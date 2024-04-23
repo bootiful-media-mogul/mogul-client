@@ -1,0 +1,51 @@
+name: Deploy
+
+env:
+
+  GCLOUD_SA_KEY:  ${{ secrets.GCLOUD_SA_KEY }}
+  GCLOUD_PROJECT: joshlong
+  GH_PAT: ${{ secrets.MOGUL_GITHUB_PERSONAL_ACCESS_TOKEN }}
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    name: Build Container
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Setup PATH"
+        run: |
+          P="${GITHUB_WORKSPACE}/bin"
+          mkdir -p $P
+          echo "${P}" >> $GITHUB_PATH
+
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '${{ secrets.GCLOUD_SA_KEY }}'
+
+      - run: |
+          gcloud config set project $GCLOUD_PROJECT
+          gcloud --quiet auth configure-docker us-docker.pkg.dev
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '21.x'
+
+      - name: Publish Container
+        run: |
+          APP_NAME=mogul-client
+          IMAGE_NAME="us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAME}:latest"
+          cd $GITHUB_WORKSPACE
+          (curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.29.0/pack-v0.29.0-linux.tgz" | sudo tar -C  $GITHUB_WORKSPACE/bin/ --no-same-owner -xzv pack)
+          pack build $IMAGE_NAME --builder paketobuildpacks/builder:full --buildpack gcr.io/paketo-buildpacks/nginx:latest --env PORT=8080
+          docker push $IMAGE_NAME
+
+      - name: Invoke Pipeline
+        run : |
+          curl -H "Accept: application/vnd.github.everest-preview+json" -H "Authorization: token ${GH_PAT}" --request POST  --data '{"event_type": "update-event"}' https://api.github.com/repos/bootiful-media-mogul/pipeline/dispatches
+          echo "Invoking the pipeline to have it deploy everything..."
+

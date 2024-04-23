@@ -37,12 +37,9 @@ jobs:
 
       - name: Publish Container
         run: |
-          APP_NAME=mogul-client
-          IMAGE_NAME="us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAME}:latest"
-          cd $GITHUB_WORKSPACE
-          (curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.29.0/pack-v0.29.0-linux.tgz" | sudo tar -C  $GITHUB_WORKSPACE/bin/ --no-same-owner -xzv pack)
-          pack build $IMAGE_NAME --builder paketobuildpacks/builder:full --buildpack gcr.io/paketo-buildpacks/nginx:latest --env PORT=8080
-          docker push $IMAGE_NAME
+          export APP_NAME=mogul-client
+          export IMAGE_NAME="us-docker.pkg.dev/${GCLOUD_PROJECT}/mogul-artifact-registry/${APP_NAME}:latest"
+          ROOT_DIR=$GITHUB_WORKSPACE $GITHUB_WORKSPACE/.github/workflows/build-container.sh
 
       - name: Invoke Pipeline
         run : |

@@ -87,7 +87,7 @@ export default {
 
         <div class="pure-controls">
           <button
-            @click.prevent="save(settingsPage.category )"
+            @click.prevent="save(settingsPage.category)"
             type="submit"
             class="pure-button pure-button-primary"
           >

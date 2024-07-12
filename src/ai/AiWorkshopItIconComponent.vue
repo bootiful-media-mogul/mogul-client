@@ -1,5 +1,5 @@
 <template>
-  <a ref="link" class="ai-workshop-it-link" href="#" @click="workshop"> </a>
+  <a ref="link" class="ai-workshop-it-link" href="#" @click="workshop"></a>
 </template>
 
 <style>
@@ -29,6 +29,7 @@ label .ai-workshop-it-link {
 
 <script lang="ts">
 import { AiWorkshopReplyEvent, workshopInAi } from '@/services'
+import { positionIconRelativeToFormInputForParentLabel } from '@/components'
 
 export default {
   emits: ['ai-workshop-completed'],
@@ -39,17 +40,8 @@ export default {
     }
   },
   mounted() {
-    const us = this.$refs.link as HTMLElement
-    const childElement = us.parentElement as HTMLElement
-    const forElementIdName = childElement.getAttribute('for')
-    if (forElementIdName != null && forElementIdName.toString().trim() != '') {
-      const formElement = document.getElementById(forElementIdName) as HTMLElement
-      const resizeFunction = () => {
-        us.style.left = formElement.offsetWidth + us.offsetWidth + 10 + 'px'
-      }
-      new ResizeObserver(resizeFunction).observe(formElement)
-      resizeFunction()
-    }
+    const aiIcon = this.$refs.link as HTMLElement
+    positionIconRelativeToFormInputForParentLabel(aiIcon)
   },
 
   setup(props, ctx) {

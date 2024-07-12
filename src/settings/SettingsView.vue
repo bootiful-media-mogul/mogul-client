@@ -1,9 +1,24 @@
 <script lang="ts">
-import { mogul, Setting, Settings, settings, SettingsPage } from '@/services'
+import { mogul, Setting, settings, SettingsPage } from '@/services'
+import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
+import PrivatePasswordInputComponent from '@/privacy/PrivatePasswordInputComponent.vue'
 
 export default {
+  components: { PrivatePasswordInputComponent, AiWorkshopItIconComponent },
+
+  async mounted() {
+    this.mogul = await mogul.me()
+    await this.reloadSettings()
+  },
   methods: {
+
+    async togglePrivacyFor(id: string) {
+      const input = document.getElementById(id) as HTMLInputElement
+      console.assert(input !== null, 'the input should be non-null')
+      input.type = input.type === 'password' ? 'text' : 'password'
+    },
     async reloadSettings() {
+
       this.settings = await settings.settings()
 
       // clone the settings so we can do dirty checking
@@ -36,10 +51,15 @@ export default {
           await this.reloadSettings()
         }
       }
+    },
+    textAreaElementId(category: string, settingName: string) {
+      return 'secret-' + category + '-' + settingName
     }
+
   },
 
   data() {
+
     const loadedSettings: Array<SettingsPage> = []
     const mogul = ''
     const settings: Array<SettingsPage> = []
@@ -51,9 +71,8 @@ export default {
   },
 
   async created() {
-    this.mogul = await mogul.me()
-    await this.reloadSettings()
   }
+
 }
 </script>
 
@@ -68,18 +87,27 @@ export default {
 
         <div v-for="setting in settingsPage.settings" v-bind:key="setting.name">
           <div class="pure-control-group">
-            <label :for="'aligned-name-' + setting.name">
+            <label :for=" textAreaElementId (settingsPage.category ,setting.name) ">
               {{ $t('settings.' + settingsPage.category + '.' + setting.name) }}
+
+
+              <PrivatePasswordInputComponent
+                :prompt="$t('episodes.episode.description.ai-prompt')"
+              />
+
+
             </label>
 
-            <textarea
-              :required="!setting.valid"
-              :id="'aligned-name-' + setting.name"
-              v-model="setting.value"
-            >
-            </textarea>
+            <input type="password"
+                   :id="textAreaElementId (settingsPage.category ,setting.name)"
+                   class="secret"
+                   :required="!setting.valid"
+                   v-model="setting.value"
+            />
+
 
             <span class="pure-form-message-inline">
+
               <span v-if="!setting.valid"> {{ $t('labels.required-value') }}</span>
             </span>
           </div>
@@ -100,6 +128,11 @@ export default {
 </template>
 
 <style scoped>
+.secret {
+  width: 100%;
+}
+
+/* standard stuff */
 .pure-controls .pure-button {
   margin-top: calc(0.5 * var(--gutter-space));
 }

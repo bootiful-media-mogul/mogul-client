@@ -30,13 +30,10 @@ label .private-password-preview-link {
 </style>
 
 <script lang="ts">
-// import { AiWorkshopReplyEvent, workshopInAi } from '@/services'
 
 import { formInputForLabel, positionIconRelativeToFormInputForParentLabel } from '@/components'
 
 export default {
-  // emits: ['ai-workshop-completed'],
-  // props: ['text', 'prompt'],
   data() {
     return {
       description: ''
@@ -50,24 +47,25 @@ export default {
 
   setup(props, ctx) {
     return {}
-    //   callbackFunction: (updated: AiWorkshopReplyEvent) =>
-    //     ctx.emit('ai-workshop-completed', updated)
-    // }
   },
 
   methods: {
-    togglePreview(e: Event) {
-      e.preventDefault()
-      const icon = this.$refs.icon as HTMLElement
-      const input = formInputForLabel(icon.parentElement as HTMLElement) as HTMLInputElement
-      // console.log('the input is ' , input.type )
-      const isPrivate = input.type.toLowerCase() === 'password'
-      input.type = isPrivate ? 'text' : 'password'
+    togglePreview: function(e: Event) {
 
-      if (isPrivate)
-        icon.classList.add('clicked')
-      else
-        icon.classList.remove('clicked')
+      e.preventDefault()
+
+      const icon = this.$refs.icon as HTMLElement
+
+      const input = formInputForLabel(icon.parentElement as HTMLElement) as HTMLInputElement
+
+      const opsToState = new Map<string, string>()
+      opsToState.set('text', 'add')
+      opsToState.set('password', 'remove')
+
+      input.type = input.type.toLowerCase() === 'password' ? 'text' : 'password'
+      const op: string = opsToState.get(input.type) as string
+
+      (icon.classList as DOMTokenList)[op]('clicked') // either classList.add('clicked') or classList.remove('clicked')
     }
   }
 }

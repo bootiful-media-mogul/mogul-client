@@ -74,6 +74,7 @@ class Podcasts {
   }
 
   async addPodcastEpisodeSegment(episodeId: number) {
+    console.log('add a new podcast episode segment #' + episodeId)
     const mutation = ` 
           mutation AddPodcastEpisodeSegment($episodeId: ID  ){ 
             addPodcastEpisodeSegment(episodeId:$episodeId  ) 
@@ -86,6 +87,9 @@ class Podcasts {
   }
 
   async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
+
+    console.log('publishing ' + episodeId + ', with plugin ' + pluginName + '.')
+
     const mutation = ` 
           mutation PublishPodcastEpisode  ($episode: ID, $pluginName: String ){ 
             publishPodcastEpisode ( episodeId: $episode,  pluginName: $pluginName ) 
@@ -118,7 +122,7 @@ class Podcasts {
     })
 
     const res = await result.data['updatePodcastEpisode']
-    console.log('updated results: ', res)
+    console.debug('updated results: ', res)
     return await this.podcastEpisodeById(res['id'])
   }
 
@@ -276,13 +280,11 @@ class Podcasts {
       episodeSegmentId: episodeSegmentId
     })
     const id = await result.data
-    console.log('id', id)
+    console.debug('movePodcastEpisodeSegmentDown #' + id)
   }
 
   async movePodcastEpisodeSegmentUp(episodeId: number, episodeSegmentId: number) {
     const mutation = `
-    
-    
          mutation MovePodcastEpisodeSegmentUp ($episodeId: ID, $episodeSegmentId: Int  ){ 
           movePodcastEpisodeSegmentUp(  episodeId: $episodeId,  episodeSegmentId: $episodeSegmentId )  
          }
@@ -292,7 +294,7 @@ class Podcasts {
       episodeSegmentId: episodeSegmentId
     })
     const id = await result.data
-    console.log('id', id)
+    console.debug('movePodcastEpisodeSegmentUp #' + id)
   }
 }
 
@@ -453,7 +455,7 @@ export class Notifications {
       const modal = data['modal']
       callback(new Notification(mogulId, key, context, category, when, modal))
     }
-    eventSource.onerror = function (sseME: Event) {
+    eventSource.onerror = function(sseME: Event) {
       console.error('something went wrong in the SSE: ' + JSON.stringify(sseME))
     }
 

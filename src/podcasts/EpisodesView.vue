@@ -59,7 +59,7 @@ export default {
     },
 
     async addNewPodcastEpisodeSegment(episode: PodcastEpisode) {
-      console.log('add a new podcast episode segment')
+
       await podcasts.addPodcastEpisodeSegment(episode.id)
       await this.loadEpisodeSegments(episode)
     },
@@ -156,7 +156,7 @@ export default {
 
     async publish(e: Event) {
       e.preventDefault()
-      console.log('publishing..')
+
       await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin)
     },
 
@@ -210,11 +210,9 @@ export default {
 
   created() {
     this.dirtyKey = this.computeDirtyKey()
-    console.log('the dirty key is ' + this.dirtyKey)
   },
 
   setup() {
-    console.log('setup called')
     return {}
   },
 

@@ -31,7 +31,7 @@ label .private-password-preview-link {
 
 <script lang="ts">
 
-import { formInputForLabel, positionIconRelativeToFormInputForParentLabel } from '@/components'
+import {formInputForLabel, positionIconRelativeToFormInputForParentLabel} from '@/components'
 
 export default {
   data() {
@@ -65,7 +65,12 @@ export default {
       input.type = input.type.toLowerCase() === 'password' ? 'text' : 'password'
       const op: string = opsToState.get(input.type) as string
 
-      (icon.classList as DOMTokenList)[op]('clicked') // either classList.add('clicked') or classList.remove('clicked')
+      if (op == 'add') {
+        icon.classList.add('clicked')
+      } //
+      else {
+        icon.classList.remove('clicked')
+      }
     }
   }
 }

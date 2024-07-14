@@ -40,32 +40,15 @@ export default {
     }
   },
   mounted() {
-    const icon = this.$refs.icon as HTMLElement
-    positionIconRelativeToFormInputForParentLabel(icon)
-
+    positionIconRelativeToFormInputForParentLabel(this.$refs.icon as HTMLElement)
   },
-
-  setup(props, ctx) {
-    return {}
-  },
-
   methods: {
     togglePreview: function(e: Event) {
-
       e.preventDefault()
-
       const icon = this.$refs.icon as HTMLElement
-
       const input = formInputForLabel(icon.parentElement as HTMLElement) as HTMLInputElement
-
-      const opsToState = new Map<string, string>()
-      opsToState.set('text', 'add')
-      opsToState.set('password', 'remove')
-
       input.type = input.type.toLowerCase() === 'password' ? 'text' : 'password'
-      const op: string = opsToState.get(input.type) as string
-
-      if (op == 'add') {
+      if (input.type == 'text') {
         icon.classList.add('clicked')
       } //
       else {

@@ -436,7 +436,7 @@ export class Notifications {
       console.log('onopen in the Notifications!')
     }
     eventSource.onmessage = (sseEvent: MessageEvent) => {
-      console.debug('got the following SSE event: ' + sseEvent.data)
+      console.debug('got the following notification SSE event: '  , sseEvent.data)
 
       const data = JSON.parse(sseEvent.data)
 

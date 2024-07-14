@@ -104,10 +104,11 @@ export default {
       this.completionEventListenersEventSource = new EventSource(uri)
 
       this.completionEventListenersEventSource.onmessage = async (sse: MessageEvent) => {
+        console.log( 'episodes sse data ' , sse.data )
         const state = JSON.parse(sse.data)['complete']
         console.log('draftEpisode.complete=' + state)
         de.complete = state
-        if (de.complete == true) {
+        if (de.complete === true) {
           console.log(`its complete, so we will force a reload`)
           await that.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
         }

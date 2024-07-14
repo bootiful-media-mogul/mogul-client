@@ -114,7 +114,8 @@ export default {
       }
 
       this.completionEventListenersEventSource.onerror = function (sse: Event) {
-        console.error('something went wrong in the SSE: ', sse)
+        sse.preventDefault()
+        console.error('something went wrong in the completions event listener SSE: ', sse)
       }
     },
 

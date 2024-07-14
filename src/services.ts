@@ -432,8 +432,11 @@ export class Notifications {
   listen(callback: (notification: Notification) => void): EventSource {
     const uri = '/api/notifications'
     const eventSource = new EventSource(uri)
+    eventSource.onopen = () => {
+      console.log('onopen in the Notifications!')
+    }
     eventSource.onmessage = (sseEvent: MessageEvent) => {
-      console.log('got the following SSE event: ' + sseEvent.data)
+      console.debug('got the following SSE event: ' + sseEvent.data)
 
       const data = JSON.parse(sseEvent.data)
 
@@ -456,7 +459,8 @@ export class Notifications {
       callback(new Notification(mogulId, key, context, category, when, modal))
     }
     eventSource.onerror = function(sseME: Event) {
-      console.error('something went wrong in the SSE: ' + JSON.stringify(sseME))
+      console.error('something went wrong in the notifications SSE (preventing default): '  ,  sseME    )
+      sseME.preventDefault()
     }
 
     return eventSource

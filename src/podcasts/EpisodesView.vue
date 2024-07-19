@@ -1,9 +1,9 @@
 <script lang="ts">
-import { PodcastEpisode, PodcastEpisodeSegment, Podcast, podcasts } from '@/services'
+import {Notification, notifications, Podcast, PodcastEpisode, PodcastEpisodeSegment, podcasts} from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import { reactive } from 'vue'
-import { dateTimeFormatter } from '../dates'
+import {reactive} from 'vue'
+import {dateTimeFormatter} from '../dates'
 
 export default {
   mounted(): void {
@@ -63,6 +63,17 @@ export default {
       await this.loadEpisodeSegments(episode)
     },
 
+    async handle(notification: Notification) {
+      const contextObj = JSON.parse(notification ['context'])
+      console.log('context object', contextObj)
+      const episodeId = contextObj ['episodeId']
+      const completed = contextObj ['complete']
+      if (completed !== this.draftEpisode.complete) {
+        // only reload if the completion state is different
+        await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+      }
+    },
+
     async loadEpisode(episode: PodcastEpisode) {
       this.draftEpisode.id = episode.id
       this.draftEpisode.graphic = episode.graphic
@@ -81,42 +92,48 @@ export default {
       if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
 
       await this.loadPodcast()
-
+      notifications.listen(this.handle)
       // todo remove all of this since we're going to have a generic notification substrait
-      console.log(
-        'going to install a listener for completion events for podcast episode [' +
-          this.draftEpisode.id +
-          ']'
-      )
+      // console.log(
+      //   'going to install a listener for completion events for podcast episode [' +
+      //     this.draftEpisode.id +
+      //     ']'
+      // )
 
-      const uri: string =
-        '/api/podcasts/' +
-        this.currentPodcast.id +
-        '/episodes/' +
-        this.draftEpisode.id +
-        '/completions'
-      console.debug('the SSE completion event uri is ' + uri)
+      // todo can i use the notifications mechanism to handle this?
+      //  i should be able to call notifications.listen(function)
+      //  and have the function added to the list of callback functions
+      //  we should only hve one client thread polling the service at a time. right now each call to listen(function) results
+      //  in a new network client thread. boo.
+      /*
+            const uri: string =
+              '/api/podcasts/' +
+              this.currentPodcast.id +
+              '/episodes/' +
+              this.draftEpisode.id +
+              '/completions'
+            console.debug('the SSE completion event uri is ' + uri)
 
-      const de = this.draftEpisode
+            const de = this.draftEpisode
 
-      const that = this
-      this.completionEventListenersEventSource = new EventSource(uri)
+            const that = this
+            this.completionEventListenersEventSource = new EventSource(uri)
 
-      this.completionEventListenersEventSource.onmessage = async (sse: MessageEvent) => {
-        console.log('episodes sse data ', sse.data)
-        const state = JSON.parse(sse.data)['complete']
-        console.log('draftEpisode.complete=' + state)
-        de.complete = state
-        if (de.complete === true) {
-          console.log(`its complete, so we will force a reload`)
-          await that.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
-        }
-      }
+            this.completionEventListenersEventSource.onmessage = async (sse: MessageEvent) => {
+              console.log('episodes sse data ', sse.data)
+              const state = JSON.parse(sse.data)['complete']
+              console.log('draftEpisode.complete=' + state)
+              de.complete = state
+              if (de.complete === true) {
+                console.log(`its complete, so we will force a reload`)
+                await that.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+              }
+            }
 
-      this.completionEventListenersEventSource.onerror = function (sse: Event) {
-        sse.preventDefault()
-        console.error('something went wrong in the completions event listener SSE: ', sse)
-      }
+            this.completionEventListenersEventSource.onerror = function (sse: Event) {
+              sse.preventDefault()
+              console.error('something went wrong in the completions event listener SSE: ', sse)
+            }*/
     },
 
     async save(e: Event) {

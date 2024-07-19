@@ -409,6 +409,7 @@ export class Notification {
   readonly context: string
   readonly mogulId: number
   readonly modal: boolean
+  readonly visible: boolean
 
   constructor(
     mogulId: number,
@@ -416,13 +417,15 @@ export class Notification {
     context: string,
     category: string,
     when: Date,
-    modal: boolean
+    modal: boolean,
+    visible: boolean
   ) {
     this.context = context
     this.mogulId = mogulId
     this.modal = modal
     this.category = category
     this.when = when
+    this.visible = visible
     this.key = key
   }
 }
@@ -431,15 +434,16 @@ export class Notifications {
 
   private readonly client: Client
 
+  private callbacks: Array<(notification: Notification) => void> = []
+
   constructor(client: Client) {
     this.client = client
-  }
-
-  listen(callback: (notification: Notification) => void) {
     const that = this
-    // todo query the graphql endpoint every 1s and publish whatever comes back if it's not null usihng
-    //  callback(new Notification(mogulId, key, context, category, when, modal))
     setInterval(async () => {
+
+      // don't run a network call if there are no callbacks to benefit from it
+      if (that.callbacks.length == 0) return
+
       const q = `
           query   {
             notifications { 
@@ -447,21 +451,29 @@ export class Notifications {
               category , 
               key , 
               when , 
-              context , 
+              context ,  
+              visible ,  
               modal 
             }
            }
           `
       const result = await this.client.query(q, {})
-      const managedFileId = await result.data
-      console.log(managedFileId)
-      const d = managedFileId ['notifications']
+      const data = await result.data
+      const d = data ['notifications']
+      // don't run a network call if there is no notification to show
       if (d !== null) {
-        callback(d as Notification)
+        const notificationObj = d as Notification
+        that.callbacks.forEach(callback => callback(notificationObj))
       }
-      return
-      // console.log('running at ' + new Date())
     }, 5000)
+  }
+
+
+  listen(callback: (notification: Notification) => void) {
+    if (this.callbacks.indexOf(callback) === -1) {
+      this.callbacks.push(callback)
+      console.log('registering a callback for Notifications')
+    }
   }
 }
 

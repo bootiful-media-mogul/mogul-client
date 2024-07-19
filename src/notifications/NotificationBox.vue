@@ -120,7 +120,7 @@ export default {
       })
 
       that.showModalNotification = notification.modal
-      that.showToasterNotification = !notification.modal
+      that.showToasterNotification =  notification.visible
 
       const displayForNMilliseconds = 1000 * 5 // 2 seconds
       if (that.showToasterNotification) {

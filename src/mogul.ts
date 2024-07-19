@@ -1,7 +1,6 @@
 import { Client } from '@urql/core'
 
 export default class Mogul {
-
   private readonly client: Client
 
   constructor(client: Client) {
@@ -21,5 +20,4 @@ export default class Mogul {
   private indexIntoQueryField(result: any, resultKey: string): any {
     return result.data[resultKey]
   }
-
 }

@@ -11,14 +11,12 @@ export default {
     await this.reloadSettings()
   },
   methods: {
-
     async togglePrivacyFor(id: string) {
       const input = document.getElementById(id) as HTMLInputElement
       console.assert(input !== null, 'the input should be non-null')
       input.type = input.type === 'password' ? 'text' : 'password'
     },
     async reloadSettings() {
-
       this.settings = await settings.settings()
 
       // clone the settings so we can do dirty checking
@@ -55,11 +53,9 @@ export default {
     textAreaElementId(category: string, settingName: string) {
       return 'secret-' + category + '-' + settingName
     }
-
   },
 
   data() {
-
     const loadedSettings: Array<SettingsPage> = []
     const mogul = ''
     const settings: Array<SettingsPage> = []
@@ -70,9 +66,7 @@ export default {
     }
   },
 
-  async created() {
-  }
-
+  async created() {}
 }
 </script>
 
@@ -87,27 +81,23 @@ export default {
 
         <div v-for="setting in settingsPage.settings" v-bind:key="setting.name">
           <div class="pure-control-group">
-            <label :for=" textAreaElementId (settingsPage.category ,setting.name) ">
+            <label :for="textAreaElementId(settingsPage.category, setting.name)">
               {{ $t('settings.' + settingsPage.category + '.' + setting.name) }}
-
 
               <PrivatePasswordInputComponent
                 :prompt="$t('episodes.episode.description.ai-prompt')"
               />
-
-
             </label>
 
-            <input type="password"
-                   :id="textAreaElementId (settingsPage.category ,setting.name)"
-                   class="secret"
-                   :required="!setting.valid"
-                   v-model="setting.value"
+            <input
+              type="password"
+              :id="textAreaElementId(settingsPage.category, setting.name)"
+              class="secret"
+              :required="!setting.valid"
+              v-model="setting.value"
             />
 
-
             <span class="pure-form-message-inline">
-
               <span v-if="!setting.valid"> {{ $t('labels.required-value') }}</span>
             </span>
           </div>

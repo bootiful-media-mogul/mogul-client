@@ -13,8 +13,7 @@ export function formInputForLabel(childElement: HTMLElement) {
 export function positionIconRelativeToFormInputForParentLabel(iconElement: HTMLElement) {
   const formElement = formInputForLabel(iconElement.parentElement as HTMLElement)
 
-  if (formElement === null)
-    return
+  if (formElement === null) return
 
   const resizeFunction = () => {
     iconElement.style.left = formElement.offsetWidth + iconElement.offsetWidth + 10 + 'px'

@@ -59,7 +59,6 @@ export default {
     },
 
     async addNewPodcastEpisodeSegment(episode: PodcastEpisode) {
-
       await podcasts.addPodcastEpisodeSegment(episode.id)
       await this.loadEpisodeSegments(episode)
     },
@@ -104,7 +103,7 @@ export default {
       this.completionEventListenersEventSource = new EventSource(uri)
 
       this.completionEventListenersEventSource.onmessage = async (sse: MessageEvent) => {
-        console.log( 'episodes sse data ' , sse.data )
+        console.log('episodes sse data ', sse.data)
         const state = JSON.parse(sse.data)['complete']
         console.log('draftEpisode.complete=' + state)
         de.complete = state

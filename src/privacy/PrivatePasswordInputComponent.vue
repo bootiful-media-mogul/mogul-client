@@ -16,7 +16,8 @@
   background-position: left;
 }
 
-.private-password-preview-link:hover, .private-password-preview-link.clicked {
+.private-password-preview-link:hover,
+.private-password-preview-link.clicked {
   background: url('../assets/images/privacy-preview-highlight.png');
   background-size: var(--icon-size) var(--icon-size);
   background-repeat: no-repeat;
@@ -30,8 +31,7 @@ label .private-password-preview-link {
 </style>
 
 <script lang="ts">
-
-import {formInputForLabel, positionIconRelativeToFormInputForParentLabel} from '@/components'
+import { formInputForLabel, positionIconRelativeToFormInputForParentLabel } from '@/components'
 
 export default {
   data() {
@@ -43,7 +43,7 @@ export default {
     positionIconRelativeToFormInputForParentLabel(this.$refs.icon as HTMLElement)
   },
   methods: {
-    togglePreview: function(e: Event) {
+    togglePreview: function (e: Event) {
       e.preventDefault()
       const icon = this.$refs.icon as HTMLElement
       const input = formInputForLabel(icon.parentElement as HTMLElement) as HTMLInputElement

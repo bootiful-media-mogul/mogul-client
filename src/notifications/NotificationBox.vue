@@ -111,6 +111,7 @@ export default {
       'animated-element-hidden': true
     }
     function processor(notification: Notification) {
+      console.log('notification' ,notification)
       that.latestNotification = that.$t('notifications.' + notification.category, {
         key: notification.key,
         mogulId: notification.mogulId,

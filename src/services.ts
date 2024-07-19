@@ -1,7 +1,7 @@
-import { Ai } from '@/ai/ai'
+import {Ai} from '@/ai/ai'
 import Mogul from '@/mogul'
 import mitt from 'mitt'
-import { Client, errorExchange, fetchExchange } from '@urql/core'
+import {Client, errorExchange, fetchExchange} from '@urql/core'
 import router from '@/index'
 
 export const graphqlClient = new Client({
@@ -87,7 +87,6 @@ class Podcasts {
   }
 
   async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
-
     console.log('publishing ' + episodeId + ', with plugin ' + pluginName + '.')
 
     const mutation = ` 
@@ -429,41 +428,40 @@ export class Notification {
 }
 
 export class Notifications {
-  listen(callback: (notification: Notification) => void): EventSource {
-    const uri = '/api/notifications'
-    const eventSource = new EventSource(uri)
-    eventSource.onopen = () => {
-      console.log('onopen in the Notifications!')
-    }
-    eventSource.onmessage = (sseEvent: MessageEvent) => {
-      console.debug('got the following notification SSE event: '  , sseEvent.data)
 
-      const data = JSON.parse(sseEvent.data)
+  private readonly client: Client
 
-      function readString(input: any): string {
-        return input + ''
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  listen(callback: (notification: Notification) => void) {
+    const that = this
+    // todo query the graphql endpoint every 1s and publish whatever comes back if it's not null usihng
+    //  callback(new Notification(mogulId, key, context, category, when, modal))
+    setInterval(async () => {
+      const q = `
+          query   {
+            notifications { 
+              mogulId , 
+              category , 
+              key , 
+              when , 
+              context , 
+              modal 
+            }
+           }
+          `
+      const result = await this.client.query(q, {})
+      const managedFileId = await result.data
+      console.log(managedFileId)
+      const d = managedFileId ['notifications']
+      if (d !== null) {
+        callback(d as Notification)
       }
-
-      function readMogulId(id: any): number {
-        if (id == null || (typeof id == 'string' && id.trim() == '')) return -1
-        if (typeof id == 'number') return id
-        return parseInt(id)
-      }
-
-      const mogulId = readMogulId(data['mogulId'])
-      const category = readString(data['category'])
-      const key = readString(data['key'])
-      const when = new Date(data['when'])
-      const context = readString(data['context'])
-      const modal = data['modal']
-      callback(new Notification(mogulId, key, context, category, when, modal))
-    }
-    eventSource.onerror = function(sseME: Event) {
-      console.error('something went wrong in the notifications SSE (preventing default): '  ,  sseME    )
-      sseME.preventDefault()
-    }
-
-    return eventSource
+      return
+      // console.log('running at ' + new Date())
+    }, 5000)
   }
 }
 
@@ -471,6 +469,7 @@ export class Notifications {
  * handles updating and inspecting all the configuration values.
  */
 export class Settings {
+
   private readonly client: Client
 
   constructor(client: Client) {
@@ -524,7 +523,7 @@ export class ManagedFiles {
           managedFileById( id : $id )  { 
             id, bucket, folder, filename, size, written ,contentType
           }
-         }
+        }
         `
     const result = await this.client.query(q, { id: id })
     const managedFileId = await result.data['managedFileById']
@@ -533,7 +532,7 @@ export class ManagedFiles {
 }
 
 export const ai = new Ai(graphqlClient)
-export const notifications = new Notifications()
+export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)
 export const events = mitt()
 export const podcasts = new Podcasts(graphqlClient)

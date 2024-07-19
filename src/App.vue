@@ -26,12 +26,8 @@ export default {
 </script>
 
 <template>
-  <!--
-  where this renders depends on the kind of notification we get. so,
-  im keeping it out of the main layout. it'll be display none until it isnt
-  and when it isn't it'll display as a modal, dead center on the screen,
-  or a toaster popup from the bottom of the screen. it'll be fixed positionally, either way
- -->
+
+
   <NotificationBox ref="notifications" />
 
   <div class="frame">

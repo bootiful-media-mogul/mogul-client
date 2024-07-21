@@ -25,7 +25,8 @@ const translations = {
 
     // notifications
     notifications: {
-      'podcast-episode-completion-event' :'The podcast with ID #{key} is completed and ready for production' ,
+      'podcast-episode-completion-event':
+        'The podcast with ID #{key} is completed and ready for production',
       'podcast-created-event':
         `The podcast "{context}", with ID #{key}, has been created.   `.trim(),
       'podcast-deleted-event':

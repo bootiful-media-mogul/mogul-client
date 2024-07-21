@@ -4,7 +4,7 @@
 <script lang="ts">
 import AiChatComponent from '@/ai/AiChatComponent.vue'
 
-import { mogul } from '@/services'
+import { migration, mogul } from '@/services'
 import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
@@ -12,7 +12,16 @@ import NotificationBox from '@/notifications/NotificationBox.vue'
 export default {
   components: { NotificationBox, AiChatComponent, PreviewComponent, SidebarPanelComponent },
 
-  methods: {},
+  methods: {
+
+    // todo remove this once all the data is migrated successfully
+    async migrate() {
+       await migration.migrate()
+    }
+    // todo remove this once all the data is migrated successfully
+  },
+
+
   data() {
     const mogul = ''
     return {
@@ -26,8 +35,6 @@ export default {
 </script>
 
 <template>
-
-
   <NotificationBox ref="notifications" />
 
   <div class="frame">
@@ -36,16 +43,20 @@ export default {
         {{ $t('hello') }} <span style="font-weight: bold"> {{ mogul }} </span>!
       </div>
 
+      <div class="view">
+        <router-view></router-view>
+      </div>
+
       <div class="toolbar">
         <router-link to="/">{{ $t('app.menu.home') }}</router-link>
         |
         <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
         |
         <router-link to="/podcasts">{{ $t('app.menu.podcasts') }}</router-link>
-      </div>
-
-      <div class="view">
-        <router-view></router-view>
+        <!--    v  todo remove this  -->
+        |
+        <a @click=" migrate()" href="#"> Migrate </a>
+        <!--    ^  todo remove this  -->
       </div>
 
       <div class="sidebar">

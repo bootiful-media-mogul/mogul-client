@@ -1,7 +1,7 @@
-import {Ai} from '@/ai/ai'
+import { Ai } from '@/ai/ai'
 import Mogul from '@/mogul'
 import mitt from 'mitt'
-import {Client, errorExchange, fetchExchange} from '@urql/core'
+import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
 
 export const graphqlClient = new Client({
@@ -431,7 +431,6 @@ export class Notification {
 }
 
 export class Notifications {
-
   private readonly client: Client
 
   private callbacks: Array<(notification: Notification) => void> = []
@@ -440,7 +439,6 @@ export class Notifications {
     this.client = client
     const that = this
     setInterval(async () => {
-
       // don't run a network call if there are no callbacks to benefit from it
       if (that.callbacks.length == 0) return
 
@@ -459,15 +457,14 @@ export class Notifications {
           `
       const result = await this.client.query(q, {})
       const data = await result.data
-      const d = data ['notifications']
+      const d = data['notifications']
       // don't run a network call if there is no notification to show
       if (d !== null) {
         const notificationObj = d as Notification
-        that.callbacks.forEach(callback => callback(notificationObj))
+        that.callbacks.forEach((callback) => callback(notificationObj))
       }
     }, 5000)
   }
-
 
   listen(callback: (notification: Notification) => void) {
     if (this.callbacks.indexOf(callback) === -1) {
@@ -481,7 +478,6 @@ export class Notifications {
  * handles updating and inspecting all the configuration values.
  */
 export class Settings {
-
   private readonly client: Client
 
   constructor(client: Client) {
@@ -543,7 +539,28 @@ export class ManagedFiles {
   }
 }
 
+
+/**
+ * support for migrating the legacy DataSource to the new schema.
+ */
+class Migration {
+
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async migrate() {
+    console.log('calling migration service..')
+    await this.client.mutation(` mutation { migrate } `, {})
+    console.log('called migration service..')
+  }
+
+}
+
 export const ai = new Ai(graphqlClient)
+export const migration = new Migration(graphqlClient)
 export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)
 export const events = mitt()

@@ -1,9 +1,16 @@
 <script lang="ts">
-import {Notification, notifications, Podcast, PodcastEpisode, PodcastEpisodeSegment, podcasts} from '@/services'
+import {
+  Notification,
+  notifications,
+  Podcast,
+  PodcastEpisode,
+  PodcastEpisodeSegment,
+  podcasts
+} from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import {reactive} from 'vue'
-import {dateTimeFormatter} from '../dates'
+import { reactive } from 'vue'
+import { dateTimeFormatter } from '../dates'
 
 export default {
   mounted(): void {
@@ -63,9 +70,9 @@ export default {
     },
 
     async handle(notification: Notification) {
-      const contextObj = JSON.parse(notification ['context'])
-      const episodeId = contextObj ['episodeId']
-      const completed = contextObj ['complete']
+      const contextObj = JSON.parse(notification['context'])
+      const episodeId = contextObj['episodeId']
+      const completed = contextObj['complete']
       if (completed !== this.draftEpisode.complete) {
         // only reload if the completion state is different
         await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))

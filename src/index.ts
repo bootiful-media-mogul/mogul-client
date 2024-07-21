@@ -18,6 +18,7 @@ const router = createRouter({
       component: PodcastsView
     },
 
+
     {
       path: '/settings',
       name: 'settings',

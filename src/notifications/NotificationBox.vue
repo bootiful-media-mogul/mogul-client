@@ -111,7 +111,7 @@ export default {
       'animated-element-hidden': true
     }
     function processor(notification: Notification) {
-      console.log('notification' ,notification)
+      console.log('notification', notification)
       that.latestNotification = that.$t('notifications.' + notification.category, {
         key: notification.key,
         mogulId: notification.mogulId,
@@ -120,7 +120,7 @@ export default {
       })
 
       that.showModalNotification = notification.modal
-      that.showToasterNotification =  notification.visible
+      that.showToasterNotification = notification.visible
 
       const displayForNMilliseconds = 1000 * 5 // 2 seconds
       if (that.showToasterNotification) {

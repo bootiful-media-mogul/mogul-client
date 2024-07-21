@@ -379,7 +379,7 @@ export default {
   </form>
 
   <form class="pure-form">
-    <fieldset>
+    <fieldset class="episodes-table">
       <legend>
         {{ $t('episodes.title') }}
       </legend>
@@ -436,12 +436,16 @@ export default {
 .episodes-row {
   grid-template-areas: 'id created edit delete  title';
   grid-template-columns:
-    var(--icon-column)
+    var(--id-column)
     10em
     var(--icon-column)
     var(--icon-column)
     auto;
   display: grid;
+}
+
+fieldset.episodes-table {
+  padding-bottom: calc(var(--footer-height) * 1);
 }
 
 .episode-managed-file-row {

@@ -75,9 +75,10 @@
 
 .podcast-rows {
   display: grid;
-  grid-template-areas: 'id   links  title ';
-  grid-template-columns: 50px 200px auto;
+  grid-template-areas: 'id links title';
+  grid-template-columns: var(--id-column)  200px auto;
 }
+
 </style>
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'

@@ -1,7 +1,7 @@
-import { Ai } from '@/ai/ai'
+import {Ai} from '@/ai/ai'
 import Mogul from '@/mogul'
 import mitt from 'mitt'
-import { Client, errorExchange, fetchExchange } from '@urql/core'
+import {Client, errorExchange, fetchExchange} from '@urql/core'
 import router from '@/index'
 
 export const graphqlClient = new Client({
@@ -540,27 +540,7 @@ export class ManagedFiles {
 }
 
 
-/**
- * support for migrating the legacy DataSource to the new schema.
- */
-class Migration {
-
-  private readonly client: Client
-
-  constructor(client: Client) {
-    this.client = client
-  }
-
-  async migrate() {
-    console.log('calling migration service..')
-    await this.client.mutation(` mutation { migrate } `, {})
-    console.log('called migration service..')
-  }
-
-}
-
 export const ai = new Ai(graphqlClient)
-export const migration = new Migration(graphqlClient)
 export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)
 export const events = mitt()

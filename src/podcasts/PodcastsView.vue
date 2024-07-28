@@ -76,12 +76,11 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id links title';
-  grid-template-columns: var(--id-column)  200px auto;
+  grid-template-columns: var(--id-column) 200px auto;
 }
-
 </style>
 <script lang="ts">
-import { Podcast, podcasts } from '@/services'
+import {Podcast, podcasts} from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import CreateEpisodeView from '@/podcasts/EpisodesView.vue'
 

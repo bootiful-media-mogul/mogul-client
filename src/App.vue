@@ -4,7 +4,7 @@
 <script lang="ts">
 import AiChatComponent from '@/ai/AiChatComponent.vue'
 
-import { migration, mogul } from '@/services'
+import {   mogul} from '@/services'
 import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
@@ -13,14 +13,7 @@ export default {
   components: { NotificationBox, AiChatComponent, PreviewComponent, SidebarPanelComponent },
 
   methods: {
-
-    // todo remove this once all the data is migrated successfully
-    async migrate() {
-       await migration.migrate()
-    }
-    // todo remove this once all the data is migrated successfully
   },
-
 
   data() {
     const mogul = ''
@@ -53,10 +46,7 @@ export default {
         <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
         |
         <router-link to="/podcasts">{{ $t('app.menu.podcasts') }}</router-link>
-        <!--    v  todo remove this  -->
-        |
-        <a @click=" migrate()" href="#"> Migrate </a>
-        <!--    ^  todo remove this  -->
+
       </div>
 
       <div class="sidebar">

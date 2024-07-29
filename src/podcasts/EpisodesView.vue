@@ -400,11 +400,7 @@ export default {
               </div>
 
               <div class="url-column">
-
-                <!--
-                todo have some sort of b+w icon i could use to repressent surfing the web and openinng a leak
-                -->
-                <a :href="publication.url " target="_blank">permalink</a>
+                <a v-if="publication.url" :href="publication.url " target="_blank">permalink</a>
               </div>
             </div>
           </div>

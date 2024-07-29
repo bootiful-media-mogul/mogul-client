@@ -50,6 +50,10 @@ const translations = {
 
     // episodes
     'episodes.title': 'all episodes',
+    'episodes.publications': 'Publications',
+    'episodes.basics': 'Basics',
+    'episodes.segments': 'Segments',
+    'episodes.publish': 'Publish',
     'episodes.episodes': 'episodes for {title}',
     'episodes.new-episode': 'new episode',
     'episodes.buttons.publish': 'publish',

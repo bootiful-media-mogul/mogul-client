@@ -1,9 +1,17 @@
 <script lang="ts">
-import {Notification, notifications, Podcast, PodcastEpisode, PodcastEpisodeSegment, podcasts} from '@/services'
+import {
+  Notification,
+  notifications,
+  Podcast,
+  PodcastEpisode,
+  PodcastEpisodeSegment,
+  podcasts,
+  Publication
+} from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import {reactive} from 'vue'
-import {dateTimeFormatter} from '../dates'
+import { reactive } from 'vue'
+import { dateTimeFormatter } from '../dates'
 
 export default {
   mounted(): void {
@@ -63,7 +71,8 @@ export default {
     },
 
     async handle(notification: Notification) {
-      const good = notification?.context !== undefined && notification?.context?.complete !== undefined
+      const good =
+        notification?.context !== undefined && notification?.context?.complete !== undefined
       if (good) {
         const contextObj = JSON.parse(notification['context'])
         // const episodeId = contextObj['episodeId']
@@ -90,6 +99,7 @@ export default {
       this.created = this.draftEpisode.created
       this.dirtyKey = this.computeDirtyKey()
       this.draftEpisodeSegments = episode.segments
+      this.publications = episode.publications
       const plugins = episode.availablePlugins
       if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
       await this.loadPodcast()
@@ -176,6 +186,7 @@ export default {
       this.title = ''
       this.description = ''
       this.draftEpisodeSegments = []
+      this.publications = []
       await this.loadPodcast()
     },
 
@@ -202,6 +213,7 @@ export default {
       created: -1,
       draftEpisode: reactive({} as PodcastEpisode),
       episodes: [] as Array<PodcastEpisode>,
+      publications: [] as Array<Publication>,
       currentPodcast: null as any as Podcast,
       selectedPodcastId: this.id,
       title: '',
@@ -227,7 +239,7 @@ export default {
       </legend>
 
       <div class="form-section">
-        <div class="form-section-title">Basics</div>
+        <div class="form-section-title">{{ $t('episodes.basics') }}</div>
 
         <label for="episodeTitle">
           {{ $t('episodes.episode.title') }}
@@ -275,7 +287,7 @@ export default {
       </div>
 
       <div class="form-section">
-        <div class="form-section-title">Segments</div>
+        <div class="form-section-title">{{ $t('episodes.segments') }}</div>
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
@@ -305,17 +317,10 @@ export default {
                   v-model:managed-file-id="segment.audio.id"
                 >
                   <div class="segment-controls">
-                    <a
-                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                      href="#"
-                      :class="upArrowClasses(draftEpisode, segment)"
-                    ></a>
-
-                    <a
-                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                      href="#"
-                      :class="downArrowClasses(draftEpisode, segment)"
-                    ></a>
+                    <a @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)" href="#"
+                       :class="upArrowClasses(draftEpisode, segment)"></a>
+                    <a @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)" href="#"
+                       :class="downArrowClasses(draftEpisode, segment)"></a>
                     <a
                       @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
                       href="#"
@@ -341,7 +346,7 @@ export default {
         </div>
 
         <div class="form-section">
-          <div class="form-section-title">Publications</div>
+          <div class="form-section-title">{{ $t('episodes.publications') }}</div>
           <div>
             <div class="publish-menu">
               <select
@@ -371,6 +376,21 @@ export default {
               </button>
             </div>
           </div>
+
+          <div class="publications">
+            <div class="pure-g form-row publications-row" v-bind:key="publication.id"
+                 v-for="publication in publications">
+              <div class="id id-column">
+                #<b>{{ publication.id }}</b>
+              </div>
+              <div class="id plugin-column">
+                  {{ publication.plugin }}
+              </div>
+              <div class="created-column">{{ dateTimeFormatter().format(new Date(publication.created)) }}</div>
+              <!--                <div class="published-column">{{ dateTimeFormatter().format(new Date(publication.published)) }}</div>-->
+
+            </div>
+          </div>
         </div>
       </div>
     </fieldset>
@@ -398,6 +418,29 @@ export default {
 </template>
 
 <style>
+/* publications */
+.publications {
+  margin-top: var(--gutter-space);
+}
+
+.publications .publications-row {
+  display: grid;
+  grid-template-areas: 'id created plugin ';
+  grid-template-columns: var(--id-column)   10em  10em auto  ;
+}
+
+.publications .publications-row .id-column {
+  grid-area: id;
+}
+
+.publications .publications-row .plugin-column {
+  grid-area: plugin;
+}
+
+.publications .publications-row .created-column {
+  grid-area: created;
+}
+
 .podcast-episode-controls-row {
   display: grid;
   grid-template-areas: 'save . cancel . publish';

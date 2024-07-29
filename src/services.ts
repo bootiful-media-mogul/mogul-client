@@ -1,7 +1,7 @@
-import {Ai} from '@/ai/ai'
+import { Ai } from '@/ai/ai'
 import Mogul from '@/mogul'
 import mitt from 'mitt'
-import {Client, errorExchange, fetchExchange} from '@urql/core'
+import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
 
 export const graphqlClient = new Client({
@@ -127,19 +127,26 @@ class Podcasts {
 
   async podcastEpisodeById(id: number): Promise<PodcastEpisode> {
     const q = `
-           query GetPodcastEpisode ( $id: ID){
-                podcastEpisodeById ( id : $id) {
-                availablePlugins,   created,   id , title, description, complete,  graphic { id  },
-                  segments { 
-                    id, name, audio { id } , order , crossFadeDuration 
-                  }
-            
-                }
+        query GetPodcastEpisodeById ( $id: ID){
+            podcastEpisodeById ( id : $id) {
+              availablePlugins, created, id, title, description, complete,  graphic { id  },
+              segments { 
+                id, name, audio { id } , order , crossFadeDuration 
+              }
+              publications {
+                id,
+                plugin,
+                created,
+                published 
+              }
+          }
         }
         `
     const res = await this.client.query(q, { id: id })
-
-    return (await res.data['podcastEpisodeById']) as PodcastEpisode
+    console.log('results ' , res )
+    const pe = (await res.data['podcastEpisodeById']) as PodcastEpisode
+    console.debug('podcast episode: ' + JSON.stringify(pe))
+    return pe
   }
 
   async create(title: string): Promise<Podcast> {
@@ -167,6 +174,12 @@ class Podcasts {
                 description, 
                 complete, 
                 graphic { id  } ,
+                publications { 
+                  id,
+                  plugin ,
+                  created, 
+                  published
+                },
                 segments { 
                   id, 
                   name, 
@@ -367,6 +380,20 @@ export class PodcastEpisodeSegment {
   }
 }
 
+export class Publication {
+  id: number
+  plugin: string
+  created: Date
+  published: Date
+
+  constructor(id: number, plugin: string, created: Date, published: Date) {
+    this.id = id
+    this.plugin = plugin
+    this.created = created
+    this.published = published
+  }
+}
+
 export class PodcastEpisode {
   availablePlugins: Array<string>
   id: number
@@ -376,6 +403,7 @@ export class PodcastEpisode {
   complete: boolean = false
   created: number = 0
   segments: Array<PodcastEpisodeSegment>
+  publications: Array<Publication>
 
   constructor(
     id: number,
@@ -385,7 +413,8 @@ export class PodcastEpisode {
     complete: boolean,
     created: number,
     availablePlugins: Array<string>,
-    segments: Array<PodcastEpisodeSegment>
+    segments: Array<PodcastEpisodeSegment>,
+    publications: Array<Publication>
   ) {
     this.availablePlugins = availablePlugins
     this.id = id
@@ -395,12 +424,9 @@ export class PodcastEpisode {
     this.complete = complete
     this.created = created
     this.segments = segments
+    this.publications = publications
   }
 }
-
-/**
- * handles consuming and displaying notifications to the user
- */
 
 export class Notification {
   readonly when: Date
@@ -538,7 +564,6 @@ export class ManagedFiles {
     return managedFileId as ManagedFile
   }
 }
-
 
 export const ai = new Ai(graphqlClient)
 export const notifications = new Notifications(graphqlClient)

@@ -4,7 +4,7 @@
 <script lang="ts">
 import AiChatComponent from '@/ai/AiChatComponent.vue'
 
-import {   mogul} from '@/services'
+import { mogul } from '@/services'
 import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
@@ -12,8 +12,7 @@ import NotificationBox from '@/notifications/NotificationBox.vue'
 export default {
   components: { NotificationBox, AiChatComponent, PreviewComponent, SidebarPanelComponent },
 
-  methods: {
-  },
+  methods: {},
 
   data() {
     const mogul = ''
@@ -46,7 +45,6 @@ export default {
         <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
         |
         <router-link to="/podcasts">{{ $t('app.menu.podcasts') }}</router-link>
-
       </div>
 
       <div class="sidebar">

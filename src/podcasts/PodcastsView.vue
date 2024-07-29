@@ -80,7 +80,7 @@
 }
 </style>
 <script lang="ts">
-import {Podcast, podcasts} from '@/services'
+import { Podcast, podcasts } from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import CreateEpisodeView from '@/podcasts/EpisodesView.vue'
 

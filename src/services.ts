@@ -310,6 +310,20 @@ class Podcasts {
     const id = await result.data
     console.debug('movePodcastEpisodeSegmentUp #' + id)
   }
+
+  async unpublish(publication: Publication) {
+
+    const mutation = `
+         mutation UnpublishPodcastEpisodePublication ($publicationId: ID   ){ 
+            unpublishPodcastEpisodePublication(   publicationId: $publicationId )  
+         }
+        `
+    const result = await this.client.mutation(mutation, {
+      publicationId:  publication.id
+    })
+    const id = await result.data
+    console.debug('unpublishPodcastEpisodePublication #' + id)
+  }
 }
 
 // settings

@@ -60,6 +60,7 @@ export default {
       await this.loadEpisodeSegments(episode)
     },
 
+
     async deletePodcastEpisode(episode: PodcastEpisode) {
       await podcasts.deletePodcastEpisode(episode.id)
       await this.cancel(new Event(''))
@@ -150,9 +151,11 @@ export default {
       }
     },
 
+    async unpublish(publication: Publication) {
+      await podcasts.unpublish(publication)
+    },
     async publish(e: Event) {
       e.preventDefault()
-
       await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin)
     },
 
@@ -398,9 +401,13 @@ export default {
               <div class="published-column">
                 {{ dateToString(publication.published) }}
               </div>
+              <div class="delete-column">
+                <a href="#" @click="unpublish( publication )" class="delete-icon"></a>
+              </div>
 
               <div class="url-column">
-                <a v-if="publication.url" :href="publication.url " target="_blank">permalink</a>
+                <a class=" mogul-icon preview-icon  "  :href="publication.url "
+                   target="_blank"> </a>
               </div>
             </div>
           </div>
@@ -438,8 +445,12 @@ export default {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas: 'id created  published  url plugin  ';
-  grid-template-columns: var(--id-column)   10em  10em  10em   auto;
+  grid-template-areas: 'id   created   url delete         plugin published   ';
+  grid-template-columns: var(--id-column)  10em var(--icon-column) var(--icon-column)    auto;
+}
+
+.publications .publications-row .delete-column {
+  grid-area: delete;
 }
 
 .publications .publications-row .id-column {

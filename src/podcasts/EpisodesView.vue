@@ -129,12 +129,12 @@ export default {
       }
     },
 
-    dateToString (date:Date) {
-      if (date){
-        return this.dateTimeFormatter().format (date)
+    dateToString(date: number) {
+      if (date && date !== 0) {
+        return this.dateTimeFormatter().format(new Date(date))
       }
-      return null ;
-    } ,
+      return null
+    },
 
     downArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
       return {
@@ -395,8 +395,8 @@ export default {
               <div class="id plugin-column">
                 {{ publication.plugin }}
               </div>
-              <div class="created-column">{{ dateToString(new Date(publication.created)) }}</div>
-              <div class="published-column">{{ dateToString(new Date(publication.published))  }}</div>
+              <div class="created-column">{{ dateToString((publication.created)) }}</div>
+              <div class="published-column">{{ dateToString((publication.published)) }}</div>
             </div>
           </div>
         </div>
@@ -414,7 +414,7 @@ export default {
         <div class="id id-column">
           #<b>{{ episode.id }}</b>
         </div>
-        <div class="created">{{ dateToString(new Date(episode.created)) }}</div>
+        <div class="created">{{ dateToString((episode.created)) }}</div>
         <div class="edit"><a href="#" @click="loadEpisode(episode)" class="edit-icon"> </a></div>
         <div class="delete">
           <a href="#" @click="deletePodcastEpisode(episode)" class="delete-icon"></a>

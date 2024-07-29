@@ -101,7 +101,8 @@ export default {
       this.draftEpisodeSegments = episode.segments
       this.publications = episode.publications
       const plugins = episode.availablePlugins
-      if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
+      if (plugins && plugins.length == 1)
+        this.selectedPlugin = plugins[0]
       await this.loadPodcast()
       notifications.listen(this.handle)
     },
@@ -127,6 +128,14 @@ export default {
         await this.loadEpisode(episode)
       }
     },
+
+    dateToString (date:Date) {
+      if (date){
+        return this.dateTimeFormatter().format (date)
+      }
+      return null ;
+    } ,
+
     downArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
       return {
         'down-arrow-icon': true,
@@ -384,11 +393,10 @@ export default {
                 #<b>{{ publication.id }}</b>
               </div>
               <div class="id plugin-column">
-                  {{ publication.plugin }}
+                {{ publication.plugin }}
               </div>
-              <div class="created-column">{{ dateTimeFormatter().format(new Date(publication.created)) }}</div>
-              <!--                <div class="published-column">{{ dateTimeFormatter().format(new Date(publication.published)) }}</div>-->
-
+              <div class="created-column">{{ dateToString(new Date(publication.created)) }}</div>
+              <div class="published-column">{{ dateToString(new Date(publication.published))  }}</div>
             </div>
           </div>
         </div>
@@ -406,7 +414,7 @@ export default {
         <div class="id id-column">
           #<b>{{ episode.id }}</b>
         </div>
-        <div class="created">{{ dateTimeFormatter().format(new Date(episode.created)) }}</div>
+        <div class="created">{{ dateToString(new Date(episode.created)) }}</div>
         <div class="edit"><a href="#" @click="loadEpisode(episode)" class="edit-icon"> </a></div>
         <div class="delete">
           <a href="#" @click="deletePodcastEpisode(episode)" class="delete-icon"></a>
@@ -426,7 +434,7 @@ export default {
 .publications .publications-row {
   display: grid;
   grid-template-areas: 'id created plugin ';
-  grid-template-columns: var(--id-column)   10em  10em auto  ;
+  grid-template-columns: var(--id-column)   10em  10em auto;
 }
 
 .publications .publications-row .id-column {

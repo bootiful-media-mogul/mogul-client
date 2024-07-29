@@ -137,7 +137,8 @@ class Podcasts {
                 id,
                 plugin,
                 created,
-                published 
+                published ,
+                url
               }
           }
         }
@@ -178,7 +179,8 @@ class Podcasts {
                   id,
                   plugin ,
                   created, 
-                  published
+                  published ,
+                  url
                 },
                 segments { 
                   id, 
@@ -383,11 +385,13 @@ export class PodcastEpisodeSegment {
 export class Publication {
   id: number
   plugin: string
-  created: Date
-  published: Date
+  created: number
+  published: number
+  url :string
 
-  constructor(id: number, plugin: string, created: Date, published: Date) {
+  constructor(id: number, plugin: string, created: number, published: number ,url :string) {
     this.id = id
+    this.url = url
     this.plugin = plugin
     this.created = created
     this.published = published

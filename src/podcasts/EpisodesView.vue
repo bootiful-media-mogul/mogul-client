@@ -394,8 +394,18 @@ export default {
               <div class="id plugin-column">
                 {{ publication.plugin }}
               </div>
-              <div class="created-column">{{ dateToString((publication.created)) }}</div>
-              <div class="published-column">{{ dateToString((publication.published)) }}</div>
+              <div class="created-column">{{ dateToString(publication.created) }}</div>
+              <div class="published-column">
+                {{ dateToString(publication.published) }}
+              </div>
+
+              <div class="url-column">
+
+                <!--
+                todo have some sort of b+w icon i could use to repressent surfing the web and openinng a leak
+                -->
+                <a :href="publication.url " target="_blank">permalink</a>
+              </div>
             </div>
           </div>
         </div>
@@ -432,8 +442,8 @@ export default {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas: 'id created plugin ';
-  grid-template-columns: var(--id-column)   10em  10em auto;
+  grid-template-areas: 'id created  published  url plugin  ';
+  grid-template-columns: var(--id-column)   10em  10em  10em   auto;
 }
 
 .publications .publications-row .id-column {
@@ -447,6 +457,16 @@ export default {
 .publications .publications-row .created-column {
   grid-area: created;
 }
+
+
+.publications .publications-row .published-column {
+  grid-area: published;
+}
+
+.publications .publications-row .url-column {
+  grid-area: url;
+}
+
 
 .podcast-episode-controls-row {
   display: grid;

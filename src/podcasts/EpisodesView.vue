@@ -146,7 +146,6 @@ export default {
     upArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
       return {
         'up-arrow-icon': true,
-        // 'disabled': this.draftEpisodeSegments[this.draftEpisodeSegments.length - 1].id == segment.id
         disabled: this.draftEpisodeSegments && this.draftEpisodeSegments[0].id == segment.id
       }
     },

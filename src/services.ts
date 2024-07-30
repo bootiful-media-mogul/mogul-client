@@ -144,7 +144,7 @@ class Podcasts {
         }
         `
     const res = await this.client.query(q, { id: id })
-    console.log('results ' , res )
+    console.log('results ', res)
     const pe = (await res.data['podcastEpisodeById']) as PodcastEpisode
     console.debug('podcast episode: ' + JSON.stringify(pe))
     return pe
@@ -312,14 +312,13 @@ class Podcasts {
   }
 
   async unpublish(publication: Publication) {
-
     const mutation = `
          mutation UnpublishPodcastEpisodePublication ($publicationId: ID   ){ 
             unpublishPodcastEpisodePublication(   publicationId: $publicationId )  
          }
         `
     const result = await this.client.mutation(mutation, {
-      publicationId:  publication.id
+      publicationId: publication.id
     })
     const id = await result.data
     console.debug('unpublishPodcastEpisodePublication #' + id)
@@ -401,9 +400,9 @@ export class Publication {
   plugin: string
   created: number
   published: number
-  url :string
+  url: string
 
-  constructor(id: number, plugin: string, created: number, published: number ,url :string) {
+  constructor(id: number, plugin: string, created: number, published: number, url: string) {
     this.id = id
     this.url = url
     this.plugin = plugin

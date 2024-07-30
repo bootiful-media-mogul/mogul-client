@@ -60,7 +60,6 @@ export default {
       await this.loadEpisodeSegments(episode)
     },
 
-
     async deletePodcastEpisode(episode: PodcastEpisode) {
       await podcasts.deletePodcastEpisode(episode.id)
       await this.cancel(new Event(''))
@@ -102,8 +101,7 @@ export default {
       this.draftEpisodeSegments = episode.segments
       this.publications = episode.publications
       const plugins = episode.availablePlugins
-      if (plugins && plugins.length == 1)
-        this.selectedPlugin = plugins[0]
+      if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
       await this.loadPodcast()
       notifications.listen(this.handle)
     },
@@ -328,10 +326,16 @@ export default {
                   v-model:managed-file-id="segment.audio.id"
                 >
                   <div class="segment-controls">
-                    <a @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)" href="#"
-                       :class="upArrowClasses(draftEpisode, segment)"></a>
-                    <a @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)" href="#"
-                       :class="downArrowClasses(draftEpisode, segment)"></a>
+                    <a
+                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
+                      href="#"
+                      :class="upArrowClasses(draftEpisode, segment)"
+                    ></a>
+                    <a
+                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
+                      href="#"
+                      :class="downArrowClasses(draftEpisode, segment)"
+                    ></a>
                     <a
                       @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
                       href="#"
@@ -389,8 +393,11 @@ export default {
           </div>
 
           <div class="publications">
-            <div class="pure-g form-row publications-row" v-bind:key="publication.id"
-                 v-for="publication in publications">
+            <div
+              class="pure-g form-row publications-row"
+              v-bind:key="publication.id"
+              v-for="publication in publications"
+            >
               <div class="id id-column">
                 #<b>{{ publication.id }}</b>
               </div>
@@ -402,12 +409,11 @@ export default {
                 {{ dateToString(publication.published) }}
               </div>
               <div class="delete-column">
-                <a href="#" @click="unpublish( publication )" class="delete-icon"></a>
+                <a href="#" @click="unpublish(publication)" class="delete-icon"></a>
               </div>
 
               <div class="url-column">
-                <a class=" mogul-icon preview-icon  "  :href="publication.url "
-                   target="_blank"> </a>
+                <a class="mogul-icon preview-icon" :href="publication.url" target="_blank"> </a>
               </div>
             </div>
           </div>
@@ -426,7 +432,7 @@ export default {
         <div class="id id-column">
           #<b>{{ episode.id }}</b>
         </div>
-        <div class="created">{{ dateToString((episode.created)) }}</div>
+        <div class="created">{{ dateToString(episode.created) }}</div>
         <div class="edit"><a href="#" @click="loadEpisode(episode)" class="edit-icon"> </a></div>
         <div class="delete">
           <a href="#" @click="deletePodcastEpisode(episode)" class="delete-icon"></a>
@@ -446,7 +452,7 @@ export default {
 .publications .publications-row {
   display: grid;
   grid-template-areas: 'id   created   url delete         plugin published   ';
-  grid-template-columns: var(--id-column)  10em var(--icon-column) var(--icon-column)    auto;
+  grid-template-columns: var(--id-column) 10em var(--icon-column) var(--icon-column) auto;
 }
 
 .publications .publications-row .delete-column {
@@ -465,7 +471,6 @@ export default {
   grid-area: created;
 }
 
-
 .publications .publications-row .published-column {
   grid-area: published;
 }
@@ -473,7 +478,6 @@ export default {
 .publications .publications-row .url-column {
   grid-area: url;
 }
-
 
 .podcast-episode-controls-row {
   display: grid;

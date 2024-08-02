@@ -285,21 +285,22 @@ class Podcasts {
 
   async movePodcastEpisodeSegmentDown(episodeId: number, episodeSegmentId: number) {
     const mutation = `
-         mutation MovePodcastEpisodeSegmentDown ($episodeId: ID, $episodeSegmentId: Int  ){ 
+         mutation MovePodcastEpisodeSegmentDown ($episodeId: ID, $episodeSegmentId: ID   ){ 
           movePodcastEpisodeSegmentDown(  episodeId: $episodeId,  episodeSegmentId: $episodeSegmentId  ) 
          }
         `
+    // todo for some reason these are showing up as `strings` and causing issues when i send them to the server-side.
+    //
     const result = await this.client.mutation(mutation, {
       episodeId: episodeId,
       episodeSegmentId: episodeSegmentId
     })
-    const id = await result.data
-    console.debug('movePodcastEpisodeSegmentDown #' + id)
+    console.debug('movePodcastEpisodeSegmentDown #' + JSON.stringify(result))
   }
 
   async movePodcastEpisodeSegmentUp(episodeId: number, episodeSegmentId: number) {
     const mutation = `
-         mutation MovePodcastEpisodeSegmentUp ($episodeId: ID, $episodeSegmentId: Int  ){ 
+         mutation MovePodcastEpisodeSegmentUp ($episodeId: ID  , $episodeSegmentId: ID    ){ 
           movePodcastEpisodeSegmentUp(  episodeId: $episodeId,  episodeSegmentId: $episodeSegmentId )  
          }
         `
@@ -307,14 +308,14 @@ class Podcasts {
       episodeId: episodeId,
       episodeSegmentId: episodeSegmentId
     })
-    const id = await result.data
-    console.debug('movePodcastEpisodeSegmentUp #' + id)
+
+    console.debug('movePodcastEpisodeSegmentUp #' + JSON.stringify(result))
   }
 
   async unpublish(publication: Publication) {
     const mutation = `
          mutation UnpublishPodcastEpisodePublication ($publicationId: ID   ){ 
-            unpublishPodcastEpisodePublication(   publicationId: $publicationId )  
+            unpublishPodcastEpisodePublication( publicationId: $publicationId )  
          }
         `
     const result = await this.client.mutation(mutation, {

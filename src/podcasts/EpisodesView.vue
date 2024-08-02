@@ -34,6 +34,9 @@ export default {
       const newPodcastId = this.selectedPodcastId
       this.currentPodcast = await podcasts.podcastById(newPodcastId)
       this.episodes = await podcasts.podcastEpisodes(newPodcastId)
+      if (this.episodes) {
+        this.episodes.sort((a: PodcastEpisode, b: PodcastEpisode) => b.created - a.created)
+      }
     },
 
     async movePodcastEpisodeSegmentDown(
@@ -172,7 +175,8 @@ export default {
         if (hasData) {
           changed = true
         }
-      } else {
+      } //
+      else {
         changed = this.dirtyKey != this.computeDirtyKey()
       }
 
@@ -451,7 +455,7 @@ export default {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas: 'id   created   url delete         plugin published   ';
+  grid-template-areas: 'id   created   url delete plugin published   ';
   grid-template-columns: var(--id-column) 10em var(--icon-column) var(--icon-column) auto;
 }
 

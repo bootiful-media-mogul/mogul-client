@@ -239,14 +239,14 @@ export default {
 
 <template>
   <h1 v-if="currentPodcast">
-    {{ $t('episodes.episodes', { title: currentPodcast.title }) }}
+    {{ $t('episodes.episodes', { id: currentPodcast.id , title: currentPodcast.title }) }}
   </h1>
 
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>
         <span v-if="title">
-          {{ $t('episodes.editing-episode', { title: title }) }}
+          {{ $t('episodes.editing-episode', {  id:  draftEpisode.id , title: title }) }}
         </span>
         <span v-else> {{ $t('episodes.new-episode') }} </span>
       </legend>

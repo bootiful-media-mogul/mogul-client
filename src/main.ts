@@ -25,6 +25,7 @@ const translations = {
 
     // notifications
     notifications: {
+      'podcast-episode-render-started-event':'Producing an episode of the podcast episode #{key}',
       'publication-started-event': 'Publishing podcast episode with ID #{key} has started.',
       'publication-completed-event': 'Publishing podcast episode with ID #{key} has finished.',
       'podcast-episode-completion-event':
@@ -51,16 +52,19 @@ const translations = {
     'episodes.buttons.add-segment': 'add a new segment',
 
     // episodes
+    'ok': 'OK',
+
+    //[intlify] Not found 'notifications.podcast-episode-render-started-event' key in 'en' locale messages.
     'episodes.title': 'all episodes',
     'episodes.publications': 'Publications',
     'episodes.basics': 'Basics',
     'episodes.segments': 'Segments',
     'episodes.publish': 'Publish',
-    'episodes.episodes': 'episodes for {title}',
+    'episodes.episodes': 'episodes for #{id} - "{title}"',
     'episodes.new-episode': 'new episode',
     'episodes.buttons.publish': 'publish',
     'episodes.buttons.cancel': 'cancel',
-    'episodes.editing-episode': 'editing "{title}"',
+    'episodes.editing-episode': 'editing episode #{id} - "{title}"',
     'episodes.buttons.save': 'save',
     'episodes.episode.description.ai-prompt':
       'please help me make this podcast episode description fun and pithy',

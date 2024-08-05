@@ -479,12 +479,16 @@ export class Notifications {
 
   private callbacks: Array<(notification: Notification) => void> = []
 
+  private callbacksByCategory: Map<string, Array<(notification: Notification) => void>> = new Map()
+
   constructor(client: Client) {
     this.client = client
     const that = this
     setInterval(async () => {
       // don't run a network call if there are no callbacks to benefit from it
-      if (that.callbacks.length == 0) return
+      if (that.callbacks.length == 0) {
+        return
+      }
 
       const q = `
           query   {
@@ -506,8 +510,21 @@ export class Notifications {
       if (d !== null) {
         const notificationObj = d as Notification
         that.callbacks.forEach((callback) => callback(notificationObj))
+        that.callbacksByCategory.forEach((array, key) => {
+          if (key === notificationObj.category) {
+            console.log('dispatching event with key [' + key + '] to function...')
+            array.forEach((cb) => cb(notificationObj))
+          }
+        })
       }
     }, 5000)
+  }
+
+  listenForCategory(category: string, callback: (notification: Notification) => void) {
+    if (!this.callbacksByCategory.has(category)) {
+      this.callbacksByCategory.set(category, [])
+    }
+    this.callbacksByCategory.get(category)!.push(callback)
   }
 
   listen(callback: (notification: Notification) => void) {

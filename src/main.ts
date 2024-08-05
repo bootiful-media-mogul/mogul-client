@@ -21,6 +21,7 @@ const translations = {
 
     hello: 'hello',
     podbean: 'Podbean',
+    mock: 'Mock',
     github: 'GitHub',
 
     // notifications

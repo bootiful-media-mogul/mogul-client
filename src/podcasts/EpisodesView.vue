@@ -82,7 +82,6 @@ export default {
       console.log('notification: ' + JSON.stringify(notification))
       // different cases that might apply to this particular page, so we'll branch on the key...
 
-
       const good =
         notification?.context !== undefined && notification?.context?.complete !== undefined
       if (good) {
@@ -381,7 +380,7 @@ export default {
               <select
                 v-model="selectedPlugin"
                 @change="pluginSelected"
-                :disabled="!draftEpisode.complete  "
+                :disabled="!draftEpisode.complete"
               >
                 <option disabled value="">
                   {{ $t('episodes.plugins.please-select-a-plugin') }}

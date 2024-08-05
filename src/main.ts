@@ -25,15 +25,13 @@ const translations = {
 
     // notifications
     notifications: {
-      'podcast-episode-render-started-event':'Producing an episode of the podcast episode #{key}',
+      'podcast-episode-render-started-event': 'Producing an episode of the podcast episode #{key}',
       'publication-started-event': 'Publishing podcast episode with ID #{key} has started.',
       'publication-completed-event': 'Publishing podcast episode with ID #{key} has finished.',
       'podcast-episode-completion-event':
         'The podcast with ID #{key} is completed and ready for production',
-      'podcast-created-event':
-        `The podcast "{context}", with ID #{key}, has been created.`.trim(),
-      'podcast-deleted-event':
-        `The podcast "{context}", with ID #{key}, has been deleted.`.trim()
+      'podcast-created-event': `The podcast "{context}", with ID #{key}, has been created.`.trim(),
+      'podcast-deleted-event': `The podcast "{context}", with ID #{key}, has been deleted.`.trim()
     },
 
     // previews
@@ -52,7 +50,7 @@ const translations = {
     'episodes.buttons.add-segment': 'add a new segment',
 
     // episodes
-    'ok': 'OK',
+    ok: 'OK',
 
     //[intlify] Not found 'notifications.podcast-episode-render-started-event' key in 'en' locale messages.
     'episodes.title': 'all episodes',

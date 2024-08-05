@@ -30,6 +30,11 @@ export default {
       return dateTimeFormatter
     },
 
+    publishButtonDisabled() {
+      const enabled = this.draftEpisode.complete && this.selectedPlugin != ''
+      return !enabled
+    },
+
     async loadPodcast() {
       const newPodcastId = this.selectedPodcastId
       this.currentPodcast = await podcasts.podcastById(newPodcastId)
@@ -239,18 +244,19 @@ export default {
 
 <template>
   <h1 v-if="currentPodcast">
-    {{ $t('episodes.episodes', { id: currentPodcast.id , title: currentPodcast.title }) }}
+    {{ $t('episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
   </h1>
 
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>
         <span v-if="title">
-          {{ $t('episodes.editing-episode', {  id:  draftEpisode.id , title: title }) }}
+          {{ $t('episodes.editing-episode', { id: draftEpisode.id, title: title }) }}
         </span>
-        <span v-else> {{ $t('episodes.new-episode') }} </span>
+        <span v-else>
+          {{ $t('episodes.new-episode') }}
+        </span>
       </legend>
-
       <div class="form-section">
         <div class="form-section-title">{{ $t('episodes.basics') }}</div>
 
@@ -371,7 +377,7 @@ export default {
               <select
                 v-model="selectedPlugin"
                 @change="pluginSelected"
-                :disabled="!draftEpisode.complete"
+                :disabled="!draftEpisode.complete  "
               >
                 <option disabled value="">
                   {{ $t('episodes.plugins.please-select-a-plugin') }}
@@ -386,10 +392,10 @@ export default {
                 </option>
               </select>
               <button
-                :disabled="!draftEpisode.complete"
                 @click="publish"
                 type="submit"
                 class="pure-button pure-button-primary publish-button"
+                :disabled="publishButtonDisabled()"
               >
                 {{ $t('episodes.buttons.publish') }}
               </button>

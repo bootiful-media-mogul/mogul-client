@@ -123,17 +123,14 @@ export default {
       // reload ui state.
       notifications.listenForCategory('publication-completed-event', async function(notification: Notification) {
         console.debug('got publication-completed-event: ' + JSON.stringify(notification))
-        // todo reload the publications
-
         await that.refreshEpisode()
-
       })
       notifications.listenForCategory('publication-started-event', async function(notification: Notification) {
         console.debug('got publication-started-event: ' + JSON.stringify(notification))
         // todo reload the publications and show some sort of badging indicating the episode is being processed. the problem is that the returned notification doesn't give us a way to link the publication, does it?
         // todo also maybe i can change some of these toast boxes to be non visible? there's too many. we just need the first one and the last one to be toasts, i'd think...
         await that.refreshEpisode()
-        //that.publications .filter( p => p.id = notification.context)
+        that.publications.filter(p => p.id === parseInt(notification.key)).forEach(p => p.publishing = true)
       })
     },
 

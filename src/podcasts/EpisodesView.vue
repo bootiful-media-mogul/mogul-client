@@ -132,7 +132,7 @@ export default {
         console.debug('got publication-started-event: ' + JSON.stringify(notification))
         // todo reload the publications
         await that.refreshEpisode()
-        that.publications .filter( p => p.id = notification.context)
+        //that.publications .filter( p => p.id = notification.context)
       })
     },
 

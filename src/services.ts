@@ -402,6 +402,8 @@ export class Publication {
   created: number
   published: number
   url: string
+  // this is meant to be set by the UI if and only if we're in the middle of publishing an episode
+  publishing: boolean = false
 
   constructor(id: number, plugin: string, created: number, published: number, url: string) {
     this.id = id

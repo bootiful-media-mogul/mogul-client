@@ -11,7 +11,7 @@ import {
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
-import { dateFormat  ,dateTimeFormat } from '@/dates'
+import { dateFormat, dateTimeFormat } from '@/dates'
 
 export default {
   mounted(): void {
@@ -38,10 +38,11 @@ export default {
     async loadPodcast() {
       const newPodcastId = this.selectedPodcastId
       this.currentPodcast = await podcasts.podcastById(newPodcastId)
-      this.episodes = await podcasts.podcastEpisodes(newPodcastId)
-      if (this.episodes) {
-        this.episodes.sort((a: PodcastEpisode, b: PodcastEpisode) => b.created - a.created)
+      const episodes = await podcasts.podcastEpisodes(newPodcastId)
+      if (episodes) {
+        episodes.sort((a: PodcastEpisode, b: PodcastEpisode) => b.created - a.created)
       }
+      this.episodes = episodes
     },
 
     async movePodcastEpisodeSegmentDown(
@@ -59,7 +60,6 @@ export default {
       await podcasts.movePodcastEpisodeSegmentUp(episode.id, episodeSegment.id)
       await this.loadEpisodeSegments(episode)
     },
-
     async deletePodcastEpisodeSegment(
       episode: PodcastEpisode,
       episodeSegment: PodcastEpisodeSegment
@@ -67,18 +67,19 @@ export default {
       await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
       await this.loadEpisodeSegments(episode)
     },
-
     async deletePodcastEpisode(episode: PodcastEpisode) {
       await podcasts.deletePodcastEpisode(episode.id)
       await this.cancel(new Event(''))
     },
-
     async addNewPodcastEpisodeSegment(episode: PodcastEpisode) {
       await podcasts.addPodcastEpisodeSegment(episode.id)
       await this.loadEpisodeSegments(episode)
     },
-
+    async refreshEpisode() {
+      await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+    },
     async handle(notification: Notification) {
+      // todo turn this into a listenForCategory call
       console.log('notification: ' + JSON.stringify(notification))
       // different cases that might apply to this particular page, so we'll branch on the key...
 
@@ -91,7 +92,7 @@ export default {
           const completed = contextObj.complete
           if (completed !== this.draftEpisode.complete) {
             // only reload if the completion state is different
-            await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+            await this.refreshEpisode()
           }
         }
       }
@@ -113,8 +114,26 @@ export default {
       this.publications = episode.publications
       const plugins = episode.availablePlugins
       if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
-      await this.loadPodcast()
-      notifications.listen(this.handle)
+      const that = this
+      await that.loadPodcast()
+
+      // show the toast boxes for everything...
+      notifications.listen(that.handle)
+
+      // reload ui state.
+      notifications.listenForCategory('publication-completed-event', async function(notification: Notification) {
+        console.debug('got publication-completed-event: ' + JSON.stringify(notification))
+        // todo reload the publications
+
+        await that.refreshEpisode()
+
+      })
+      notifications.listenForCategory('publication-started-event', async function(notification: Notification) {
+        console.debug('got publication-started-event: ' + JSON.stringify(notification))
+        // todo reload the publications
+        await that.refreshEpisode()
+        that.publications .filter( p => p.id = notification.context)
+      })
     },
 
     async save(e: Event) {
@@ -426,6 +445,7 @@ export default {
               </div>
 
               <div class="url-column">
+                <span v-if="publication.publishing"> publishing... </span>
                 <a class="mogul-icon preview-icon" :href="publication.url" target="_blank"> </a>
               </div>
             </div>
@@ -465,7 +485,7 @@ export default {
 .publications .publications-row {
   display: grid;
   grid-template-areas: 'id   created   url delete plugin published  . ';
-  grid-template-columns: var(--id-column)  var(--date-column) var(--icon-column) var(--icon-column) var(--date-column) auto ;
+  grid-template-columns: var(--id-column)  var(--date-column) var(--icon-column) var(--icon-column) var(--date-column) auto;
 }
 
 .publications .publications-row .delete-column {

@@ -11,7 +11,7 @@ import {
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
-import { dateTimeFormatter } from '../dates'
+import { dateFormat  ,dateTimeFormat } from '@/dates'
 
 export default {
   mounted(): void {
@@ -27,7 +27,7 @@ export default {
 
   methods: {
     dateTimeFormatter() {
-      return dateTimeFormatter
+      return dateFormat
     },
 
     publishButtonDisabled() {
@@ -464,8 +464,8 @@ export default {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas: 'id   created   url delete plugin published   ';
-  grid-template-columns: var(--id-column) 10em var(--icon-column) var(--icon-column) auto;
+  grid-template-areas: 'id   created   url delete plugin published  . ';
+  grid-template-columns: var(--id-column)  var(--date-column) var(--icon-column) var(--icon-column) var(--date-column) auto ;
 }
 
 .publications .publications-row .delete-column {
@@ -529,7 +529,7 @@ export default {
   grid-template-areas: 'id created edit delete  title';
   grid-template-columns:
     var(--id-column)
-    10em
+    var(--date-column)
     var(--icon-column)
     var(--icon-column)
     auto;

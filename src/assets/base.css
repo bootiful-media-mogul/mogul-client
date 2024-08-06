@@ -10,6 +10,8 @@
   --icon-column: calc(var(--gutter-space) * 1.5);
   --id-column: calc(var(--gutter-space) * 3);
   --footer-height: calc(var(--gutter-space) * 1.5);
+  --date-column: calc(1 * 6em);
+  --datetime-column: calc(2 * var(--date-column));
 }
 
 .managed-file-preview-image {

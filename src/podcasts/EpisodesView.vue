@@ -77,191 +77,199 @@ export default {
     },
     async refreshEpisode() {
       await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+      console.log('publications' + JSON.stringify(this.publications))
+    },
+    async loadEpisode(episode: PodcastEpisode) {
+      this.draftEpisode.id = episode.id
+      this.draftEpisode.graphic = episode.graphic
+      this.draftEpisode.title = episode.title
+      this.draftEpisode.description = episode.description
+      this.draftEpisode.complete = episode.complete
+      this.draftEpisode.created = episode.created
+      this.draftEpisode.availablePlugins = episode.availablePlugins
+      this.description = this.draftEpisode.description
+      this.title = this.draftEpisode.title
+      this.created = this.draftEpisode.created
+      this.dirtyKey = this.computeDirtyKey()
+      this.draftEpisodeSegments = episode.segments
 
+      const publicationsToShow = episode.publications
+      this.publications = publicationsToShow.sort(
+        (a: Publication, b: Publication) => b.created - a.created
+      )
+      // this.publications = episode.publications
+      const plugins = episode.availablePlugins
+      if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
+      const that = this
+      await that.loadPodcast()
 
-    }
-  ,
-  async loadEpisode(episode: PodcastEpisode) {
-    this.draftEpisode.id = episode.id
-    this.draftEpisode.graphic = episode.graphic
-    this.draftEpisode.title = episode.title
-    this.draftEpisode.description = episode.description
-    this.draftEpisode.complete = episode.complete
-    this.draftEpisode.created = episode.created
-    this.draftEpisode.availablePlugins = episode.availablePlugins
-    this.description = this.draftEpisode.description
-    this.title = this.draftEpisode.title
-    this.created = this.draftEpisode.created
-    this.dirtyKey = this.computeDirtyKey()
-    this.draftEpisodeSegments = episode.segments
-    this.publications = episode.publications
-    const plugins = episode.availablePlugins
-    if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
-    const that = this
-    await that.loadPodcast()
-
-    // called when there are enough segments to publish the episode
-    notifications.listenForCategory('podcast-episode-completion-event', async function(notification: Notification) {
-      const good =
-        notification?.context !== undefined && notification?.context?.complete !== undefined
-      if (good) {
-        const contextObj = JSON.parse(notification['context'])
-        // const episodeId = contextObj['episodeId']
-        if (contextObj.complete) {
-          const completed = contextObj.complete
-          if (completed !== that.draftEpisode.complete) {
-            // only reload if the completion state is different
-            await that.refreshEpisode()
+      // called when there are enough segments to publish the episode
+      notifications.listenForCategory(
+        'podcast-episode-completion-event',
+        async function (notification: Notification) {
+          const good =
+            notification?.context !== undefined && notification?.context?.complete !== undefined
+          if (good) {
+            const contextObj = JSON.parse(notification['context'])
+            // const episodeId = contextObj['episodeId']
+            if (contextObj.complete) {
+              const completed = contextObj.complete
+              if (completed !== that.draftEpisode.complete) {
+                // only reload if the completion state is different
+                await that.refreshEpisode()
+              }
+            }
           }
         }
-      }
-    })
-
-    // reload ui state.
-    notifications.listenForCategory('publication-completed-event', async function(notification: Notification) {
-      console.debug('got publication-completed-event: ' + JSON.stringify(notification))
-      await that.refreshEpisode()
-    })
-    notifications.listenForCategory('publication-started-event', async function(notification: Notification) {
-      console.debug('got publication-started-event: ' + JSON.stringify(notification))
-      // todo reload the publications and show some sort of badging indicating the episode is being processed. the problem is that the returned notification doesn't give us a way to link the publication, does it?
-      // todo also maybe i can change some of these toast boxes to be non visible? there's too many. we just need the first one and the last one to be toasts, i'd think...
-      // todo also why is the url not showing up once the publications are reloaded and there is a url in the server-side entity?
-      await that.refreshEpisode()
-    })
-  },
-
-  async save(e: Event) {
-    e.preventDefault()
-
-    if (this.draftEpisode.id) {
-      // we're editing a record, so update it
-      const episode = await podcasts.updatePodcastEpisode(
-        this.draftEpisode.id,
-        this.title,
-        this.description
       )
-      await this.loadEpisode(episode)
-    } //
-    else {
-      const episode = await podcasts.createPodcastEpisodeDraft(
-        this.selectedPodcastId,
-        this.title,
-        this.description
+
+      // reload ui state.
+      notifications.listenForCategory(
+        'publication-completed-event',
+        async function (notification: Notification) {
+          console.debug('got publication-completed-event: ' + JSON.stringify(notification))
+          // await that.refreshEpisode()
+        }
       )
-      await this.loadEpisode(episode)
-    }
-  },
+      notifications.listenForCategory(
+        'publication-started-event',
+        async function (notification: Notification) {
+          console.debug('got publication-started-event: ' + JSON.stringify(notification))
+          // todo reload the publications and show some sort of badging indicating the episode is being processed. the problem is that the returned notification doesn't give us a way to link the publication, does it?
+          // todo also maybe i can change some of these toast boxes to be non visible? there's too many. we just need the first one and the last one to be toasts, i'd think...
+          // todo also why is the url not showing up once the publications are reloaded and there is a url in the server-side entity?
+          console.log('old publications: ' + JSON.stringify(that.publications))
+          await that.refreshEpisode()
+          console.log('new publications: ' + JSON.stringify(that.publications))
+          that.publications
+            .filter((pub) => pub.id === parseInt(notification.key))
+            .forEach((p) => (p.publishing = true))
+        }
+      )
+    },
 
-  dateToString(date: number) {
-    if (date && date !== 0) {
-      return this.dateTimeFormatter().format(new Date(date))
-    }
-    return null
-  },
+    async save(e: Event) {
+      e.preventDefault()
 
-  downArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
-    return {
-      'down-arrow-icon': true,
-      disabled: this.draftEpisodeSegments[this.draftEpisodeSegments.length - 1].id == segment.id
-    }
-  },
-
-  upArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
-    return {
-      'up-arrow-icon': true,
-      disabled: this.draftEpisodeSegments && this.draftEpisodeSegments[0].id == segment.id
-    }
-  },
-
-  async unpublish(publication: Publication) {
-    await podcasts.unpublish(publication)
-  },
-  async publish(e: Event) {
-    e.preventDefault()
-    await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin)
-  },
-
-  pluginSelected(e: Event) {
-    e.preventDefault()
-    console.log('plugin selected: ' + JSON.stringify(this.selectedPlugin))
-  },
-
-  /**
-   * returns true if the buttons should be disabled because there's no change in the data in the form.
-   */
-  buttonsDisabled() {
-    let changed = false
-    if (!this.draftEpisode.id) {
-      const hasData: boolean = this.description.trim() != '' && this.title.trim() != ''
-      if (hasData) {
-        changed = true
+      if (this.draftEpisode.id) {
+        // we're editing a record, so update it
+        const episode = await podcasts.updatePodcastEpisode(
+          this.draftEpisode.id,
+          this.title,
+          this.description
+        )
+        await this.loadEpisode(episode)
+      } //
+      else {
+        const episode = await podcasts.createPodcastEpisodeDraft(
+          this.selectedPodcastId,
+          this.title,
+          this.description
+        )
+        await this.loadEpisode(episode)
       }
-    } //
-    else {
-      changed = this.dirtyKey != this.computeDirtyKey()
+    },
+
+    dateToString(date: number) {
+      if (date && date !== 0) {
+        return this.dateTimeFormatter().format(new Date(date))
+      }
+      return null
+    },
+
+    downArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
+      return {
+        'down-arrow-icon': true,
+        disabled: this.draftEpisodeSegments[this.draftEpisodeSegments.length - 1].id == segment.id
+      }
+    },
+
+    upArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
+      return {
+        'up-arrow-icon': true,
+        disabled: this.draftEpisodeSegments && this.draftEpisodeSegments[0].id == segment.id
+      }
+    },
+
+    async unpublish(publication: Publication) {
+      await podcasts.unpublish(publication)
+    },
+    async publish(e: Event) {
+      e.preventDefault()
+      await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin)
+    },
+
+    pluginSelected(e: Event) {
+      e.preventDefault()
+      console.log('plugin selected: ' + JSON.stringify(this.selectedPlugin))
+    },
+
+    /**
+     * returns true if the buttons should be disabled because there's no change in the data in the form.
+     */
+    buttonsDisabled() {
+      let changed = false
+      if (!this.draftEpisode.id) {
+        const hasData: boolean = this.description.trim() != '' && this.title.trim() != ''
+        if (hasData) {
+          changed = true
+        }
+      } //
+      else {
+        changed = this.dirtyKey != this.computeDirtyKey()
+      }
+
+      return !changed
+    },
+
+    computeDirtyKey(): string {
+      return (
+        '' +
+        (this.draftEpisode.id ? this.draftEpisode.id : '') +
+        this.description +
+        ':' +
+        this.title
+      )
+    },
+
+    async cancel(e: Event) {
+      e.preventDefault()
+      this.draftEpisode = reactive({} as PodcastEpisode)
+      this.title = ''
+      this.description = ''
+      this.draftEpisodeSegments = []
+      this.publications = []
+      await this.loadPodcast()
+    },
+
+    async loadEpisodeSegments(episode: PodcastEpisode) {
+      const ep = await podcasts.podcastEpisodeById(episode.id)
+      this.draftEpisodeSegments = ep.segments
     }
-
-    return !changed
   },
-
-  computeDirtyKey(): string {
-    return (
-      '' +
-      (this.draftEpisode.id ? this.draftEpisode.id : '') +
-      this.description +
-      ':' +
-      this.title
-    )
+  created() {
+    this.dirtyKey = this.computeDirtyKey()
   },
-
-  async cancel(e: Event) {
-    e.preventDefault()
-    this.draftEpisode = reactive({} as PodcastEpisode)
-    this.title = ''
-    this.description = ''
-    this.draftEpisodeSegments = []
-    this.publications = []
-    await this.loadPodcast()
+  setup() {
+    return {}
   },
-
-  async loadEpisodeSegments(episode: PodcastEpisode) {
-    const ep = await podcasts.podcastEpisodeById(episode.id)
-    this.draftEpisodeSegments = ep.segments
+  data() {
+    return {
+      draftEpisodeSegments: [] as Array<PodcastEpisodeSegment>,
+      completionEventListenersEventSource: null as any as EventSource,
+      completionEventListeners: [],
+      selectedPlugin: '',
+      created: -1,
+      draftEpisode: reactive({} as PodcastEpisode),
+      episodes: [] as Array<PodcastEpisode>,
+      publications: [] as Array<Publication>,
+      currentPodcast: null as any as Podcast,
+      selectedPodcastId: this.id,
+      title: '',
+      description: '',
+      dirtyKey: ''
+    }
   }
-}
-,
-
-created()
-{
-  this.dirtyKey = this.computeDirtyKey()
-}
-,
-
-setup()
-{
-  return {}
-}
-,
-
-data()
-{
-  return {
-    draftEpisodeSegments: [] as Array<PodcastEpisodeSegment>,
-    completionEventListenersEventSource: null as any as EventSource,
-    completionEventListeners: [],
-    selectedPlugin: '',
-    created: -1,
-    draftEpisode: reactive({} as PodcastEpisode),
-    episodes: [] as Array<PodcastEpisode>,
-    publications: [] as Array<Publication>,
-    currentPodcast: null as any as Podcast,
-    selectedPodcastId: this.id,
-    title: '',
-    description: '',
-    dirtyKey: ''
-  }
-}
 }
 </script>
 
@@ -445,9 +453,16 @@ data()
                 <a href="#" @click="unpublish(publication)" class="delete-icon"></a>
               </div>
 
-              <div class="url-column">
+              <div class="url-column preview">
                 <span v-if="publication.publishing"> publishing... </span>
-                <a class="mogul-icon preview-icon" :href="publication.url" target="_blank"> </a>
+                <a
+                  :class="
+                    'mogul-icon preview-icon ' +
+                    (publication.url && publication.url !== '' ? '' : ' disabled')
+                  "
+                  :href="publication.url"
+                  target="_blank"
+                ></a>
               </div>
             </div>
           </div>
@@ -486,7 +501,9 @@ data()
 .publications .publications-row {
   display: grid;
   grid-template-areas: 'id   created   url delete plugin published  . ';
-  grid-template-columns: var(--id-column)  var(--date-column) var(--icon-column) var(--icon-column) var(--date-column) auto;
+  grid-template-columns:
+    var(--id-column) var(--date-column) var(--icon-column) var(--icon-column) var(--date-column)
+    auto;
 }
 
 .publications .publications-row .delete-column {

@@ -128,7 +128,7 @@ export default {
         'publication-completed-event',
         async function (notification: Notification) {
           console.debug('got publication-completed-event: ' + JSON.stringify(notification))
-          // await that.refreshEpisode()
+          await that.refreshEpisode()
         }
       )
       notifications.listenForCategory(
@@ -143,7 +143,11 @@ export default {
           console.log('new publications: ' + JSON.stringify(that.publications))
           that.publications
             .filter((pub) => pub.id === parseInt(notification.key))
-            .forEach((p) => (p.publishing = true))
+            .forEach((p) =>  {
+              p.publishing = true
+              console.log('publishing '+ p.id )
+            })
+
         }
       )
     },

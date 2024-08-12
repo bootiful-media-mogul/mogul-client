@@ -143,11 +143,10 @@ export default {
           console.log('new publications: ' + JSON.stringify(that.publications))
           that.publications
             .filter((pub) => pub.id === parseInt(notification.key))
-            .forEach((p) =>  {
+            .forEach((p) => {
               p.publishing = true
-              console.log('publishing '+ p.id )
+              console.log('publishing ' + p.id)
             })
-
         }
       )
     },

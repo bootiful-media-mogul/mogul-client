@@ -26,6 +26,8 @@ const translations = {
 
     // notifications
     notifications: {
+      'podcast-episode-render-finished-event':
+        'Finished producing an episode of the podcast episode #{key} ',
       'podcast-episode-render-started-event': 'Producing an episode of the podcast episode #{key}',
       'publication-started-event': 'Publishing podcast episode with ID #{key} has started.',
       'publication-completed-event': 'Publishing podcast episode with ID #{key} has finished.',

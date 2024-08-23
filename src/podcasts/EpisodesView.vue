@@ -104,7 +104,7 @@ export default {
       const that = this
       await that.loadPodcast()
 
-      // called when there are enough segments to publish the episode
+      // called when there are enough segments to publish the episode. toggles publish functionality 
       notifications.listenForCategory(
         'podcast-episode-completion-event',
         async function(notification: Notification) {

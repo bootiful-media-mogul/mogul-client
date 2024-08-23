@@ -47,7 +47,7 @@ export class AiWorkshopRequestEvent {
 }
 
 export function previewManagedFile(managedFileId: number) {
-  console.log('launching previewManagedFile for ' + managedFileId)
+  // console.log('launching previewManagedFile for ' + managedFileId)
   events.emit('preview-managed-file-event', managedFileId)
 }
 
@@ -74,7 +74,7 @@ class Podcasts {
   }
 
   async addPodcastEpisodeSegment(episodeId: number) {
-    console.log('add a new podcast episode segment #' + episodeId)
+    // console.log('add a new podcast episode segment #' + episodeId)
     const mutation = ` 
           mutation AddPodcastEpisodeSegment($episodeId: ID  ){ 
             addPodcastEpisodeSegment(episodeId:$episodeId  ) 
@@ -87,7 +87,7 @@ class Podcasts {
   }
 
   async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
-    console.log('publishing ' + episodeId + ', with plugin ' + pluginName + '.')
+    // console.log('publishing ' + episodeId + ', with plugin ' + pluginName + '.')
 
     const mutation = ` 
           mutation PublishPodcastEpisode  ($episode: ID, $pluginName: String ){ 
@@ -113,7 +113,7 @@ class Podcasts {
           }
          }
         `
-    console.debug(episodeId + ':' + title + ':' + description)
+    //console.debug(episodeId + ':' + title + ':' + description)
     const result = await this.client.mutation(mutation, {
       episode: episodeId,
       title: title,
@@ -121,7 +121,7 @@ class Podcasts {
     })
 
     const res = await result.data['updatePodcastEpisode']
-    console.debug('updated results: ', res)
+    // console.debug('updated results: ', res)
     return await this.podcastEpisodeById(res['id'])
   }
 
@@ -144,9 +144,9 @@ class Podcasts {
         }
         `
     const res = await this.client.query(q, { id: id })
-    console.log('results ', res)
+    // console.log('results ', res)
     const pe = (await res.data['podcastEpisodeById']) as PodcastEpisode
-    console.debug('podcast episode: ' + JSON.stringify(pe))
+    // console.debug('podcast episode: ' + JSON.stringify(pe))
     return pe
   }
 
@@ -256,7 +256,7 @@ class Podcasts {
           }
          }
         `
-    console.log(podcastId + ':' + title + ':' + description)
+    //console.log(podcastId + ':' + title + ':' + description)
     const result = await this.client.mutation(mutation, {
       podcast: podcastId,
       title: title,
@@ -265,7 +265,7 @@ class Podcasts {
 
     const idBag = (await result.data['createPodcastEpisodeDraft'])['id']
     const episode = await this.podcastEpisodeById(idBag)
-    console.log('the episode is ', episode)
+    // console.log('the episode is ', episode)
     return episode
   }
 
@@ -295,7 +295,7 @@ class Podcasts {
       episodeId: episodeId,
       episodeSegmentId: episodeSegmentId
     })
-    console.debug('movePodcastEpisodeSegmentDown #' + JSON.stringify(result))
+    // console.debug('movePodcastEpisodeSegmentDown #' + JSON.stringify(result))
   }
 
   async movePodcastEpisodeSegmentUp(episodeId: number, episodeSegmentId: number) {
@@ -309,7 +309,7 @@ class Podcasts {
       episodeSegmentId: episodeSegmentId
     })
 
-    console.debug('movePodcastEpisodeSegmentUp #' + JSON.stringify(result))
+    // console.debug('movePodcastEpisodeSegmentUp #' + JSON.stringify(result))
   }
 
   async unpublish(publication: Publication) {
@@ -322,7 +322,7 @@ class Podcasts {
       publicationId: publication.id
     })
     const id = await result.data
-    console.debug('unpublishPodcastEpisodePublication #' + id)
+    // console.debug('unpublishPodcastEpisodePublication #' + id)
   }
 }
 
@@ -514,7 +514,7 @@ export class Notifications {
         that.callbacks.forEach((callback) => callback(notificationObj))
         that.callbacksByCategory.forEach((array, key) => {
           if (key === notificationObj.category) {
-            console.log('dispatching event with key [' + key + '] to function...')
+            // console.log('dispatching event with key [' + key + '] to function...')
             array.forEach((cb) => cb(notificationObj))
           }
         })
@@ -532,7 +532,7 @@ export class Notifications {
   listen(callback: (notification: Notification) => void) {
     if (this.callbacks.indexOf(callback) === -1) {
       this.callbacks.push(callback)
-      console.log('registering a callback for Notifications')
+      // console.log('registering a callback for Notifications')
     }
   }
 }

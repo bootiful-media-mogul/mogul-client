@@ -32,7 +32,7 @@ export default {
 
     publishButtonDisabled() {
       const disabled = !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
-      console.log('disabled? ' + disabled)
+      // console.log('disabled? ' + disabled)
       return disabled
     },
 
@@ -78,7 +78,7 @@ export default {
     },
     async refreshEpisode() {
       await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
-      console.log('publications' + JSON.stringify(this.publications))
+      //console.log('publications' + JSON.stringify(this.publications))
     },
     async loadEpisode(episode: PodcastEpisode) {
       this.draftEpisode.id = episode.id
@@ -126,13 +126,13 @@ export default {
       notifications.listenForCategory(
         'publication-started-event',
         async function(notification: Notification) {
-          console.debug('got publication-started-event: ' + JSON.stringify(notification))
+          //console.debug('got publication-started-event: ' + JSON.stringify(notification))
           // todo reload the publications and show some sort of badging indicating the episode is being processed. the problem is that the returned notification doesn't give us a way to link the publication, does it?
           // todo also maybe i can change some of these toast boxes to be non visible? there's too many. we just need the first one and the last one to be toasts, i'd think...
           // todo also why is the url not showing up once the publications are reloaded and there is a url in the server-side entity?
-          console.log('old publications: ' + JSON.stringify(that.publications))
+          //console.log('old publications: ' + JSON.stringify(that.publications))
           await that.refreshEpisode()
-          console.log('new publications: ' + JSON.stringify(that.publications))
+          //console.log('new publications: ' + JSON.stringify(that.publications))
           that.publications
             .filter((pub) => pub.id === parseInt(notification.key))
             .forEach((p) => {

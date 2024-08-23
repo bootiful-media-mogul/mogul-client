@@ -22,6 +22,7 @@ export default {
   },
   async created() {
     this.mogul = await mogul.me()
+    console.log(this.mogul)
   }
 }
 </script>

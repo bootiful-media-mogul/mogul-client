@@ -110,13 +110,8 @@ export default {
         async function(notification: Notification) {
           const jsonMap = JSON.parse(notification.context) as any
           const complete = jsonMap['complete'] as boolean
-          console.log('got a notification that the episode #' + jsonMap['episodeId'])
-          if (complete) {
-            if (complete !== that.draftEpisode.complete) {
-              // only reload if the completion state is different
-              await that.refreshEpisode()
-            }
-          }
+          console.log('got a notification that the episode #' + jsonMap['episodeId']  + ' has been marked as ' + ( complete ?'complete':'incomplete'))
+          await that.refreshEpisode()
         }
       )
 
@@ -425,10 +420,10 @@ export default {
               <button
                 @click="publish"
                 type="submit"
-                :key=" draftEpisode.id "
+                :key="draftEpisode.id"
                 ref="publishButton"
                 class="pure-button pure-button-primary publish-button"
-                :disabled="publishButtonDisabled()  "
+                :disabled="publishButtonDisabled()"
               >
                 {{ $t('episodes.buttons.publish') }}
               </button>

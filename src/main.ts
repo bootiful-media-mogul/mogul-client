@@ -19,7 +19,7 @@ const translations = {
       create: 'Create'
     },
 
-    hello: 'hello',
+    hello: 'hello, {mogul} ({email})',
     podbean: 'Podbean',
     mock: 'Mock',
     github: 'GitHub',

@@ -1,7 +1,6 @@
 import { Client } from '@urql/core'
 
 export default class Mogul {
-
   private readonly client: Client
 
   constructor(client: Client) {
@@ -11,10 +10,11 @@ export default class Mogul {
   async user(): Promise<any> {
     const query = `
             query { 
-             me { username, email, givenName, familyName  } 
+             me {  name, email, givenName, familyName  } 
             } 
     `
     const result = await this.client.query(query, {})
+    console.log( result)
     return result.data['me']
   }
 
@@ -31,5 +31,4 @@ export default class Mogul {
   private indexIntoQueryField(result: any, resultKey: string): any {
     return result.data[resultKey]
   }
-
 }

@@ -144,10 +144,7 @@ class Podcasts {
         }
         `
     const res = await this.client.query(q, { id: id })
-    // console.log('results ', res)
-    const pe = (await res.data['podcastEpisodeById']) as PodcastEpisode
-    // console.debug('podcast episode: ' + JSON.stringify(pe))
-    return pe
+    return (await res.data['podcastEpisodeById']) as PodcastEpisode
   }
 
   async create(title: string): Promise<Podcast> {
@@ -157,7 +154,7 @@ class Podcasts {
            id, title
           }
          }
-        `
+    `
     const result = await this.client.mutation(mutation, {
       title: title
     })

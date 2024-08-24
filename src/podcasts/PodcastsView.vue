@@ -31,24 +31,36 @@
   <form class="pure-form">
     <fieldset>
       <legend>Podcasts</legend>
+
       <div class="pure-g form-row podcast-rows" v-for="podcast in podcasts" v-bind:key="podcast.id">
-        <div class="id-column">
+        <div class="id">
           #<b>{{ podcast.id }}</b>
         </div>
+        <div class="created"> 
+           {{ dateToString(podcast.created) }}
+        </div>
 
-        <div class="links-column">
+
+        <div class="links">
           <a href="#" @click="navigateToEpisodesPageForPodcast(podcast.id, $event)">
             {{ $t('podcasts.podcasts.episodes') }}
           </a>
-          |
-          <a v-if="podcasts.length > 1" href="#" @click="deletePodcast(podcast.id)">
-            {{ $t('podcasts.podcasts.delete') }}
-          </a>
-          <a v-if="podcasts.length == 1" href="#" class="disabled">
-            {{ $t('podcasts.podcasts.delete') }}
-          </a>
         </div>
-        <div class="title-column">
+        <div class="delete">
+          <a
+            v-if="podcasts.length  > 1"
+            @click.prevent="deletePodcast(podcast.id)"
+            href="#"
+            class="delete-icon"
+          ></a>
+          <span
+            v-if="podcasts.length == 1"
+            href="#"
+            class="delete-icon disabled"
+          ></span>
+
+        </div>
+        <div class="title">
           {{ podcast.title }}
         </div>
       </div>
@@ -57,32 +69,47 @@
 </template>
 
 <style>
-.id-column {
+.id {
   font-weight: normal;
   font-size: smaller;
 }
 
-.links-column {
+.links {
+  grid-area: links;
 }
 
-.title-column {
+.title {
+  grid-area: title;
 }
 
-.id-column b {
+.created {
+  grid-area: created;
+}
+
+.id b {
   font-weight: bold;
   font-size: medium;
 }
 
+.delete {
+  grid-area: delete;
+}
+
+.title {
+  grid-area: title;
+}
+
 .podcast-rows {
   display: grid;
-  grid-template-areas: 'id links title';
-  grid-template-columns: var(--id-column) 200px auto;
+  grid-template-areas: 'id delete links created title';
+  grid-template-columns: var(--id-column) 50px  200px 100px auto;
 }
 </style>
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import CreateEpisodeView from '@/podcasts/EpisodesView.vue'
+import { dateToString } from '@/dates'
 
 async function refresh() {
   return await podcasts.podcasts()
@@ -98,9 +125,11 @@ export default {
 
   async created() {
     this.podcasts = await refresh()
+    console.log(this.podcasts)
   },
 
   methods: {
+    dateToString,
     async deletePodcast(id: number) {
       console.log('trying to delete ' + id)
       const deleted = await podcasts.deletePodcast(id)
@@ -117,6 +146,8 @@ export default {
         params: { id: podcastId }
       })
     },
+
+
     async createPodcast(e: Event) {
       e.preventDefault()
       await podcasts.create(this.title)

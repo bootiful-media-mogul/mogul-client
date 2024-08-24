@@ -59,10 +59,12 @@ export function workshopInAi(callback: (e: AiWorkshopReplyEvent) => void, text: 
 export class Podcast {
   readonly title: string
   readonly id: number
+  readonly created: number
 
-  constructor(id: number, title: string) {
+  constructor(id: number, title: string , created: number) {
     this.id = id
     this.title = title
+    this.created = created
   }
 }
 
@@ -233,7 +235,7 @@ class Podcasts {
     const q = `
         query {
           podcasts  { 
-           id, title
+           id, title ,created 
           }
          }
         `

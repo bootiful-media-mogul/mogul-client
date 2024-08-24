@@ -11,7 +11,7 @@ import {
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
-import { dateFormat } from '@/dates'
+import { dateFormat ,dateToString } from '@/dates'
 
 export default {
   mounted(): void {
@@ -26,15 +26,9 @@ export default {
   props: ['id'],
 
   methods: {
-    dateTimeFormatter() {
-      return dateFormat
-    },
-
+   
     publishButtonDisabled() {
-      const disabled =
-        !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
-      // console.log('disabled? ' + disabled)
-      return disabled
+      return  !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
     },
 
     async loadPodcast() {
@@ -170,13 +164,7 @@ export default {
         await this.loadEpisode(episode)
       }
     },
-
-    dateToString(date: number) {
-      if (date && date !== 0) {
-        return this.dateTimeFormatter().format(new Date(date))
-      }
-      return null
-    },
+ 
 
     downArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
       return {

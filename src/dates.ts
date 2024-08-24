@@ -3,6 +3,7 @@ export const dateFormat = new Intl.DateTimeFormat('en-US', {
   month: '2-digit',
   day: '2-digit'
 } as Intl.DateTimeFormatOptions)
+
 export const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
   minute: '2-digit',
   hour: '2-digit',
@@ -10,3 +11,11 @@ export const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
   month: '2-digit',
   day: '2-digit'
 } as Intl.DateTimeFormatOptions)
+
+
+export function dateToString(date: number) {
+  if (date && date !== 0) {
+    return dateFormat.format(new Date(date))
+  }
+  return null
+}

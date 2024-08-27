@@ -61,7 +61,7 @@ export class Podcast {
   readonly id: number
   readonly created: number
 
-  constructor(id: number, title: string , created: number) {
+  constructor(id: number, title: string, created: number) {
     this.id = id
     this.title = title
     this.created = created

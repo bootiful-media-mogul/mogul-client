@@ -36,10 +36,9 @@
         <div class="id">
           #<b>{{ podcast.id }}</b>
         </div>
-        <div class="created"> 
-           {{ dateToString(podcast.created) }}
+        <div class="created">
+          {{ dts(podcast.created) }}
         </div>
-
 
         <div class="links">
           <a href="#" @click="navigateToEpisodesPageForPodcast(podcast.id, $event)">
@@ -48,17 +47,12 @@
         </div>
         <div class="delete">
           <a
-            v-if="podcasts.length  > 1"
+            v-if="podcasts.length > 1"
             @click.prevent="deletePodcast(podcast.id)"
             href="#"
             class="delete-icon"
           ></a>
-          <span
-            v-if="podcasts.length == 1"
-            href="#"
-            class="delete-icon disabled"
-          ></span>
-
+          <span v-if="podcasts.length == 1" href="#" class="delete-icon disabled"></span>
         </div>
         <div class="title">
           {{ podcast.title }}
@@ -102,7 +96,7 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete links created title';
-  grid-template-columns: var(--id-column) 50px  200px 100px auto;
+  grid-template-columns: var(--id-column) 50px 200px 100px auto;
 }
 </style>
 <script lang="ts">
@@ -129,7 +123,9 @@ export default {
   },
 
   methods: {
-    dateToString,
+    dts: function(date: number) {
+      return dateToString(date)
+    },
     async deletePodcast(id: number) {
       console.log('trying to delete ' + id)
       const deleted = await podcasts.deletePodcast(id)
@@ -146,7 +142,6 @@ export default {
         params: { id: podcastId }
       })
     },
-
 
     async createPodcast(e: Event) {
       e.preventDefault()

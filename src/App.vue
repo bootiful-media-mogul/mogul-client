@@ -16,15 +16,16 @@ export default {
 
   data() {
     const mogul = ''
-    const email  = ''
+    const email = ''
     return {
-      mogul ,email 
+      mogul,
+      email
     }
   },
   async created() {
     const user = await mogul.user()
-    this.mogul = user.givenName + ' ' + user.familyName 
-    this.email =   user.email 
+    this.mogul = user.givenName + ' ' + user.familyName
+    this.email = user.email
     console.log(this.mogul)
   }
 }
@@ -36,7 +37,7 @@ export default {
   <div class="frame">
     <div class="page">
       <div class="welcome">
-        {{ $t('hello', {mogul:mogul,email:  email} ) }}   
+        {{ $t('hello', { mogul: mogul, email: email }) }}
       </div>
 
       <div class="view">

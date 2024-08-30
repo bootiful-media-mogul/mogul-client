@@ -108,12 +108,13 @@ export default {
         async function (notification: Notification) {
           const jsonMap = JSON.parse(notification.context) as any
           const complete = jsonMap['complete'] as boolean
-          console.log(
-            'got a notification that the episode #' +
-              jsonMap['episodeId'] +
-              ' has been marked as ' +
-              (complete ? 'complete' : 'incomplete')
-          )
+          //
+          // console.debug(
+          //   'got a notification that the episode #' +
+          //     jsonMap['episodeId'] +
+          //     ' has been marked as ' +
+          //     (complete ? 'complete' : 'incomplete')
+          // )
           await that.refreshEpisode()
         }
       )

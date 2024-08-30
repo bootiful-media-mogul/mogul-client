@@ -26,11 +26,10 @@ export default {
   props: ['id'],
 
   methods: {
-
-    dts (date: number): string {
+    dts(date: number): string {
       return dateToString(date)
     },
-    
+
     publishButtonDisabled() {
       return !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
     },
@@ -106,14 +105,14 @@ export default {
       // called when there are enough segments to publish the episode. toggles publish functionality
       notifications.listenForCategory(
         'podcast-episode-completion-event',
-        async function(notification: Notification) {
+        async function (notification: Notification) {
           const jsonMap = JSON.parse(notification.context) as any
           const complete = jsonMap['complete'] as boolean
           console.log(
             'got a notification that the episode #' +
-            jsonMap['episodeId'] +
-            ' has been marked as ' +
-            (complete ? 'complete' : 'incomplete')
+              jsonMap['episodeId'] +
+              ' has been marked as ' +
+              (complete ? 'complete' : 'incomplete')
           )
           await that.refreshEpisode()
         }
@@ -122,14 +121,14 @@ export default {
       // reload ui state.
       notifications.listenForCategory(
         'publication-completed-event',
-        async function(notification: Notification) {
+        async function (notification: Notification) {
           console.debug('got publication-completed-event: ' + JSON.stringify(notification))
           await that.refreshEpisode()
         }
       )
       notifications.listenForCategory(
         'publication-started-event',
-        async function(notification: Notification) {
+        async function (notification: Notification) {
           //console.debug('got publication-started-event: ' + JSON.stringify(notification))
           // todo reload the publications and show some sort of badging indicating the episode is being processed. the problem is that the returned notification doesn't give us a way to link the publication, does it?
           // todo also maybe i can change some of these toast boxes to be non visible? there's too many. we just need the first one and the last one to be toasts, i'd think...

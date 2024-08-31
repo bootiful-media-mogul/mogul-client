@@ -119,6 +119,7 @@ export default {
       }
     },
     async loadEpisode(episode: PodcastEpisode) {
+      this.currentPublication =   -1  ; // currently unused 
       console.log('loadEpisode: ' + (episode ? episode : '(null episode)'))
       this.draftEpisode.id = episode.id
       this.draftEpisode.graphic = episode.graphic
@@ -242,8 +243,13 @@ export default {
   created() {
     this.dirtyKey = this.computeDirtyKey()
     const that = this
-
-    // called when there are enough segments to publish the episode. toggles publish functionality
+    
+    // todo these event handlers should <em>only</em> reload the UI 
+    //  state if the user is doing something w/ an entity 
+    //  affected by the event. that is, why refresh a screen
+    //  belonging to something else completely if that thing isn't 
+    //  visible on the screen in the first place?
+    
     
     notifications.listenForCategory(
       'podcast-episode-completion-event',
@@ -253,22 +259,22 @@ export default {
         const episodeId = parseInt(notification.key)
         console.log('podcast-episode-completion-event: episodeId: ' + episodeId + '; complete: ' + complete)
         await that.refreshEpisodePublicationControls(episodeId, complete) // get it from the event
-        //todo change this to only refresh the things that need changing
       }
-    )
+    );
 
-    // reload ui state.
     notifications.listenForCategory(
       'publication-completed-event',
       async function(notification: Notification) {
-        
-        console.log ('got publication-completed-event: ' + JSON.stringify(notification) + 
+        console.debug( 'got publication-completed-event: ' + JSON.stringify(notification) + 
           ' publication-completed-event: about to call refreshEpisode for episode ID ' +that.draftEpisode.id +'.')
-        
-        await that.refreshEpisode(that.draftEpisode.id )
-        //todo change this to only refresh the things that need changing
+        // if ( that.currentPublication == parseInt(notification.key))
+        // {
+          await that.refreshEpisode(that.draftEpisode.id )
+          // console.log('refreshing the currently loaded episode because the ')
+        // }
       }
-    )
+    );
+    
     notifications.listenForCategory(
       'publication-started-event',
       async function(notification: Notification) {
@@ -279,6 +285,7 @@ export default {
           .filter((pub) => pub.id === parseInt(notification.key))
           .forEach((p) => {
             p.publishing = true
+            that.currentPublication = p .id 
             console.log('publishing ' + p.id)
           })
       }
@@ -289,6 +296,7 @@ export default {
   },
   data() {
     return {
+      currentPublication: -1 as number ,
       draftEpisodeSegments: [] as Array<PodcastEpisodeSegment>,
       completionEventListenersEventSource: null as any as EventSource,
       completionEventListeners: [],

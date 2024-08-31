@@ -119,15 +119,13 @@ export default {
 
   async created() {
     this.podcasts = await refresh()
-    console.log(this.podcasts)
   },
 
   methods: {
-    dts: function (date: number) {
+    dts: function(date: number) {
       return dateToString(date)
     },
     async deletePodcast(id: number) {
-      console.log('trying to delete ' + id)
       const deleted = await podcasts.deletePodcast(id)
       // nb: i tried just setting the variable podcasts to a new array, but vue.js didn't 'see' that
       // so it's safer to modify the existing collection
@@ -136,7 +134,6 @@ export default {
 
     async navigateToEpisodesPageForPodcast(podcastId: number, e: Event) {
       e.preventDefault()
-      console.log('creating podcast episode')
       this.$router.push({
         name: 'podcast-episodes',
         params: { id: podcastId }

@@ -69,6 +69,7 @@ export class Podcast {
 }
 
 class Podcasts {
+
   private readonly client: Client
 
   constructor(client: Client) {
@@ -88,19 +89,23 @@ class Podcasts {
     return true
   }
 
-  async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
-    // console.log('publishing ' + episodeId + ', with plugin ' + pluginName + '.')
-
+  async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<Publication> {
     const mutation = ` 
           mutation PublishPodcastEpisode  ($episode: ID, $pluginName: String ){ 
-            publishPodcastEpisode ( episodeId: $episode,  pluginName: $pluginName ) 
+            publishPodcastEpisode ( episodeId: $episode,  pluginName: $pluginName )  { 
+                id,
+                plugin,
+                url, 
+                created , 
+                published 
+            }
           }
-        `
-    await this.client.mutation(mutation, {
+    `
+    const publication = await this.client.mutation(mutation, {
       episode: episodeId,
       pluginName: pluginName
     })
-    return true
+    return await publication.data ['publishPodcastEpisode'] as Publication
   }
 
   async updatePodcastEpisode(

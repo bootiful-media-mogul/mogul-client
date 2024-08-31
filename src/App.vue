@@ -26,7 +26,6 @@ export default {
     const user = await mogul.user()
     this.mogul = user.givenName + ' ' + user.familyName
     this.email = user.email
-    console.log(this.mogul)
   }
 }
 </script>

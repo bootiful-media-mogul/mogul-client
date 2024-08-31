@@ -64,6 +64,7 @@ export default {
       episode: PodcastEpisode,
       episodeSegment: PodcastEpisodeSegment
     ) {
+      this.draftEpisode.complete = false
       await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
       await this.loadEpisodeSegments(episode)
     },
@@ -72,14 +73,53 @@ export default {
       await this.cancel(new Event(''))
     },
     async addNewPodcastEpisodeSegment(episode: PodcastEpisode) {
+      this.draftEpisode.complete = false
       await podcasts.addPodcastEpisodeSegment(episode.id)
       await this.loadEpisodeSegments(episode)
     },
-    async refreshEpisode() {
-      await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+    
+    
+    async refreshEpisode(episodeId: number) {
+      console.log('refreshing episode [' + episodeId + ']')
+      if (!episodeId) console.error('the episode you gave me to refresh isnt valid ' + episodeId + '!')
+      await this.loadEpisode(await podcasts.podcastEpisodeById(episodeId))
       //console.log('publications' + JSON.stringify(this.publications))
     },
+
+    async refreshEpisodePublicationControls(id: number, completed: boolean) {
+      this.draftEpisode.complete = completed // set it up so that the UI sees the change.
+      console.log('refreshEpisodePublicationControls: episodeId: ' + id)
+      if (!id) {
+        console.log('no episode provided, returning')
+      }
+      console.log('searching for episode with id ' + id)
+      const episode = await podcasts.podcastEpisodeById(id)
+      if (!episode) {
+        console.debug('there is no episode in the SQL DB. returning. ')
+        return
+      }//
+      else {
+        console.debug('found the episode.')
+      }
+
+      if (episode && episode.publications && episode.publications.length > 0) {
+        this.publications = episode.publications.sort(
+          (a: Publication, b: Publication) => b.created - a.created
+        )
+      } //  
+      else {
+        console.debug('No publications found for episode ' + id)
+      }
+      if (episode && episode.availablePlugins) {
+        const plugins = episode.availablePlugins
+        if (plugins && plugins.length == 1)
+          this.selectedPlugin = plugins[0]
+      } else {
+        console.debug('no plugins found for episode ' + episode.id)
+      }
+    },
     async loadEpisode(episode: PodcastEpisode) {
+      console.log('loadEpisode: ' + (episode ? episode : '(null episode)'))
       this.draftEpisode.id = episode.id
       this.draftEpisode.graphic = episode.graphic
       this.draftEpisode.title = episode.title
@@ -92,46 +132,7 @@ export default {
       this.created = this.draftEpisode.created
       this.dirtyKey = this.computeDirtyKey()
       this.draftEpisodeSegments = episode.segments
-
-      const publicationsToShow = episode.publications
-      this.publications = publicationsToShow.sort(
-        (a: Publication, b: Publication) => b.created - a.created
-      )
-      const plugins = episode.availablePlugins
-      if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
-      const that = this
-      await that.loadPodcast()
-
-      // called when there are enough segments to publish the episode. toggles publish functionality
-      notifications.listenForCategory(
-        'podcast-episode-completion-event',
-        async function(notification: Notification) {
-          const jsonMap = JSON.parse(notification.context) as any
-          // const complete = jsonMap['complete'] as boolean
-          await that.refreshEpisode()
-        }
-      )
-
-      // reload ui state.
-      notifications.listenForCategory(
-        'publication-completed-event',
-        async function(notification: Notification) {
-          console.debug('got publication-completed-event: ' + JSON.stringify(notification))
-          await that.refreshEpisode()
-        }
-      )
-      notifications.listenForCategory(
-        'publication-started-event',
-        async function(notification: Notification) {
-          await that.refreshEpisode()
-          that.publications
-            .filter((pub) => pub.id === parseInt(notification.key))
-            .forEach((p) => {
-              p.publishing = true
-              console.log('publishing ' + p.id)
-            })
-        }
-      )
+      await this.refreshEpisodePublicationControls(episode.id, this.draftEpisode.complete)
     },
 
     async save(e: Event) {
@@ -144,7 +145,10 @@ export default {
           this.title,
           this.description
         )
-        await this.loadEpisode(episode)
+
+        console.log('updated draft episode ' + this.draftEpisode.id + '.')
+        await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
+
       } //
       else {
         const episode = await podcasts.createPodcastEpisodeDraft(
@@ -152,7 +156,8 @@ export default {
           this.title,
           this.description
         )
-        await this.loadEpisode(episode)
+        console.log('about to save new draft episode: ' + episode.id)
+        await this.loadEpisode(await podcasts.podcastEpisodeById(episode.id))
       }
     },
 
@@ -223,11 +228,61 @@ export default {
 
     async loadEpisodeSegments(episode: PodcastEpisode) {
       const ep = await podcasts.podcastEpisodeById(episode.id)
-      this.draftEpisodeSegments = ep.segments
+      if (ep && ep.segments && ep.segments.length > 0) {
+        console.log('episode.segments.length=' + ep.segments.length)
+        this.draftEpisodeSegments = ep.segments
+      } else {
+        console.log('no segments returned when loading ' +
+          'segments, therefore setting to 0 length')
+
+        // this.draftEpisodeSegments = []
+      }
     }
   },
   created() {
     this.dirtyKey = this.computeDirtyKey()
+    const that = this
+
+    // called when there are enough segments to publish the episode. toggles publish functionality
+    
+    notifications.listenForCategory(
+      'podcast-episode-completion-event',
+      async function(notification: Notification) {
+        const jsonMap = JSON.parse(notification.context) as any
+        const complete = jsonMap['complete'] as boolean
+        const episodeId = parseInt(notification.key)
+        console.log('podcast-episode-completion-event: episodeId: ' + episodeId + '; complete: ' + complete)
+        await that.refreshEpisodePublicationControls(episodeId, complete) // get it from the event
+        //todo change this to only refresh the things that need changing
+      }
+    )
+
+    // reload ui state.
+    notifications.listenForCategory(
+      'publication-completed-event',
+      async function(notification: Notification) {
+        
+        console.log ('got publication-completed-event: ' + JSON.stringify(notification) + 
+          ' publication-completed-event: about to call refreshEpisode for episode ID ' +that.draftEpisode.id +'.')
+        
+        await that.refreshEpisode(that.draftEpisode.id )
+        //todo change this to only refresh the things that need changing
+      }
+    )
+    notifications.listenForCategory(
+      'publication-started-event',
+      async function(notification: Notification) {
+        console.log('publication-started-event: about to call refreshEpisode for episode ID ' +that.draftEpisode.id +'.')
+
+        await that.refreshEpisode(that.draftEpisode.id )
+        that.publications
+          .filter((pub) => pub.id === parseInt(notification.key))
+          .forEach((p) => {
+            p.publishing = true
+            console.log('publishing ' + p.id)
+          })
+      }
+    )
   },
   setup() {
     return {}
@@ -463,7 +518,7 @@ export default {
           #<b>{{ episode.id }}</b>
         </div>
         <div class="created">{{ dts(episode.created) }}</div>
-        <div class="edit"><a href="#" @click="loadEpisode(episode)" class="edit-icon"> </a></div>
+        <div class="edit"><a href="#" @click="refreshEpisode(episode.id)" class="edit-icon"> </a></div>
         <div class="delete">
           <a href="#" @click="deletePodcastEpisode(episode)" class="delete-icon"></a>
         </div>

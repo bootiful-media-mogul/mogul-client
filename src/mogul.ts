@@ -14,7 +14,7 @@ export default class Mogul {
             } 
     `
     const result = await this.client.query(query, {})
-    console.log(result)
+    // console.debug(result)
     return result.data['me']
   }
 

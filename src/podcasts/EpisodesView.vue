@@ -34,7 +34,7 @@ export default {
       return !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
     },
 
-    //todo we're calling this from loadEpisode. any chance this is grossly inefficient and could be optimized away? 
+    //todo we're calling this from loadEpisode. any chance this is grossly inefficient and could be optimized away?
     async loadPodcast() {
       const newPodcastId = this.selectedPodcastId
       this.currentPodcast = await podcasts.podcastById(newPodcastId)
@@ -78,9 +78,9 @@ export default {
       await this.loadEpisodeSegments(episode)
     },
 
-
     async refreshEpisode(episodeId: number) {
-      if (!episodeId) console.error('the episode you gave me to refresh isnt valid ' + episodeId + '!')
+      if (!episodeId)
+        console.error('the episode you gave me to refresh isnt valid ' + episodeId + '!')
       await this.loadEpisode(await podcasts.podcastEpisodeById(episodeId))
     },
 
@@ -95,16 +95,17 @@ export default {
           this.publications = episode.publications.sort(
             (a: Publication, b: Publication) => b.created - a.created
           )
-        } //  
+        } //
 
         if (episode.availablePlugins) {
           const plugins = episode.availablePlugins
-          if (plugins && plugins.length == 1)
-            this.selectedPlugin = plugins[0]
+          if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
         }
       } else {
-        console.error('there is no episode in the SQL DB for ' +
-          'refreshEpisodePublicationControls. returning. ')
+        console.error(
+          'there is no episode in the SQL DB for ' +
+            'refreshEpisodePublicationControls. returning. '
+        )
       }
     },
     async loadEpisode(episode: PodcastEpisode) {
@@ -161,12 +162,11 @@ export default {
 
     async unpublish(publication: Publication) {
       await podcasts.unpublish(publication)
-    }, 
-    
-    
+    },
+
     async publish(e: Event) {
       e.preventDefault()
-      await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin) 
+      await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin)
     },
 
     pluginSelected(e: Event) {
@@ -215,23 +215,22 @@ export default {
       const ep = await podcasts.podcastEpisodeById(episode.id)
       if (ep && ep.segments && ep.segments.length > 0) {
         this.draftEpisodeSegments = ep.segments
-      } 
+      }
     }
   },
   created() {
     this.dirtyKey = this.computeDirtyKey()
     const that = this
 
-    // todo these event handlers should <em>only</em> reload the UI 
-    //  state if the user is doing something w/ an entity 
+    // todo these event handlers should <em>only</em> reload the UI
+    //  state if the user is doing something w/ an entity
     //  affected by the event. that is, why refresh a screen
-    //  belonging to something else completely if that thing isn't 
+    //  belonging to something else completely if that thing isn't
     //  visible on the screen in the first place?
-
 
     notifications.listenForCategory(
       'podcast-episode-completion-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         const jsonMap = JSON.parse(notification.context) as any
         const complete = jsonMap['complete'] as boolean
         const episodeId = parseInt(notification.key)
@@ -241,14 +240,14 @@ export default {
 
     notifications.listenForCategory(
       'publication-completed-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
       }
     )
 
     notifications.listenForCategory(
       'publication-started-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
         that.publications
           .filter((pub) => pub.id === parseInt(notification.key))
@@ -492,7 +491,9 @@ export default {
           #<b>{{ episode.id }}</b>
         </div>
         <div class="created">{{ dts(episode.created) }}</div>
-        <div class="edit"><a href="#" @click="refreshEpisode(episode.id)" class="edit-icon"> </a></div>
+        <div class="edit">
+          <a href="#" @click="refreshEpisode(episode.id)" class="edit-icon"> </a>
+        </div>
         <div class="delete">
           <a href="#" @click="deletePodcastEpisode(episode)" class="delete-icon"></a>
         </div>

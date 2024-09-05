@@ -1,21 +1,17 @@
 <script lang="ts">
-import { mogul, Setting, settings, SettingsPage } from '@/services'
-import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
+import {mogul, Setting, settings, SettingsPage} from '@/services'
 import PrivatePasswordInputComponent from '@/privacy/PrivatePasswordInputComponent.vue'
 
 export default {
-  components: { PrivatePasswordInputComponent, AiWorkshopItIconComponent },
+  components: {PrivatePasswordInputComponent},
 
   async mounted() {
-    this.mogul = await mogul.me()
+    const u = (await mogul.user())
+    this.mogul = u.displayName
     await this.reloadSettings()
   },
   methods: {
-    async togglePrivacyFor(id: string) {
-      const input = document.getElementById(id) as HTMLInputElement
-      console.assert(input !== null, 'the input should be non-null')
-      input.type = input.type === 'password' ? 'text' : 'password'
-    },
+
     async reloadSettings() {
       this.settings = await settings.settings()
 

@@ -69,7 +69,6 @@ export class Podcast {
 }
 
 class Podcasts {
-
   private readonly client: Client
 
   constructor(client: Client) {
@@ -105,7 +104,7 @@ class Podcasts {
       episode: episodeId,
       pluginName: pluginName
     })
-    return await publication.data ['publishPodcastEpisode'] as Publication
+    return (await publication.data['publishPodcastEpisode']) as Publication
   }
 
   async updatePodcastEpisode(
@@ -584,6 +583,8 @@ export class Settings {
     return json.data['settings']
   }
 }
+
+
 
 export class ManagedFiles {
   private readonly client: Client

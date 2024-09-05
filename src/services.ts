@@ -135,7 +135,13 @@ class Podcasts {
     const q = `
         query GetPodcastEpisodeById ( $id: ID){
             podcastEpisodeById ( id : $id) {
-              availablePlugins, created, id, title, description, complete,  graphic { id  },
+              availablePlugins, 
+              created, 
+              id, 
+              title, 
+              description, 
+              complete,  
+              graphic { id  },
               segments { 
                 id, name, audio { id } , order , crossFadeDuration 
               }
@@ -150,7 +156,7 @@ class Podcasts {
         }
         `
     const res = await this.client.query(q, { id: id })
-    return (await res.data['podcastEpisodeById']) as PodcastEpisode
+    return (await res.data['podcastEpisodeById']) as PodcastEpisode 
   }
 
   async create(title: string): Promise<Podcast> {
@@ -329,7 +335,7 @@ class Podcasts {
   }
 }
 
-// settings
+
 export class Setting {
   name: string
   valid: boolean
@@ -353,8 +359,6 @@ export class SettingsPage {
     this.settings = settings
   }
 }
-
-// settings
 
 export class ManagedFile {
   id: number
@@ -385,13 +389,13 @@ export class ManagedFile {
 }
 
 export class PodcastEpisodeSegment {
+  
   id: number
   name: string
   audio: ManagedFile
   order: number
 
   constructor(id: number, name: string, audio: ManagedFile, order: number) {
-    console.log(id, name, audio, order)
     this.id = id
     this.name = name
     this.audio = audio

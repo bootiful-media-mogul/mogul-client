@@ -80,8 +80,10 @@ export default {
 
     async refreshEpisode(episodeId: number) {
       if (!episodeId)
-        console.error('the episode you gave me to refresh isnt valid ' + episodeId + '!')
-      await this.loadEpisode(await podcasts.podcastEpisodeById(episodeId))
+        console.error('the episode you gave me ' +
+          'to refresh is not valid ' + episodeId + '!')
+      const ep = await podcasts.podcastEpisodeById(episodeId)
+      await this.loadEpisode(ep)
     },
 
     async refreshEpisodePublicationControls(id: number, completed: boolean) {
@@ -104,7 +106,7 @@ export default {
       } else {
         console.error(
           'there is no episode in the SQL DB for ' +
-            'refreshEpisodePublicationControls. returning. '
+          'refreshEpisodePublicationControls. returning. '
         )
       }
     },
@@ -230,7 +232,7 @@ export default {
 
     notifications.listenForCategory(
       'podcast-episode-completion-event',
-      async function (notification: Notification) {
+      async function(notification: Notification) {
         const jsonMap = JSON.parse(notification.context) as any
         const complete = jsonMap['complete'] as boolean
         const episodeId = parseInt(notification.key)
@@ -240,14 +242,14 @@ export default {
 
     notifications.listenForCategory(
       'publication-completed-event',
-      async function (notification: Notification) {
+      async function(notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
       }
     )
 
     notifications.listenForCategory(
       'publication-started-event',
-      async function (notification: Notification) {
+      async function(notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
         that.publications
           .filter((pub) => pub.id === parseInt(notification.key))

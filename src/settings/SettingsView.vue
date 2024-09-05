@@ -67,7 +67,7 @@ export default {
 </script>
 
 <template>
-  <h1 v-if="mogul">{{ $t('settings.title', { mogul: mogul }) }}</h1>
+  <h1 v-if="mogul">{{ $t('settings.title' ) }}</h1>
   <div v-for="settingsPage in settings" v-bind:key="settingsPage.category">
     <form class="pure-form pure-form-stacked">
       <fieldset>

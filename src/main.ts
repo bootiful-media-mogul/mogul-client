@@ -85,7 +85,7 @@ const translations = {
     'podcasts.podcasts.episodes': 'episodes',
 
     // settings
-    'settings.title': 'System Settings for {mogul}',
+    'settings.title': 'Settings',
     'settings.save-button': 'save configuration changes for {plugin}',
     'settings.github': 'Github',
     'settings.github.clientId': 'Client ID',

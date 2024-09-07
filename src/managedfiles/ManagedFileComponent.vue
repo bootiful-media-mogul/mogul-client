@@ -51,7 +51,7 @@
     var(--icon-column)
     var(--icon-column)
     var(--icon-column)
-    15em
+    8em
     auto;
   display: grid;
 }

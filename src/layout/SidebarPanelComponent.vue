@@ -4,6 +4,7 @@
       <div class="visibility-controls">
         <a href="#" @click="hide" v-if="expanded">{{ $t('labels.close') }}</a>
         <a href="#" @click="show" v-if="!expanded">{{ title }}</a>
+        | <a href="#" @click="maximize">+</a>
       </div>
     </div>
     <div class="sidebar-panel-content">
@@ -38,9 +39,24 @@
   margin-bottom: var(--gutter-space);
 }
 
+
+/* Maximized (modal-like) state */
+.sidebar-panel.maximized {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  border-radius: 10px;
+}
+
 .sidebar-panel-hidden {
   background-color: black;
 }
+
 
 .sidebar-panel-visible .sidebar-panel-top {
   background-color: black;
@@ -84,26 +100,34 @@ export default {
     })
   },
 
-  data(vm) {
-    const expanded = false
+  data() {
     return {
-      expanded
+      expanded: false,
+      maximized: false
     }
   },
 
   props: ['title'],
   methods: {
     hide() {
+      this.maximized = false
       this.expanded = false
     },
     show() {
       this.expanded = true
+      this.maximized = false
+    },
+    maximize() {
+      this.expanded = true
+      this.maximized = true
     }
   },
   computed: {
+
     visibilityCss() {
       return (
-        'panel sidebar-panel ' + (this.expanded ? 'sidebar-panel-visible' : 'sidebar-panel-hidden')
+        'panel sidebar-panel ' + (this.expanded ? 'sidebar-panel-visible' : 'sidebar-panel-hidden') + ' ' +
+        (this.maximized ? 'maximized' : '')
       )
     }
   }

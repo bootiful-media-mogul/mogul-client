@@ -350,10 +350,10 @@ export default {
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
-            <div class="pure-u-3-24">
+            <div class="pure-u-5-24">
               <label>{{ $t('episodes.episode.graphic') }}</label>
             </div>
-            <div class="pure-u-21-24">
+            <div class="pure-u-19-24">
               <ManagedFileComponent
                 accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
                 v-model:managed-file-id="draftEpisode.graphic.id"
@@ -365,12 +365,12 @@ export default {
 
           <div v-bind:key="segment.id" v-for="segment in draftEpisodeSegments">
             <div class="pure-g episode-managed-file-row">
-              <div class="pure-u-3-24">
+              <div class="pure-u-5-24">
                 <label>
                   {{ $t('episodes.episode.segments.number', { order: segment.order }) }}
                 </label>
               </div>
-              <div class="pure-u-21-24">
+              <div class="pure-u-19-24">
                 <ManagedFileComponent
                   accept=".mp3,audio/mpeg"
                   v-model:managed-file-id="segment.audio.id"
@@ -488,7 +488,7 @@ export default {
         {{ $t('episodes.title') }}
       </legend>
 
-      <div class="pure-g form-row episodes-row" v-bind:key="episode.id" v-for="episode in episodes">
+      <div class="pure-g  episodes-row" v-bind:key="episode.id" v-for="episode in episodes">
         <div class="id id-column">
           #<b>{{ episode.id }}</b>
         </div>
@@ -577,6 +577,8 @@ export default {
 }
 
 .episodes-row {
+  /*grid-template-rows: 100px ;*/
+  
   grid-template-areas: 'id created edit delete  title';
   grid-template-columns:
     var(--id-column)
@@ -585,6 +587,7 @@ export default {
     var(--icon-column)
     auto;
   display: grid;
+  margin-bottom: calc(  0.5 *  1em);
 }
 
 fieldset.episodes-table {

@@ -272,7 +272,7 @@ html {
 }
 
 .pure-form legend {
-  height: calc(var(--gutter-space) * 1);
+  /*height: calc(var(--gutter-space) * 1);*/
   box-sizing: unset;
   display: inline-block;
   border-radius: var(--radius) var(--radius) var(--radius) var(--radius);

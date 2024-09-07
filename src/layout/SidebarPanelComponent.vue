@@ -1,10 +1,17 @@
 <template>
   <div :class="visibilityCss">
     <div class="sidebar-panel-top">
+      
+ 
+      
+       <div class="sidebar-panel-title">
+         {{ title }}
+       </div>
       <div class="visibility-controls">
+        
         <a href="#" @click="hide" v-if="expanded">{{ $t('labels.close') }}</a>
-        <a href="#" @click="show" v-if="!expanded">{{ title }}</a>
-        | <a href="#" @click="maximize">+</a>
+        <a href="#" @click="show" v-if="!expanded"> show </a>
+        <a href="#" @click="maximize">+</a>
       </div>
     </div>
     <div class="sidebar-panel-content">
@@ -18,16 +25,23 @@
 .sidebar-panel-hidden .sidebar-panel-content {
   display: none;
 }
+.sidebar-panel-title {
+  color: white;
+  //font-weight: bold;
+  text-transform: uppercase;
+  /*font-size: smaller;*/
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Arial Black', sans-serif;
+  font-size: small;
+}
 
 .visibility-controls {
-  text-transform: uppercase;
-  font-weight: bold;
-  font-size: smaller;
+  
 }
 
 .visibility-controls a {
-  color: white;
-  font-size: small;
+
 }
 
 .sidebar-panel {

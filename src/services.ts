@@ -156,7 +156,7 @@ class Podcasts {
         }
         `
     const res = await this.client.query(q, { id: id })
-    return (await res.data['podcastEpisodeById']) as PodcastEpisode 
+    return (await res.data['podcastEpisodeById']) as PodcastEpisode
   }
 
   async create(title: string): Promise<Podcast> {
@@ -335,7 +335,6 @@ class Podcasts {
   }
 }
 
-
 export class Setting {
   name: string
   valid: boolean
@@ -389,7 +388,6 @@ export class ManagedFile {
 }
 
 export class PodcastEpisodeSegment {
-  
   id: number
   name: string
   audio: ManagedFile
@@ -587,8 +585,6 @@ export class Settings {
     return json.data['settings']
   }
 }
-
-
 
 export class ManagedFiles {
   private readonly client: Client

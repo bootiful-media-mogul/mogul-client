@@ -1,4 +1,4 @@
-import {Client} from '@urql/core'
+import { Client } from '@urql/core'
 
 export default class Mogul {
   private readonly client: Client
@@ -34,7 +34,6 @@ export default class Mogul {
 }
 
 export class User {
-
   name: string
   email: string
   givenName: string
@@ -42,7 +41,7 @@ export class User {
 
   // materialized view
   readonly displayName: string
-  
+
   constructor(name: string, email: string, givenName: string, familyName: string) {
     this.name = name
     this.email = email
@@ -50,5 +49,4 @@ export class User {
     this.familyName = familyName
     this.displayName = this.givenName + ' ' + this.familyName + ' (' + this.email + ')'
   }
-
 }

@@ -97,7 +97,7 @@ html {
   opacity: 70%;
 }
 
-.icon {
+.panel-window-button-icon {
   height: var(--icon-width);
   display: inline-block;
   width: var(--icon-width);

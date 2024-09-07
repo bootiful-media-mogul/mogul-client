@@ -72,8 +72,6 @@
   grid-area: links;
 }
 
- 
-
 .created {
   grid-area: created;
 }
@@ -94,7 +92,7 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete links created title';
-  
+
   grid-template-columns: var(--id-column) 50px 200px 100px auto;
 }
 </style>

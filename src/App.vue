@@ -17,7 +17,7 @@ export default {
   data() {
     const mogul = ''
     return {
-      mogul 
+      mogul
     }
   },
   async created() {
@@ -33,7 +33,7 @@ export default {
   <div class="frame">
     <div class="page">
       <div class="welcome">
-        {{ $t('hello', { mogul: mogul  }) }}
+        {{ $t('hello', { mogul: mogul }) }}
       </div>
 
       <div class="view">

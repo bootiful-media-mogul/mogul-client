@@ -1,17 +1,24 @@
 <template>
   <div :class="visibilityCss">
     <div class="sidebar-panel-top">
-      
- 
-      
-       <div class="sidebar-panel-title">
-         {{ title }}
-       </div>
-      <div class="visibility-controls">
-        
-        <a href="#" @click="hide" v-if="expanded">{{ $t('labels.close') }}</a>
-        <a href="#" @click="show" v-if="!expanded"> show </a>
-        <a href="#" @click="maximize">+</a>
+      <div class="sidebar-panel-top-title">
+        {{ title }}
+      </div>
+      <div class="sidebar-panel-top-visibility-controls ">
+        <!--
+          <a href="#" @click="hide" v-if="expanded">{{ $t('labels.close') }}</a>
+          <a href="#" @click="show" v-if="!expanded"> show </a>
+          <a href="#" @click="maximize">+</a>
+        -->
+
+        <SidebarPanelWindowButtonComponent class="maximized">
+          <img @click="maximize" src="../assets/images/panel-maximize.png" />
+        </SidebarPanelWindowButtonComponent>
+
+        <SidebarPanelWindowButtonComponent class="show-hide">
+          <img @click="show" src="../assets/images/panel-minimize.png" />
+        </SidebarPanelWindowButtonComponent>
+
       </div>
     </div>
     <div class="sidebar-panel-content">
@@ -22,26 +29,43 @@
 </template>
 
 <style>
-.sidebar-panel-hidden .sidebar-panel-content {
-  display: none;
-}
-.sidebar-panel-title {
+
+
+.sidebar-panel-top .sidebar-panel-top-title {
+  grid-area: title;
   color: white;
-  //font-weight: bold;
   text-transform: uppercase;
-  /*font-size: smaller;*/
   text-decoration: none;
   font-weight: bold;
   font-family: 'Arial Black', sans-serif;
   font-size: small;
+
 }
 
-.visibility-controls {
-  
+.sidebar-panel-top .sidebar-panel-top-visibility-controls {
+  grid-area: controls;
+  border: 1px solid white;
+  display: grid;
+  grid-template-areas: 'show-hide . maximize';
+  grid-template-columns:  var(--icon-column) var(--gutter-space)   var(--icon-column)
+}
+
+
+.sidebar-panel-hidden .sidebar-panel-content {
+  display: none;
+}
+
+ 
+
+.visibility-controls .show-hide {
+  grid-area: show-hide;
+}
+
+.visibility-controls .maximized {
+  grid-area: maximize;
 }
 
 .visibility-controls a {
-
 }
 
 .sidebar-panel {
@@ -53,9 +77,7 @@
   margin-bottom: var(--gutter-space);
 }
 
-
-/* Maximized (modal-like) state */
-.sidebar-panel.maximized {
+.sidebar-panel-maximized {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -71,9 +93,9 @@
   background-color: black;
 }
 
-
 .sidebar-panel-visible .sidebar-panel-top {
   background-color: black;
+  border: 1px solid red;
 
   padding-bottom: calc(0.5 * var(--gutter-space));
   margin-left: calc(-1 * var(--gutter-space));
@@ -81,7 +103,12 @@
   margin-right: calc(-1 * var(--gutter-space));
   padding-left: var(--gutter-space);
   padding-top: var(--gutter-space);
+
+  display: grid;
+  grid-template-areas: 'title controls';
+  grid-template-columns: auto 5em;
 }
+
 
 .sidebar-panel-visible .sidebar-panel-content {
   padding-top: var(--gutter-space);
@@ -91,12 +118,12 @@
   text-decoration: none;
 }
 
-.sidebar-panel-visible {
-}
+
 </style>
 
 <script lang="ts">
 import { events } from '@/services'
+import SidebarPanelWindowButtonComponent from './SidebarPanelWindowButtonComponent.vue'
 
 export default {
   created() {
@@ -112,6 +139,10 @@ export default {
         this.show()
       }
     })
+  },
+
+  components: {
+    SidebarPanelWindowButtonComponent
   },
 
   data() {
@@ -137,11 +168,9 @@ export default {
     }
   },
   computed: {
-
     visibilityCss() {
       return (
-        'panel sidebar-panel ' + (this.expanded ? 'sidebar-panel-visible' : 'sidebar-panel-hidden') + ' ' +
-        (this.maximized ? 'maximized' : '')
+        'panel sidebar-panel ' + (this.expanded ? 'sidebar-panel-visible' : 'sidebar-panel-hidden') + ' ' + (this.maximized ? 'sidebar-panel-maximized' : '')
       )
     }
   }

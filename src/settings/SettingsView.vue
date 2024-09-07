@@ -1,17 +1,16 @@
 <script lang="ts">
-import {mogul, Setting, settings, SettingsPage} from '@/services'
+import { mogul, Setting, settings, SettingsPage } from '@/services'
 import PrivatePasswordInputComponent from '@/privacy/PrivatePasswordInputComponent.vue'
 
 export default {
-  components: {PrivatePasswordInputComponent},
+  components: { PrivatePasswordInputComponent },
 
   async mounted() {
-    const u = (await mogul.user())
+    const u = await mogul.user()
     this.mogul = u.displayName
     await this.reloadSettings()
   },
   methods: {
-
     async reloadSettings() {
       this.settings = await settings.settings()
 
@@ -67,7 +66,7 @@ export default {
 </script>
 
 <template>
-  <h1 v-if="mogul">{{ $t('settings.title' ) }}</h1>
+  <h1 v-if="mogul">{{ $t('settings.title') }}</h1>
   <div v-for="settingsPage in settings" v-bind:key="settingsPage.category">
     <form class="pure-form pure-form-stacked">
       <fieldset>

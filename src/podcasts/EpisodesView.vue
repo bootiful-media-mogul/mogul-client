@@ -80,8 +80,7 @@ export default {
 
     async refreshEpisode(episodeId: number) {
       if (!episodeId)
-        console.error('the episode you gave me ' +
-          'to refresh is not valid ' + episodeId + '!')
+        console.error('the episode you gave me ' + 'to refresh is not valid ' + episodeId + '!')
       const ep = await podcasts.podcastEpisodeById(episodeId)
       await this.loadEpisode(ep)
     },
@@ -106,7 +105,7 @@ export default {
       } else {
         console.error(
           'there is no episode in the SQL DB for ' +
-          'refreshEpisodePublicationControls. returning. '
+            'refreshEpisodePublicationControls. returning. '
         )
       }
     },
@@ -232,7 +231,7 @@ export default {
 
     notifications.listenForCategory(
       'podcast-episode-completion-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         const jsonMap = JSON.parse(notification.context) as any
         const complete = jsonMap['complete'] as boolean
         const episodeId = parseInt(notification.key)
@@ -242,14 +241,14 @@ export default {
 
     notifications.listenForCategory(
       'publication-completed-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
       }
     )
 
     notifications.listenForCategory(
       'publication-started-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
         that.publications
           .filter((pub) => pub.id === parseInt(notification.key))
@@ -488,7 +487,7 @@ export default {
         {{ $t('episodes.title') }}
       </legend>
 
-      <div class="pure-g  episodes-row" v-bind:key="episode.id" v-for="episode in episodes">
+      <div class="pure-g episodes-row" v-bind:key="episode.id" v-for="episode in episodes">
         <div class="id id-column">
           #<b>{{ episode.id }}</b>
         </div>
@@ -578,7 +577,7 @@ export default {
 
 .episodes-row {
   /*grid-template-rows: 100px ;*/
-  
+
   grid-template-areas: 'id created edit delete  title';
   grid-template-columns:
     var(--id-column)
@@ -587,7 +586,7 @@ export default {
     var(--icon-column)
     auto;
   display: grid;
-  margin-bottom: calc(  0.5 *  1em);
+  margin-bottom: calc(0.5 * 1em);
 }
 
 fieldset.episodes-table {

@@ -12,7 +12,6 @@
 variable references don't in vue if you use scoped css styles. 
 so, to keep things on the level, i'm using really long fully 
 qualified css rules that probably won't clash in a global namespace.
-
 */
 :root {
   --panel-window-button-diameter: 20px;
@@ -22,10 +21,13 @@ qualified css rules that probably won't clash in a global namespace.
 
 .panel-window-button {
   position: relative;
+  
+  width: var(--panel-window-button-diameter);
+  height : var(--panel-window-button-diameter);
+
 }
 
 .panel-window-button-icon {
-  z-index: 10;
 
   position: absolute;
 
@@ -33,17 +35,17 @@ qualified css rules that probably won't clash in a global namespace.
 
 .panel-window-button-icon img {
   filter: invert(100%);
-
-  width: var(--panel-window-button-diameter);
   height: var(--panel-window-button-diameter);
+  z-index: 100;
+  position: absolute;
 }
 
 .panel-window-button-color-square {
-  background-color: red;
+  background-color: red ;
   position: absolute;
+
   left: var(--panel-window-button-inner-ofset);
-  top  : var(--panel-window-button-inner-ofset);
-  /*top: 100px;*/
+  top: var(--panel-window-button-inner-ofset);
   z-index: 7;
   width: var(--panel-window-button-inner-diameter);
   height: var(--panel-window-button-inner-diameter);
@@ -61,7 +63,7 @@ export default {
     }
   },
 
-  props: ['enabbled'],
+  //props: ['enabled'],
   methods: {},
   computed: {}
 }

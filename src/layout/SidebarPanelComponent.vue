@@ -1,73 +1,38 @@
 <template>
-  <div :class="visibilityCss">
-    <div class="sidebar-panel-top">
-      <div class="sidebar-panel-top-title">
+  <div class="panel sidebar-panel">
+    <!--    :class="visibilityCss"-->
+    <div class="top">
+      <div class="title">
         {{ title }}
       </div>
-      <div class="sidebar-panel-top-visibility-controls ">
-        <!--
-          <a href="#" @click="hide" v-if="expanded">{{ $t('labels.close') }}</a>
-          <a href="#" @click="show" v-if="!expanded"> show </a>
-          <a href="#" @click="maximize">+</a>
+      <div class="controls ">
+<!--      
+   -->     <!--
+        todo refactor this so that the button toggles between hide and show
         -->
-
-        <SidebarPanelWindowButtonComponent class="maximized">
-          <img @click="maximize" src="../assets/images/panel-maximize.png" />
-        </SidebarPanelWindowButtonComponent>
-
-        <SidebarPanelWindowButtonComponent class="show-hide">
-          <img @click="show" src="../assets/images/panel-minimize.png" />
-        </SidebarPanelWindowButtonComponent>
-
+<!--      -->
+        
+<!--        <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >-->
+       
+<!--        </div>
+        <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >
+        -->    <SidebarPanelWindowButtonComponent class="show-hide">
+        <img @click="show" src="../assets/images/panel-minimize.png" />
+      </SidebarPanelWindowButtonComponent><SidebarPanelWindowButtonComponent class="maximize">
+            <img @click="maximize" src="../assets/images/panel-maximize.png" />
+          </SidebarPanelWindowButtonComponent>
+<!--        </div>-->
+        
       </div>
     </div>
-    <div class="sidebar-panel-content">
+    <div class="content">
       <slot />
     </div>
-    <div class="sidebar-panel-bottom"></div>
   </div>
 </template>
 
+
 <style>
-
-
-.sidebar-panel-top .sidebar-panel-top-title {
-  grid-area: title;
-  color: white;
-  text-transform: uppercase;
-  text-decoration: none;
-  font-weight: bold;
-  font-family: 'Arial Black', sans-serif;
-  font-size: small;
-
-}
-
-.sidebar-panel-top .sidebar-panel-top-visibility-controls {
-  grid-area: controls;
-  border: 1px solid white;
-  display: grid;
-  grid-template-areas: 'show-hide . maximize';
-  grid-template-columns:  var(--icon-column) var(--gutter-space)   var(--icon-column)
-}
-
-
-.sidebar-panel-hidden .sidebar-panel-content {
-  display: none;
-}
-
- 
-
-.visibility-controls .show-hide {
-  grid-area: show-hide;
-}
-
-.visibility-controls .maximized {
-  grid-area: maximize;
-}
-
-.visibility-controls a {
-}
-
 .sidebar-panel {
   width: var(--sidebar-width);
   right: 0;
@@ -75,27 +40,20 @@
   padding: var(--gutter-space);
   background-color: white;
   margin-bottom: var(--gutter-space);
+
+
 }
 
-.sidebar-panel-maximized {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
-  border-radius: 10px;
+.sidebar-panel .content {
+  padding-top: var(--gutter-space);
+
 }
 
-.sidebar-panel-hidden {
+
+.sidebar-panel .top {
+
   background-color: black;
-}
 
-.sidebar-panel-visible .sidebar-panel-top {
-  background-color: black;
-  border: 1px solid red;
 
   padding-bottom: calc(0.5 * var(--gutter-space));
   margin-left: calc(-1 * var(--gutter-space));
@@ -106,12 +64,64 @@
 
   display: grid;
   grid-template-areas: 'title controls';
-  grid-template-columns: auto 5em;
+  grid-template-columns: 1fr auto;
+  gap: 0;
+
+}
+
+.sidebar-panel .top .title {
+  grid-area: title;
+  color: white;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: bold;
+  font-family: 'Arial Black', sans-serif;
+  font-size: small;
+}
+
+.sidebar-panel .top .controls {
+  grid-area: controls;
+  display: grid;
+  grid-template-areas: 'show-hide   maximize';
+  gap: calc(var(--gutter-space) / 2);
+  grid-template-columns:  auto  auto ;
+  position: relative;
+  align-items: center;
+  padding-right: var(--gutter-space);
+  
+}
+
+.sidebar-panel .top .controls .title {
+  grid-area: title;
+}
+
+.sidebar-panel .top .controls .show-hide {
+  grid-area: show-hide;
+
 }
 
 
-.sidebar-panel-visible .sidebar-panel-content {
-  padding-top: var(--gutter-space);
+/*
+
+
+.sidebar-panel .top .controls .maximize {
+  grid-area: maximize;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  z-index: 1000;
+  border-radius: 10px;
+
+}
+*/
+
+.sidebar-panel .top {
+
+
 }
 
 .sidebar-panel a {
@@ -170,7 +180,7 @@ export default {
   computed: {
     visibilityCss() {
       return (
-        'panel sidebar-panel ' + (this.expanded ? 'sidebar-panel-visible' : 'sidebar-panel-hidden') + ' ' + (this.maximized ? 'sidebar-panel-maximized' : '')
+        ' panel  sidebar-panel ' //+ (this.expanded ? 'expanded' : 'closed') + ' ' + (this.maximized ? 'maximized' : '')
       )
     }
   }

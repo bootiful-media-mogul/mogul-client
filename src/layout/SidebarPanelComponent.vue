@@ -12,7 +12,7 @@
           />
         </SidebarPanelWindowButtonComponent>
 
-        <SidebarPanelWindowButtonComponent  v-if="expanded || maximized" class="close">
+        <SidebarPanelWindowButtonComponent v-if="expanded || maximized" class="close">
           <img
             @click="hide"
             src="../assets/images/panel-close.png"
@@ -91,26 +91,29 @@
   grid-area: show-hide;
 }
 
-/*
-
-
-.sidebar-panel .top .controls .maximize {
-  grid-area: maximize;
-
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  height: 80%;
-  z-index: 1000;
-  border-radius: 10px;
-
-}
-
-*/
+ 
 
 .sidebar-panel .top {
+}
+
+.maximized {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    z-index: 1000; /* Bring it to the front */
+    border-radius: 10px;
+  
+}
+.closed {
+  background-color: black;
+}
+
+.closed .content {
+  display: none;
 }
 
 .sidebar-panel a {
@@ -123,6 +126,12 @@ import { events } from '@/services'
 import SidebarPanelWindowButtonComponent from './SidebarPanelWindowButtonComponent.vue'
 
 export default {
+
+  computed: {
+    visibilityCss() {
+      return ' panel  sidebar-panel ' + (this.expanded ? 'expanded' : 'closed')  + ' ' + (this.maximized ? 'maximized' : '')
+    }
+  },
   created() {
     // allow child components to ask for visibility in their parent panels
     events.on('sidebar-panel-closed', (event: any) => {
@@ -169,11 +178,7 @@ export default {
       this.maximized = true
       this.debug()
     }
-  },
-  computed: {
-    visibilityCss() {
-      return ' panel  sidebar-panel ' + (this.expanded ? 'expanded' : 'closed') //+ ' ' + (this.maximized ? 'maximized' : '')
-    }
   }
+
 }
 </script>

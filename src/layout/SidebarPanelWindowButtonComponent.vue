@@ -64,7 +64,6 @@ export default {
     const defaultStyle = 'panel-window-button-color-square-default'
     const hoverStyle = 'panel-window-button-color-square-hover'
     btn.addEventListener('mouseover', (event: MouseEvent) => {
-      console.log('mouse over! ' + square.classList)
       square.classList.remove(defaultStyle)
       square.classList.add(hoverStyle)
     })

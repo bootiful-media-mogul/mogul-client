@@ -1,32 +1,29 @@
 <template>
-  <div class="panel sidebar-panel">
-    <!--    :class="visibilityCss"-->
+  <div :class="visibilityCss">
     <div class="top">
       <div class="title">
         {{ title }}
       </div>
       <div class="controls">
-        <!--      
-   -->
-        <!--
-        todo refactor this so that the button toggles between hide and show
-        -->
-        <!--      -->
-
-        <!--        <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >-->
-
-        <!--        </div>
-        <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >
-        -->
-        <SidebarPanelWindowButtonComponent class="show-hide">
+        <SidebarPanelWindowButtonComponent class="show-hide" v-if="!(expanded || maximized)">
           <img
             @click="show"
             src="../assets/images/panel-minimize.png"
-          /> </SidebarPanelWindowButtonComponent
-        ><SidebarPanelWindowButtonComponent class="maximize">
+          />
+        </SidebarPanelWindowButtonComponent>
+
+        <SidebarPanelWindowButtonComponent  v-if="expanded || maximized" class="close">
+          <img
+            @click="hide"
+            src="../assets/images/panel-close.png"
+          />
+        </SidebarPanelWindowButtonComponent>
+
+
+        <SidebarPanelWindowButtonComponent class="maximize">
           <img @click="maximize" src="../assets/images/panel-maximize.png" />
         </SidebarPanelWindowButtonComponent>
-        <!--        </div>-->
+
       </div>
     </div>
     <div class="content">
@@ -110,6 +107,7 @@
   border-radius: 10px;
 
 }
+
 */
 
 .sidebar-panel .top {
@@ -153,22 +151,28 @@ export default {
 
   props: ['title'],
   methods: {
+    debug() {
+      console.log('expanded: ' + this.expanded + ', maximized: ' + this.maximized)
+    },
     hide() {
       this.maximized = false
       this.expanded = false
+      this.debug()
     },
     show() {
       this.expanded = true
       this.maximized = false
+      this.debug()
     },
     maximize() {
       this.expanded = true
       this.maximized = true
+      this.debug()
     }
   },
   computed: {
     visibilityCss() {
-      return ' panel  sidebar-panel ' //+ (this.expanded ? 'expanded' : 'closed') + ' ' + (this.maximized ? 'maximized' : '')
+      return ' panel  sidebar-panel ' + (this.expanded ? 'expanded' : 'closed') //+ ' ' + (this.maximized ? 'maximized' : '')
     }
   }
 }

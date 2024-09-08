@@ -141,17 +141,12 @@ export default {
   },
 
   mounted() {
-    // lets relocate the background panel to the document root so its not following us around
+  
 
-    //console.log('mount')
-
-
+    
     const bgPanelNode = document.createElement('div')
     bgPanelNode.classList.add('bg-panel')
-    
-    //
     document.body.appendChild(bgPanelNode)
-    //
     this.bgPanelNode = bgPanelNode
 
   },
@@ -166,10 +161,10 @@ export default {
       }
     })
     events.on('sidebar-panel-opened', (event: any) => {
-      console.log(this.$el)
+      // console.log(this.$el)
       // does event match any of our children nodes? if so, we show visibility
       const contains = this.$el.contains(event)
-      console.log('should we show this panel? ' + contains)
+      // console.log('should we show this panel? ' + contains)
       if (contains) {
         this.show()
       }
@@ -191,7 +186,7 @@ export default {
   props: ['title'],
   methods: {
     debug() {
-      console.trace('expanded: ' + this.expanded + ', maximized: ' + this.maximized)
+      //console.trace('expanded: ' + this.expanded + ', maximized: ' + this.maximized)
     },
     hide() {
       this.maximized = false

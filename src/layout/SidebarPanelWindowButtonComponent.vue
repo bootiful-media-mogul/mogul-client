@@ -1,36 +1,30 @@
 <template>
-  <div class="panel-window-button">
+  <div ref="button" class="panel-window-button">
     <div class="panel-window-button-icon">
       <slot />
     </div>
-    <div class="panel-window-button-color-square"></div>
+    <div ref="square" class="panel-window-button-color-square panel-window-button-color-square-default"></div>
   </div>
 </template>
 
 <style>
-/* 
-variable references don't in vue if you use scoped css styles. 
-so, to keep things on the level, i'm using really long fully 
-qualified css rules that probably won't clash in a global namespace.
-*/
 :root {
   --panel-window-button-diameter: 20px;
   --panel-window-button-inner-diameter: calc(var(--panel-window-button-diameter) * 0.7071);
-  --panel-window-button-inner-ofset: calc(calc(var(--panel-window-button-diameter) - var(--panel-window-button-inner-diameter)) / 2);
+  --panel-window-button-inner-ofset: calc(
+    calc(var(--panel-window-button-diameter) - var(--panel-window-button-inner-diameter)) / 2
+  );
 }
 
 .panel-window-button {
   position: relative;
-  
-  width: var(--panel-window-button-diameter);
-  height : var(--panel-window-button-diameter);
 
+  width: var(--panel-window-button-diameter);
+  height: var(--panel-window-button-diameter);
 }
 
 .panel-window-button-icon {
-
   position: absolute;
-
 }
 
 .panel-window-button-icon img {
@@ -40,8 +34,15 @@ qualified css rules that probably won't clash in a global namespace.
   position: absolute;
 }
 
+.panel-window-button-color-square-hover {
+  background-color: var(--bg-color);
+}
+
+.panel-window-button-color-square-default {
+  background-color: black;
+}
+
 .panel-window-button-color-square {
-  background-color: red ;
   position: absolute;
 
   left: var(--panel-window-button-inner-ofset);
@@ -55,15 +56,31 @@ qualified css rules that probably won't clash in a global namespace.
 <script lang="ts">
 export default {
   created() {
+
+  },
+  mounted() {
+    const square = this.$refs.square
+    const btn = this.$refs.button
+    const defaultStyle = 'panel-window-button-color-square-default'
+    const hoverStyle = 'panel-window-button-color-square-hover'
+    btn.addEventListener('mouseover', (event: MouseEvent) => {
+      console.log('mouse over! ' + square.classList)
+      square.classList.remove(defaultStyle)
+      square.classList.add(hoverStyle)
+    })
+    btn.addEventListener('mouseout', (event: MouseEvent) => {
+      square.classList.add(defaultStyle)
+      square.classList.remove(hoverStyle)
+    })
   },
 
   data() {
     return {
-      enabled: true
+      // enabled: true
     }
   },
 
-  //props: ['enabled'],
+  // props: ['enabled'],
   methods: {},
   computed: {}
 }

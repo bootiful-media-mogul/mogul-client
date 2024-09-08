@@ -5,24 +5,28 @@
       <div class="title">
         {{ title }}
       </div>
-      <div class="controls ">
-<!--      
-   -->     <!--
+      <div class="controls">
+        <!--      
+   -->
+        <!--
         todo refactor this so that the button toggles between hide and show
         -->
-<!--      -->
-        
-<!--        <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >-->
-       
-<!--        </div>
+        <!--      -->
+
+        <!--        <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >-->
+
+        <!--        </div>
         <div style="border:1px solid orange;width: 30px; height: 30px; background-color: white"  >
-        -->    <SidebarPanelWindowButtonComponent class="show-hide">
-        <img @click="show" src="../assets/images/panel-minimize.png" />
-      </SidebarPanelWindowButtonComponent><SidebarPanelWindowButtonComponent class="maximize">
-            <img @click="maximize" src="../assets/images/panel-maximize.png" />
-          </SidebarPanelWindowButtonComponent>
-<!--        </div>-->
-        
+        -->
+        <SidebarPanelWindowButtonComponent class="show-hide">
+          <img
+            @click="show"
+            src="../assets/images/panel-minimize.png"
+          /> </SidebarPanelWindowButtonComponent
+        ><SidebarPanelWindowButtonComponent class="maximize">
+          <img @click="maximize" src="../assets/images/panel-maximize.png" />
+        </SidebarPanelWindowButtonComponent>
+        <!--        </div>-->
       </div>
     </div>
     <div class="content">
@@ -30,7 +34,6 @@
     </div>
   </div>
 </template>
-
 
 <style>
 .sidebar-panel {
@@ -40,20 +43,14 @@
   padding: var(--gutter-space);
   background-color: white;
   margin-bottom: var(--gutter-space);
-
-
 }
 
 .sidebar-panel .content {
   padding-top: var(--gutter-space);
-
 }
 
-
 .sidebar-panel .top {
-
   background-color: black;
-
 
   padding-bottom: calc(0.5 * var(--gutter-space));
   margin-left: calc(-1 * var(--gutter-space));
@@ -66,7 +63,6 @@
   grid-template-areas: 'title controls';
   grid-template-columns: 1fr auto;
   gap: 0;
-
 }
 
 .sidebar-panel .top .title {
@@ -84,11 +80,10 @@
   display: grid;
   grid-template-areas: 'show-hide   maximize';
   gap: calc(var(--gutter-space) / 2);
-  grid-template-columns:  auto  auto ;
+  grid-template-columns: auto auto;
   position: relative;
   align-items: center;
   padding-right: var(--gutter-space);
-  
 }
 
 .sidebar-panel .top .controls .title {
@@ -97,9 +92,7 @@
 
 .sidebar-panel .top .controls .show-hide {
   grid-area: show-hide;
-
 }
-
 
 /*
 
@@ -120,15 +113,11 @@
 */
 
 .sidebar-panel .top {
-
-
 }
 
 .sidebar-panel a {
   text-decoration: none;
 }
-
-
 </style>
 
 <script lang="ts">
@@ -179,9 +168,7 @@ export default {
   },
   computed: {
     visibilityCss() {
-      return (
-        ' panel  sidebar-panel ' //+ (this.expanded ? 'expanded' : 'closed') + ' ' + (this.maximized ? 'maximized' : '')
-      )
+      return ' panel  sidebar-panel ' //+ (this.expanded ? 'expanded' : 'closed') + ' ' + (this.maximized ? 'maximized' : '')
     }
   }
 }

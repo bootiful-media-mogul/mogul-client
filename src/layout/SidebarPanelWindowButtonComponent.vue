@@ -60,22 +60,20 @@
 export default {
   created() {},
   mounted() {
-    
     const square = this.$refs.square
     const btn = this.$refs.button
     const defaultStyle = 'panel-window-button-color-square-default'
     const hoverStyle = 'panel-window-button-color-square-hover'
-    
+
     btn.addEventListener('mouseover', (event: MouseEvent) => {
       square.classList.remove(defaultStyle)
       square.classList.add(hoverStyle)
     })
-    
+
     btn.addEventListener('mouseout', (event: MouseEvent) => {
       square.classList.add(defaultStyle)
       square.classList.remove(hoverStyle)
     })
-    
   },
 
   data() {

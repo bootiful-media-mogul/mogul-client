@@ -134,25 +134,21 @@ export default {
   computed: {
     visibilityCss() {
       return (
-        ' panel sidebar-panel ' + (this.expanded ? 'expanded' : 'closed') + ' ' +
+        ' panel sidebar-panel ' +
+        (this.expanded ? 'expanded' : 'closed') +
+        ' ' +
         (this.maximized ? 'maximized' : '')
       )
     }
   },
 
   mounted() {
-  
-
-    
     const bgPanelNode = document.createElement('div')
     bgPanelNode.classList.add('bg-panel')
     document.body.appendChild(bgPanelNode)
     this.bgPanelNode = bgPanelNode
-
   },
   created() {
-
-
     console.log('created')
     // allow child components to ask for visibility in their parent panels
     events.on('sidebar-panel-closed', (event: any) => {

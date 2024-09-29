@@ -93,14 +93,14 @@
   display: grid;
   grid-template-areas: 'id delete links created title';
 
-  grid-template-columns: var(--id-column) 50px 200px 100px auto;
+  grid-template-columns: var(--id-column) 50px 200px var(--date-column) auto;
 }
 </style>
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import CreateEpisodeView from '@/podcasts/EpisodesView.vue'
-import { dateToString } from '@/dates'
+import { dateTimeToString } from '@/dates'
 
 async function refresh() {
   return await podcasts.podcasts()
@@ -119,8 +119,8 @@ export default {
   },
 
   methods: {
-    dts: function (date: number) {
-      return dateToString(date)
+    dts: function(date: number) {
+      return dateTimeToString(date)
     },
     async deletePodcast(id: number) {
       const deleted = await podcasts.deletePodcast(id)

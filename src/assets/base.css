@@ -10,7 +10,7 @@
   --icon-column: calc(var(--gutter-space) * 1.5);
   --id-column: calc(var(--gutter-space) * 3);
   --footer-height: calc(var(--gutter-space) * 1.5);
-  --date-column: calc(1 * 6em);
+  --date-column: calc(2 * 6em);
   --datetime-column: calc(2 * var(--date-column));
 }
 
@@ -46,7 +46,7 @@ a {
   font-weight: bold;
   text-transform: uppercase;
   font-family: 'Arial Black', sans-serif;
-  font-size: small;
+  /*font-size: small;*/
 }
 
 .pure-button {
@@ -72,7 +72,6 @@ a {
 
 .pure-form label {
   text-transform: capitalize;
-  font-size: smaller;
   margin-top: 1em;
 }
 
@@ -93,7 +92,6 @@ html {
 }
 
 .form-prompt {
-  font-size: small;
   opacity: 70%;
 }
 

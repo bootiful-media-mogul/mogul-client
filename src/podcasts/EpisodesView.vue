@@ -456,10 +456,10 @@ export default {
               v-bind:key="publication.id"
               v-for="publication in publications"
             >
-              <div class="id id-column">
+              <div class="  id-column">
                 #<b>{{ publication.id }}</b>
               </div>
-              <div class="id plugin-column">
+              <div class="  plugin-column">
                 {{ publication.plugin }}
               </div>
               <div class="created-column">{{ dts(publication.created) }}</div>
@@ -612,7 +612,6 @@ fieldset.episodes-table {
 }
 
 div.segment-controls {
-  font-size: smaller;
   display: grid;
   grid-template-areas: 'up down delete ';
   grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column);

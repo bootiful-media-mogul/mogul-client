@@ -33,7 +33,7 @@
 
     <span class="contentType">
       <span v-if="contentType">
-        <code style="font-size: smaller">{{ contentType }}</code>
+        <code>{{ contentType }}</code>
       </span>
     </span>
 

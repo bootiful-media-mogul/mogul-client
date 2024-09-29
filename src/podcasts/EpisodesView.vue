@@ -11,7 +11,7 @@ import {
 import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
-import { dateToString } from '@/dates'
+import { dateTimeToString, dateToString } from '@/dates'
 
 export default {
   mounted(): void {
@@ -27,7 +27,7 @@ export default {
 
   methods: {
     dts(date: number): string {
-      return dateToString(date)
+      return dateTimeToString(date)
     },
 
     publishButtonDisabled() {
@@ -55,15 +55,13 @@ export default {
 
     async movePodcastEpisodeSegmentUp(
       episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment
-    ) {
+      episodeSegment: PodcastEpisodeSegment) {
       await podcasts.movePodcastEpisodeSegmentUp(episode.id, episodeSegment.id)
       await this.loadEpisodeSegments(episode)
     },
     async deletePodcastEpisodeSegment(
       episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment
-    ) {
+      episodeSegment: PodcastEpisodeSegment) {
       this.draftEpisode.complete = false
       await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
       await this.loadEpisodeSegments(episode)
@@ -80,22 +78,23 @@ export default {
 
     async refreshEpisode(episodeId: number) {
       if (!episodeId)
-        console.error('the episode you gave me ' + 'to refresh is not valid ' + episodeId + '!')
+        console.error('the episode you gave to refresh is not valid ' + episodeId + '!')
       const ep = await podcasts.podcastEpisodeById(episodeId)
       await this.loadEpisode(ep)
     },
-    
-    async refreshPublications (episode :PodcastEpisode) {
+
+    async refreshPublications(episode: PodcastEpisode) {
       if (episode.publications && episode.publications.length > 0) {
-        console.log('there are ' + episode.publications .length + ' publications.')
+        console.debug('there are ' + episode.publications.length + ' publications.')
         this.publications = episode.publications.sort(
           (a: Publication, b: Publication) => b.created - a.created
         )
+        episode.publications = this.publications
       } //
       else {
         this.publications = []
       }
-    }  , 
+    },
 
     async refreshEpisodePublicationControls(id: number, completed: boolean) {
       this.draftEpisode.complete = completed // set it up so that the UI sees the change.
@@ -104,7 +103,7 @@ export default {
       }
       const episode = await podcasts.podcastEpisodeById(id)
       if (episode) {
-   
+
         await this.refreshPublications(episode)
 
         if (episode.availablePlugins) {
@@ -113,8 +112,7 @@ export default {
         }
       } else {
         console.error(
-          'there is no episode in the SQL DB for ' +
-          'refreshEpisodePublicationControls. returning. '
+          'there is no episode in the SQL DB for refreshEpisodePublicationControls. returning. '
         )
       }
     },
@@ -126,11 +124,6 @@ export default {
       this.draftEpisode.complete = episode.complete
       this.draftEpisode.created = episode.created
       this.draftEpisode.availablePlugins = episode.availablePlugins
-
-      // this.draftEpisode.publications = episode.publications
-      // this.publications = episode.publications
-      // console.log( epi.publications)
-      //
       this.description = this.draftEpisode.description
       this.title = this.draftEpisode.title
       this.created = this.draftEpisode.created

@@ -88,23 +88,17 @@ class Podcasts {
     return true
   }
 
-  async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<Publication> {
+  async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
     const mutation = ` 
           mutation PublishPodcastEpisode  ($episode: ID, $pluginName: String ){ 
-            publishPodcastEpisode ( episodeId: $episode,  pluginName: $pluginName )  { 
-                id,
-                plugin,
-                url, 
-                created , 
-                published 
-            }
+            publishPodcastEpisode ( episodeId: $episode,  pluginName: $pluginName ) 
           }
     `
     const publication = await this.client.mutation(mutation, {
       episode: episodeId,
       pluginName: pluginName
     })
-    return (await publication.data['publishPodcastEpisode']) as Publication
+    return (await publication.data['publishPodcastEpisode']) as boolean
   }
 
   async updatePodcastEpisode(
@@ -273,9 +267,7 @@ class Podcasts {
     })
 
     const idBag = (await result.data['createPodcastEpisodeDraft'])['id']
-    const episode = await this.podcastEpisodeById(idBag)
-    // console.log('the episode is ', episode)
-    return episode
+    return await this.podcastEpisodeById(idBag)
   }
 
   async podcastById(podcastId: number): Promise<Podcast> {
@@ -317,8 +309,6 @@ class Podcasts {
       episodeId: episodeId,
       episodeSegmentId: episodeSegmentId
     })
-
-    // console.debug('movePodcastEpisodeSegmentUp #' + JSON.stringify(result))
   }
 
   async unpublish(publication: Publication) {
@@ -327,11 +317,10 @@ class Podcasts {
             unpublishPodcastEpisodePublication( publicationId: $publicationId )  
          }
         `
-    const result = await this.client.mutation(mutation, {
+    await this.client.mutation(mutation, {
       publicationId: publication.id
     })
-    const id = await result.data
-    // console.debug('unpublishPodcastEpisodePublication #' + id)
+    
   }
 }
 

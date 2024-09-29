@@ -6,28 +6,25 @@
       </div>
       <div class="controls">
         <SidebarPanelWindowButtonComponent v-if="!maximized" class="maximize">
-          <img @click="maximize" src="../assets/images/panel-maximize.png" />
+          <img @click="maximize" src="../assets/images/panel-maximize.png" alt="maximize" />
         </SidebarPanelWindowButtonComponent>
 
         <SidebarPanelWindowButtonComponent class="show-hide" v-if="!(expanded || maximized)">
-          <img @click="show" src="../assets/images/panel-minimize.png" />
+          <img @click="show" src="../assets/images/panel-minimize.png" alt="minimize" />
         </SidebarPanelWindowButtonComponent>
 
         <SidebarPanelWindowButtonComponent v-if="expanded || maximized" class="show-hide">
-          <img @click="hide" src="../assets/images/panel-close.png" />
+          <img @click="hide" src="../assets/images/panel-close.png" alt="close" />
         </SidebarPanelWindowButtonComponent>
       </div>
     </div>
     <div class="content">
       <slot />
     </div>
-
-
   </div>
 </template>
 
 <style>
-
 .bg-panel {
   background-color: white;
   opacity: 0.6;

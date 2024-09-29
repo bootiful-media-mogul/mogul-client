@@ -84,6 +84,18 @@ export default {
       const ep = await podcasts.podcastEpisodeById(episodeId)
       await this.loadEpisode(ep)
     },
+    
+    async refreshPublications (episode :PodcastEpisode) {
+      if (episode.publications && episode.publications.length > 0) {
+        console.log('there are ' + episode.publications .length + ' publications.')
+        this.publications = episode.publications.sort(
+          (a: Publication, b: Publication) => b.created - a.created
+        )
+      } //
+      else {
+        this.publications = []
+      }
+    }  , 
 
     async refreshEpisodePublicationControls(id: number, completed: boolean) {
       this.draftEpisode.complete = completed // set it up so that the UI sees the change.
@@ -92,11 +104,8 @@ export default {
       }
       const episode = await podcasts.podcastEpisodeById(id)
       if (episode) {
-        if (episode.publications && episode.publications.length > 0) {
-          this.publications = episode.publications.sort(
-            (a: Publication, b: Publication) => b.created - a.created
-          )
-        } //
+   
+        await this.refreshPublications(episode)
 
         if (episode.availablePlugins) {
           const plugins = episode.availablePlugins
@@ -105,7 +114,7 @@ export default {
       } else {
         console.error(
           'there is no episode in the SQL DB for ' +
-            'refreshEpisodePublicationControls. returning. '
+          'refreshEpisodePublicationControls. returning. '
         )
       }
     },
@@ -117,6 +126,11 @@ export default {
       this.draftEpisode.complete = episode.complete
       this.draftEpisode.created = episode.created
       this.draftEpisode.availablePlugins = episode.availablePlugins
+
+      // this.draftEpisode.publications = episode.publications
+      // this.publications = episode.publications
+      // console.log( epi.publications)
+      //
       this.description = this.draftEpisode.description
       this.title = this.draftEpisode.title
       this.created = this.draftEpisode.created
@@ -231,7 +245,7 @@ export default {
 
     notifications.listenForCategory(
       'podcast-episode-completion-event',
-      async function (notification: Notification) {
+      async function(notification: Notification) {
         const jsonMap = JSON.parse(notification.context) as any
         const complete = jsonMap['complete'] as boolean
         const episodeId = parseInt(notification.key)
@@ -241,14 +255,14 @@ export default {
 
     notifications.listenForCategory(
       'publication-completed-event',
-      async function (notification: Notification) {
+      async function(notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
       }
     )
 
     notifications.listenForCategory(
       'publication-started-event',
-      async function (notification: Notification) {
+      async function(notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
         that.publications
           .filter((pub) => pub.id === parseInt(notification.key))

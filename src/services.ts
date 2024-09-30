@@ -320,7 +320,6 @@ class Podcasts {
     await this.client.mutation(mutation, {
       publicationId: publication.id
     })
-    
   }
 }
 

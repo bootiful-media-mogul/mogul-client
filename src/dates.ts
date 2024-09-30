@@ -12,11 +12,11 @@ export const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
   day: '2-digit'
 } as Intl.DateTimeFormatOptions)
 
-export function  dateTimeToString(date:number) {
-  if (date && date!==0){
+export function dateTimeToString(date: number) {
+  if (date && date !== 0) {
     return dateTimeFormat.format(new Date(date))
   }
-  return null 
+  return null
 }
 export function dateToString(date: number) {
   if (date && date !== 0) {

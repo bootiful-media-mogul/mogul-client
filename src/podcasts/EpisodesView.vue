@@ -55,13 +55,15 @@ export default {
 
     async movePodcastEpisodeSegmentUp(
       episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment) {
+      episodeSegment: PodcastEpisodeSegment
+    ) {
       await podcasts.movePodcastEpisodeSegmentUp(episode.id, episodeSegment.id)
       await this.loadEpisodeSegments(episode)
     },
     async deletePodcastEpisodeSegment(
       episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment) {
+      episodeSegment: PodcastEpisodeSegment
+    ) {
       this.draftEpisode.complete = false
       await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
       await this.loadEpisodeSegments(episode)
@@ -103,7 +105,6 @@ export default {
       }
       const episode = await podcasts.podcastEpisodeById(id)
       if (episode) {
-
         await this.refreshPublications(episode)
 
         if (episode.availablePlugins) {
@@ -456,10 +457,10 @@ export default {
               v-bind:key="publication.id"
               v-for="publication in publications"
             >
-              <div class="  id-column">
+              <div class="id-column">
                 #<b>{{ publication.id }}</b>
               </div>
-              <div class="  plugin-column">
+              <div class="plugin-column">
                 {{ publication.plugin }}
               </div>
               <div class="created-column">{{ dts(publication.created) }}</div>

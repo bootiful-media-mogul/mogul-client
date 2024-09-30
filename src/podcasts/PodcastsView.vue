@@ -119,7 +119,7 @@ export default {
   },
 
   methods: {
-    dts: function(date: number) {
+    dts: function (date: number) {
       return dateTimeToString(date)
     },
     async deletePodcast(id: number) {

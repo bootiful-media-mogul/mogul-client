@@ -306,28 +306,31 @@ export default {
       </legend>
       <div class="form-section">
         <div class="form-section-title">{{ $t('episodes.basics') }}</div>
+        <div class="form-row">
 
-        <label for="episodeTitle">
-          {{ $t('episodes.episode.title') }}
-          <AiWorkshopItIconComponent
-            :prompt="$t('episodes.episode.title.ai-prompt')"
-            :text="title"
-            @ai-workshop-completed="title = $event.text"
-          />
-        </label>
-        <input id="episodeTitle" required v-model="title" type="text" />
+          <label for="episodeTitle">
+            {{ $t('episodes.episode.title') }}
+            <AiWorkshopItIconComponent
+              :prompt="$t('episodes.episode.title.ai-prompt')"
+              :text="title"
+              @ai-workshop-completed="title = $event.text"
+            />
+          </label>
+          <input id="episodeTitle" required v-model="title" type="text" />
+        </div>
+        <div class="form-row">
 
-        <label for="episodeDescription">
-          {{ $t('episodes.episode.description') }}
+          <label for="episodeDescription">
+            {{ $t('episodes.episode.description') }}
 
-          <AiWorkshopItIconComponent
-            :prompt="$t('episodes.episode.description.ai-prompt')"
-            :text="description"
-            @ai-workshop-completed="description = $event.text"
-          />
-        </label>
-        <textarea id="episodeDescription" rows="10" required v-model="description" />
-
+            <AiWorkshopItIconComponent
+              :prompt="$t('episodes.episode.description.ai-prompt')"
+              :text="description"
+              @ai-workshop-completed="description = $event.text"
+            />
+          </label>
+          <textarea id="episodeDescription" rows="10" required v-model="description" />
+        </div>
         <div class="podcast-episode-controls-row">
           <span class="save">
             <button

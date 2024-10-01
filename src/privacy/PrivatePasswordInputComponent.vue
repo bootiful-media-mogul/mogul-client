@@ -4,13 +4,9 @@
 
 <style>
 .private-password-preview-link {
-  --icon-size: 3em;
-
   background: url('../assets/images/privacy-preview.png');
-
   height: var(--icon-size);
   width: var(--icon-size);
-
   background-size: var(--icon-size) var(--icon-size);
   background-repeat: no-repeat;
   background-position: left;
@@ -26,7 +22,8 @@
 
 label .private-password-preview-link {
   position: absolute;
-  padding-top: var(--icon-size);
+  padding-top: calc(var(--icon-size) - calc(var(--icon-size) / 2));
+  
 }
 </style>
 

@@ -45,6 +45,7 @@ const translations = {
     'app.menu.home': 'home',
     'app.menu.settings': 'settings',
     'app.menu.podcasts': 'podcasts',
+    'app.menu.about': 'about',
     'app.made-with-love': ` Mogul, made with love ❤️ by {josh} (and with Spring 🍃) `,
 
     // episode segments
@@ -54,6 +55,11 @@ const translations = {
 
     // episodes
     ok: 'OK',
+
+    
+    
+    'about.title': 'About',
+
 
     //[intlify] Not found 'notifications.podcast-episode-render-started-event' key in 'en' locale messages.
     'episodes.title': 'all episodes',

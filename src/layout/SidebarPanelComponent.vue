@@ -1,7 +1,7 @@
 <template>
   <div :class="visibilityCss">
     <div class="top">
-      <div class="title">
+      <div class="title navigable-section">
         {{ title }}
       </div>
       <div class="controls">
@@ -71,15 +71,12 @@
   text-transform: uppercase;
   text-decoration: none;
   font-weight: bold;
-  font-family: 'Arial Black', sans-serif;
-  font-size: small;
 }
 
 .sidebar-panel .top .controls {
   grid-area: controls;
   display: grid;
   grid-template-areas: '   maximize show-hide';
-  /*gap: calc(var(--gutter-space) / 2);*/
   grid-template-columns: auto auto;
   position: relative;
   align-items: center;
@@ -106,7 +103,7 @@
   width: 80%;
   height: 80%;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  z-index: 1000; /* Bring it to the front */
+  z-index: 1000; 
   border-radius: 10px;
 }
 
@@ -117,10 +114,7 @@
 .closed .content {
   display: none;
 }
-
-.sidebar-panel a {
-  text-decoration: none;
-}
+ 
 </style>
 
 <script lang="ts">

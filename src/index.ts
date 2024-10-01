@@ -3,6 +3,7 @@ import HomeView from './HomeView.vue'
 import EpisodesView from '@/podcasts/EpisodesView.vue'
 import PodcastsView from '@/podcasts/PodcastsView.vue'
 import SettingsView from '@/settings/SettingsView.vue'
+import About from '@/About.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,12 @@ const router = createRouter({
       path: '/podcast-episodes/:id',
       name: 'podcast-episodes',
       component: EpisodesView,
+      props: true
+    },
+    {
+      path: '/about',
+      name: 'about',
+      component: About,
       props: true
     }
   ]

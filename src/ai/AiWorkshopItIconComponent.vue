@@ -4,11 +4,10 @@
 
 <style>
 .ai-workshop-it-link {
-  --icon-size: 3em;
+  
   background: url('../assets/images/ai-icon-highlight.png');
   height: var(--icon-size);
   width: var(--icon-size);
-
   background-size: var(--icon-size) var(--icon-size);
   background-repeat: no-repeat;
   background-position: left;
@@ -23,7 +22,7 @@
 
 label .ai-workshop-it-link {
   position: absolute;
-  padding-top: var(--icon-size);
+  padding-top: calc(var(--icon-size) - calc(var(--icon-size) / 2));
 }
 </style>
 
@@ -41,7 +40,8 @@ export default {
   },
   mounted() {
     const aiIcon = this.$refs.link as HTMLElement
-    positionIconRelativeToFormInputForParentLabel(aiIcon)
+    positionIconRelativeToFormInputForParentLabel(aiIcon, value => value  , 
+    value => value -  0)
   },
 
   setup(props, ctx) {

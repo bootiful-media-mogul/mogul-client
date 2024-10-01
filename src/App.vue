@@ -27,6 +27,8 @@ export default {
 }
 </script>
 
+
+
 <template>
   <NotificationBox ref="notifications" />
 
@@ -40,12 +42,14 @@ export default {
         <router-view></router-view>
       </div>
 
-      <div class="toolbar">
+      <div class="toolbar navigable-section">
         <router-link to="/">{{ $t('app.menu.home') }}</router-link>
         |
         <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
         |
         <router-link to="/podcasts">{{ $t('app.menu.podcasts') }}</router-link>
+        |
+        <router-link to="/about">{{ $t('app.menu.about') }}</router-link>
       </div>
 
       <div class="sidebar">
@@ -62,14 +66,6 @@ export default {
         <SidebarPanelComponent title="Transcription"></SidebarPanelComponent>
       </div>
     </div>
-    <div class="footer">
-      <span
-        v-html="
-          $t('app.made-with-love', {
-            josh: '<a href=\'https://youtube.com/@coffeesoftware\'>Josh Long</a>'
-          })
-        "
-      ></span>
-    </div>
+    
   </div>
 </template>

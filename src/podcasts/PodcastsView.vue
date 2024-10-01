@@ -65,7 +65,7 @@
 <style>
 .id {
   font-weight: normal;
-  font-size: smaller;
+  //font-size: smaller;
 }
 
 .links {

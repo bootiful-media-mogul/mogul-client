@@ -12,7 +12,7 @@
     --footer-height: calc(var(--gutter-space) * 1.5);
     --date-column: calc(2 * 6em);
     --datetime-column: calc(2 * var(--date-column));
-
+    --icon-size: 2.5em;
 }
 
 .managed-file-preview-image {

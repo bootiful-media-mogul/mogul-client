@@ -4,7 +4,7 @@
 
 <style>
 .ai-workshop-it-link {
-  --icon-size: 2.5em;
+  
   background: url('../assets/images/ai-icon-highlight.png');
   height: var(--icon-size);
   width: var(--icon-size);

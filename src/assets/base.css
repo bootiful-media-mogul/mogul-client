@@ -45,8 +45,7 @@ a {
   text-decoration: none;
   font-weight: bold;
   text-transform: uppercase;
-  font-family: 'Arial Black', sans-serif;
-  /*font-size: small;*/
+  /*font-family: 'Arial Black', sans-serif;*/
 }
 
 .pure-button {
@@ -311,7 +310,7 @@ html {
 }
 
 .form-section .form-section-title {
-  font-size: x-large;
+  /*font-size: 15px;*/
   border-bottom: 1px solid black;
 
   margin-bottom: var(--gutter-space);

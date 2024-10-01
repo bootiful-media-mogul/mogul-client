@@ -357,10 +357,10 @@ export default {
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
-            <div class="pure-u-5-24">
+            <div class="pure-u-3-24">
               <label>{{ $t('episodes.episode.graphic') }}</label>
             </div>
-            <div class="pure-u-19-24">
+            <div class="pure-u-21-24">
               <ManagedFileComponent
                 accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
                 v-model:managed-file-id="draftEpisode.graphic.id"
@@ -372,12 +372,12 @@ export default {
 
           <div v-bind:key="segment.id" v-for="segment in draftEpisodeSegments">
             <div class="pure-g episode-managed-file-row">
-              <div class="pure-u-5-24">
+              <div class="pure-u-3-24">
                 <label>
                   {{ $t('episodes.episode.segments.number', { order: segment.order }) }}
                 </label>
               </div>
-              <div class="pure-u-19-24">
+              <div class="pure-u-21-24">
                 <ManagedFileComponent
                   accept=".mp3,audio/mpeg"
                   v-model:managed-file-id="segment.audio.id"
@@ -406,6 +406,7 @@ export default {
 
           <div class="podcast-episode-controls-row">
             <span class="save">
+              
               <button
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
                 type="submit"
@@ -551,9 +552,11 @@ export default {
 }
 
 .podcast-episode-controls-row {
+  /*
   display: grid;
   grid-template-areas: 'save . cancel . publish';
   grid-template-columns: min-content var(--form-buttons-gutter-space) min-content auto min-content;
+  */
 }
 
 .podcast-episode-controls-row .save {

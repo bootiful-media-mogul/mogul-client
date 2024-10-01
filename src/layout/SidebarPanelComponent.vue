@@ -71,8 +71,8 @@
   text-transform: uppercase;
   text-decoration: none;
   font-weight: bold;
-  font-family: 'Arial Black', sans-serif;
-  font-size: small;
+  /*font-family: 'Arial Black', sans-serif;*/
+  /* font-size: small;*/
 }
 
 .sidebar-panel .top .controls {

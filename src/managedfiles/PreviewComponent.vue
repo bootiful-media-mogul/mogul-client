@@ -2,7 +2,6 @@
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>Media Preview</legend>
-
       <div>
         <img
           v-if="isImage"
@@ -18,14 +17,10 @@
           <b>{{ filename }}</b>
         </div>
         <div>
-          <span style="font-size: smaller">
-            <code>{{ contentType }}</code>
-          </span>
+          <code>{{ contentType }}</code>
         </div>
         <div>
-          <span style="font-size: smaller">
-            <code>{{ size }}</code>
-          </span>
+          <code>{{ size }}</code>
         </div>
       </div>
     </fieldset>

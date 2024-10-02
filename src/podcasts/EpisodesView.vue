@@ -239,7 +239,7 @@ export default {
 
     notifications.listenForCategory(
       'podcast-episode-completion-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         const jsonMap = JSON.parse(notification.context) as any
         const complete = jsonMap['complete'] as boolean
         const episodeId = parseInt(notification.key)
@@ -249,14 +249,14 @@ export default {
 
     notifications.listenForCategory(
       'publication-completed-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
       }
     )
 
     notifications.listenForCategory(
       'publication-started-event',
-      async function(notification: Notification) {
+      async function (notification: Notification) {
         await that.refreshEpisode(that.draftEpisode.id)
         that.publications
           .filter((pub) => pub.id === parseInt(notification.key))
@@ -307,7 +307,6 @@ export default {
       <div class="form-section">
         <div class="form-section-title">{{ $t('episodes.basics') }}</div>
         <div class="form-row">
-
           <label for="episodeTitle">
             {{ $t('episodes.episode.title') }}
             <AiWorkshopItIconComponent
@@ -319,7 +318,6 @@ export default {
           <input id="episodeTitle" required v-model="title" type="text" />
         </div>
         <div class="form-row">
-
           <label for="episodeDescription">
             {{ $t('episodes.episode.description') }}
 
@@ -409,7 +407,6 @@ export default {
 
           <div class="podcast-episode-controls-row">
             <span class="save">
-              
               <button
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
                 type="submit"

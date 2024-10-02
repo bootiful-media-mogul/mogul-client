@@ -56,10 +56,7 @@ const translations = {
     // episodes
     ok: 'OK',
 
-    
-    
     'about.title': 'About',
-
 
     //[intlify] Not found 'notifications.podcast-episode-render-started-event' key in 'en' locale messages.
     'episodes.title': 'all episodes',

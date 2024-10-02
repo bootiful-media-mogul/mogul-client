@@ -103,7 +103,7 @@
   width: 80%;
   height: 80%;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  z-index: 1000; 
+  z-index: 1000;
   border-radius: 10px;
 }
 
@@ -114,7 +114,6 @@
 .closed .content {
   display: none;
 }
- 
 </style>
 
 <script lang="ts">

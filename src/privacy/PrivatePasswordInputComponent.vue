@@ -23,7 +23,6 @@
 label .private-password-preview-link {
   position: absolute;
   padding-top: calc(var(--icon-size) - calc(var(--icon-size) / 2));
-  
 }
 </style>
 

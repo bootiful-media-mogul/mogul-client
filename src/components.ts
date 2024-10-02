@@ -13,17 +13,20 @@ export function formInputForLabel(childElement: HTMLElement) {
   return null
 }
 
-export function positionIconRelativeToFormInputForParentLabel(iconElement: HTMLElement,
-                                                              leftPositionProcessorFn: (value) => Number,
-                                                              topPositionProcessorFn: (value) => Number) {
-  const leftCallbackFn = leftPositionProcessorFn ? leftPositionProcessorFn : i => i
-  const topCallbackFn = topPositionProcessorFn ? topPositionProcessorFn : i => i
+export function positionIconRelativeToFormInputForParentLabel(
+  iconElement: HTMLElement,
+  leftPositionProcessorFn: (value) => Number,
+  topPositionProcessorFn: (value) => Number
+) {
+  const leftCallbackFn = leftPositionProcessorFn ? leftPositionProcessorFn : (i) => i
+  const topCallbackFn = topPositionProcessorFn ? topPositionProcessorFn : (i) => i
   const formElement = formInputForLabel(iconElement.parentElement as HTMLElement)
 
   if (formElement === null) return
 
   const resizeFunction = () => {
-    iconElement.style.left = leftCallbackFn(formElement.offsetWidth + iconElement.offsetWidth) + 'px'
+    iconElement.style.left =
+      leftCallbackFn(formElement.offsetWidth + iconElement.offsetWidth) + 'px'
     // iconElement.style.top = topCallbackFn(formElement.style.top) + 'px'
   }
   new ResizeObserver(resizeFunction).observe(formElement)

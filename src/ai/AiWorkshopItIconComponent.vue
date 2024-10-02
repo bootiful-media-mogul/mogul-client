@@ -4,7 +4,6 @@
 
 <style>
 .ai-workshop-it-link {
-  
   background: url('../assets/images/ai-icon-highlight.png');
   height: var(--icon-size);
   width: var(--icon-size);
@@ -40,8 +39,11 @@ export default {
   },
   mounted() {
     const aiIcon = this.$refs.link as HTMLElement
-    positionIconRelativeToFormInputForParentLabel(aiIcon, value => value  , 
-    value => value -  0)
+    positionIconRelativeToFormInputForParentLabel(
+      aiIcon,
+      (value) => value,
+      (value) => value - 0
+    )
   },
 
   setup(props, ctx) {

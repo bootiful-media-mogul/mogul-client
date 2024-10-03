@@ -60,8 +60,8 @@
 export default {
   created() {},
   mounted() {
-    const square = this.$refs.square
-    const btn = this.$refs.button
+    const square = this.$refs.square as HTMLElement
+    const btn = this.$refs.button as HTMLButtonElement
     const defaultStyle = 'panel-window-button-color-square-default'
     const hoverStyle = 'panel-window-button-color-square-hover'
 

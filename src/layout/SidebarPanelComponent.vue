@@ -163,7 +163,7 @@ export default {
 
   data() {
     return {
-      bgPanelNode: null as Node,
+      bgPanelNode: null as HTMLElement | null ,
       expanded: false,
       maximized: false
     }
@@ -177,7 +177,8 @@ export default {
     hide() {
       this.maximized = false
       this.expanded = false
-      this.bgPanelNode.style.display = 'none'
+      if (this.bgPanelNode) 
+        this.bgPanelNode.style.display = 'none'
       this.debug()
     },
     show() {
@@ -189,7 +190,8 @@ export default {
       this.expanded = true
       this.maximized = true
 
-      this.bgPanelNode.style.display = 'block'
+      if (this.bgPanelNode)
+        this.bgPanelNode.style.display = 'block'
 
       this.debug()
     }

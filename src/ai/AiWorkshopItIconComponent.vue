@@ -40,9 +40,7 @@ export default {
   mounted() {
     const aiIcon = this.$refs.link as HTMLElement
     positionIconRelativeToFormInputForParentLabel(
-      aiIcon,
-      (value) => value,
-      (value) => value - 0
+      aiIcon, (value) => value 
     )
   },
 

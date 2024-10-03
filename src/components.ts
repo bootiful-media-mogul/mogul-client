@@ -14,12 +14,8 @@ export function formInputForLabel(childElement: HTMLElement) {
 }
 
 export function positionIconRelativeToFormInputForParentLabel(
-  iconElement: HTMLElement,
-  leftPositionProcessorFn: (value) => Number,
-  topPositionProcessorFn: (value) => Number
-) {
-  const leftCallbackFn = leftPositionProcessorFn ? leftPositionProcessorFn : (i) => i
-  const topCallbackFn = topPositionProcessorFn ? topPositionProcessorFn : (i) => i
+  iconElement: HTMLElement, leftPositionProcessorFn?: (value: number) => number) {
+  const leftCallbackFn = leftPositionProcessorFn ? leftPositionProcessorFn : (i:number) => i
   const formElement = formInputForLabel(iconElement.parentElement as HTMLElement)
 
   if (formElement === null) return

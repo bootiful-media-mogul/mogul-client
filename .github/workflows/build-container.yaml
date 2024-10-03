@@ -15,7 +15,7 @@ jobs:
     name: Build Container
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: "Setup PATH"
         run: |
@@ -31,7 +31,7 @@ jobs:
           gcloud config set project $GCLOUD_PROJECT
           gcloud --quiet auth configure-docker us-docker.pkg.dev
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: '21.x'
 

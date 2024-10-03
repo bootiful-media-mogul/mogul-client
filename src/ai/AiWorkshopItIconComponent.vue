@@ -39,15 +39,12 @@ export default {
   },
   mounted() {
     const aiIcon = this.$refs.link as HTMLElement
-    positionIconRelativeToFormInputForParentLabel(
-      aiIcon, (value) => value 
-    )
+    positionIconRelativeToFormInputForParentLabel(aiIcon, (value) => value)
   },
 
   setup(props, ctx) {
     return {
-      callbackFunction: (updated: AiWorkshopReplyEvent) =>
-        ctx.emit('ai-workshop-completed', updated)
+      callbackFunction: (updated: AiWorkshopReplyEvent) => ctx.emit('ai-workshop-completed', updated)
     }
   },
 

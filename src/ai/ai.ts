@@ -1,6 +1,7 @@
 import { Client } from '@urql/core'
 
 export class Ai {
+  
   private readonly client: Client
 
   constructor(client: Client) {

@@ -10,7 +10,9 @@ import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
 
 export default {
-  components: { NotificationBox, AiChatComponent, PreviewComponent, SidebarPanelComponent },
+  components: {
+    NotificationBox, AiChatComponent, PreviewComponent, SidebarPanelComponent
+  },
 
   methods: {},
 
@@ -26,8 +28,6 @@ export default {
   }
 }
 </script>
-
-
 
 <template>
   <NotificationBox ref="notifications" />
@@ -62,10 +62,7 @@ export default {
         </SidebarPanelComponent>
 
         <SidebarPanelComponent title="Notes"></SidebarPanelComponent>
-
-        <SidebarPanelComponent title="Transcription"></SidebarPanelComponent>
       </div>
     </div>
-    
   </div>
 </template>

@@ -36,10 +36,10 @@ export default {
     }
   },
   mounted() {
-    positionIconRelativeToFormInputForParentLabel(this.$refs.icon as HTMLElement, x => x)
+    positionIconRelativeToFormInputForParentLabel(this.$refs.icon as HTMLElement, (x) => x)
   },
   methods: {
-    togglePreview: function(e: Event) {
+    togglePreview: function (e: Event) {
       e.preventDefault()
       const icon = this.$refs.icon as HTMLElement
       const input = formInputForLabel(icon.parentElement as HTMLElement) as HTMLInputElement

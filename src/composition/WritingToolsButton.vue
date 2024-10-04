@@ -17,54 +17,67 @@
         <div class="button-label">proofread</div>
       </div>
 
-  
 
     </div>
   </div>
 </template>
 <style>
+
 .writing-tools-panel {
   --writing-tools-panel-icon-size: 30px;
   //border: 10px solid royalblue;
   display: grid;
-  grid-template-areas:  ' proofread-button   rewrite-button ';
-  grid-template-columns: auto   auto;
+  grid-template-areas:  ' proofread-button . rewrite-button ';
+  grid-template-columns: auto auto auto;
   margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
   margin-top: calc(var(--gutter-space) / 3);
   padding: var(--gutter-space);
   background-color: #f9f9f9;
   border-radius: 4px;
 }
+
 .proofread-button {
   grid-area: proofread-button;
+  background-color: orange;
 }
+
 .rewrite-button {
   grid-area: rewrite-button;
+  background-color: orange;
 }
+
 .rewrite-icon {
   background-image: url('src/assets/images/writing-tools/rewrite.png');
 }
+
 .proofread-icon {
   background-image: url('src/assets/images/writing-tools/proofread.png');
 }
+
 .button {
   display: grid;
   grid-template-areas: '. icon .'
                         '. label .';
   grid-template-columns:  auto auto auto;
 }
+
 .button-label {
   text-align: center;
   grid-area: label;
 }
+
 .button-icon {
+  border: 1px solid red;
   align-self: center;
+
   grid-area: icon;
+  background-color: lightgrey;
   background-repeat: no-repeat;
-  background-position-x: center;
   background-size: var(--writing-tools-panel-icon-size) var(--writing-tools-panel-icon-size);
   height: var(--writing-tools-panel-icon-size);
+  //width: var(--writing-tools-panel-icon-size);
 }
+
 .toggle-icon {
   cursor: pointer;
   margin-left: calc(var(--gutter-space) / 3);
@@ -149,58 +162,18 @@
 
 </style>
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 export default {
-  name: 'WritingTools',
+  name: 'WritingToolsButton',
   data() {
-    return {
-      panelVisible: false
-    }
+    return {}
   },
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    }
-  },
-  emits: ['update:modelValue'],
-  setup(props, { emit }) {
-    const text = ref('')
-    const inputElement = ref(null)
-
-    const updateValue = (event) => {
-      const value = event.target.value
-      emit('update:modelValue', value)
-      text.value = value
-    }
-
-    onMounted(() => {
-      // todo
-      // I can export the change to the nested component in this way:
-      // setTimeout( () => emit('update:modelValue' , 'hello, world'), 5 * 1000)
-      //
-      inputElement.value = document.querySelector('input, textarea')
-      if (inputElement.value) {
-        inputElement.value.addEventListener('input', updateValue)
-      }
-    })
-
-    onBeforeUnmount(() => {
-      if (inputElement.value) {
-        inputElement.value.removeEventListener('input', updateValue)
-      }
-    })
-
-    return {
-      text,
-      inputElement
-    }
+  props: {},
+  setup() {
+    return {}
   },
   methods: {
-    togglePanel() {
-      this.panelVisible = !this.panelVisible
-    }
+    togglePanel() {}
   }
 }
 </script>

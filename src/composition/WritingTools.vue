@@ -6,7 +6,7 @@
     </div>
 
     <div v-if="panelVisible" class="writing-tools-panel">
-      <div>
+      <div class="tools-panel">
         <div class="tools">
           <div class="proofread"></div>
           <div class="rewrite"></div>
@@ -20,6 +20,13 @@
           <div class="summary"></div>
           <div class="key-points"></div>
         </div>
+      </div>
+      <div class="apply-or-deny-panel">
+      <!--
+      visible when the suggestion has been made 
+      -->
+        <button value="confirm"></button>
+        <button value="revert"></button>
       </div>
     </div>
   </div>
@@ -54,7 +61,6 @@
 }
 
 .writing-tools-panel {
-  z-index: 2000;
   margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
   margin-top: calc(var(--gutter-space) / 3);
   padding: var(--gutter-space);
@@ -92,6 +98,11 @@ export default {
     }
 
     onMounted(() => {
+      
+      // todo
+      // I can export the change to the nested component in this way:
+      // setTimeout( () => emit('update:modelValue' , 'hello, world'), 5 * 1000)
+      // 
       inputElement.value = document.querySelector('input, textarea')
       if (inputElement.value) {
         inputElement.value.addEventListener('input', updateValue)

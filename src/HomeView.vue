@@ -44,6 +44,9 @@ export default {
     </fieldset>
   </form>
 
+  <div>
+    {{userInput}}
+  </div>
  
 
 

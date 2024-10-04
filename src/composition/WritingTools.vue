@@ -23,7 +23,30 @@
         />
 
       </div>
-      
+      <div class="styles">
+        <WritingToolsButton
+          label="Professional"
+          class="professional-button"
+          icon-image="src/assets/images/writing-tools/professional.png"
+          @click="console.log('professional')"
+        />
+
+        <WritingToolsButton
+          label="Concise"
+          class="concise-button"
+          icon-image="src/assets/images/writing-tools/concise.png"
+          @click="console.log('concise')"
+        />
+
+        <WritingToolsButton
+          label="Friendly"
+          class="friendly-button"
+          icon-image="src/assets/images/writing-tools/friendly.png"
+          @click="console.log('friendly')"
+        />
+
+
+      </div>
     </div>
   </div>
 </template>
@@ -37,11 +60,41 @@
   border-radius: 4px;
 }
 
+/* styles for the rewrite */
+.writing-tools-panel .styles {
+  display: grid;
+  grid-template-areas:  ' friendly-button concise-button professional-button  ';
+  grid-template-columns: auto auto auto;
+}
+
+.writing-tools-panel .styles {
+  font-size: small;
+}
+
+.writing-tools-panel .styles .writing-tools-button-icon {
+  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7) calc(var(--writing-tools-panel-icon-size) * 0.7);
+  height: calc(var(--writing-tools-panel-icon-size) * 0.7);
+}
+
+.concise-button {
+  grid-area: concise-button;
+}
+
+.friendly-button {
+  grid-area: friendly-button;
+}
+
+.professional-button {
+  grid-area: professional-button;
+}
+
+/* writing tools */
 .writing-tools-panel .tools {
   display: grid;
   grid-template-areas:  ' proofread-button rewrite-button ';
   grid-template-columns: auto   auto;
 }
+
 
 .rewrite-button {
   grid-area: rewrite-button;

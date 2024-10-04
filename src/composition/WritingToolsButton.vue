@@ -23,7 +23,6 @@
   align-self: center;
   grid-area: icon;
   background-repeat: no-repeat;
-
   background-position-x: center;
   background-size: var(--writing-tools-panel-icon-size) var(--writing-tools-panel-icon-size);
   height: var(--writing-tools-panel-icon-size);

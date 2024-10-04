@@ -44,7 +44,8 @@ export default {
 
   setup(props, ctx) {
     return {
-      callbackFunction: (updated: AiWorkshopReplyEvent) => ctx.emit('ai-workshop-completed', updated)
+      callbackFunction: (updated: AiWorkshopReplyEvent) =>
+        ctx.emit('ai-workshop-completed', updated)
     }
   },
 

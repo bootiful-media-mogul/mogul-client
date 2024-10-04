@@ -11,7 +11,10 @@ import NotificationBox from '@/notifications/NotificationBox.vue'
 
 export default {
   components: {
-    NotificationBox, AiChatComponent, PreviewComponent, SidebarPanelComponent
+    NotificationBox,
+    AiChatComponent,
+    PreviewComponent,
+    SidebarPanelComponent
   },
 
   methods: {},

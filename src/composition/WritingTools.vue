@@ -22,11 +22,11 @@
         </div>
       </div>
       <div class="apply-or-deny-panel">
-      <!--
-      visible when the suggestion has been made 
-      -->
-        <button value="confirm"></button>
-        <button value="revert"></button>
+        <!--
+        visible when the suggestion has been made 
+        -->
+        <button value="confirm" name="confirm" class="pure-button pure-button-primary">confirm</button>
+        <button value="revert" name="revert"   class="pure-button">revert</button>
       </div>
     </div>
   </div>
@@ -67,6 +67,10 @@
   background-color: #f9f9f9;
   border-radius: 4px; /* this is the same radius used for inputs in pure.css */
 
+}
+
+.apply-or-deny-panel {
+ display: none;
 }
 </style>
 <script>

@@ -7,28 +7,29 @@
 
     <div v-if="panelVisible" class="writing-tools-panel">
 
-      <WritingToolsButton
-        label="Proofread"
-        class="proofread-button"
-        icon-image="src/assets/images/writing-tools/proofread.png"
-      />
+      <div class="tools">
+        <WritingToolsButton
+          label="Proofread"
+          class="proofread-button"
+          icon-image="src/assets/images/writing-tools/proofread.png"
+          @click="console.log('proof')"
+        />
 
-      <WritingToolsButton
-        label="Rewrite"
-        class="rewrite-button"
-        icon-image="src/assets/images/writing-tools/rewrite.png"
-      />
+        <WritingToolsButton
+          label="Rewrite"
+          class="rewrite-button"
+          icon-image="src/assets/images/writing-tools/rewrite.png"
+          @click="console.log('rewrite')"
+        />
 
-
+      </div>
+      
     </div>
   </div>
 </template>
 <style>
 .writing-tools-panel {
   --writing-tools-panel-icon-size: 30px;
-  display: grid;
-  grid-template-areas:  '     proofread-button rewrite-button ';
-  grid-template-columns: auto   auto;
   margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
   margin-top: calc(var(--gutter-space) / 3);
   padding: var(--gutter-space);
@@ -36,10 +37,15 @@
   border-radius: 4px;
 }
 
+.writing-tools-panel .tools {
+  display: grid;
+  grid-template-areas:  ' proofread-button rewrite-button ';
+  grid-template-columns: auto   auto;
+}
+
 .rewrite-button {
   grid-area: rewrite-button;
 }
-
 
 .proofread-button {
   grid-area: proofread-button;

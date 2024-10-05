@@ -141,21 +141,21 @@
           label="Friendly"
           class="friendly-button"
           icon-image="src/assets/images/writing-tools/friendly.png"
-          @click="console.log('friendly')"
+          @click="rewriteFriendly"
         />
 
         <WritingToolsButton
           label="Concise"
           class="concise-button"
           icon-image="src/assets/images/writing-tools/concise.png"
-          @click="console.log('concise')"
+          @click="rewriteConcise"
         />
 
         <WritingToolsButton
           label="Professional"
           class="professional-button"
           icon-image="src/assets/images/writing-tools/professional.png"
-          @click="console.log('professional')"
+          @click="rewriteProfessional"
         />
 
 
@@ -176,7 +176,8 @@ export default {
       panelVisible: false,
       rewriteStylesVisible: false,
       rewriteClasses: 'styles',
-      toolsClasses: 'tools'
+      toolsClasses: 'tools',
+      previousModelValue: ''
     }
   },
   props: {
@@ -189,11 +190,10 @@ export default {
   setup(props, { emit }) {
     const text = ref('')
     const inputElement = ref(null)
-
     const updateValue = (event) => {
-      const value = event.target.value
-      emit('update:modelValue', value)
-      text.value = value
+      const txt = event.target.value
+      emit('update:modelValue', txt)
+      text.value = txt
     }
 
     onMounted(() => {
@@ -219,13 +219,29 @@ export default {
     }
   },
   methods: {
+
     proposeUpdatedText(updatedText: string) {
       console.log('updated text: ' + updatedText)
+      this.previousModelValue = this.modelValue
+      this.$emit('update:modelValue', updatedText)
     },
     proofread() {
       console.log('proofread')
       if (this.rewriteStylesVisible)
         this.toggleRewriteTools()
+
+      this.proposeUpdatedText('proofread: ' + this.modelValue.toUpperCase())
+
+    },
+
+    rewriteProfessional() {
+      this.proposeUpdatedText('professional: ' + this.modelValue.toUpperCase())
+    },
+    rewriteConcise() {
+      this.proposeUpdatedText('concise: ' + this.modelValue.toUpperCase())
+    },
+    rewriteFriendly() {
+      this.proposeUpdatedText('friendly: ' + this.modelValue.toUpperCase())
     },
     toggleRewriteTools() {
       this.rewriteStylesVisible = !this.rewriteStylesVisible

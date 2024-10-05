@@ -8,10 +8,11 @@ import {
   podcasts,
   Publication
 } from '@/services'
-import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
+// import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
 import { dateTimeToString, dateToString } from '@/dates'
+import WritingTools from '@/composition/WritingTools.vue'
 
 export default {
   mounted(): void {
@@ -19,8 +20,8 @@ export default {
   },
 
   components: {
-    ManagedFileComponent,
-    AiWorkshopItIconComponent
+    WritingTools,
+    ManagedFileComponent
   },
 
   props: ['id'],
@@ -309,25 +310,18 @@ export default {
         <div class="form-row">
           <label for="episodeTitle">
             {{ $t('episodes.episode.title') }}
-            <AiWorkshopItIconComponent
-              :prompt="$t('episodes.episode.title.ai-prompt')"
-              :text="title"
-              @ai-workshop-completed="title = $event.text"
-            />
           </label>
+          <WritingTools v-model="title">
           <input id="episodeTitle" required v-model="title" type="text" />
+          </WritingTools>
         </div>
         <div class="form-row">
           <label for="episodeDescription">
             {{ $t('episodes.episode.description') }}
-
-            <AiWorkshopItIconComponent
-              :prompt="$t('episodes.episode.description.ai-prompt')"
-              :text="description"
-              @ai-workshop-completed="description = $event.text"
-            />
           </label>
-          <textarea id="episodeDescription" rows="10" required v-model="description" />
+          <WritingTools v-model="description">
+            <textarea id="episodeDescription" rows="10" required v-model="description" />
+          </WritingTools>
         </div>
         <div class="podcast-episode-controls-row">
           <span class="save">

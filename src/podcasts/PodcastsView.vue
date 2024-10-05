@@ -6,14 +6,10 @@
       <div class="pure-control-group">
         <label for="title">
           {{ $t('podcasts.new-podcast.title') }}
-
-          <AiWorkshopItIconComponent
-            :prompt="$t('podcasts.title.ai.prompt')"
-            :text="title"
-            @ai-workshop-completed="title = $event.text"
-          />
         </label>
-        <input type="text" required id="title" v-model="title" />
+       <WritingTools v-model="title">
+         <input type="text" required id="title" v-model="title" />
+       </WritingTools>
       </div>
       <div class="pure-controls">
         <button
@@ -98,9 +94,9 @@
 </style>
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'
-import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import CreateEpisodeView from '@/podcasts/EpisodesView.vue'
 import { dateTimeToString } from '@/dates'
+import WritingTools from '@/composition/WritingTools.vue'
 
 async function refresh() {
   return await podcasts.podcasts()
@@ -112,7 +108,7 @@ export default {
       return CreateEpisodeView
     }
   },
-  components: { AiWorkshopItIconComponent },
+  components: { WritingTools },
 
   async created() {
     this.podcasts = await refresh()

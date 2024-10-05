@@ -12,6 +12,10 @@
                         '. label .';
   grid-template-columns:  auto auto auto;
   cursor: pointer;
+
+  border-radius: var(--button-radius);
+  background-color: lightgrey;
+  padding: calc(var(--gutter-space) / 2);
 }
 
 .writing-tools-button-label {

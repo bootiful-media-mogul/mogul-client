@@ -1,61 +1,34 @@
-<template>
-  <div class="writing-tools-container">
-    <div ref="writingToolsRoot" class="input-wrapper">
-      <slot></slot>
-      <div class="toggle-icon" @click="togglePanel">✏️</div>
-    </div>
-
-    <div v-if="panelVisible" class="writing-tools-panel">
-
-      <div class="tools">
-
-        <WritingToolsButton
-          label="Proofread"
-          class="writing-tools-button   proofread-button"
-          icon-image="src/assets/images/writing-tools/proofread.png"
-          @click="proofread"
-        />
-
-        <WritingToolsButton
-          label="Rewrite"
-          class="rewrite-button"
-          icon-image="src/assets/images/writing-tools/rewrite.png"
-          @click="toggleRewriteTools"
-        />
-
-      </div>
-      <div class="styles" v-if="rewriteStylesVisible">
-        <WritingToolsButton
-          label="Professional"
-          class="professional-button"
-          icon-image="src/assets/images/writing-tools/professional.png"
-          @click="console.log('professional')"
-        />
-
-        <WritingToolsButton
-          label="Concise"
-          class="concise-button"
-          icon-image="src/assets/images/writing-tools/concise.png"
-          @click="console.log('concise')"
-        />
-
-        <WritingToolsButton
-          label="Friendly"
-          class="friendly-button"
-          icon-image="src/assets/images/writing-tools/friendly.png"
-          @click="console.log('friendly')"
-        />
+<style scoped>
 
 
-      </div>
-    </div>
-  </div>
-</template>
-<style>
-.writing-tools-button {
-  border-radius: var(--button-radius);
-  background-color: lightgrey;
-  padding: calc(var(--gutter-space) / 2);
+.tools.active .writing-tools-button:last-of-type {
+  background-color: #999999;
+}
+
+.styles {
+  padding-top: calc(var(--gutter-space) / 2);
+}
+
+.styles .writing-tools-button {
+  border-radius: 0;
+}
+
+.styles.active .writing-tools-button {
+  background-color: #999999;
+
+}
+
+.styles .writing-tools-button:first-of-type {
+  border-top-left-radius: var(--button-radius);
+  border-bottom-left-radius: var(--button-radius);
+}
+
+.styles .writing-tools-button:last-of-type {
+  border-top-right-radius: var(--button-radius);
+  border-bottom-right-radius: var(--button-radius);
+}
+
+.tools .writing-tools-button:last-of-type {
 }
 
 .writing-tools-panel {
@@ -72,13 +45,20 @@
   display: grid;
   grid-template-areas:  ' friendly-button concise-button professional-button  ';
   grid-template-columns: auto auto auto;
-  grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-row-gap: calc(var(--gutter-space) / 2);
+}
+
+.tools.active {
+  //border: 1px solid orange;
+}
+
+.styles.active {
+  //border: 1px solid red;
+  //border-top-right-radius: 0;
 }
 
 .writing-tools-panel .styles {
   font-size: small;
-  padding-top : calc(var(--gutter-space) / 2);
+  //padding-top: calc(var(--gutter-space) / 2);
 }
 
 .writing-tools-panel .styles .writing-tools-button-icon {
@@ -105,9 +85,7 @@
   grid-template-columns: auto   auto;
   grid-column-gap: calc(var(--gutter-space) / 2);
   grid-row-gap: calc(var(--gutter-space) / 2);
-  
 }
-
 
 .rewrite-button {
   grid-area: rewrite-button;
@@ -130,9 +108,63 @@
   position: relative;
 }
 
-
 </style>
-<script>
+
+<template>
+  <div class="writing-tools-container">
+    <div ref="writingToolsRoot" class="input-wrapper">
+      <slot></slot>
+      <div class="toggle-icon" @click="togglePanel">✏️</div>
+    </div>
+
+    <div v-if="panelVisible" class="writing-tools-panel">
+
+      <div :class="toolsClasses">
+
+        <WritingToolsButton
+          label="Proofread"
+          class="writing-tools-button   proofread-button"
+          icon-image="src/assets/images/writing-tools/proofread.png"
+          @click="proofread"
+        />
+
+        <WritingToolsButton
+          label="Rewrite"
+          class="rewrite-button"
+          icon-image="src/assets/images/writing-tools/rewrite.png"
+          @click="toggleRewriteTools"
+        />
+
+      </div>
+      <div :class="rewriteClasses" v-if="rewriteStylesVisible">
+        <WritingToolsButton
+          label="Friendly"
+          class="friendly-button"
+          icon-image="src/assets/images/writing-tools/friendly.png"
+          @click="console.log('friendly')"
+        />
+
+        <WritingToolsButton
+          label="Concise"
+          class="concise-button"
+          icon-image="src/assets/images/writing-tools/concise.png"
+          @click="console.log('concise')"
+        />
+
+        <WritingToolsButton
+          label="Professional"
+          class="professional-button"
+          icon-image="src/assets/images/writing-tools/professional.png"
+          @click="console.log('professional')"
+        />
+
+
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import WritingToolsButton from '@/composition/WritingToolsButton.vue'
 
@@ -142,7 +174,9 @@ export default {
   data() {
     return {
       panelVisible: false,
-      rewriteStylesVisible: false
+      rewriteStylesVisible: false,
+      rewriteClasses: 'styles',
+      toolsClasses: 'tools'
     }
   },
   props: {
@@ -185,12 +219,23 @@ export default {
     }
   },
   methods: {
+    proposeUpdatedText(updatedText: string) {
+      console.log('updated text: ' + updatedText)
+    },
     proofread() {
-      this.rewriteStylesVisible = false
+      console.log('proofread')
+      if (this.rewriteStylesVisible)
+        this.toggleRewriteTools()
     },
     toggleRewriteTools() {
-      console.log('rewrite')
       this.rewriteStylesVisible = !this.rewriteStylesVisible
+      if (this.rewriteStylesVisible) {
+        this.rewriteClasses += ' active'
+        this.toolsClasses += ' active'
+      } else {
+        this.rewriteClasses = 'styles'
+        this.toolsClasses = 'tools'
+      }
     },
     togglePanel() {
       this.panelVisible = !this.panelVisible

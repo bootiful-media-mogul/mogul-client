@@ -48,9 +48,7 @@ export default {
     iconImage: { type: String, default: '' }
   },
   setup() {
-    return {
-      // bgCss: ''
-    }
+    return {}
   },
   methods: {}
 }

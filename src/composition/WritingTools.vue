@@ -108,6 +108,9 @@
   position: relative;
 }
 
+.proposal-approval a {
+  font-size: small;
+}
 </style>
 
 <template>
@@ -118,47 +121,56 @@
     </div>
 
     <div v-if="panelVisible" class="writing-tools-panel">
+      <div v-if="!proposalApprovalRequired">
+        <div :class="toolsClasses">
 
-      <div :class="toolsClasses">
+          <WritingToolsButton
+            label="Proofread"
+            class="writing-tools-button   proofread-button"
+            icon-image="src/assets/images/writing-tools/proofread.png"
+            @click="proofread"
+          />
 
-        <WritingToolsButton
-          label="Proofread"
-          class="writing-tools-button   proofread-button"
-          icon-image="src/assets/images/writing-tools/proofread.png"
-          @click="proofread"
-        />
+          <WritingToolsButton
+            label="Rewrite"
+            class="rewrite-button"
+            icon-image="src/assets/images/writing-tools/rewrite.png"
+            @click="toggleRewriteTools"
+          />
 
-        <WritingToolsButton
-          label="Rewrite"
-          class="rewrite-button"
-          icon-image="src/assets/images/writing-tools/rewrite.png"
-          @click="toggleRewriteTools"
-        />
+        </div>
+        <div :class="rewriteClasses" v-if="rewriteStylesVisible">
+          <WritingToolsButton
+            label="Friendly"
+            class="friendly-button"
+            icon-image="src/assets/images/writing-tools/friendly.png"
+            @click="rewriteFriendly"
+          />
 
+          <WritingToolsButton
+            label="Concise"
+            class="concise-button"
+            icon-image="src/assets/images/writing-tools/concise.png"
+            @click="rewriteConcise"
+          />
+
+          <WritingToolsButton
+            label="Professional"
+            class="professional-button"
+            icon-image="src/assets/images/writing-tools/professional.png"
+            @click="rewriteProfessional"
+          />
+
+
+        </div>
       </div>
-      <div :class="rewriteClasses" v-if="rewriteStylesVisible">
-        <WritingToolsButton
-          label="Friendly"
-          class="friendly-button"
-          icon-image="src/assets/images/writing-tools/friendly.png"
-          @click="rewriteFriendly"
-        />
-
-        <WritingToolsButton
-          label="Concise"
-          class="concise-button"
-          icon-image="src/assets/images/writing-tools/concise.png"
-          @click="rewriteConcise"
-        />
-
-        <WritingToolsButton
-          label="Professional"
-          class="professional-button"
-          icon-image="src/assets/images/writing-tools/professional.png"
-          @click="rewriteProfessional"
-        />
-
-
+      <div class="proposal-approval" v-if="proposalApprovalRequired">
+        <a href="#" @click.prevent="accept">
+          accept
+        </a> |
+        <a href="#" @click.prevent="revert">
+          revert
+        </a>
       </div>
     </div>
   </div>
@@ -173,6 +185,7 @@ export default {
   components: { WritingToolsButton },
   data() {
     return {
+      proposalApprovalRequired: false,
       panelVisible: false,
       rewriteStylesVisible: false,
       rewriteClasses: 'styles',
@@ -220,10 +233,28 @@ export default {
   },
   methods: {
 
+    reset() {
+      if (this.panelVisible) {
+        this.togglePanel()
+      }
+
+      this.toggleRewriteTools()
+      this.proposalApprovalRequired = false
+    },
+    revert() {
+      this.proposeUpdatedText(this.previousModelValue)
+      this.reset()
+    },
+    accept() {
+
+      this.proposalApprovalRequired = false
+      this.reset()
+    },
     proposeUpdatedText(updatedText: string) {
       console.log('updated text: ' + updatedText)
       this.previousModelValue = this.modelValue
       this.$emit('update:modelValue', updatedText)
+      this.proposalApprovalRequired = true
     },
     proofread() {
       console.log('proofread')

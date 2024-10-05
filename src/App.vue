@@ -2,8 +2,6 @@
  renders a list of all the existing podcasts
 -->
 <script lang="ts">
-import AiChatComponent from '@/ai/AiChatComponent.vue'
-
 import { mogul } from '@/services'
 import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
@@ -12,7 +10,6 @@ import NotificationBox from '@/notifications/NotificationBox.vue'
 export default {
   components: {
     NotificationBox,
-    AiChatComponent,
     PreviewComponent,
     SidebarPanelComponent
   },
@@ -56,10 +53,6 @@ export default {
       </div>
 
       <div class="sidebar">
-        <SidebarPanelComponent title="A.I.">
-          <AiChatComponent />
-        </SidebarPanelComponent>
-
         <SidebarPanelComponent title="Media Preview">
           <PreviewComponent />
         </SidebarPanelComponent>

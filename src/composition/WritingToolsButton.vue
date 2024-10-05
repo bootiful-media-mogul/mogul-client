@@ -5,12 +5,12 @@
   </div>
 </template>
 <style>
-
 .writing-tools-button {
   display: grid;
-  grid-template-areas: '. icon .'
-                        '. label .';
-  grid-template-columns:  auto auto auto;
+  grid-template-areas:
+    '. icon  .'
+    '. label .';
+  grid-template-columns: auto auto auto;
   cursor: pointer;
 
   border-radius: var(--button-radius);
@@ -31,13 +31,11 @@
   background-size: var(--writing-tools-panel-icon-size) var(--writing-tools-panel-icon-size);
   height: var(--writing-tools-panel-icon-size);
 }
-
 </style>
 <script>
 export default {
   name: 'WritingToolsButton',
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       backgroundStyle: ` background-image: url('${this.iconImage}')  `

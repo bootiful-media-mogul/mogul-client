@@ -1,4 +1,3 @@
-import { Ai } from '@/ai/ai'
 import Mogul from '@/mogul'
 import mitt from 'mitt'
 import { Client, errorExchange, fetchExchange } from '@urql/core'
@@ -20,6 +19,7 @@ export const graphqlClient = new Client({
   ]
 })
 
+/*
 export enum AiWorkshopReplyEventType {
   TEXT,
   IMAGE
@@ -44,7 +44,8 @@ export class AiWorkshopRequestEvent {
     this.text = text
     this.callback = callback
   }
-}
+} 
+*/
 
 export function previewManagedFile(managedFileId: number) {
   // console.log('launching previewManagedFile for ' + managedFileId)
@@ -592,6 +593,40 @@ export class ManagedFiles {
     const result = await this.client.query(q, { id: id })
     const managedFileId = await result.data['managedFileById']
     return managedFileId as ManagedFile
+  }
+}
+
+export class Ai {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  /* generate text responses */
+  async chat(prompt: string): Promise<string> {
+    const query = `
+            query AiChatQuery ( $prompt: String) { 
+             aiChat( prompt : $prompt ) 
+            }
+     `
+    const result = await this.client.query(query, {
+      prompt: prompt
+    })
+    return (await result['data']['aiChat']) as string
+  }
+
+  /** renders images given a prompt */
+  render(prompt: string): string {
+    return ''
+  }
+
+  /**
+   * i think we'd have a little drag-and-drop panel in the AiClient where we'd be allowed to drop {@code .mp3} or
+   * {@code .mp4} or {@code .wav} files,
+   * */
+  transcribe(path: string): string {
+    return ''
   }
 }
 

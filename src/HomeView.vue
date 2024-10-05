@@ -22,8 +22,8 @@ export default {
       <div class="pure-control-group">
         <label for="title"> some text we need input on </label>
         <WritingTools v-model="userInput">
-          <textarea  :value="userInput" />
-<!--          <input type="text" :value="userInput" />-->
+          <textarea :value="userInput" />
+          <!--          <input type="text" :value="userInput" />-->
         </WritingTools>
       </div>
 

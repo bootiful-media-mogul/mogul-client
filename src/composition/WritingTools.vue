@@ -1,8 +1,13 @@
 <style scoped>
-
-
 .tools.active .writing-tools-button:last-of-type {
-  background-color: #999999;
+  background-color: white;
+  opacity: 100%;
+}
+
+.styles.active .writing-tools-button {
+  background-color: white;
+  opacity: 100%;
+
 }
 
 .styles {
@@ -11,11 +16,6 @@
 
 .styles .writing-tools-button {
   border-radius: 0;
-}
-
-.styles.active .writing-tools-button {
-  background-color: #999999;
-
 }
 
 .styles .writing-tools-button:first-of-type {
@@ -44,17 +44,15 @@
 /* styles for the rewrite */
 .writing-tools-panel .styles {
   display: grid;
-  grid-template-areas:  ' friendly-button concise-button professional-button  ';
+  grid-template-areas: ' friendly-button concise-button professional-button  ';
   grid-template-columns: auto auto auto;
 }
 
 .tools.active {
-  //border: 1px solid orange;
 }
 
 .styles.active {
-  //border: 1px solid red;
-  //border-top-right-radius: 0;
+
 }
 
 .writing-tools-panel .styles {
@@ -82,6 +80,7 @@
 .revert-link {
   grid-area: revert-link;
 }
+
 .accept-link {
   grid-area: accept-link;
 }
@@ -89,8 +88,8 @@
 /* writing tools */
 .writing-tools-panel .tools {
   display: grid;
-  grid-template-areas:  ' proofread-button rewrite-button ';
-  grid-template-columns: auto   auto;
+  grid-template-areas: ' proofread-button rewrite-button ';
+  grid-template-columns: auto auto;
   grid-column-gap: calc(var(--gutter-space) / 2);
   grid-row-gap: calc(var(--gutter-space) / 2);
 }
@@ -119,9 +118,11 @@
 .proposal-approval a {
   font-size: small;
 }
-.proposal-approval  {}
-.proposal-approval  .accept-link  {  
-  
+
+.proposal-approval {
+}
+
+.proposal-approval .accept-link {
 }
 </style>
 
@@ -135,54 +136,46 @@
     <div v-if="panelVisible" class="writing-tools-panel">
       <div v-if="!proposalApprovalRequired">
         <div :class="toolsClasses">
-
           <WritingToolsButton
             label="Proofread"
-            class="writing-tools-button   proofread-button"
-            icon-image="src/assets/images/writing-tools/proofread.png"
+            class="writing-tools-button proofread-button"
+            icon-image="/src/assets/images/writing-tools/proofread.png"
             @click="proofread"
           />
 
           <WritingToolsButton
             label="Rewrite"
             class="rewrite-button"
-            icon-image="src/assets/images/writing-tools/rewrite.png"
+            icon-image="/src/assets/images/writing-tools/rewrite.png"
             @click="toggleRewriteTools"
           />
-
         </div>
         <div :class="rewriteClasses" v-if="rewriteStylesVisible">
           <WritingToolsButton
             label="Friendly"
             class="friendly-button"
-            icon-image="src/assets/images/writing-tools/friendly.png"
+            icon-image="/src/assets/images/writing-tools/friendly.png"
             @click="rewriteFriendly"
           />
 
           <WritingToolsButton
             label="Concise"
             class="concise-button"
-            icon-image="src/assets/images/writing-tools/concise.png"
+            icon-image="/src/assets/images/writing-tools/concise.png"
             @click="rewriteConcise"
           />
 
           <WritingToolsButton
             label="Professional"
             class="professional-button"
-            icon-image="src/assets/images/writing-tools/professional.png"
+            icon-image="/src/assets/images/writing-tools/professional.png"
             @click="rewriteProfessional"
           />
-
-
         </div>
       </div>
       <div class="proposal-approval" v-if="proposalApprovalRequired">
-        <a class="accept-link" href="#" @click.prevent="accept">
-          accept
-        </a> |
-        <a  class="revert-link" href="#" @click.prevent="revert">
-          revert
-        </a>
+        <a class="accept-link" href="#" @click.prevent="accept"> accept </a> |
+        <a class="revert-link" href="#" @click.prevent="revert"> revert </a>
       </div>
     </div>
   </div>
@@ -191,6 +184,7 @@
 <script lang="ts">
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import WritingToolsButton from '@/composition/WritingToolsButton.vue'
+import { ai } from '@/services'
 
 export default {
   name: 'WritingTools',
@@ -214,6 +208,7 @@ export default {
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     const text = ref('')
+    const writingToolsRoot = ref(null)
     const inputElement = ref(null)
     const updateValue = (event) => {
       const txt = event.target.value
@@ -222,11 +217,7 @@ export default {
     }
 
     onMounted(() => {
-      // todo
-      // I can export the change to the nested component in this way:
-      // setTimeout( () => emit('update:modelValue' , 'hello, world'), 5 * 1000)
-      //
-      inputElement.value = document.querySelector('input, textarea')
+      inputElement.value = (writingToolsRoot.value as HTMLElement).querySelector('input, textarea')
       if (inputElement.value) {
         inputElement.value.addEventListener('input', updateValue)
       }
@@ -239,52 +230,77 @@ export default {
     })
 
     return {
+      writingToolsRoot,
       text,
       inputElement
     }
   },
   methods: {
-
     reset() {
-      if (this.panelVisible) {
-        this.togglePanel()
-      }
-
-      this.toggleRewriteTools()
       this.proposalApprovalRequired = false
+      this.panelVisible = false
+      this.rewriteStylesVisible = false
+      this.rewriteClasses = 'styles'
+      this.toolsClasses = 'tools'
+      this.previousModelValue = ''
     },
     revert() {
       this.proposeUpdatedText(this.previousModelValue)
       this.reset()
     },
     accept() {
-
       this.proposalApprovalRequired = false
       this.reset()
     },
+
     proposeUpdatedText(updatedText: string) {
       console.log('updated text: ' + updatedText)
       this.previousModelValue = this.modelValue
       this.$emit('update:modelValue', updatedText)
       this.proposalApprovalRequired = true
     },
-    proofread() {
-      console.log('proofread')
-      if (this.rewriteStylesVisible)
-        this.toggleRewriteTools()
 
-      this.proposeUpdatedText('proofread: ' + this.modelValue.toUpperCase())
+    async proofread() {
 
+      if (this.modelValue.trim() === '') return
+
+      if (this.rewriteStylesVisible) this.toggleRewriteTools()
+
+      const proofread = await ai.chat(
+        `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
+        ==========================================
+        ${this.modelValue}
+      `)
+      this.proposeUpdatedText(proofread)
     },
 
-    rewriteProfessional() {
-      this.proposeUpdatedText('professional: ' + this.modelValue.toUpperCase())
+    async rewriteProfessional() {
+      if (this.modelValue.trim() === '') return
+      const updated = await ai.chat(
+        `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
+        ==========================================
+        ${this.modelValue}
+      `)
+      this.proposeUpdatedText(updated)
     },
-    rewriteConcise() {
-      this.proposeUpdatedText('concise: ' + this.modelValue.toUpperCase())
+
+    async rewriteConcise() {
+      if (this.modelValue.trim() === '') return
+      const updated = await ai.chat(
+        `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
+        ==========================================
+        ${this.modelValue}
+      `)
+      this.proposeUpdatedText(updated)
     },
-    rewriteFriendly() {
-      this.proposeUpdatedText('friendly: ' + this.modelValue.toUpperCase())
+    async rewriteFriendly() {
+      if (this.modelValue.trim() === '') return
+      const updated = await ai.chat(
+        `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
+        ==========================================
+        ${this.modelValue}
+      `)
+      this.proposeUpdatedText(updated)
     },
     toggleRewriteTools() {
       this.rewriteStylesVisible = !this.rewriteStylesVisible

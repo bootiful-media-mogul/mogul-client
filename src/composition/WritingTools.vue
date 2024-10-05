@@ -7,7 +7,6 @@
 .styles.active .writing-tools-button {
   background-color: white;
   opacity: 100%;
-
 }
 
 .styles {
@@ -52,7 +51,6 @@
 }
 
 .styles.active {
-
 }
 
 .writing-tools-panel .styles {
@@ -61,7 +59,8 @@
 }
 
 .writing-tools-panel .styles .writing-tools-button-icon {
-  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7) calc(var(--writing-tools-panel-icon-size) * 0.7);
+  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7)
+    calc(var(--writing-tools-panel-icon-size) * 0.7);
   height: calc(var(--writing-tools-panel-icon-size) * 0.7);
 }
 
@@ -261,7 +260,6 @@ export default {
     },
 
     async proofread() {
-
       if (this.modelValue.trim() === '') return
 
       if (this.rewriteStylesVisible) this.toggleRewriteTools()
@@ -270,7 +268,8 @@ export default {
         `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
         ==========================================
         ${this.modelValue}
-      `)
+      `
+      )
       this.proposeUpdatedText(proofread)
     },
 
@@ -280,7 +279,8 @@ export default {
         `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
         ==========================================
         ${this.modelValue}
-      `)
+      `
+      )
       this.proposeUpdatedText(updated)
     },
 
@@ -290,7 +290,8 @@ export default {
         `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
         ==========================================
         ${this.modelValue}
-      `)
+      `
+      )
       this.proposeUpdatedText(updated)
     },
     async rewriteFriendly() {
@@ -299,7 +300,8 @@ export default {
         `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
         ==========================================
         ${this.modelValue}
-      `)
+      `
+      )
       this.proposeUpdatedText(updated)
     },
     toggleRewriteTools() {

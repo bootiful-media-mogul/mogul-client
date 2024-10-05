@@ -7,9 +7,9 @@
         <label for="title">
           {{ $t('podcasts.new-podcast.title') }}
         </label>
-       <WritingTools v-model="title">
-         <input type="text" required id="title" v-model="title" />
-       </WritingTools>
+        <WritingTools v-model="title">
+          <input type="text" required id="title" v-model="title" />
+        </WritingTools>
       </div>
       <div class="pure-controls">
         <button

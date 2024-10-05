@@ -312,7 +312,7 @@ export default {
             {{ $t('episodes.episode.title') }}
           </label>
           <WritingTools v-model="title">
-          <input id="episodeTitle" required v-model="title" type="text" />
+            <input id="episodeTitle" required v-model="title" type="text" />
           </WritingTools>
         </div>
         <div class="form-row">

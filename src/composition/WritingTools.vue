@@ -8,22 +8,23 @@
     <div v-if="panelVisible" class="writing-tools-panel">
 
       <div class="tools">
+
         <WritingToolsButton
           label="Proofread"
-          class="proofread-button"
+          class="writing-tools-button   proofread-button"
           icon-image="src/assets/images/writing-tools/proofread.png"
-          @click="console.log('proof')"
+          @click="proofread"
         />
 
         <WritingToolsButton
           label="Rewrite"
           class="rewrite-button"
           icon-image="src/assets/images/writing-tools/rewrite.png"
-          @click="console.log('rewrite')"
+          @click="toggleRewriteTools"
         />
 
       </div>
-      <div class="styles">
+      <div class="styles" v-if="rewriteStylesVisible">
         <WritingToolsButton
           label="Professional"
           class="professional-button"
@@ -51,11 +52,17 @@
   </div>
 </template>
 <style>
+.writing-tools-button {
+  border-radius: var(--button-radius);
+  background-color: lightgrey;
+  padding: calc(var(--gutter-space) / 2);
+}
+
 .writing-tools-panel {
   --writing-tools-panel-icon-size: 30px;
   margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
   margin-top: calc(var(--gutter-space) / 3);
-  padding: var(--gutter-space);
+  padding: calc(var(--gutter-space) / 2);
   background-color: #f9f9f9;
   border-radius: 4px;
 }
@@ -65,10 +72,13 @@
   display: grid;
   grid-template-areas:  ' friendly-button concise-button professional-button  ';
   grid-template-columns: auto auto auto;
+  grid-column-gap: calc(var(--gutter-space) / 2);
+  grid-row-gap: calc(var(--gutter-space) / 2);
 }
 
 .writing-tools-panel .styles {
   font-size: small;
+  padding-top : calc(var(--gutter-space) / 2);
 }
 
 .writing-tools-panel .styles .writing-tools-button-icon {
@@ -93,6 +103,9 @@
   display: grid;
   grid-template-areas:  ' proofread-button rewrite-button ';
   grid-template-columns: auto   auto;
+  grid-column-gap: calc(var(--gutter-space) / 2);
+  grid-row-gap: calc(var(--gutter-space) / 2);
+  
 }
 
 
@@ -128,7 +141,8 @@ export default {
   components: { WritingToolsButton },
   data() {
     return {
-      panelVisible: false
+      panelVisible: false,
+      rewriteStylesVisible: false
     }
   },
   props: {
@@ -171,6 +185,13 @@ export default {
     }
   },
   methods: {
+    proofread() {
+      this.rewriteStylesVisible = false
+    },
+    toggleRewriteTools() {
+      console.log('rewrite')
+      this.rewriteStylesVisible = !this.rewriteStylesVisible
+    },
     togglePanel() {
       this.panelVisible = !this.panelVisible
     }

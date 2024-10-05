@@ -36,7 +36,8 @@
   margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
   margin-top: calc(var(--gutter-space) / 3);
   padding: calc(var(--gutter-space) / 2);
-  background-color: #f9f9f9;
+  background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
+
   border-radius: 4px;
 }
 
@@ -78,6 +79,13 @@
   grid-area: professional-button;
 }
 
+.revert-link {
+  grid-area: revert-link;
+}
+.accept-link {
+  grid-area: accept-link;
+}
+
 /* writing tools */
 .writing-tools-panel .tools {
   display: grid;
@@ -110,6 +118,10 @@
 
 .proposal-approval a {
   font-size: small;
+}
+.proposal-approval  {}
+.proposal-approval  .accept-link  {  
+  
 }
 </style>
 
@@ -165,10 +177,10 @@
         </div>
       </div>
       <div class="proposal-approval" v-if="proposalApprovalRequired">
-        <a href="#" @click.prevent="accept">
+        <a class="accept-link" href="#" @click.prevent="accept">
           accept
         </a> |
-        <a href="#" @click.prevent="revert">
+        <a  class="revert-link" href="#" @click.prevent="revert">
           revert
         </a>
       </div>

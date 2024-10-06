@@ -46,7 +46,6 @@ a {
   text-decoration: none;
   font-weight: bold;
   text-transform: uppercase;
-  /*font-family: 'Arial Black', sans-serif;*/
 }
 
 .pure-button {
@@ -55,7 +54,6 @@ a {
 }
 
 .pure-form-stacked .pure-button {
-  /*margin-top: 0.5em;*/
   box-sizing: content-box;
   background-color: black;
 
@@ -66,15 +64,12 @@ a {
 }
 
 .form-row {
-  /*height: calc(2 * var(--gutter-space));*/
   vertical-align: bottom;
-  /*margin-bottom: calc(var( --form-buttons-gutter-space) / 2 );*/
   margin-top: calc(var(--form-buttons-gutter-space) * 2);
 }
 
 .pure-form label {
   text-transform: capitalize;
-  /*margin-top: 1em;*/
 }
 
 .form-row .pure-button {
@@ -278,7 +273,6 @@ html {
 }
 
 .pure-form legend {
-  /*height: calc(var(--gutter-space) * 1);*/
   box-sizing: unset;
   display: inline-block;
   border-radius: var(--radius) var(--radius) var(--radius) var(--radius);

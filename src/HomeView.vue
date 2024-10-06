@@ -15,7 +15,7 @@ export default {
 
 <template>
   <h1>Home</h1>
-
+  <!--
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>Simple form to remove later</legend>
@@ -23,7 +23,6 @@ export default {
         <label for="title"> some text we need input on </label>
         <WritingTools v-model="userInput">
           <textarea :value="userInput" />
-          <!--          <input type="text" :value="userInput" />-->
         </WritingTools>
       </div>
 
@@ -34,8 +33,6 @@ export default {
       </div>
     </fieldset>
   </form>
-
-  <div>
-    {{ userInput }}
-  </div>
+  <div>{{ userInput }}</div>
+  -->
 </template>

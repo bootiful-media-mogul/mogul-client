@@ -19,44 +19,10 @@ export const graphqlClient = new Client({
   ]
 })
 
-/*
-export enum AiWorkshopReplyEventType {
-  TEXT,
-  IMAGE
-}
-
-export class AiWorkshopReplyEvent {
-  readonly text: string
-  readonly type: AiWorkshopReplyEventType
-
-  constructor(text: string, type: AiWorkshopReplyEventType) {
-    this.text = text
-    this.type = type
-  }
-}
-
-export class AiWorkshopRequestEvent {
-  readonly text: string
-
-  readonly callback: (arg0: AiWorkshopReplyEvent) => void
-
-  constructor(text: string, callback: (arg0: AiWorkshopReplyEvent) => void) {
-    this.text = text
-    this.callback = callback
-  }
-} 
-*/
-
 export function previewManagedFile(managedFileId: number) {
-  // console.log('launching previewManagedFile for ' + managedFileId)
   events.emit('preview-managed-file-event', managedFileId)
 }
 
-export function workshopInAi(callback: (e: AiWorkshopReplyEvent) => void, text: string) {
-  events.emit('ai-workshop-event', new AiWorkshopRequestEvent(text, callback))
-}
-
-////
 export class Podcast {
   readonly title: string
   readonly id: number

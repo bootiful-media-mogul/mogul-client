@@ -40,7 +40,6 @@
   border-radius: 4px;
 }
 
-/* styles for the rewrite */
 .writing-tools-panel .styles {
   display: grid;
   grid-template-areas: ' friendly-button concise-button professional-button  ';
@@ -55,7 +54,6 @@
 
 .writing-tools-panel .styles {
   font-size: small;
-  //padding-top: calc(var(--gutter-space) / 2);
 }
 
 .writing-tools-panel .styles .writing-tools-button-icon {
@@ -84,7 +82,6 @@
   grid-area: accept-link;
 }
 
-/* writing tools */
 .writing-tools-panel .tools {
   display: grid;
   grid-template-areas: ' proofread-button rewrite-button ';
@@ -207,16 +204,21 @@ export default {
   emits: ['update:modelValue'],
   setup(props, { emit }) {
     const text = ref('')
-    const writingToolsRoot = ref(null)
-    const inputElement = ref(null)
-    const updateValue = (event) => {
-      const txt = event.target.value
-      emit('update:modelValue', txt)
-      text.value = txt
+    const writingToolsRoot = ref(null as HTMLElement | null)
+    const inputElement = ref(null as HTMLInputElement | null | undefined)
+    const updateValue = (event: Event) => {
+      const elementTarget = event?.target as HTMLInputElement
+      if (elementTarget.value) {
+        const txt = elementTarget.value
+        emit('update:modelValue', txt)
+        text.value = txt
+      }
     }
 
     onMounted(() => {
-      inputElement.value = (writingToolsRoot.value as HTMLElement).querySelector('input, textarea')
+      inputElement.value = (writingToolsRoot.value as HTMLElement | null)?.querySelector(
+        'input, textarea'
+      )
       if (inputElement.value) {
         inputElement.value.addEventListener('input', updateValue)
       }

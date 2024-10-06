@@ -32,7 +32,7 @@
   height: var(--writing-tools-panel-icon-size);
 }
 </style>
-<script>
+<script lang="ts">
 export default {
   name: 'WritingToolsButton',
   mounted() {},

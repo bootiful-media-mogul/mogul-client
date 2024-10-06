@@ -1,9 +1,9 @@
 <script lang="ts">
-import WritingTools from '@/composition/WritingTools.vue'
+// import WritingTools from '@/composition/WritingTools.vue'
 
 export default {
   components: {
-    WritingTools
+    // WritingTools
   },
   data() {
     return {

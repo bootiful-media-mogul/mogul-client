@@ -135,14 +135,14 @@
           <WritingToolsButton
             label="Proofread"
             class="writing-tools-button proofread-button"
-            icon-image="/src/assets/images/writing-tools/proofread.png"
+            icon-image="../src/assets/images/writing-tools/proofread.png"
             @click="proofread"
           />
 
           <WritingToolsButton
             label="Rewrite"
             class="rewrite-button"
-            icon-image="/src/assets/images/writing-tools/rewrite.png"
+            icon-image="../src/assets/images/writing-tools/rewrite.png"
             @click="toggleRewriteTools"
           />
         </div>
@@ -150,21 +150,21 @@
           <WritingToolsButton
             label="Friendly"
             class="friendly-button"
-            icon-image="/src/assets/images/writing-tools/friendly.png"
+            icon-image="../src/assets/images/writing-tools/friendly.png"
             @click="rewriteFriendly"
           />
 
           <WritingToolsButton
             label="Concise"
             class="concise-button"
-            icon-image="/src/assets/images/writing-tools/concise.png"
+            icon-image="../src/assets/images/writing-tools/concise.png"
             @click="rewriteConcise"
           />
 
           <WritingToolsButton
             label="Professional"
             class="professional-button"
-            icon-image="/src/assets/images/writing-tools/professional.png"
+            icon-image="../src/assets/images/writing-tools/professional.png"
             @click="rewriteProfessional"
           />
         </div>

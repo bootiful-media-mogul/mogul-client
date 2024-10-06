@@ -8,10 +8,9 @@ import {
   podcasts,
   Publication
 } from '@/services'
-// import AiWorkshopItIconComponent from '@/ai/AiWorkshopItIconComponent.vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
-import { dateTimeToString, dateToString } from '@/dates'
+import { dateTimeToString } from '@/dates'
 import WritingTools from '@/composition/WritingTools.vue'
 
 export default {
@@ -35,7 +34,7 @@ export default {
       return !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
     },
 
-    //todo we're calling this from loadEpisode. any chance this is grossly inefficient and could be optimized away?
+    // todo we're calling this from loadEpisode. any chance this is grossly inefficient and could be optimized away?
     async loadPodcast() {
       const newPodcastId = this.selectedPodcastId
       this.currentPodcast = await podcasts.podcastById(newPodcastId)

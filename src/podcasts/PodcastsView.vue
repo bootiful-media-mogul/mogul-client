@@ -87,13 +87,11 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete links created title';
-
   grid-template-columns: var(--id-column) 50px 200px var(--date-column) auto;
 }
 </style>
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'
-import CreateEpisodeView from '@/podcasts/EpisodesView.vue'
 import { dateTimeToString } from '@/dates'
 import WritingTools from '@/composition/WritingTools.vue'
 
@@ -102,11 +100,6 @@ async function refresh() {
 }
 
 export default {
-  computed: {
-    CreateEpisodeView() {
-      return CreateEpisodeView
-    }
-  },
   components: { WritingTools },
 
   async created() {

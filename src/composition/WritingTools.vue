@@ -57,8 +57,7 @@
 }
 
 .writing-tools-panel .styles .writing-tools-button-icon {
-  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7)
-    calc(var(--writing-tools-panel-icon-size) * 0.7);
+  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7) calc(var(--writing-tools-panel-icon-size) * 0.7);
   height: calc(var(--writing-tools-panel-icon-size) * 0.7);
 }
 
@@ -135,38 +134,43 @@
           <WritingToolsButton
             label="Proofread"
             class="writing-tools-button proofread-button"
-            icon-image="../src/assets/images/writing-tools/proofread.png"
             @click="proofread"
-          />
+          >
+            <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
+          </WritingToolsButton>
 
           <WritingToolsButton
             label="Rewrite"
             class="rewrite-button"
-            icon-image="../src/assets/images/writing-tools/rewrite.png"
             @click="toggleRewriteTools"
-          />
+          >
+            <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
+          </WritingToolsButton>
         </div>
         <div :class="rewriteClasses" v-if="rewriteStylesVisible">
           <WritingToolsButton
             label="Friendly"
             class="friendly-button"
-            icon-image="../src/assets/images/writing-tools/friendly.png"
             @click="rewriteFriendly"
-          />
-
+          >
+            <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
+          </WritingToolsButton>
+          
           <WritingToolsButton
             label="Concise"
             class="concise-button"
-            icon-image="../src/assets/images/writing-tools/concise.png"
             @click="rewriteConcise"
-          />
+          >
+            <img alt="concise" src="../assets/images/writing-tools/concise.png" />
+          </WritingToolsButton>
 
           <WritingToolsButton
             label="Professional"
             class="professional-button"
-            icon-image="../src/assets/images/writing-tools/professional.png"
             @click="rewriteProfessional"
-          />
+          >
+            <img alt="professional" src="../assets/images/writing-tools/professional.png" />
+          </WritingToolsButton>
         </div>
       </div>
       <div class="proposal-approval" v-if="proposalApprovalRequired">

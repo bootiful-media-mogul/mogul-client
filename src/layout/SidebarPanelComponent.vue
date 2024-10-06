@@ -76,7 +76,7 @@
 .sidebar-panel .top .controls {
   grid-area: controls;
   display: grid;
-  grid-template-areas: '   maximize show-hide';
+  grid-template-areas: 'maximize show-hide';
   grid-template-columns: auto auto;
   position: relative;
   align-items: center;
@@ -131,7 +131,6 @@ export default {
       )
     }
   },
-
   mounted() {
     const bgPanelNode = document.createElement('div')
     bgPanelNode.classList.add('bg-panel')
@@ -147,10 +146,7 @@ export default {
       }
     })
     events.on('sidebar-panel-opened', (event: any) => {
-      // console.log(this.$el)
-      // does event match any of our children nodes? if so, we show visibility
       const contains = this.$el.contains(event)
-      // console.log('should we show this panel? ' + contains)
       if (contains) {
         this.show()
       }
@@ -172,7 +168,6 @@ export default {
   props: ['title'],
   methods: {
     debug() {
-      //console.trace('expanded: ' + this.expanded + ', maximized: ' + this.maximized)
     },
     hide() {
       this.maximized = false

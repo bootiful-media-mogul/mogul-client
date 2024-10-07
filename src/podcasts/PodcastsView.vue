@@ -87,7 +87,7 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete links created title';
-  grid-template-columns: var(--id-column) 50px 200px var(--date-column) auto;
+  grid-template-columns: var(--id-column) 30px 100px var(--date-column) auto;
 }
 </style>
 <script lang="ts">

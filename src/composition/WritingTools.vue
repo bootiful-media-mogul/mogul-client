@@ -162,8 +162,8 @@
         </div>
       </div>
       <div class="proposal-approval" v-if="proposalApprovalRequired">
-        <a class="accept-link" href="#" @click.prevent="accept"> accept </a> |
-        <a class="revert-link" href="#" @click.prevent="revert"> revert </a>
+        <a class="accept-link" href="#" @click.prevent="accept">accept</a> |
+        <a class="revert-link" href="#" @click.prevent="revert">revert</a>
       </div>
     </div>
   </div>

@@ -167,8 +167,7 @@ export default {
 
   props: ['title'],
   methods: {
-    debug() {
-    },
+    debug() {},
     hide() {
       this.maximized = false
       this.expanded = false

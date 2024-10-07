@@ -10,7 +10,16 @@
 }
 
 .styles {
-  padding-top: calc(var(--gutter-space) / 2);
+  /* todo somehow refactor so that the rewrite button is its current height + 
+   the following value 
+   padding-top: calc(var(--gutter-space) / 2);
+   */
+
+}
+
+.rewrite-button.active {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .styles .writing-tools-button {
@@ -30,13 +39,18 @@
 .tools .writing-tools-button:last-of-type {
 }
 
-.writing-tools-panel {
-  --writing-tools-panel-icon-size: 30px;
-  margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
-  margin-top: calc(var(--gutter-space) / 3);
-  padding: calc(var(--gutter-space) / 2);
-  background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
 
+.writing-tools-panel {
+  --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
+  --writing-tools-panel-icon-size: 20px;
+  margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
+  margin-top: calc(-1 * var(--writing-tools-panel-padding));
+  padding-bottom: calc(var(--gutter-space) / 2);
+  padding-left: calc(var(--gutter-space) / 2);
+  padding-right: calc(var(--gutter-space) / 2);
+  padding-top: calc(2 * var(--writing-tools-panel-padding));
+
+  background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
   border-radius: 4px;
 }
 
@@ -46,19 +60,19 @@
   grid-template-columns: auto auto auto;
 }
 
-.tools.active {
+.writing-tools-panel .styles.active .writing-tools-button {
+  border-top-right-radius: 0;
 }
 
-.styles.active {
+.rewrite-button {
 }
 
-.writing-tools-panel .styles {
-  font-size: small;
+.active .proofread-button {
+  /* padding-bottom: calc(var(--gutter-space) / 2); */
 }
 
-.writing-tools-panel .styles .writing-tools-button-icon {
-  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7) calc(var(--writing-tools-panel-icon-size) * 0.7);
-  height: calc(var(--writing-tools-panel-icon-size) * 0.7);
+.active .rewrite-button {
+  /*padding-bottom: calc(var(--gutter-space) / 2);*/
 }
 
 .concise-button {
@@ -91,10 +105,20 @@
 
 .rewrite-button {
   grid-area: rewrite-button;
+
+}
+
+.active .proofread-button {
+  margin-bottom: calc(1 * var(--writing-tools-panel-padding));;
+}
+
+.active .rewrite-button {
+  padding-bottom: calc(2 * var(--writing-tools-panel-padding));;
 }
 
 .proofread-button {
   grid-area: proofread-button;
+  /*margin-bottom: var(--writing-tools-panel-padding);*/
 }
 
 .toggle-icon {
@@ -139,28 +163,17 @@
             <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
           </WritingToolsButton>
 
-          <WritingToolsButton
-            label="Rewrite"
-            class="rewrite-button"
-            @click="toggleRewriteTools"
-          >
+          <WritingToolsButton label="Rewrite" :class="rewriteToolsClasses"
+                              @click="toggleRewriteTools">
             <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
           </WritingToolsButton>
         </div>
-        <div :class="rewriteClasses" v-if="rewriteStylesVisible">
-          <WritingToolsButton
-            label="Friendly"
-            class="friendly-button"
-            @click="rewriteFriendly"
-          >
+        <div :class="rewriteStylesClasses" v-if="rewriteStylesVisible">
+          <WritingToolsButton label="Friendly" class="friendly-button" @click="rewriteFriendly">
             <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
           </WritingToolsButton>
-          
-          <WritingToolsButton
-            label="Concise"
-            class="concise-button"
-            @click="rewriteConcise"
-          >
+
+          <WritingToolsButton label="Concise" class="concise-button" @click="rewriteConcise">
             <img alt="concise" src="../assets/images/writing-tools/concise.png" />
           </WritingToolsButton>
 
@@ -174,8 +187,8 @@
         </div>
       </div>
       <div class="proposal-approval" v-if="proposalApprovalRequired">
-        <a class="accept-link" href="#" @click.prevent="accept"> accept </a> |
-        <a class="revert-link" href="#" @click.prevent="revert"> revert </a>
+        <a class="accept-link" href="#" @click.prevent="accept">accept</a> |
+        <a class="revert-link" href="#" @click.prevent="revert">revert</a>
       </div>
     </div>
   </div>
@@ -194,7 +207,8 @@ export default {
       proposalApprovalRequired: false,
       panelVisible: false,
       rewriteStylesVisible: false,
-      rewriteClasses: 'styles',
+      rewriteStylesClasses: 'styles',
+      rewriteToolsClasses: 'rewrite-button',
       toolsClasses: 'tools',
       previousModelValue: ''
     }
@@ -245,9 +259,10 @@ export default {
       this.proposalApprovalRequired = false
       this.panelVisible = false
       this.rewriteStylesVisible = false
-      this.rewriteClasses = 'styles'
+      this.rewriteStylesClasses = 'styles'
       this.toolsClasses = 'tools'
       this.previousModelValue = ''
+      this.rewriteToolsClasses = 'rewrite-button'
     },
     revert() {
       this.proposeUpdatedText(this.previousModelValue)
@@ -313,11 +328,13 @@ export default {
     toggleRewriteTools() {
       this.rewriteStylesVisible = !this.rewriteStylesVisible
       if (this.rewriteStylesVisible) {
-        this.rewriteClasses += ' active'
+        this.rewriteStylesClasses += ' active'
         this.toolsClasses += ' active'
+        this.rewriteToolsClasses += ' active'
       } else {
-        this.rewriteClasses = 'styles'
+        this.rewriteStylesClasses = 'styles'
         this.toolsClasses = 'tools'
+        this.rewriteToolsClasses = 'rewrite-button'
       }
     },
     togglePanel() {

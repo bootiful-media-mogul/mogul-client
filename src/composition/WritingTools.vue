@@ -16,7 +16,7 @@
    */
 }
 
-.rewrite-button.active {
+.tools.active .rewrite-button  {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -35,9 +35,6 @@
   border-bottom-right-radius: var(--button-radius);
 }
 
-.tools .writing-tools-button:last-of-type {
-}
-
 .writing-tools-panel {
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
   --writing-tools-panel-icon-size: 20px;
@@ -50,6 +47,12 @@
 
   background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
   border-radius: 4px;
+  /* make sure the user doesn't accidentally select nonsense */
+  user-select: none; /* For modern browsers */
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For older Firefox versions */
+  -ms-user-select: none; /* For older IE/Edge versions */
+
 }
 
 .writing-tools-panel .styles {
@@ -62,16 +65,8 @@
   border-top-right-radius: 0;
 }
 
-.rewrite-button {
-}
 
-.active .proofread-button {
-  /* padding-bottom: calc(var(--gutter-space) / 2); */
-}
 
-.active .rewrite-button {
-  /*padding-bottom: calc(var(--gutter-space) / 2);*/
-}
 
 .concise-button {
   grid-area: concise-button;
@@ -97,8 +92,8 @@
   display: grid;
   grid-template-areas: ' proofread-button rewrite-button ';
   grid-template-columns: auto auto;
-  grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-row-gap: calc(var(--gutter-space) / 2);
+  grid-column-gap:  calc(1 * var(--writing-tools-panel-padding));
+  
 }
 
 .rewrite-button {
@@ -107,14 +102,18 @@
 
 .active .proofread-button {
   margin-bottom: calc(1 * var(--writing-tools-panel-padding));
+  /* padding-bottom: calc(1 * var(--writing-tools-panel-padding)); */
+
 }
 
 .active .rewrite-button {
+  margin-bottom: 0;
   padding-bottom: calc(2 * var(--writing-tools-panel-padding));
 }
 
 .proofread-button {
   grid-area: proofread-button;
+  
   /*margin-bottom: var(--writing-tools-panel-padding);*/
 }
 
@@ -154,7 +153,7 @@
         <div :class="toolsClasses">
           <WritingToolsButton
             label="Proofread"
-            class="writing-tools-button proofread-button"
+            class="proofread-button"
             @click="proofread"
           >
             <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />

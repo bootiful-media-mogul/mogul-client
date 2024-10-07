@@ -16,7 +16,7 @@
   grid-template-columns: auto min-content auto;
   border-radius: var(--button-radius);
   background-color: lightgrey;
-  padding: calc(var(--gutter-space) / 2);
+  padding: calc(var(--gutter-space) / 3);
 
   font-size: small;
 }
@@ -27,6 +27,7 @@
   grid-template-areas: 'icon label';
   grid-template-columns: var(--writing-tools-panel-icon-size) auto;
   align-items: center;
+  height: var(--writing-tools-panel-icon-size);
   /*
   display: grid;
   grid-template-areas:
@@ -50,12 +51,14 @@
   width: var(--writing-tools-panel-icon-size);
   grid-area: icon;
 }
+
 </style>
 
 <script lang="ts">
 export default {
   name: 'WritingToolsButton',
-  mounted() {},
+  mounted() {
+  },
   data() {
     return {
       backgroundStyle: ` background-image: url('${this.iconImage}')  `

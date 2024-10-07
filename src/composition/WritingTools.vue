@@ -31,12 +31,11 @@
 }
 
 .writing-tools-panel {
-  --writing-tools-panel-icon-size: 30px;
+  --writing-tools-panel-icon-size: 20px;
   margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
   margin-top: calc(var(--gutter-space) / 3);
   padding: calc(var(--gutter-space) / 2);
   background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
-
   border-radius: 4px;
 }
 
@@ -46,20 +45,21 @@
   grid-template-columns: auto auto auto;
 }
 
-.tools.active {
+/*.tools.active {
 }
 
 .styles.active {
 }
 
 .writing-tools-panel .styles {
-  font-size: small;
-}
+  
+}*/
 
-.writing-tools-panel .styles .writing-tools-button-icon {
-  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7) calc(var(--writing-tools-panel-icon-size) * 0.7);
+/*.writing-tools-panel .styles .writing-tools-button-icon {
+  background-size: calc(var(--writing-tools-panel-icon-size) * 0.7)
+    calc(var(--writing-tools-panel-icon-size) * 0.7);
   height: calc(var(--writing-tools-panel-icon-size) * 0.7);
-}
+}*/
 
 .concise-button {
   grid-area: concise-button;
@@ -139,28 +139,16 @@
             <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
           </WritingToolsButton>
 
-          <WritingToolsButton
-            label="Rewrite"
-            class="rewrite-button"
-            @click="toggleRewriteTools"
-          >
+          <WritingToolsButton label="Rewrite" class="rewrite-button" @click="toggleRewriteTools">
             <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
           </WritingToolsButton>
         </div>
         <div :class="rewriteClasses" v-if="rewriteStylesVisible">
-          <WritingToolsButton
-            label="Friendly"
-            class="friendly-button"
-            @click="rewriteFriendly"
-          >
+          <WritingToolsButton label="Friendly" class="friendly-button" @click="rewriteFriendly">
             <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
           </WritingToolsButton>
-          
-          <WritingToolsButton
-            label="Concise"
-            class="concise-button"
-            @click="rewriteConcise"
-          >
+
+          <WritingToolsButton label="Concise" class="concise-button" @click="rewriteConcise">
             <img alt="concise" src="../assets/images/writing-tools/concise.png" />
           </WritingToolsButton>
 

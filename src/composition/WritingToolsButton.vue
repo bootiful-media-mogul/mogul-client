@@ -1,47 +1,72 @@
 <template>
   <div class="writing-tools-button">
-    <div class="writing-tools-button-icon">
-      <slot />
+    <div class="writing-tools-button-content">
+      <div class="writing-tools-button-content-icon">
+        <slot />
+      </div>
+      <div class="writing-tools-button-content-label">{{ label }}</div>
     </div>
-    <div class="writing-tools-button-label">{{ label }}</div>
   </div>
 </template>
 <style>
 .writing-tools-button {
-  display: grid;
-  grid-template-areas:
-    '. icon  .'
-    '. label .';
-  grid-template-columns: auto auto auto;
   cursor: pointer;
-
+  display: grid;
+  grid-template-areas: ' . content . ';
+  grid-template-columns: auto min-content auto;
   border-radius: var(--button-radius);
   background-color: lightgrey;
   padding: calc(var(--gutter-space) / 2);
+  /*
+    
+    
+    */
 }
 
-.writing-tools-button-label {
-  text-align: center;
-  grid-area: label;
-}
-
-.writing-tools-button-icon {
-  align-self: center;
-  grid-area: icon;
+.writing-tools-button-content {
+  display: grid;
+  grid-area: content;
+  grid-template-areas: 'icon label';
+  grid-template-columns: var(--writing-tools-panel-icon-size) auto;
   align-items: center;
+  /*
+  display: grid;
+  grid-template-areas:
+    '. icon . label .';
+  grid-template-columns: 
+      auto var(--writing-tools-panel-icon-size) calc(var(--gutter-space)/3) auto auto ;
+  border: 1px solid red;
+  
+  */
+}
+
+.writing-tools-button-content-label {
+  padding-left: calc(var(--gutter-space) / 2);
+  /*  border: 1px solid red;
+    grid-area: label;
+    text-align: left;*/
+}
+
+.writing-tools-button-content-icon {
+  height: var(--writing-tools-panel-icon-size);
+  /*
+  grid-area: icon;
+  
   background-repeat: no-repeat;
   background-position-x: center;
   background-size: var(--writing-tools-panel-icon-size) var(--writing-tools-panel-icon-size);
-  height: var(--writing-tools-panel-icon-size);
+  
   display: grid;
   grid-template-areas: '. icon .';
-  grid-template-columns: auto var(--writing-tools-panel-icon-size) auto ;
+  grid-template-columns: auto var(--writing-tools-panel-icon-size) auto;*/
 }
 
-.writing-tools-button-icon img {
+.writing-tools-button-content-icon img {
   width: var(--writing-tools-panel-icon-size);
-  grid-area: icon;
+  grid-area: icon
 }
+
+
 </style>
 <script lang="ts">
 export default {

@@ -112,6 +112,10 @@
   margin-left: calc(var(--gutter-space) / 3);
 }
 
+/*          <img @click="hide" src="../assets/images/panel-close.png" alt="close" />
+*/
+.close-icon {}
+
 .input-wrapper {
   display: flex;
   align-items: center;
@@ -133,7 +137,7 @@
   <div class="writing-tools-container">
     <div ref="writingToolsRoot" class="input-wrapper">
       <slot></slot>
-      <div class="toggle-icon unselectable edit-icon" @click="togglePanel">️</div>
+      <div :class="toggleButtonClasses" @click="togglePanel">️</div>
     </div>
 
     <div v-if="panelVisible" class="unselectable writing-tools-panel">
@@ -196,6 +200,7 @@ export default {
       rewriteStylesVisible: false,
       rewriteStylesClasses: 'styles',
       rewriteToolsClasses: 'rewrite-button',
+      toggleButtonClasses: 'toggle-icon unselectable edit-icon',
       toolsClasses: 'tools',
       previousModelValue: ''
     }
@@ -249,6 +254,7 @@ export default {
       this.rewriteStylesClasses = 'styles'
       this.toolsClasses = 'tools'
       this.previousModelValue = ''
+      this.toggleButtonClasses = 'toggle-icon unselectable edit-icon'
       this.rewriteToolsClasses = 'rewrite-button'
     },
     revert() {
@@ -326,6 +332,10 @@ export default {
     },
     togglePanel() {
       this.panelVisible = !this.panelVisible
+      if (this.panelVisible)
+        this.toggleButtonClasses = 'toggle-icon unselectable close-icon'
+      else
+        this.toggleButtonClasses = 'toggle-icon unselectable edit-icon'
     }
   }
 }

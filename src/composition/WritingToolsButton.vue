@@ -40,33 +40,20 @@
 
 .writing-tools-button-content-label {
   padding-left: calc(var(--gutter-space) / 2);
-  /*  border: 1px solid red;
-    grid-area: label;
-    text-align: left;*/
 }
 
 .writing-tools-button-content-icon {
   height: var(--writing-tools-panel-icon-size);
-  /*
-  grid-area: icon;
-  
-  background-repeat: no-repeat;
-  background-position-x: center;
-  background-size: var(--writing-tools-panel-icon-size) var(--writing-tools-panel-icon-size);
-  
-  display: grid;
-  grid-template-areas: '. icon .';
-  grid-template-columns: auto var(--writing-tools-panel-icon-size) auto;*/
 }
 
 .writing-tools-button-content-icon img {
   width: var(--writing-tools-panel-icon-size);
   grid-area: icon
 }
-
-
 </style>
+
 <script lang="ts">
+
 export default {
   name: 'WritingToolsButton',
   mounted() {

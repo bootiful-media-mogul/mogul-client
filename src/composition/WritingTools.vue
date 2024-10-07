@@ -9,14 +9,7 @@
   opacity: 100%;
 }
 
-.styles {
-  /* todo somehow refactor so that the rewrite button is its current height + 
-   the following value 
-   padding-top: calc(var(--gutter-space) / 2);
-   */
-}
-
-.tools.active .rewrite-button  {
+.tools.active .rewrite-button {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -35,23 +28,24 @@
   border-bottom-right-radius: var(--button-radius);
 }
 
-.writing-tools-panel {
-  --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
-  --writing-tools-panel-icon-size: 20px;
-  margin-right: calc(calc(var(--gutter-space) / 3) + calc(var(--gutter-space) * 1.2));
-  margin-top: calc(-1 * var(--writing-tools-panel-padding));
-  padding-bottom: calc(var(--gutter-space) / 2);
-  padding-left: calc(var(--gutter-space) / 2);
-  padding-right: calc(var(--gutter-space) / 2);
-  padding-top: calc(2 * var(--writing-tools-panel-padding));
-
-  background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
-  border-radius: 4px;
-  /* make sure the user doesn't accidentally select nonsense */
+.unselectable {
   user-select: none; /* For modern browsers */
   -webkit-user-select: none; /* For Safari */
   -moz-user-select: none; /* For older Firefox versions */
   -ms-user-select: none; /* For older IE/Edge versions */
+}
+
+.writing-tools-panel {
+  --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
+  --writing-tools-panel-icon-size: 20px;
+  margin-right: calc(var(--icon-width) + var(--writing-tools-panel-padding));
+  margin-top: calc(-1 * var(--writing-tools-panel-padding));
+  padding-bottom: var(--writing-tools-panel-padding);
+  padding-left: var(--writing-tools-panel-padding);
+  padding-right: var(--writing-tools-panel-padding);
+  padding-top: calc(2 * var(--writing-tools-panel-padding));
+  background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
+  border-radius: 4px;
 
 }
 
@@ -64,8 +58,6 @@
 .writing-tools-panel .styles.active .writing-tools-button {
   border-top-right-radius: 0;
 }
-
-
 
 
 .concise-button {
@@ -92,8 +84,8 @@
   display: grid;
   grid-template-areas: ' proofread-button rewrite-button ';
   grid-template-columns: auto auto;
-  grid-column-gap:  calc(1 * var(--writing-tools-panel-padding));
-  
+  grid-column-gap: calc(1 * var(--writing-tools-panel-padding));
+
 }
 
 .rewrite-button {
@@ -113,15 +105,11 @@
 
 .proofread-button {
   grid-area: proofread-button;
-  
-  /*margin-bottom: var(--writing-tools-panel-padding);*/
 }
 
 .toggle-icon {
   cursor: pointer;
   margin-left: calc(var(--gutter-space) / 3);
-  width: calc(var(--gutter-space) * 1.2);
-  height: calc(var(--gutter-space) * 1.2);
 }
 
 .input-wrapper {
@@ -145,10 +133,10 @@
   <div class="writing-tools-container">
     <div ref="writingToolsRoot" class="input-wrapper">
       <slot></slot>
-      <div class="toggle-icon" @click="togglePanel">✏️</div>
+      <div class="toggle-icon unselectable edit-icon" @click="togglePanel">️</div>
     </div>
 
-    <div v-if="panelVisible" class="writing-tools-panel">
+    <div v-if="panelVisible" class="unselectable writing-tools-panel">
       <div v-if="!proposalApprovalRequired">
         <div :class="toolsClasses">
           <WritingToolsButton

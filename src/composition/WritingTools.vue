@@ -14,7 +14,6 @@
    the following value 
    padding-top: calc(var(--gutter-space) / 2);
    */
-
 }
 
 .rewrite-button.active {
@@ -38,7 +37,6 @@
 
 .tools .writing-tools-button:last-of-type {
 }
-
 
 .writing-tools-panel {
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
@@ -105,15 +103,14 @@
 
 .rewrite-button {
   grid-area: rewrite-button;
-
 }
 
 .active .proofread-button {
-  margin-bottom: calc(1 * var(--writing-tools-panel-padding));;
+  margin-bottom: calc(1 * var(--writing-tools-panel-padding));
 }
 
 .active .rewrite-button {
-  padding-bottom: calc(2 * var(--writing-tools-panel-padding));;
+  padding-bottom: calc(2 * var(--writing-tools-panel-padding));
 }
 
 .proofread-button {
@@ -163,8 +160,11 @@
             <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
           </WritingToolsButton>
 
-          <WritingToolsButton label="Rewrite" :class="rewriteToolsClasses"
-                              @click="toggleRewriteTools">
+          <WritingToolsButton
+            label="Rewrite"
+            :class="rewriteToolsClasses"
+            @click="toggleRewriteTools"
+          >
             <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
           </WritingToolsButton>
         </div>

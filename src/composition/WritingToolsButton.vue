@@ -18,7 +18,7 @@
   background-color: lightgrey;
   padding: calc(var(--gutter-space) / 2);
 
-  font-size:small;
+  font-size: small;
 }
 
 .writing-tools-button-content {
@@ -48,16 +48,14 @@
 
 .writing-tools-button-content-icon img {
   width: var(--writing-tools-panel-icon-size);
-  grid-area: icon
+  grid-area: icon;
 }
 </style>
 
 <script lang="ts">
-
 export default {
   name: 'WritingToolsButton',
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       backgroundStyle: ` background-image: url('${this.iconImage}')  `

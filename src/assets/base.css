@@ -172,11 +172,11 @@ html {
 }
 
 .close-icon {
-    background: url('../assets/images/panel-close-highlight.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/panel-close-highlight.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 .close-icon:hover {
   background: url('../assets/images/panel-close.png');

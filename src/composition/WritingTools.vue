@@ -59,7 +59,6 @@
   border-top-right-radius: 0;
 }
 
-
 .concise-button {
   grid-area: concise-button;
 }
@@ -85,7 +84,6 @@
   grid-template-areas: ' proofread-button rewrite-button ';
   grid-template-columns: auto auto;
   grid-column-gap: calc(1 * var(--writing-tools-panel-padding));
-
 }
 
 .rewrite-button {
@@ -95,7 +93,6 @@
 .active .proofread-button {
   margin-bottom: calc(1 * var(--writing-tools-panel-padding));
   /* padding-bottom: calc(1 * var(--writing-tools-panel-padding)); */
-
 }
 
 .active .rewrite-button {
@@ -111,10 +108,6 @@
   cursor: pointer;
   margin-left: calc(var(--gutter-space) / 3);
 }
-
-/*          <img @click="hide" src="../assets/images/panel-close.png" alt="close" />
-*/
-.close-icon {}
 
 .input-wrapper {
   display: flex;
@@ -143,11 +136,7 @@
     <div v-if="panelVisible" class="unselectable writing-tools-panel">
       <div v-if="!proposalApprovalRequired">
         <div :class="toolsClasses">
-          <WritingToolsButton
-            label="Proofread"
-            class="proofread-button"
-            @click="proofread"
-          >
+          <WritingToolsButton label="Proofread" class="proofread-button" @click="proofread">
             <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
           </WritingToolsButton>
 
@@ -332,10 +321,8 @@ export default {
     },
     togglePanel() {
       this.panelVisible = !this.panelVisible
-      if (this.panelVisible)
-        this.toggleButtonClasses = 'toggle-icon unselectable close-icon'
-      else
-        this.toggleButtonClasses = 'toggle-icon unselectable edit-icon'
+      if (this.panelVisible) this.toggleButtonClasses = 'toggle-icon unselectable close-icon'
+      else this.toggleButtonClasses = 'toggle-icon unselectable edit-icon'
     }
   }
 }

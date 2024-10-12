@@ -1,8 +1,11 @@
 <script lang="ts">
 // import WritingTools from '@/composition/WritingTools.vue'
 
+import InputWrapper from '@/ui/InputWrapper.vue'
+
 export default {
   components: {
+    InputWrapper
     // WritingTools
   },
   data() {
@@ -15,15 +18,15 @@ export default {
 
 <template>
   <h1>Home</h1>
-  <!--
+   
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>Simple form to remove later</legend>
       <div class="pure-control-group">
         <label for="title"> some text we need input on </label>
-        <WritingTools v-model="userInput">
-          <textarea :value="userInput" />
-        </WritingTools>
+        <InputWrapper v-model="userInput">
+            <textarea :value="userInput" />
+        </InputWrapper>
       </div>
 
       <div class="pure-controls">
@@ -34,5 +37,5 @@ export default {
     </fieldset>
   </form>
   <div>{{ userInput }}</div>
-  -->
+ 
 </template>

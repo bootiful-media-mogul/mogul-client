@@ -1,32 +1,9 @@
 <style scoped>
-.tools.active .writing-tools-button:last-of-type {
+.tools.active > .writing-tools-button:last-of-type {
   background-color: white;
   opacity: 100%;
 }
 
-.styles.active .writing-tools-button {
-  background-color: white;
-  opacity: 100%;
-}
-
-.tools.active .rewrite-button {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.styles .writing-tools-button {
-  border-radius: 0;
-}
-
-.styles .writing-tools-button:first-of-type {
-  border-top-left-radius: var(--button-radius);
-  border-bottom-left-radius: var(--button-radius);
-}
-
-.styles .writing-tools-button:last-of-type {
-  border-top-right-radius: var(--button-radius);
-  border-bottom-right-radius: var(--button-radius);
-}
 
 .unselectable {
   user-select: none; /* For modern browsers */
@@ -46,62 +23,16 @@
   padding-top: calc(2 * var(--writing-tools-panel-padding));
   background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
   border-radius: 4px;
-
 }
 
-.writing-tools-panel .styles {
-  display: grid;
-  grid-template-areas: ' friendly-button concise-button professional-button  ';
-  grid-template-columns: auto auto auto;
-}
-
-.writing-tools-panel .styles.active .writing-tools-button {
-  border-top-right-radius: 0;
-}
-
-.concise-button {
-  grid-area: concise-button;
-}
-
-.friendly-button {
-  grid-area: friendly-button;
-}
-
-.professional-button {
-  grid-area: professional-button;
-}
-
-.revert-link {
-  grid-area: revert-link;
-}
-
-.accept-link {
-  grid-area: accept-link;
-}
-
-.writing-tools-panel .tools {
+.writing-tools-panel > .tools {
   display: grid;
   grid-template-areas: ' proofread-button rewrite-button ';
   grid-template-columns: auto auto;
   grid-column-gap: calc(1 * var(--writing-tools-panel-padding));
 }
 
-.rewrite-button {
-  grid-area: rewrite-button;
-}
 
-.active .proofread-button {
-  margin-bottom: calc(1 * var(--writing-tools-panel-padding));
-}
-
-.active .rewrite-button {
-  margin-bottom: 0;
-  padding-bottom: calc(2 * var(--writing-tools-panel-padding));
-}
-
-.proofread-button {
-  grid-area: proofread-button;
-}
 
 .toggle-icon {
   cursor: pointer;
@@ -114,15 +45,8 @@
   position: relative;
 }
 
-.proposal-approval a {
-  font-size: small;
-}
-
-.proposal-approval {
-}
-
-.proposal-approval .accept-link {
-}
+ 
+ 
 </style>
 
 <template>
@@ -153,7 +77,7 @@ export default {
       proposalApprovalRequired: false,
       panelVisible: false,
       rewriteStylesVisible: false,
-      rewriteStylesClasses: 'styles',
+      // rewriteStylesClasses: 'styles',
       rewriteToolsClasses: 'rewrite-button',
       toggleButtonClasses: 'toggle-icon unselectable edit-icon',
       toolsClasses: 'tools',
@@ -203,7 +127,7 @@ export default {
   },
   methods: {
     reset() {
-      this.proposalApprovalRequired = false
+      // this.proposalApprovalRequired = false
       this.panelVisible = false
       this.rewriteStylesVisible = false
       this.rewriteStylesClasses = 'styles'
@@ -212,14 +136,8 @@ export default {
       this.toggleButtonClasses = 'toggle-icon unselectable edit-icon'
       this.rewriteToolsClasses = 'rewrite-button'
     },
-    /*
-    revert() {
-      this.proposeUpdatedText(this.previousModelValue)
-      this.reset()
-    },
-    */
     accept() {
-      this.proposalApprovalRequired = false
+      // this.proposalApprovalRequired = false
       this.reset()
     },
 
@@ -227,7 +145,7 @@ export default {
       console.log('updated text: ' + updatedText)
       this.previousModelValue = this.modelValue
       this.$emit('update:modelValue', updatedText)
-      this.proposalApprovalRequired = true
+      // this.proposalApprovalRequired = true
     },
 
        

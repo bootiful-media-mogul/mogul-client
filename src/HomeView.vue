@@ -1,11 +1,14 @@
 <script lang="ts">
-// import WritingTools from '@/composition/WritingTools.vue'
 
-import InputWrapper from '@/ui/InputWrapper.vue'
+// import InputWrapper from '@/ui/InputWrapper.vue'
+import MetaWrapper from '@/ui/MetaWrapper.vue'
+import MetaWrapperChild from '@/ui/MetaWrapperChild.vue'
 
 export default {
   components: {
-    InputWrapper
+    MetaWrapperChild,
+    MetaWrapper
+    // InputWrapper
     // WritingTools
   },
   data() {
@@ -18,24 +21,46 @@ export default {
 
 <template>
   <h1>Home</h1>
-   
-  <form class="pure-form pure-form-stacked">
-    <fieldset>
-      <legend>Simple form to remove later</legend>
-      <div class="pure-control-group">
-        <label for="title"> some text we need input on </label>
-        <InputWrapper v-model="userInput">
-            <textarea :value="userInput" />
-        </InputWrapper>
-      </div>
 
-      <div class="pure-controls">
-        <button class="pure-button pure-button-primary" type="submit" value="create">
-          do the thing
-        </button>
-      </div>
-    </fieldset>
-  </form>
-  <div>{{ userInput }}</div>
- 
+
+  <MetaWrapper>
+    <MetaWrapperChild>
+      <template v-slot:foo> a</template>
+    </MetaWrapperChild>
+    <MetaWrapperChild>
+      <template v-slot:foo>b</template>
+    </MetaWrapperChild>
+  </MetaWrapper>
+
+
+  <!--
+  
+    <form class="pure-form pure-form-stacked">
+      <fieldset>
+        <legend>Simple form to remove later</legend>
+        <div class="pure-control-group">
+          <label for="title">some text we need input on</label>
+          <InputWrapper v-model="userInput">
+            <InputWrapper>
+              <textarea :value="userInput" /> 
+              <template v-slot:panel>
+                this is another panel
+              </template>
+            </InputWrapper>
+            <template v-slot:panel>
+              this is the panel
+            </template>
+          </InputWrapper>
+        </div>
+  
+        <div class="pure-controls">
+          <button class="pure-button pure-button-primary" type="submit" value="create">
+            do the thing
+          </button>
+        </div>
+      </fieldset>
+    </form>
+    <div>{{ userInput }}</div>
+  -->
+
 </template>

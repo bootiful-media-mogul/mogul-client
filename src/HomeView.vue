@@ -25,7 +25,7 @@ export default {
 
   <MetaWrapper>
     <MetaWrapperChild>
-      <template v-slot:icon> a</template>
+      <template v-slot:icon>a</template>
       <template v-slot:default> the default</template>
     </MetaWrapperChild>
     <MetaWrapperChild>

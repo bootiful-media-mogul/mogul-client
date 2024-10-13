@@ -13,11 +13,11 @@ import { inject, onMounted } from 'vue';
 export default {
   name: 'MetaWrapperChild',
   setup(props, { slots }) {
-    const registerFooSlot = inject('registerFooSlot');
+    const registerIconSlot = inject('registerIconSlot');
 
     onMounted(() => {
-      if (slots.foo) {
-        registerFooSlot(slots.foo);
+      if (slots.icon) {
+        registerIconSlot(slots.icon);
       }
     });
   }

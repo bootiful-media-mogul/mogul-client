@@ -25,10 +25,10 @@ export default {
 
   <MetaWrapper>
     <MetaWrapperChild>
-      <template v-slot:foo> a</template>
+      <template v-slot:icon> a</template>
     </MetaWrapperChild>
     <MetaWrapperChild>
-      <template v-slot:foo>b</template>
+      <template v-slot:icon>b</template>
     </MetaWrapperChild>
   </MetaWrapper>
 

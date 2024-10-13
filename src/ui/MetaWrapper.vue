@@ -4,7 +4,7 @@
     <h1>Parent Component</h1>
 
     <!-- Render the discovered foo slots here -->
-    <div v-for="(slot, index) in fooSlots.reverse()" :key="index">
+    <div v-for="(slot, index) in iconSlots " :key="index">
       <component :is="slot" />
     </div>
 
@@ -14,22 +14,22 @@
 </template>
 
 <script>
-import { ref, provide, onMounted } from 'vue';
+import { ref, provide } from 'vue'
 
 export default {
   name: 'MetaWrapper',
   setup() {
-    const fooSlots = ref([]);
+    const iconSlots = ref([])
 
-    const registerFooSlot = (slot) => {
-      fooSlots.value.push(slot);
-    };
+    const registerIconSlot = (slot) => {
+      iconSlots.value.push(slot)
+    }
 
-    provide('registerFooSlot', registerFooSlot);
+    provide('registerIconSlot', registerIconSlot)
 
     return {
-      fooSlots
-    };
+      iconSlots: iconSlots
+    }
   }
-};
+}
 </script>

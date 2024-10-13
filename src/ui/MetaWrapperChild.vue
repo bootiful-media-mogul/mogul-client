@@ -1,4 +1,3 @@
-
 <!-- Child.vue -->
 <template>
   <div>
@@ -8,18 +7,18 @@
 </template>
 
 <script>
-import { inject, onMounted } from 'vue';
+import { inject, onMounted } from 'vue'
 
 export default {
   name: 'MetaWrapperChild',
   setup(props, { slots }) {
-    const registerIconSlot = inject('registerIconSlot');
-
+    const registerChild = inject('registerChild')
     onMounted(() => {
-      if (slots.icon) {
-        registerIconSlot(slots.icon);
+      if (slots.default && slots.icon) {
+        registerChild({ default: slots.default, icon: slots.icon })
+        console.log('registering ...')
       }
-    });
+    })
   }
-};
+}
 </script>

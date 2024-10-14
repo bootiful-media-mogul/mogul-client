@@ -19,8 +19,7 @@ export default {
 
 <template>
   <h1>Home</h1>
-
-
+  
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form

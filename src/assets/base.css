@@ -178,6 +178,7 @@ html {
   width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
 }
+
 .close-icon:hover {
   background: url('../assets/images/panel-close.png');
   height: var(--icon-width);
@@ -185,6 +186,7 @@ html {
   width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
 }
+
 
 .edit-icon:hover {
   background: url('../assets/images/edit.png');

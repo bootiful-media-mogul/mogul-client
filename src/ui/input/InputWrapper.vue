@@ -2,20 +2,17 @@
 <template>
   <div class="writing-tools-container">
     <div ref="root" class="input-wrapper">
-
       <slot></slot>
-      ️
-      <div v-for="(slot, index) in childSlots" :key="index">
+    </div>
+    <div class="icon-column">
+      <div class="icon" v-for="(slot, index) in childSlots" :key="index">
         <component :is="slot.icon"></component>
       </div>
     </div>
-
-    <div class="writing-tools-panel">
+    <div class="panel">
       <div v-for="(slot, index) in childSlots" :key="index">
         <component :is="slot.panel"></component>
       </div>
-
-
     </div>
   </div>
 </template>
@@ -25,7 +22,7 @@ import { ref, provide, onMounted, onBeforeUnmount } from 'vue'
 
 export default {
   name: 'InputWrapper',
-  
+
   setup(props, { emit }) {
     const text = ref('')
     const root = ref(null as HTMLElement | null)
@@ -98,19 +95,55 @@ export default {
 }
 </script>
 
-<style>
-.tools.active > .writing-tools-button:last-of-type {
-  background-color: white;
-  opacity: 100%;
+<style scoped>
+
+.writing-tools-container {
+  display: grid;
+  grid-template-areas: ' input . icons ' 
+                       ' panel . icons ';
+
+  grid-template-columns: auto  calc(var(--gutter-space) / 3)  var(--icon-width);
 }
 
-
-.unselectable {
-  user-select: none; /* For modern browsers */
-  -webkit-user-select: none; /* For Safari */
-  -moz-user-select: none; /* For older Firefox versions */
-  -ms-user-select: none; /* For older IE/Edge versions */
+.icon-column {
+  border: 1px solid orange;
+  grid-area: icons;
 }
+
+.panel {
+  grid-area: panel;
+  /**/
+
+  --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
+  --writing-tools-panel-icon-size: 20px;
+  /*margin-right: calc(var(--icon-width) + var(--writing-tools-panel-padding));*/
+  margin-top: calc(-2 * var(--writing-tools-panel-padding));
+  padding-bottom: var(--writing-tools-panel-padding);
+  padding-left: var(--writing-tools-panel-padding);
+  padding-right: var(--writing-tools-panel-padding);
+  padding-top: calc(3 * var(--writing-tools-panel-padding));
+  background-color: rgba(255, 255, 255, 0.3);  
+  border-radius: 4px;
+  z-index: -1;
+  
+  /**/
+  
+  
+  
+  
+  
+}
+
+.icon {
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
+  cursor: pointer;
+}
+
+/*
+
 
 .writing-tools-panel {
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
@@ -121,21 +154,8 @@ export default {
   padding-left: var(--writing-tools-panel-padding);
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2 * var(--writing-tools-panel-padding));
-  background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
+  background-color: rgba(255, 255, 255, 0.3); !* A slightly whiter transparent overlay *!
   border-radius: 4px;
-}
-
-.writing-tools-panel > .tools {
-  display: grid;
-  grid-template-areas: ' proofread-button rewrite-button ';
-  grid-template-columns: auto auto;
-  grid-column-gap: calc(1 * var(--writing-tools-panel-padding));
-}
-
-
-.toggle-icon {
-  cursor: pointer;
-  margin-left: calc(var(--gutter-space) / 3);
 }
 
 .input-wrapper {
@@ -143,5 +163,6 @@ export default {
   align-items: center;
   position: relative;
 }
+*/
 
 </style>

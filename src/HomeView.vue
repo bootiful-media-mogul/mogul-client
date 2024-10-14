@@ -2,10 +2,12 @@
 
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
+import FakeWritingTools from '@/ui/input/FakeWritingTools.vue'
 
 export default {
   name: 'HomeView',
   components: {
+    FakeWritingTools: FakeWritingTools,
     InputWrapper,
     InputWrapperChild
   },
@@ -19,7 +21,7 @@ export default {
 
 <template>
   <h1>Home</h1>
-  
+
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form
@@ -27,16 +29,24 @@ export default {
       <div class="pure-control-group">
         <label for="title">input </label>
         <InputWrapper v-model="userInput">
-          <input type="text"
-                 id="title" name="title" :value="userInput" />
+
+          <input type="text" id="title" name="title" :value="userInput" />
+
           <InputWrapperChild>
-            <template v-slot:icon>[a]</template>
-            <template v-slot:panel> the default a</template>
+            <template v-slot:icon>A</template>
+            <template v-slot:panel> 
+              the default a {{userInput}}
+            </template>
           </InputWrapperChild>
+          
+          <FakeWritingTools :userInput="userInput"></FakeWritingTools>
+
           <InputWrapperChild>
-            <template v-slot:panel> the default b</template>
-            <template v-slot:icon>[b]</template>
+            <template v-slot:icon>C</template>
+            <template v-slot:panel> the default c {{userInput}} </template>
           </InputWrapperChild>
+          
+          
         </InputWrapper>
 
 
@@ -49,11 +59,7 @@ export default {
       </div>
     </fieldset>
   </form>
+
   <div> what did the user type? {{ userInput }}</div>
-
-
-  <!--
-
-  -->
 
 </template>

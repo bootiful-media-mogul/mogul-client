@@ -75,9 +75,12 @@ export default {
   },
   methods: {
     togglePanel: function(slot) {
-      slot.visible = !slot.visible
+      const newVisibility = !slot.visible
+      this.childSlots.forEach(slot => {
+        slot.visible = false
+      })
+      slot.visible = newVisibility
       this.allHidden = this.childSlots.filter(item => item.visible).length == 0
-      console.log('allhidden', this.allHidden)
     }
   },
   emits: ['update:modelValue'],

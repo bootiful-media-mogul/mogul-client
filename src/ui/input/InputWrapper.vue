@@ -30,23 +30,23 @@ export default {
 
     const updateValue = (event: Event) => {
       const elementTarget = event?.target as HTMLInputElement
-      if (elementTarget.value) {
-        const txt = elementTarget.value
-        emit('update:modelValue', txt)
-        text.value = txt
-      }
+      const txt = elementTarget.value
+      emit('update:modelValue', txt)
+      text.value = txt
     }
+
+    const events = 'input,change'.split(',')
 
     onMounted(() => {
       inputElement.value = (root.value as HTMLElement | null)?.querySelector('input, textarea')
       if (inputElement.value) {
-        inputElement.value.addEventListener('input', updateValue)
+        events.forEach(evt => inputElement.value.addEventListener(evt, updateValue))
       }
     })
 
     onBeforeUnmount(() => {
       if (inputElement.value) {
-        inputElement.value.removeEventListener('input', updateValue)
+        events.forEach(evt => inputElement.value.removeEventListener(evt, updateValue))
       }
     })
 
@@ -122,16 +122,13 @@ export default {
   padding-left: var(--writing-tools-panel-padding);
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(3 * var(--writing-tools-panel-padding));
-  background-color: rgba(255, 255, 255, 0.3);  
+  background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   z-index: -1;
-  
+
   /**/
-  
-  
-  
-  
-  
+
+
 }
 
 .icon {

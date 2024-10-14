@@ -5,13 +5,13 @@
       <slot></slot>
     </div>
     <div class="icon-column">
-      <div class="icon" v-for="(slot, index) in childSlots" :key="index">
+      <div @click="togglePanel(slot)" class="icon unselectable" v-for="(slot, index) in childSlots" :key="index">
         <component :is="slot.icon"></component>
       </div>
     </div>
-    <div class="panel">
+    <div v-if="!allHidden" class="panel">
       <div v-for="(slot, index) in childSlots" :key="index">
-        <component :is="slot.panel"></component>
+        <component v-if="slot.visible" :is="slot.panel"></component>
       </div>
     </div>
   </div>
@@ -67,26 +67,23 @@ export default {
       inputElement
     }
   },
-
   props: {
     modelValue: {
       type: String,
       default: ''
     }
   },
-
+  methods: {
+    togglePanel: function(slot) {
+      slot.visible = !slot.visible
+      this.allHidden = this.childSlots.filter(item => item.visible).length == 0
+      console.log('allhidden', this.allHidden)
+    }
+  },
   emits: ['update:modelValue'],
-
   data() {
-
     return {
-      proposalApprovalRequired: false,
-      panelVisible: false,
-      rewriteStylesVisible: false,
-      // rewriteStylesClasses: 'styles',
-      rewriteToolsClasses: 'rewrite-button',
-      toggleButtonClasses: 'toggle-icon unselectable edit-icon',
-      toolsClasses: 'tools',
+      allHidden: true,
       previousModelValue: ''
     }
   }

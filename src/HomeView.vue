@@ -41,10 +41,7 @@ export default {
           
           <FakeWritingTools :userInput="userInput"></FakeWritingTools>
 
-          <InputWrapperChild>
-            <template v-slot:icon>C</template>
-            <template v-slot:panel> the default c {{userInput}} </template>
-          </InputWrapperChild>
+       
           
           
         </InputWrapper>

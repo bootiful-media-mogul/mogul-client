@@ -30,7 +30,7 @@ export default {
         <label for="title">input </label>
         <InputWrapper v-model="userInput">
 
-          <input type="text" id="title" name="title" :value="userInput" />
+          <textarea type="text" id="title" name="title" :value="userInput" />
 
           <InputWrapperChild>
             <template v-slot:icon>A</template>

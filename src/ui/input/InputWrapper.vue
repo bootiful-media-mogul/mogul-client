@@ -5,7 +5,7 @@
       <slot></slot>
     </div>
     <div class="icon-column">
- 
+
 
       <InputWrapperMenu class="icon-column-menu">
         <div
@@ -106,10 +106,6 @@ export default {
 
 <style scoped>
 .writing-tools-container {
-
-  
-  
-
   display: grid;
   grid-template-areas:
     ' input  icons '
@@ -120,14 +116,11 @@ export default {
 .icon-column-menu {
   grid-area: icons-column-menu;
 }
+
 .icon-column {
-  
   display: grid;
-  
-  
   border: 1px solid white;
   grid-area: icons;
-  
 }
 
 .panel {

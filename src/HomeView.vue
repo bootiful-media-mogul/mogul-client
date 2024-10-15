@@ -3,7 +3,7 @@
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
-import aiIconHighlight from '@/assets/images/ai-icon-highlight.png'
+import pencilIcon from '@/assets/images/edit-highlight.png'
 import FakeWritingTools from '@/ui/input/FakeWritingTools.vue'
 
 
@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       userInput: '' ,
-      aiIconHighlight : aiIconHighlight 
+      aiIconHighlight : pencilIcon 
     }
   }
 }

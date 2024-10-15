@@ -5,14 +5,19 @@
       <slot></slot>
     </div>
     <div class="icon-column">
-      <div
-        @click="togglePanel(slot)"
-        class="icon unselectable"
-        v-for="(slot, index) in childSlots"
-        :key="index"
-      >
-        <component :is="slot.icon"></component>
-      </div>
+ 
+
+      <InputWrapperMenu class="icon-column-menu">
+        <div
+          @click="togglePanel(slot)"
+          class="icon unselectable"
+          v-for="(slot, index) in childSlots"
+          :key="index"
+        >
+          <component :is="slot.icon"></component>
+
+        </div>
+      </InputWrapperMenu>
     </div>
     <div v-if="!allHidden" class="panel">
       <div v-for="(slot, index) in childSlots" :key="index">
@@ -24,9 +29,12 @@
 
 <script lang="ts">
 import { ref, provide, onMounted, onBeforeUnmount } from 'vue'
+import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
+import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 
 export default {
   name: 'InputWrapper',
+  components: { InputWrapperMenuButton, InputWrapperMenu },
 
   setup(props, { emit }) {
     const text = ref('')
@@ -77,7 +85,7 @@ export default {
     }
   },
   methods: {
-    togglePanel: function (slot) {
+    togglePanel: function(slot) {
       const newVisibility = !slot.visible
       this.childSlots.forEach((slot) => {
         slot.visible = false
@@ -98,26 +106,34 @@ export default {
 
 <style scoped>
 .writing-tools-container {
+
+  
+  
+
   display: grid;
   grid-template-areas:
-    ' input . icons '
-    ' panel . icons ';
-
-  grid-template-columns: auto calc(var(--gutter-space) / 3) var(--icon-width);
+    ' input  icons '
+    ' panel  . ';
+  grid-template-columns: auto min-content;
 }
 
+.icon-column-menu {
+  grid-area: icons-column-menu;
+}
 .icon-column {
-  border: 1px solid orange;
+  
+  display: grid;
+  
+  
+  border: 1px solid white;
   grid-area: icons;
+  
 }
 
 .panel {
   grid-area: panel;
-  /**/
-
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
   --writing-tools-panel-icon-size: 20px;
-  /*margin-right: calc(var(--icon-width) + var(--writing-tools-panel-padding));*/
   margin-top: calc(-2 * var(--writing-tools-panel-padding));
   padding-bottom: var(--writing-tools-panel-padding);
   padding-left: var(--writing-tools-panel-padding);
@@ -126,38 +142,12 @@ export default {
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
   z-index: -1;
-
-  /**/
 }
 
 .icon {
   height: var(--icon-width);
   display: inline-block;
-  width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
   cursor: pointer;
 }
-
-/*
-
-
-.writing-tools-panel {
-  --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
-  --writing-tools-panel-icon-size: 20px;
-  margin-right: calc(var(--icon-width) + var(--writing-tools-panel-padding));
-  margin-top: calc(-1 * var(--writing-tools-panel-padding));
-  padding-bottom: var(--writing-tools-panel-padding);
-  padding-left: var(--writing-tools-panel-padding);
-  padding-right: var(--writing-tools-panel-padding);
-  padding-top: calc(2 * var(--writing-tools-panel-padding));
-  background-color: rgba(255, 255, 255, 0.3); !* A slightly whiter transparent overlay *!
-  border-radius: 4px;
-}
-
-.input-wrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
-}
-*/
 </style>

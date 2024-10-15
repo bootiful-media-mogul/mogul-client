@@ -1,18 +1,28 @@
 <script lang="ts">
+
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
+import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
+import aiIconHighlight from '@/assets/images/ai-icon-highlight.png'
 import FakeWritingTools from '@/ui/input/FakeWritingTools.vue'
+
 
 export default {
   name: 'HomeView',
   components: {
-    FakeWritingTools: FakeWritingTools,
+    FakeWritingTools,
+    InputWrapperMenuButton,
     InputWrapper,
     InputWrapperChild
   },
+  methods: {
+ 
+
+  },
   data() {
     return {
-      userInput: ''
+      userInput: '' ,
+      aiIconHighlight : aiIconHighlight 
     }
   }
 }
@@ -30,11 +40,13 @@ export default {
           <textarea type="text" id="title" name="title" :value="userInput" />
 
           <InputWrapperChild>
-            <template v-slot:icon>A</template>
-            <template v-slot:panel> the default a {{ userInput }} </template>
+            <template v-slot:icon>
+              <InputWrapperMenuButton :icon="aiIconHighlight" />
+            </template>
+            <template v-slot:panel> the default a {{ userInput }}</template>
           </InputWrapperChild>
-
-          <FakeWritingTools :userInput="userInput"></FakeWritingTools>
+          
+          <FakeWritingTools/>
         </InputWrapper>
       </div>
 

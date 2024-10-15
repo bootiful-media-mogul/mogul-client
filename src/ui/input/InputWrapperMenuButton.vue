@@ -10,9 +10,7 @@ export default {
 </script>
 <style scoped>
 .input-wrapper-menu-button {
-  border: 1px solid #129fea;
   width: calc(1.5 * var(--icon-width));
-  /*height: calc(1.5 * var(--icon-width));*/
 }
 </style>
 <template>

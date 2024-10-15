@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <div class="arrow up">⬆️</div>
+    <div class="unselectable arrow up">⬆</div>
     <div class="icons">
       <slot> the buttons should go here otherwise this will look like crap!</slot>
     </div>
-    <div class="arrow down">⬇️</div>
+    <div class="unselectable  arrow down">⬇</div>
   </div>
 </template>
 <style scoped>
@@ -38,6 +38,7 @@
 .arrow {
   text-align: center;
   font-size: 0.7em;
+  cursor: pointer;
 }
 
 .arrow:first-of-type {

@@ -51,14 +51,12 @@
   width: var(--writing-tools-panel-icon-size);
   grid-area: icon;
 }
-
 </style>
 
 <script lang="ts">
 export default {
   name: 'WritingToolsButton',
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       backgroundStyle: ` background-image: url('${this.iconImage}')  `

@@ -46,7 +46,6 @@
   padding-top: calc(2 * var(--writing-tools-panel-padding));
   background-color: rgba(255, 255, 255, 0.3); /* A slightly whiter transparent overlay */
   border-radius: 4px;
-
 }
 
 .writing-tools-panel .styles {

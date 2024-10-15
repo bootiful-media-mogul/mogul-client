@@ -5,7 +5,12 @@
       <slot></slot>
     </div>
     <div class="icon-column">
-      <div @click="togglePanel(slot)" class="icon unselectable" v-for="(slot, index) in childSlots" :key="index">
+      <div
+        @click="togglePanel(slot)"
+        class="icon unselectable"
+        v-for="(slot, index) in childSlots"
+        :key="index"
+      >
         <component :is="slot.icon"></component>
       </div>
     </div>
@@ -40,16 +45,15 @@ export default {
     onMounted(() => {
       inputElement.value = (root.value as HTMLElement | null)?.querySelector('input, textarea')
       if (inputElement.value) {
-        events.forEach(evt => inputElement.value.addEventListener(evt, updateValue))
+        events.forEach((evt) => inputElement.value.addEventListener(evt, updateValue))
       }
     })
 
     onBeforeUnmount(() => {
       if (inputElement.value) {
-        events.forEach(evt => inputElement.value.removeEventListener(evt, updateValue))
+        events.forEach((evt) => inputElement.value.removeEventListener(evt, updateValue))
       }
     })
-
 
     const childSlots = ref([])
 
@@ -58,7 +62,6 @@ export default {
     }
 
     provide('registerChild', registerChild)
-
 
     return {
       childSlots,
@@ -74,13 +77,13 @@ export default {
     }
   },
   methods: {
-    togglePanel: function(slot) {
+    togglePanel: function (slot) {
       const newVisibility = !slot.visible
-      this.childSlots.forEach(slot => {
+      this.childSlots.forEach((slot) => {
         slot.visible = false
       })
       slot.visible = newVisibility
-      this.allHidden = this.childSlots.filter(item => item.visible).length == 0
+      this.allHidden = this.childSlots.filter((item) => item.visible).length == 0
     }
   },
   emits: ['update:modelValue'],
@@ -90,19 +93,17 @@ export default {
       previousModelValue: ''
     }
   }
-
-
 }
 </script>
 
 <style scoped>
-
 .writing-tools-container {
   display: grid;
-  grid-template-areas: ' input . icons ' 
-                       ' panel . icons ';
+  grid-template-areas:
+    ' input . icons '
+    ' panel . icons ';
 
-  grid-template-columns: auto  calc(var(--gutter-space) / 3)  var(--icon-width);
+  grid-template-columns: auto calc(var(--gutter-space) / 3) var(--icon-width);
 }
 
 .icon-column {
@@ -127,8 +128,6 @@ export default {
   z-index: -1;
 
   /**/
-
-
 }
 
 .icon {
@@ -161,5 +160,4 @@ export default {
   position: relative;
 }
 */
-
 </style>

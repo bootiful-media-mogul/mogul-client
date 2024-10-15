@@ -4,11 +4,13 @@
     <h1>Parent Component</h1>
 
     <!-- Render the discovered foo slots here -->
-    <div v-for="(slot, index) in childSlots " :key="index">
-      <div>icon:
+    <div v-for="(slot, index) in childSlots" :key="index">
+      <div>
+        icon:
         <component :is="slot.icon" />
       </div>
-      <div> default:
+      <div>
+        default:
         <component :is="slot.default" />
       </div>
     </div>
@@ -24,7 +26,6 @@ import { ref, provide } from 'vue'
 export default {
   name: 'MetaWrapper',
   setup() {
-
     const childSlots = ref([])
 
     const registerChild = (slotPair) => {

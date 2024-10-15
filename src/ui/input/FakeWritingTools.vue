@@ -5,13 +5,11 @@
   </InputWrapperChild>
 </template>
 <script lang="ts">
-
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 
 export default {
   name: 'FakeWritingTools',
   components: { InputWrapperChild },
-
 
   props: {
     userInput: {

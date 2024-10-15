@@ -1,5 +1,4 @@
 <script lang="ts">
-
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import FakeWritingTools from '@/ui/input/FakeWritingTools.vue'
@@ -24,29 +23,19 @@ export default {
 
   <form class="pure-form pure-form-stacked">
     <fieldset>
-      <legend>a nice form
-      </legend>
+      <legend>a nice form</legend>
       <div class="pure-control-group">
         <label for="title">input </label>
         <InputWrapper v-model="userInput">
-
           <textarea type="text" id="title" name="title" :value="userInput" />
 
           <InputWrapperChild>
             <template v-slot:icon>A</template>
-            <template v-slot:panel> 
-              the default a {{userInput}}
-            </template>
+            <template v-slot:panel> the default a {{ userInput }} </template>
           </InputWrapperChild>
-          
+
           <FakeWritingTools :userInput="userInput"></FakeWritingTools>
-
-       
-          
-          
         </InputWrapper>
-
-
       </div>
 
       <div class="pure-controls">
@@ -57,6 +46,5 @@ export default {
     </fieldset>
   </form>
 
-  <div> what did the user type? {{ userInput }}</div>
-
+  <div>what did the user type? {{ userInput }}</div>
 </template>

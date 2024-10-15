@@ -4,7 +4,6 @@
   opacity: 100%;
 }
 
-
 .unselectable {
   user-select: none; /* For modern browsers */
   -webkit-user-select: none; /* For Safari */
@@ -32,8 +31,6 @@
   grid-column-gap: calc(1 * var(--writing-tools-panel-padding));
 }
 
-
-
 .toggle-icon {
   cursor: pointer;
   margin-left: calc(var(--gutter-space) / 3);
@@ -44,20 +41,13 @@
   align-items: center;
   position: relative;
 }
-
- 
- 
 </style>
 
 <template>
-  
- 
   <div class="writing-tools-container">
     <div ref="writingToolsRoot" class="input-wrapper">
       <slot></slot>
-      <div :class="toggleButtonClasses"
-           @click="togglePanel"
-      >️</div>
+      <div :class="toggleButtonClasses" @click="togglePanel">️</div>
     </div>
 
     <div v-if="panelVisible" class="unselectable writing-tools-panel">
@@ -71,7 +61,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 
 export default {
   name: 'WritingTools',
-  components: {   },
+  components: {},
   data() {
     return {
       proposalApprovalRequired: false,
@@ -148,7 +138,6 @@ export default {
       // this.proposalApprovalRequired = true
     },
 
-       
     togglePanel() {
       this.panelVisible = !this.panelVisible
       if (this.panelVisible) this.toggleButtonClasses = 'toggle-icon unselectable close-icon'

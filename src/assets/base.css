@@ -187,7 +187,6 @@ html {
   background-size: var(--icon-width) var(--icon-width);
 }
 
-
 .edit-icon:hover {
   background: url('../assets/images/edit.png');
   height: var(--icon-width);

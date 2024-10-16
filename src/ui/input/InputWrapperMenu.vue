@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <div class="unselectable arrow up">⬆</div>
+    <div class="unselectable arrow up" @click="$emit('up')">⬆</div>
     <div class="icons">
       <slot> the buttons should go here otherwise this will look like crap!</slot>
     </div>
-    <div class="unselectable  arrow down">⬇</div>
+    <div class="unselectable  arrow down" @click="$emit('down')">⬇</div>
   </div>
 </template>
 <style scoped>
@@ -22,17 +22,15 @@
 
 .down {
   grid-area: down;
-  border: 1px solid yellow;
+  
 }
 
 .icons {
   grid-area: icons;
-  border: 1px solid olivedrab;
 }
 
 .up {
   grid-area: up;
-  border: 1px solid #0078e7;
 }
 
 .arrow {
@@ -49,3 +47,9 @@
   padding-top: calc(var(--icon-width) / 3);
 }
 </style>
+<script lang="ts">
+
+export default {
+  emits: ['up', 'down']
+}
+</script>

@@ -7,21 +7,21 @@
     <div class="icon-column">
 
 
-      <InputWrapperMenu class="icon-column-menu">
+      <InputWrapperMenu class="icon-column-menu" @down="down" @up="up">
         <div
-          @click="togglePanel(slot)"
+          @click="showPanel(slot)"
           class="icon unselectable"
           v-for="(slot, index) in childSlots"
           :key="index"
         >
-          <component :is="slot.icon"></component>
+          <component v-if="slot.iconVisible" :is="slot.icon"></component>
 
         </div>
       </InputWrapperMenu>
     </div>
-    <div v-if="!allHidden" class="panel">
+    <div  class="panel">
       <div v-for="(slot, index) in childSlots" :key="index">
-        <component v-if="slot.visible" :is="slot.panel"></component>
+        <component v-if="slot.panelVisible" :is="slot.panel"></component>
       </div>
     </div>
   </div>
@@ -65,6 +65,7 @@ export default {
 
     const childSlots = ref([])
 
+
     const registerChild = (slotPair) => {
       childSlots.value.push(slotPair)
     }
@@ -84,21 +85,46 @@ export default {
       default: ''
     }
   },
+  mounted() {
+
+    this.childSlots [0].iconVisible = true
+
+  },
   methods: {
-    togglePanel: function(slot) {
-      const newVisibility = !slot.visible
+    move(direction) {
+      const currentlyVisiblePanel = this.childSlots.filter(slot => slot.panelVisible)
+      const selected = currentlyVisiblePanel && currentlyVisiblePanel.length > 0 ? currentlyVisiblePanel[0] : this.childSlots[0]
+      let index = this.childSlots.indexOf(selected)
+      if ((index + direction) >= 0 && (index + direction) < (this.childSlots.length)) index = index + direction
       this.childSlots.forEach((slot) => {
-        slot.visible = false
+        slot.panelVisible = false
+        slot.iconVisible = false
       })
-      slot.visible = newVisibility
-      this.allHidden = this.childSlots.filter((item) => item.visible).length == 0
-    }
+      this.childSlots[index].panelVisible = true
+      this.childSlots[index].iconVisible = true
+      
+      
+      
+    },
+    down() {
+      this.move(+1)
+    },
+    up() {
+      this.move(-1)
+    },
+    showPanel(slot) {
+      this.childSlots.forEach((slot) => {
+        slot.panelVisible = false
+      })
+      this.childSlots [this.childSlots.indexOf(slot)].panelVisible = true
+    },
+   
   },
   emits: ['update:modelValue'],
   data() {
     return {
-      allHidden: true,
-      previousModelValue: ''
+      previousModelValue: '',
+      activeIndex: -1
     }
   }
 }
@@ -119,14 +145,14 @@ export default {
 
 .icon-column {
   display: grid;
-  border: 1px solid white;
+  
   grid-area: icons;
 }
 
 .panel {
   grid-area: panel;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
-  --writing-tools-panel-icon-size: 20px;
+  /*--writing-tools-panel-icon-size: 20px;*/
   margin-top: calc(-2 * var(--writing-tools-panel-padding));
   padding-bottom: var(--writing-tools-panel-padding);
   padding-left: var(--writing-tools-panel-padding);

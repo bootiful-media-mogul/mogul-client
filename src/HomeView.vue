@@ -34,16 +34,23 @@ export default {
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form</legend>
+      
       <div class="pure-control-group">
+        
         <label for="title">input </label>
+        
         <InputWrapper v-model="userInput">
+          
           <textarea type="text" id="title" name="title" :value="userInput" />
 
           <InputWrapperChild>
+            
             <template v-slot:icon>
               <InputWrapperMenuButton :icon="aiIconHighlight" />
             </template>
+            
             <template v-slot:panel> the default a {{ userInput }}</template>
+            
           </InputWrapperChild>
           
           <FakeWritingTools/>

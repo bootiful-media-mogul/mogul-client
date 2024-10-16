@@ -7,7 +7,7 @@
     <div class="icon-column">
 
 
-      <InputWrapperMenu class="icon-column-menu" @down="down" @up="up">
+      <InputWrapperMenu :disabled="panelVisible" class="icon-column-menu" @down="down" @up="up">
         <div
           @click="togglePanel(slot)"
           class="icon unselectable"

@@ -141,7 +141,7 @@ export default {
   grid-template-areas:
     ' input icons '
     ' panel . ';
-  grid-column-gap: calc(var(--gutter-space) / 3);
+  
   grid-template-columns: auto min-content;
 }
 

@@ -13,9 +13,7 @@
   display: grid;
 
   grid-template-areas: ' up icons down ';
-  grid-column-gap: calc(var(--gutter-space) / 6);
-  grid-template-columns:  auto var(--icon-width) auto;
-  
+  grid-template-columns:  20px var(--icon-width) 20px;
   justify-content: center;
   align-items: center;
  
@@ -23,13 +21,14 @@
 
 .arrow {
   text-align: center;
- /* font-size: 0.7em;*/
+
   
   cursor: pointer;
 }
 
 .arrow.down {
   grid-area: down;
+  
 }
 
 .icons {
@@ -37,7 +36,10 @@
 }
 
 .arrow.up {
+  
   grid-area: up;
+  text-align: right;
+  
 }
 
 /*.arrow:first-of-type {

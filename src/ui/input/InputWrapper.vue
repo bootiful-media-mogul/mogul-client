@@ -137,17 +137,24 @@ export default {
 
 <style scoped>
 .writing-tools-container {
+  
   display: grid;
   grid-template-areas:
-    ' input icons '
-    ' panel icons ';
-  grid-template-columns: auto min-content;
+    ' . icons '
+    ' input input '
+    ' panel panel ';
+  grid-template-columns: auto min-content ;
 }
 
 .icon-column-menu {
   grid-area: icons-column-menu;
 }
-
+.input-wrapper {
+  grid-area: input;
+}
+.panel {
+  grid-area: panel;
+}
 .icon-column {
   display: grid;
   grid-area: icons;

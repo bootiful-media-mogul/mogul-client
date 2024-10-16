@@ -41,7 +41,8 @@ export default {
         
         <InputWrapper v-model="userInput">
           
-          <textarea type="text" id="title" name="title" :value="userInput" />
+<!--          <textarea type="text" id="title" name="title" :value="userInput" />-->
+          <input type="text" id="title" name="title" :value="userInput" />
 
           <InputWrapperChild>
             

@@ -9,17 +9,23 @@
 
       <InputWrapperMenu class="icon-column-menu" @down="down" @up="up">
         <div
-          @click="showPanel(slot)"
+          @click="togglePanel(slot)"
           class="icon unselectable"
           v-for="(slot, index) in childSlots"
           :key="index"
         >
-          <component v-if="slot.iconVisible" :is="slot.icon"></component>
+          
+          <div v-if="panelVisible && slot.iconVisible">
+            <div class="close-icon"></div>
+          </div>
+          <div v-else>
+            <component  v-if="slot.iconVisible" :is="slot.icon"></component>
+          </div>
 
         </div>
       </InputWrapperMenu>
     </div>
-    <div  class="panel">
+    <div class="panel" v-if="panelVisible">
       <div v-for="(slot, index) in childSlots" :key="index">
         <component v-if="slot.panelVisible" :is="slot.panel"></component>
       </div>
@@ -97,14 +103,11 @@ export default {
       let index = this.childSlots.indexOf(selected)
       if ((index + direction) >= 0 && (index + direction) < (this.childSlots.length)) index = index + direction
       this.childSlots.forEach((slot) => {
-        slot.panelVisible = false
         slot.iconVisible = false
+        slot.panelVisible = false
       })
-      this.childSlots[index].panelVisible = true
       this.childSlots[index].iconVisible = true
-      
-      
-      
+      this.childSlots[index].panelVisible = true
     },
     down() {
       this.move(+1)
@@ -112,17 +115,19 @@ export default {
     up() {
       this.move(-1)
     },
-    showPanel(slot) {
+    togglePanel(slot) {
       this.childSlots.forEach((slot) => {
         slot.panelVisible = false
       })
       this.childSlots [this.childSlots.indexOf(slot)].panelVisible = true
-    },
-   
+      this.panelVisible = !this.panelVisible
+    }
+
   },
   emits: ['update:modelValue'],
   data() {
     return {
+      panelVisible: false,
       previousModelValue: '',
       activeIndex: -1
     }
@@ -134,8 +139,8 @@ export default {
 .writing-tools-container {
   display: grid;
   grid-template-areas:
-    ' input  icons '
-    ' panel  . ';
+    ' input icons '
+    ' panel icons ';
   grid-template-columns: auto min-content;
 }
 
@@ -145,7 +150,6 @@ export default {
 
 .icon-column {
   display: grid;
-  
   grid-area: icons;
 }
 

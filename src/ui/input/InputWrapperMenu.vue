@@ -9,20 +9,28 @@
 </template>
 <style scoped>
 .menu {
+  /* 
+   todo i dont like the vertical positioning. this is going to be ugly in a single line input.
+   todo also, i need to setup the toggle so that when u click the icon, it shows the panel and the icon turns into an `X`, like it does currently.
+   todo   click the 'X', and the panel is hidden. EZ.     
+   */
   display: grid;
-  grid-template-areas:
-    'icons up'
-    'icons down';
 
-  grid-template-columns:  auto    auto;
-  grid-template-rows:  var(--icon-width) var(--icon-width);
+  padding-left: calc(var(--gutter-space) / 3);
+  grid-template-areas:
+    ' up    '
+    ' icons '
+    ' down  ';
+
+  grid-template-columns:  auto;
+  grid-template-rows: 20px var(--icon-width)  20px;
   align-items: center;
   justify-content: center;
 }
 
 .down {
   grid-area: down;
-  
+
 }
 
 .icons {

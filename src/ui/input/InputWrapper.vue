@@ -14,12 +14,12 @@
           v-for="(slot, index) in childSlots"
           :key="index"
         >
-          
+
           <div v-if="panelVisible && slot.iconVisible">
             <div class="close-icon"></div>
           </div>
           <div v-else>
-            <component  v-if="slot.iconVisible" :is="slot.icon"></component>
+            <component v-if="slot.iconVisible" :is="slot.icon"></component>
           </div>
 
         </div>
@@ -137,24 +137,26 @@ export default {
 
 <style scoped>
 .writing-tools-container {
-  
   display: grid;
   grid-template-areas:
-    ' . icons '
-    ' input input '
-    ' panel panel ';
-  grid-template-columns: auto min-content ;
+    ' input icons '
+    ' panel . ';
+  grid-column-gap: calc(var(--gutter-space) / 3);
+  grid-template-columns: auto min-content;
 }
 
 .icon-column-menu {
   grid-area: icons-column-menu;
 }
+
 .input-wrapper {
   grid-area: input;
 }
+
 .panel {
   grid-area: panel;
 }
+
 .icon-column {
   display: grid;
   grid-area: icons;

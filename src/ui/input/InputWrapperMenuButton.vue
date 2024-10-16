@@ -1,21 +1,30 @@
 <script lang="ts">
 export default {
   props: {
-    icon: {
-      type: String,
-      default: ''
+    iconHover: { type: String, default: '' },
+    icon: { type: String, default: '' }
+  },
+  data() {
+    return {
+      src: this.iconHover
+    }
+  },
+  methods: {
+    swap() {
+      if (this.iconHover)
+        this.src = this.icon == this.src ? this.iconHover : this.icon
     }
   }
 }
 </script>
 <style scoped>
 .input-wrapper-menu-button {
-  width: calc(1 * var(--icon-width));
+  max-width: var(--icon-width);
 }
 </style>
 <template>
-
-  <img :alt="'an image -' + icon" :src="icon" class="input-wrapper-menu-button" />
-
-
+  <img :alt="'an image -' + src " :src="src"
+       @mouseover="swap"
+       @mouseout="swap"
+       class="input-wrapper-menu-button" />
 </template>

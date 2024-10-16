@@ -13,7 +13,7 @@
   display: grid;
 
   grid-template-areas: ' up icons down ';
-  grid-column-gap: calc(var(--gutter-space) / 3);
+  grid-column-gap: calc(var(--gutter-space) / 6);
   grid-template-columns:  auto var(--icon-width) auto;
   
   justify-content: center;
@@ -39,8 +39,6 @@
 .arrow.up {
   grid-area: up;
 }
-
-
 
 /*.arrow:first-of-type {
   padding-bottom: calc(var(--icon-width) / 3);

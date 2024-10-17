@@ -1,18 +1,21 @@
 <script lang="ts">
+/*
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
+import WritingAssistant from '@/writing/WritingAssistant.vue'
+*/
+
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
-import WritingAssistant from '@/writing/WritingAssistant.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    WritingAssistant,
+/*    WritingAssistant,
     InputWrapperMenuButton,
     InputWrapper,
-    InputWrapperChild
+    InputWrapperChild*/
   },
   methods: {},
   data() {
@@ -27,6 +30,7 @@ export default {
 
 <template>
   <h1>Home</h1>
+  <!--
 
   <form class="pure-form pure-form-stacked">
     <fieldset>
@@ -63,4 +67,6 @@ export default {
   </form>
 
   <div>what did the user type? {{ userInput }}</div>
+  
+  -->
 </template>

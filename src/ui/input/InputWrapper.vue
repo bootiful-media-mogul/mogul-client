@@ -143,10 +143,7 @@ export default {
 
   grid-template-columns: auto min-content;
 }
-
-.icon-column-menu {
-  grid-area: icons-column-menu;
-}
+ 
 
 .input-wrapper {
   grid-area: input;

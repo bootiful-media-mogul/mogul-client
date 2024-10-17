@@ -183,14 +183,12 @@ export default {
     },
 
     proposeUpdatedText(updatedText: string) {
-      console.log('updated text: ' + updatedText)
       this.previousModelValue = this.modelValue
       this.$emit('update:modelValue', updatedText)
       this.proposalApprovalRequired = true
     },
 
     async proofread() {
-      console.log( 'modelvalue: ' + this.modelValue)
       if (this.modelValue.trim() === '') return
 
       if (this.rewriteStylesVisible) this.toggleRewriteTools()

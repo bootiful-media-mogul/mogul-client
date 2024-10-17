@@ -3,7 +3,7 @@
 .rendered-preview {
   font-size: small;
   padding: calc(var(--gutter-space) / 3);
-  
+
 }
 
 .rendered-preview a {
@@ -38,30 +38,33 @@ import { markdown } from '@/services'
 
 export default {
   name: 'MarkdownPreview',
+  mounted() {
+    console.log('window.setTimeout: ' + (window.setTimeout ? 'y' : 'n'))
+  },
   components: { InputWrapperMenuButton, InputWrapperChild },
-
   methods: {
 
     async debouncingRender(md: string) {
       if (this.timer && this.timer > -1) {
         clearTimeout(this.timer)
-        console.log('clearing timer...')
       }
 
-      this.timer = setTimeout(async () => {
+      this.timer = window.setTimeout(async () => {
         await this.render(md)
       }, 1000)
     },
     async render(md: string) {
-
       if (this.modelValue.trim() === '') return
-
       this.rendered = await markdown.render(md)
     }
   },
   watch: {
     modelValue: async function(o: string, n: string) {
-      await this.debouncingRender(n)
+      // 
+      // we're interested in the event, but we'll only 
+      // want to render the actual value when the time comes.
+      //
+      await this.debouncingRender(this.modelValue)
     }
   },
 

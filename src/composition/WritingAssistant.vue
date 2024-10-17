@@ -89,7 +89,6 @@
 }
 
 
-
 .proposal-approval a {
   font-size: small;
 }
@@ -109,7 +108,7 @@
       <div class="writing-tools-panel">
 
         <div v-if="!proposalApprovalRequired">
-          
+
           <div :class="toolsClasses">
             <WritingToolsButton label="Proofread" class="proofread-button" @click="proofread">
               <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
@@ -122,10 +121,9 @@
             >
               <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
             </WritingToolsButton>
-            
           </div>
           <div :class="rewriteStylesClasses" v-if="rewriteStylesVisible">
-            
+
             <WritingToolsButton label="Friendly" class="friendly-button" @click="rewriteFriendly">
               <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
             </WritingToolsButton>
@@ -134,11 +132,7 @@
               <img alt="concise" src="../assets/images/writing-tools/concise.png" />
             </WritingToolsButton>
 
-            <WritingToolsButton
-              label="Professional"
-              class="professional-button"
-              @click="rewriteProfessional"
-            >
+            <WritingToolsButton label="Professional" class="professional-button" @click="rewriteProfessional">
               <img alt="professional" src="../assets/images/writing-tools/professional.png" />
             </WritingToolsButton>
           </div>
@@ -171,8 +165,6 @@ export default {
 
   methods: {
 
-    /**/
-
     reset() {
       this.proposalApprovalRequired = false
       this.rewriteStylesVisible = false
@@ -192,58 +184,59 @@ export default {
 
     proposeUpdatedText(updatedText: string) {
       console.log('updated text: ' + updatedText)
-      this.previousModelValue = this.userInput
-      this.$emit('update:userInput', updatedText)
+      this.previousModelValue = this.modelValue
+      this.$emit('update:modelValue', updatedText)
       this.proposalApprovalRequired = true
     },
 
     async proofread() {
-      if (this.userInput.trim() === '') return
+      console.log( 'modelvalue: ' + this.modelValue)
+      if (this.modelValue.trim() === '') return
 
       if (this.rewriteStylesVisible) this.toggleRewriteTools()
 
       const proofread = await ai.chat(
         `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
         ==========================================
-        ${this.userInput}
+        ${this.modelValue}
       `
       )
       this.proposeUpdatedText(proofread)
     },
 
     async rewriteProfessional() {
-      if (this.userInput.trim() === '') return
+      if (this.modelValue.trim() === '') return
       const updated = await ai.chat(
         `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
         ==========================================
-        ${this.userInput}
+        ${this.modelValue}
       `
       )
       this.proposeUpdatedText(updated)
     },
 
     async rewriteConcise() {
-      if (this.userInput.trim() === '') return
+      if (this.modelValue.trim() === '') return
       const updated = await ai.chat(
         `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
         ==========================================
-        ${this.userInput}
+        ${this.modelValue}
       `
       )
       this.proposeUpdatedText(updated)
     },
     async rewriteFriendly() {
-      if (this.userInput.trim() === '') return
+      if (this.modelValue.trim() === '') return
       const updated = await ai.chat(
         `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
         ==========================================
-        ${this.userInput}
+        ${this.modelValue}
       `
       )
       this.proposeUpdatedText(updated)
     },
     toggleRewriteTools() {
-      console.log('toggling rewrite tools..')
+      console.log('toggling rewrite tools for ' + this.modelValue)
       this.rewriteStylesVisible = !this.rewriteStylesVisible
       if (this.rewriteStylesVisible) {
         this.rewriteStylesClasses += ' active'
@@ -260,7 +253,7 @@ export default {
 
   data() {
     return {
-      previousModelValue :'',
+      previousModelValue: '',
       proposalApprovalRequired: false,
       asset: asset,
       toolsClasses: 'tools',
@@ -271,8 +264,12 @@ export default {
     }
   },
   props: {
-    
-    userInput: {
+    /* modelValue: {
+      type: String,
+      default: ''
+    }*/
+
+    modelValue: {
       type: String,
       default: ''
     }

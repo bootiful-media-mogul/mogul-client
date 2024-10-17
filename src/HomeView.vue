@@ -38,8 +38,22 @@ export default {
         <InputWrapper v-model="userInput">
 
           <input type="text" id="title" name="title" :value="userInput" />
+
+          <WritingAssistant v-model="userInput" />
           
-          <WritingAssistant />
+          <InputWrapperChild>
+            <template v-slot:icon>
+              <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
+            </template>
+
+            <template v-slot:panel>
+              the default a {{ userInput }}
+
+              <a href="#" @click="console.log('moo')">moo</a>
+            </template>
+          </InputWrapperChild>
+
+
         </InputWrapper>
       </div>
 

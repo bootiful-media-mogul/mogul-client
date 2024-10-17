@@ -5,8 +5,6 @@
       <slot></slot>
     </div>
     <div class="icon-column">
-
-
       <InputWrapperMenu :disabled="panelVisible" class="icon-column-menu" @down="down" @up="up">
         <div
           @click="togglePanel(slot)"
@@ -14,14 +12,12 @@
           v-for="(slot, index) in childSlots"
           :key="index"
         >
-
           <div v-if="panelVisible && slot.iconVisible">
             <div class="close-icon"></div>
           </div>
           <div v-else>
             <component v-if="slot.iconVisible" :is="slot.icon"></component>
           </div>
-
         </div>
       </InputWrapperMenu>
     </div>
@@ -71,7 +67,6 @@ export default {
 
     const childSlots = ref([])
 
-
     const registerChild = (slotPair) => {
       childSlots.value.push(slotPair)
     }
@@ -92,16 +87,18 @@ export default {
     }
   },
   mounted() {
-
-    this.childSlots [0].iconVisible = true
-
+    this.childSlots[0].iconVisible = true
   },
   methods: {
     move(direction) {
-      const currentlyVisiblePanel = this.childSlots.filter(slot => slot.panelVisible)
-      const selected = currentlyVisiblePanel && currentlyVisiblePanel.length > 0 ? currentlyVisiblePanel[0] : this.childSlots[0]
+      const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
+      const selected =
+        currentlyVisiblePanel && currentlyVisiblePanel.length > 0
+          ? currentlyVisiblePanel[0]
+          : this.childSlots[0]
       let index = this.childSlots.indexOf(selected)
-      if ((index + direction) >= 0 && (index + direction) < (this.childSlots.length)) index = index + direction
+      if (index + direction >= 0 && index + direction < this.childSlots.length)
+        index = index + direction
       this.childSlots.forEach((slot) => {
         slot.iconVisible = false
         slot.panelVisible = false
@@ -119,10 +116,9 @@ export default {
       this.childSlots.forEach((slot) => {
         slot.panelVisible = false
       })
-      this.childSlots [this.childSlots.indexOf(slot)].panelVisible = true
+      this.childSlots[this.childSlots.indexOf(slot)].panelVisible = true
       this.panelVisible = !this.panelVisible
     }
-
   },
   emits: ['update:modelValue'],
   data() {
@@ -141,7 +137,7 @@ export default {
   grid-template-areas:
     ' input icons '
     ' panel . ';
-  
+
   grid-template-columns: auto min-content;
 }
 

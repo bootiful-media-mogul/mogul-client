@@ -7,7 +7,12 @@ export default {
     const registerChild = inject('registerChild')
     onMounted(() => {
       if (slots.panel && slots.icon) {
-        registerChild({ iconVisible:false, panelVisible: false, panel: slots.panel, icon: slots.icon })
+        registerChild({
+          iconVisible: false,
+          panelVisible: false,
+          panel: slots.panel,
+          icon: slots.icon
+        })
         console.log('registering ...')
       }
     })

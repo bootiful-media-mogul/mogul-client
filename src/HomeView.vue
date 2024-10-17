@@ -1,12 +1,10 @@
 <script lang="ts">
-
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
 import FakeWritingTools from '@/ui/input/FakeWritingTools.vue'
-
 
 export default {
   name: 'HomeView',
@@ -16,15 +14,12 @@ export default {
     InputWrapper,
     InputWrapperChild
   },
-  methods: {
- 
-
-  },
+  methods: {},
   data() {
     return {
-      userInput: '' ,
-      aiIcon  : pencilIcon ,
-      aiIconHighlight : pencilIconHighlight 
+      userInput: '',
+      aiIcon: pencilIcon,
+      aiIconHighlight: pencilIconHighlight
     }
   }
 }
@@ -36,27 +31,23 @@ export default {
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form</legend>
-      
+
       <div class="pure-control-group">
-        
         <label for="title">input </label>
-        
+
         <InputWrapper v-model="userInput">
-          
-<!--          <textarea type="text" id="title" name="title" :value="userInput" />-->
+          <!--          <textarea type="text" id="title" name="title" :value="userInput" />-->
           <input type="text" id="title" name="title" :value="userInput" />
 
           <InputWrapperChild>
-            
             <template v-slot:icon>
               <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
             </template>
-            
+
             <template v-slot:panel> the default a {{ userInput }}</template>
-            
           </InputWrapperChild>
-          
-          <FakeWritingTools/>
+
+          <FakeWritingTools />
         </InputWrapper>
       </div>
 

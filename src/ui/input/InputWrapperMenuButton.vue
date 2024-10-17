@@ -11,8 +11,7 @@ export default {
   },
   methods: {
     swap() {
-      if (this.iconHover)
-        this.src = this.icon == this.src ? this.iconHover : this.icon
+      if (this.iconHover) this.src = this.icon == this.src ? this.iconHover : this.icon
     }
   }
 }
@@ -23,8 +22,11 @@ export default {
 }
 </style>
 <template>
-  <img :alt="'an image -' + src " :src="src"
-       @mouseover="swap"
-       @mouseout="swap"
-       class="input-wrapper-menu-button" />
+  <img
+    :alt="'an image -' + src"
+    :src="src"
+    @mouseover="swap"
+    @mouseout="swap"
+    class="input-wrapper-menu-button"
+  />
 </template>

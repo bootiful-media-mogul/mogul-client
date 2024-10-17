@@ -11,7 +11,7 @@
 .menu {
   display: grid;
   grid-template-areas: ' up icons down ';
-  grid-template-columns:  20px var(--icon-width) 20px;
+  grid-template-columns: 20px var(--icon-width) 20px;
   justify-content: center;
   align-items: center;
 }
@@ -23,7 +23,6 @@
 
 .arrow.down {
   grid-area: down;
-
 }
 
 .icons {
@@ -31,10 +30,8 @@
 }
 
 .arrow.up {
-
   grid-area: up;
   text-align: right;
-
 }
 
 /*.arrow:first-of-type {
@@ -51,11 +48,10 @@
 }
 </style>
 <script lang="ts">
-
 export default {
   methods: {
     up() {
-       this.$emit('up')
+      this.$emit('up')
     },
     down() {
       this.$emit('down')

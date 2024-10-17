@@ -596,6 +596,27 @@ export class Ai {
   }
 }
 
+export class Markdown {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+  
+  async render( markdown: string): Promise<string> {
+    const query = `
+        query AiChatQuery($markdown: String){ 
+         renderMarkdown(markdown:$markdown) 
+        }
+    `
+    const result = await this.client.query(query, {
+      markdown: markdown
+    })
+    return (await result['data']['renderMarkdown']) as string
+  }
+}
+
+export const markdown = new Markdown(graphqlClient)
 export const ai = new Ai(graphqlClient)
 export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)

@@ -144,12 +144,13 @@
       </div>
     </template>
     <template v-slot:icon>
-      <InputWrapperMenuButton :icon="asset" />
+      <InputWrapperMenuButton :icon="assetHighlight" :icon-hover="asset" />
     </template>
   </InputWrapperChild>
 </template>
 <script lang="ts">
 import asset from '@/assets/images/writing-tools/rewrite.png'
+import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
 
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
@@ -249,6 +250,7 @@ export default {
       previousModelValue: '',
       proposalApprovalRequired: false,
       asset: asset,
+      assetHighlight: assetHighlight,
       toolsClasses: 'tools',
       rewriteStylesVisible: false,
       rewriteStylesClasses: 'styles',
@@ -257,11 +259,6 @@ export default {
     }
   },
   props: {
-    /* modelValue: {
-      type: String,
-      default: ''
-    }*/
-
     modelValue: {
       type: String,
       default: ''

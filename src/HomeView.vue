@@ -8,14 +8,16 @@ import WritingAssistant from '@/writing/WritingAssistant.vue'
 
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
+import InputWrapper from '@/ui/input/InputWrapper.vue'
+import WritingAssistant from '@/writing/WritingAssistant.vue'
+import MarkdownPreview from '@/markdown/MarkdownPreview.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    /*    WritingAssistant,
-    InputWrapperMenuButton,
-    InputWrapper,
-    InputWrapperChild*/
+    MarkdownPreview,
+    WritingAssistant,
+    InputWrapper
   },
   methods: {},
   data() {
@@ -30,7 +32,6 @@ export default {
 
 <template>
   <h1>Home</h1>
-  <!--
 
   <form class="pure-form pure-form-stacked">
     <fieldset>
@@ -40,11 +41,13 @@ export default {
         <label for="title">input </label>
 
         <InputWrapper v-model="userInput">
-          <input type="text" id="title" name="title" :value="userInput" />
+          
+          <textarea type="text" id="title" rows="10" name="title" :value="userInput"></textarea>
 
+          <MarkdownPreview v-model="userInput" />
           <WritingAssistant v-model="userInput" />
 
-          <InputWrapperChild>
+          <!--          <InputWrapperChild>
             <template v-slot:icon>
               <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
             </template>
@@ -54,7 +57,7 @@ export default {
 
               <a href="#" @click="console.log('moo')">moo</a>
             </template>
-          </InputWrapperChild>
+          </InputWrapperChild>-->
         </InputWrapper>
       </div>
 
@@ -67,6 +70,4 @@ export default {
   </form>
 
   <div>what did the user type? {{ userInput }}</div>
-  
-  -->
 </template>

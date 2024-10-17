@@ -39,7 +39,7 @@ import { markdown } from '@/services'
 export default {
   name: 'MarkdownPreview',
   mounted() {
-    console.log('window.setTimeout: ' + (window.setTimeout ? 'y' : 'n'))
+    // console.log('window.setTimeout: ' + (window.setTimeout ? 'y' : 'n'))
   },
   components: { InputWrapperMenuButton, InputWrapperChild },
   methods: {

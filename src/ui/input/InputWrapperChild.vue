@@ -1,12 +1,16 @@
-<script>
-import { inject, onMounted } from 'vue'
+<script lang="ts">
+import { defineComponent, inject, onMounted } from 'vue'
 
-export default {
+import type { Slot } from 'vue'
+import type { RegisterChildFunction } from '@/ui/input/input'
+
+export default defineComponent({
   name: 'InputWrapperChild',
-  setup(props, { slots }) {
-    const registerChild = inject('registerChild')
+  setup(_, { slots }) {
+    const registerChild = inject<RegisterChildFunction>('registerChild')
+
     onMounted(() => {
-      if (slots.panel && slots.icon) {
+      if (slots.panel && slots.icon && registerChild) {
         registerChild({
           iconVisible: false,
           panelVisible: false,
@@ -16,8 +20,10 @@ export default {
         console.log('registering ...')
       }
     })
+
+    return {}
   }
-}
+})
 </script>
 
 <template>

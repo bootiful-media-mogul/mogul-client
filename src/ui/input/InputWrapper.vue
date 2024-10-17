@@ -5,8 +5,12 @@
       <slot></slot>
     </div>
     <div class="icon-column">
-      <InputWrapperMenu :disabled="panelVisible || this.childSlots.length <= 1 "
-                        class="icon-column-menu" @down="down" @up="up">
+      <InputWrapperMenu
+        :disabled="panelVisible || childSlots.length <= 1"
+        class="icon-column-menu"
+        @down="down"
+        @up="up"
+      >
         <div
           @click="togglePanel(slot)"
           class="icon unselectable"
@@ -33,18 +37,19 @@
 </template>
 
 <script lang="ts">
-import { ref, provide, onMounted, onBeforeUnmount } from 'vue'
+import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
+import type { PanelSlot } from './input'
 
 export default {
   name: 'InputWrapper',
   components: { InputWrapperMenuButton, InputWrapperMenu },
 
   setup(props, { emit }) {
-    const text = ref('')
-    const root = ref(null as HTMLElement | null)
-    const inputElement = ref(null as HTMLInputElement | null | undefined)
+    const text = ref<String>('')
+    const root = ref<HTMLElement>()
+    const inputElement = ref<HTMLInputElement>() //null as HTMLInputElement | null | undefined)
 
     const updateValue = (event: Event) => {
       const elementTarget = event?.target as HTMLInputElement
@@ -56,21 +61,21 @@ export default {
     const events = 'input,change'.split(',')
 
     onMounted(() => {
-      inputElement.value = (root.value as HTMLElement | null)?.querySelector('input, textarea')
+      inputElement.value = root.value?.querySelector('input, textarea')!!
       if (inputElement.value) {
-        events.forEach((evt) => inputElement.value.addEventListener(evt, updateValue))
+        events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
       }
     })
 
     onBeforeUnmount(() => {
       if (inputElement.value) {
-        events.forEach((evt) => inputElement.value.removeEventListener(evt, updateValue))
+        events.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
       }
     })
 
-    const childSlots = ref([])
+    const childSlots = ref<Array<PanelSlot>>([])
 
-    const registerChild = (slotPair) => {
+    const registerChild = (slotPair: PanelSlot) => {
       childSlots.value.push(slotPair)
     }
 
@@ -93,7 +98,7 @@ export default {
     this.childSlots[0].iconVisible = true
   },
   methods: {
-    move(direction) {
+    move(direction: number) {
       const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
       const selected =
         currentlyVisiblePanel && currentlyVisiblePanel.length > 0
@@ -115,7 +120,7 @@ export default {
     up() {
       this.move(-1)
     },
-    togglePanel(slot) {
+    togglePanel(slot: PanelSlot) {
       this.childSlots.forEach((slot) => {
         slot.panelVisible = false
       })
@@ -143,7 +148,6 @@ export default {
 
   grid-template-columns: auto min-content;
 }
- 
 
 .input-wrapper {
   grid-area: input;

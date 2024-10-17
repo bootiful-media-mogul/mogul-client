@@ -36,11 +36,10 @@ export default {
         <label for="title">input </label>
 
         <InputWrapper v-model="userInput">
-
           <input type="text" id="title" name="title" :value="userInput" />
 
           <WritingAssistant v-model="userInput" />
-          
+
           <InputWrapperChild>
             <template v-slot:icon>
               <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
@@ -52,8 +51,6 @@ export default {
               <a href="#" @click="console.log('moo')">moo</a>
             </template>
           </InputWrapperChild>
-
-
         </InputWrapper>
       </div>
 

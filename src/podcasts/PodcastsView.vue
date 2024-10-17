@@ -12,8 +12,6 @@
           <input type="text" required id="title" v-model="title" />
           <WritingAssistant v-model="title" />
         </InputWrapper>
-
-
       </div>
       <div class="pure-controls">
         <button
@@ -105,14 +103,14 @@ async function refresh() {
 }
 
 export default {
-  components: { WritingAssistant, InputWrapper,  },
+  components: { WritingAssistant, InputWrapper },
 
   async created() {
     this.podcasts = await refresh()
   },
 
   methods: {
-    dts: function(date: number) {
+    dts: function (date: number) {
       return dateTimeToString(date)
     },
     async deletePodcast(id: number) {

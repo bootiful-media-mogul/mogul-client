@@ -33,7 +33,6 @@
   border-bottom-right-radius: var(--button-radius);
 }
 
-
 .writing-tools-panel .styles {
   display: grid;
   grid-template-areas: ' friendly-button concise-button professional-button  ';
@@ -88,7 +87,6 @@
   grid-area: proofread-button;
 }
 
-
 .proposal-approval a {
   font-size: small;
 }
@@ -101,14 +99,9 @@
 </style>
 <template>
   <InputWrapperChild>
-
     <template v-slot:panel>
-
-
       <div class="writing-tools-panel">
-
         <div v-if="!proposalApprovalRequired">
-
           <div :class="toolsClasses">
             <WritingAssistantButton label="Proofread" class="proofread-button" @click="proofread">
               <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
@@ -123,8 +116,11 @@
             </WritingAssistantButton>
           </div>
           <div :class="rewriteStylesClasses" v-if="rewriteStylesVisible">
-
-            <WritingAssistantButton label="Friendly" class="friendly-button" @click="rewriteFriendly">
+            <WritingAssistantButton
+              label="Friendly"
+              class="friendly-button"
+              @click="rewriteFriendly"
+            >
               <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
             </WritingAssistantButton>
 
@@ -132,7 +128,11 @@
               <img alt="concise" src="../assets/images/writing-tools/concise.png" />
             </WritingAssistantButton>
 
-            <WritingAssistantButton label="Professional" class="professional-button" @click="rewriteProfessional">
+            <WritingAssistantButton
+              label="Professional"
+              class="professional-button"
+              @click="rewriteProfessional"
+            >
               <img alt="professional" src="../assets/images/writing-tools/professional.png" />
             </WritingAssistantButton>
           </div>
@@ -142,8 +142,6 @@
           <a class="revert-link" href="#" @click.prevent="revert">revert</a>
         </div>
       </div>
-
-
     </template>
     <template v-slot:icon>
       <InputWrapperMenuButton :icon="asset" />
@@ -162,9 +160,7 @@ export default {
   name: 'WritingAssistant',
   components: { WritingAssistantButton, InputWrapperMenuButton, InputWrapperChild },
 
-
   methods: {
-
     reset() {
       this.proposalApprovalRequired = false
       this.rewriteStylesVisible = false
@@ -247,7 +243,6 @@ export default {
       }
     }
   },
-
 
   data() {
     return {

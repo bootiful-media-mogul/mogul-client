@@ -14,9 +14,7 @@ export default {
   },
   methods: {
     swap() {
-      if (this.iconHover)
-        this.src = this.icon == this.src ? this.iconHover : this.icon
-      
+      if (this.iconHover) this.src = this.icon == this.src ? this.iconHover : this.icon
     }
   }
 }

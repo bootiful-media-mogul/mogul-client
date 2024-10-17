@@ -46,8 +46,7 @@
 <script lang="ts">
 export default {
   name: 'WritingAssistantButton',
-  mounted() {
-  },
+  mounted() {},
   data() {
     return {
       backgroundStyle: `background-image: url('${this.iconImage}')  `

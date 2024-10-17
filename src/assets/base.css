@@ -178,6 +178,16 @@ html {
   width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
 }
+
+
+.unselectable {
+  user-select: none; /* For modern browsers */
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For older Firefox versions */
+  -ms-user-select: none; /* For older IE/Edge versions */
+}
+
+
 .close-icon:hover {
   background: url('../assets/images/panel-close.png');
   height: var(--icon-width);

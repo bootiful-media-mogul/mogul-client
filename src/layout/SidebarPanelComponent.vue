@@ -138,7 +138,6 @@ export default {
     this.bgPanelNode = bgPanelNode
   },
   created() {
-    console.log('created')
     // allow child components to ask for visibility in their parent panels
     events.on('sidebar-panel-closed', (event: any) => {
       if (this.$el.contains(event)) {

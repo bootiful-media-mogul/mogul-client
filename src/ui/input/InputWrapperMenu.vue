@@ -1,0 +1,84 @@
+<template>
+  <div class="menu">
+    <div :class="'unselectable arrow up ' + ( this.disabled ? 'disabled':'') " ref="up" @click="up">◀</div>
+    <div class="unselectable icons">
+      <slot> the buttons should go here otherwise this will look like crap!</slot>
+    </div>
+    <div :class="'unselectable arrow down ' + ( this.disabled ? 'disabled':'')" ref="down" @click="down">▶</div>
+  </div>
+</template>
+<style scoped>
+.menu {
+  display: grid;
+  grid-template-areas: ' up icons down ';
+  grid-template-columns: 20px var(--icon-width) 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.arrow {
+  text-align: center;
+  cursor: pointer;
+}
+
+.arrow.down {
+  grid-area: down;
+}
+
+.icons {
+  grid-area: icons;
+}
+
+.arrow.up {
+  grid-area: up;
+  text-align: right;
+}
+
+/*.arrow:first-of-type {
+  padding-bottom: calc(var(--icon-width) / 3);
+}
+
+.arrow:last-of-type {
+  padding-top: calc(var(--icon-width) / 3);
+}*/
+
+.arrow.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+</style>
+<script lang="ts">
+export default {
+  methods: {
+    up() {
+      this.$emit('up')
+    },
+    down() {
+      this.$emit('down')
+    },
+    enable(r) {
+      r.classList.remove('disabled')
+    },
+    disable(r) {
+      r.classList.add('disabled')
+      // r.style.border = '1px solid orange'
+    }
+  },
+  mounted() {
+    
+  },
+  props: { disabled: { type: Boolean, default: false } },
+  watch: {
+    disabled(oldValue, newValue) {
+      if (!newValue) {
+        this.disable(this.$refs.up)
+        this.disable(this.$refs.down)
+      } else {
+        this.enable(this.$refs.up)
+        this.enable(this.$refs.down)
+      }
+    }
+  },
+  emits: ['up', 'down']
+}
+</script>

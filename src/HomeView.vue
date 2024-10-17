@@ -1,13 +1,25 @@
 <script lang="ts">
-// import WritingTools from '@/composition/WritingTools.vue'
+import InputWrapper from '@/ui/input/InputWrapper.vue'
+import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
+import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
+import pencilIcon from '@/assets/images/edit.png'
+import pencilIconHighlight from '@/assets/images/edit-highlight.png'
+import WritingAssistant from '@/writing/WritingAssistant.vue'
 
 export default {
+  name: 'HomeView',
   components: {
-    // WritingTools
+    WritingAssistant,
+    InputWrapperMenuButton,
+    InputWrapper,
+    InputWrapperChild
   },
+  methods: {},
   data() {
     return {
-      userInput: ''
+      userInput: '',
+      aiIcon: pencilIcon,
+      aiIconHighlight: pencilIconHighlight
     }
   }
 }
@@ -15,15 +27,34 @@ export default {
 
 <template>
   <h1>Home</h1>
-  <!--
+
   <form class="pure-form pure-form-stacked">
     <fieldset>
-      <legend>Simple form to remove later</legend>
+      <legend>a nice form</legend>
+
       <div class="pure-control-group">
-        <label for="title"> some text we need input on </label>
-        <WritingTools v-model="userInput">
-          <textarea :value="userInput" />
-        </WritingTools>
+        <label for="title">input </label>
+
+        <InputWrapper v-model="userInput">
+
+          <input type="text" id="title" name="title" :value="userInput" />
+
+          <WritingAssistant v-model="userInput" />
+          
+          <InputWrapperChild>
+            <template v-slot:icon>
+              <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
+            </template>
+
+            <template v-slot:panel>
+              the default a {{ userInput }}
+
+              <a href="#" @click="console.log('moo')">moo</a>
+            </template>
+          </InputWrapperChild>
+
+
+        </InputWrapper>
       </div>
 
       <div class="pure-controls">
@@ -33,6 +64,6 @@ export default {
       </div>
     </fieldset>
   </form>
-  <div>{{ userInput }}</div>
-  -->
+
+  <div>what did the user type? {{ userInput }}</div>
 </template>

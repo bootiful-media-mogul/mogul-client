@@ -7,9 +7,13 @@
         <label for="title">
           {{ $t('podcasts.new-podcast.title') }}
         </label>
-        <WritingTools v-model="title">
+
+        <InputWrapper v-model="title">
           <input type="text" required id="title" v-model="title" />
-        </WritingTools>
+          <WritingAssistant v-model="title" />
+        </InputWrapper>
+
+
       </div>
       <div class="pure-controls">
         <button
@@ -93,21 +97,22 @@
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'
 import { dateTimeToString } from '@/dates'
-import WritingTools from '@/composition/WritingTools.vue'
+import WritingAssistant from '@/writing/WritingAssistant.vue'
+import InputWrapper from '@/ui/input/InputWrapper.vue'
 
 async function refresh() {
   return await podcasts.podcasts()
 }
 
 export default {
-  components: { WritingTools },
+  components: { WritingAssistant, InputWrapper,  },
 
   async created() {
     this.podcasts = await refresh()
   },
 
   methods: {
-    dts: function (date: number) {
+    dts: function(date: number) {
       return dateTimeToString(date)
     },
     async deletePodcast(id: number) {

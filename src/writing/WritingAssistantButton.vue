@@ -1,5 +1,5 @@
 <template>
-  <div class="writing-tools-button">
+  <div class="writing-tools-button unselectable">
     <div class="writing-tools-button-content">
       <div class="writing-tools-button-content-icon">
         <slot />
@@ -17,7 +17,6 @@
   border-radius: var(--button-radius);
   background-color: lightgrey;
   padding: calc(var(--gutter-space) / 3);
-
   font-size: small;
 }
 
@@ -28,15 +27,6 @@
   grid-template-columns: var(--writing-tools-panel-icon-size) auto;
   align-items: center;
   height: var(--writing-tools-panel-icon-size);
-  /*
-  display: grid;
-  grid-template-areas:
-    '. icon . label .';
-  grid-template-columns: 
-      auto var(--writing-tools-panel-icon-size) calc(var(--gutter-space)/3) auto auto ;
-  border: 1px solid red;
-  
-  */
 }
 
 .writing-tools-button-content-label {
@@ -51,17 +41,16 @@
   width: var(--writing-tools-panel-icon-size);
   grid-area: icon;
 }
-
 </style>
 
 <script lang="ts">
 export default {
-  name: 'WritingToolsButton',
+  name: 'WritingAssistantButton',
   mounted() {
   },
   data() {
     return {
-      backgroundStyle: ` background-image: url('${this.iconImage}')  `
+      backgroundStyle: `background-image: url('${this.iconImage}')  `
     }
   },
   props: {

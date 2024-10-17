@@ -41,7 +41,8 @@ export default {
         <label for="title">input </label>
 
         <InputWrapper v-model="userInput">
-          <textarea type="text" id="title" name="title" :value="userInput"></textarea>
+          
+          <textarea type="text" id="title" rows="10" name="title" :value="userInput"></textarea>
 
           <MarkdownPreview v-model="userInput" />
           <WritingAssistant v-model="userInput" />

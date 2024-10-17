@@ -9,9 +9,14 @@ export default {
       src: this.iconHover
     }
   },
+  mounted() {
+    this.src = this.icon
+  },
   methods: {
     swap() {
-      if (this.iconHover) this.src = this.icon == this.src ? this.iconHover : this.icon
+      if (this.iconHover)
+        this.src = this.icon == this.src ? this.iconHover : this.icon
+      
     }
   }
 }

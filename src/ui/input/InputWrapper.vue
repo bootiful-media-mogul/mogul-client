@@ -5,7 +5,8 @@
       <slot></slot>
     </div>
     <div class="icon-column">
-      <InputWrapperMenu :disabled="panelVisible" class="icon-column-menu" @down="down" @up="up">
+      <InputWrapperMenu :disabled="panelVisible || this.childSlots.length <= 1 "
+                        class="icon-column-menu" @down="down" @up="up">
         <div
           @click="togglePanel(slot)"
           class="icon unselectable"
@@ -23,7 +24,9 @@
     </div>
     <div class="panel" v-if="panelVisible">
       <div v-for="(slot, index) in childSlots" :key="index">
-        <component v-if="slot.panelVisible" :is="slot.panel"></component>
+        <div v-if="slot.panelVisible">
+          <component :is="slot.panel"></component>
+        </div>
       </div>
     </div>
   </div>
@@ -149,19 +152,14 @@ export default {
   grid-area: input;
 }
 
-.panel {
-  grid-area: panel;
-}
-
 .icon-column {
   display: grid;
   grid-area: icons;
 }
 
 .panel {
-  grid-area: panel;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
-  /*--writing-tools-panel-icon-size: 20px;*/
+  grid-area: panel;
   margin-top: calc(-2 * var(--writing-tools-panel-padding));
   padding-bottom: var(--writing-tools-panel-padding);
   padding-left: var(--writing-tools-panel-padding);
@@ -169,7 +167,6 @@ export default {
   padding-top: calc(3 * var(--writing-tools-panel-padding));
   background-color: rgba(255, 255, 255, 0.3);
   border-radius: 4px;
-  z-index: -1;
 }
 
 .icon {

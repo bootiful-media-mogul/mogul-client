@@ -1,5 +1,5 @@
 <template>
-  <div class="writing-tools-button">
+  <div @click="$emit ('click')" class="writing-tools-button">
     <div class="writing-tools-button-content">
       <div class="writing-tools-button-content-icon">
         <slot />
@@ -56,7 +56,9 @@
 <script lang="ts">
 export default {
   name: 'WritingToolsButton',
-  mounted() {},
+  mounted() {
+  },
+  emits: ['click'],
   data() {
     return {
       backgroundStyle: ` background-image: url('${this.iconImage}')  `

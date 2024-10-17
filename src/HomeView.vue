@@ -4,12 +4,12 @@ import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
-import  WritingTools from '@/ui/input/FakeWritingTools.vue'
+import WritingAssistant from '@/composition/WritingAssistant.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    WritingTools,
+    WritingAssistant,
     InputWrapperMenuButton,
     InputWrapper,
     InputWrapperChild
@@ -36,18 +36,10 @@ export default {
         <label for="title">input </label>
 
         <InputWrapper v-model="userInput">
-          
+
           <input type="text" id="title" name="title" :value="userInput" />
-
-          <InputWrapperChild>
-            <template v-slot:icon>
-              <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
-            </template>
-
-            <template v-slot:panel> the default a {{ userInput }}</template>
-          </InputWrapperChild>
-
-          <WritingTools />
+          
+          <WritingAssistant />
         </InputWrapper>
       </div>
 

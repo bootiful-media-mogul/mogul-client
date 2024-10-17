@@ -132,7 +132,7 @@
       <div :class="toggleButtonClasses" @click="togglePanel">️</div>
     </div>
 
-    <div v-if="panelVisible" class="unselectable writing-tools-panel">
+    <div v-if="panelVisible" class="  writing-tools-panel">
       <div v-if="!proposalApprovalRequired">
         <div :class="toolsClasses">
           <WritingToolsButton label="Proofread" class="proofread-button" @click="proofread">

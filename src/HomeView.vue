@@ -12,7 +12,7 @@ import pencilIconHighlight from '@/assets/images/edit-highlight.png'
 export default {
   name: 'HomeView',
   components: {
-/*    WritingAssistant,
+    /*    WritingAssistant,
     InputWrapperMenuButton,
     InputWrapper,
     InputWrapperChild*/

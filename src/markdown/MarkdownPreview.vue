@@ -44,13 +44,13 @@ export default {
   components: { InputWrapperMenuButton, InputWrapperChild },
   methods: {
 
-    async debouncingRender(md: string) {
+    async debouncingRender() {
       if (this.timer && this.timer > -1) {
         clearTimeout(this.timer)
       }
 
       this.timer = window.setTimeout(async () => {
-        await this.render(md)
+        await this.render(this.modelValue)
       }, 1000)
     },
     async render(md: string) {
@@ -60,11 +60,9 @@ export default {
   },
   watch: {
     modelValue: async function(o: string, n: string) {
-      // 
       // we're interested in the event, but we'll only 
       // want to render the actual value when the time comes.
-      //
-      await this.debouncingRender(this.modelValue)
+      await this.debouncingRender()
     }
   },
 

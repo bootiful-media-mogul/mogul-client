@@ -4,7 +4,7 @@ import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
-import WritingAssistant from '@/composition/WritingAssistant.vue'
+import WritingAssistant from '@/writing/WritingAssistant.vue'
 
 export default {
   name: 'HomeView',

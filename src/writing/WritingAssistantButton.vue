@@ -45,7 +45,7 @@
 
 <script lang="ts">
 export default {
-  name: 'WritingToolsButton',
+  name: 'WritingAssistantButton',
   mounted() {
   },
   data() {

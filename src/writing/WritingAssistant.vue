@@ -110,31 +110,31 @@
         <div v-if="!proposalApprovalRequired">
 
           <div :class="toolsClasses">
-            <WritingToolsButton label="Proofread" class="proofread-button" @click="proofread">
+            <WritingAssistantButton label="Proofread" class="proofread-button" @click="proofread">
               <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
-            </WritingToolsButton>
+            </WritingAssistantButton>
 
-            <WritingToolsButton
+            <WritingAssistantButton
               label="Rewrite"
               :class="rewriteToolsClasses"
               @click="toggleRewriteTools"
             >
               <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
-            </WritingToolsButton>
+            </WritingAssistantButton>
           </div>
           <div :class="rewriteStylesClasses" v-if="rewriteStylesVisible">
 
-            <WritingToolsButton label="Friendly" class="friendly-button" @click="rewriteFriendly">
+            <WritingAssistantButton label="Friendly" class="friendly-button" @click="rewriteFriendly">
               <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
-            </WritingToolsButton>
+            </WritingAssistantButton>
 
-            <WritingToolsButton label="Concise" class="concise-button" @click="rewriteConcise">
+            <WritingAssistantButton label="Concise" class="concise-button" @click="rewriteConcise">
               <img alt="concise" src="../assets/images/writing-tools/concise.png" />
-            </WritingToolsButton>
+            </WritingAssistantButton>
 
-            <WritingToolsButton label="Professional" class="professional-button" @click="rewriteProfessional">
+            <WritingAssistantButton label="Professional" class="professional-button" @click="rewriteProfessional">
               <img alt="professional" src="../assets/images/writing-tools/professional.png" />
-            </WritingToolsButton>
+            </WritingAssistantButton>
           </div>
         </div>
         <div class="proposal-approval" v-if="proposalApprovalRequired">
@@ -156,11 +156,11 @@ import asset from '@/assets/images/writing-tools/rewrite.png'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { ai } from '@/services'
-import WritingToolsButton from '@/composition/WritingToolsButton.vue'
+import WritingAssistantButton from '@/writing/WritingAssistantButton.vue'
 
 export default {
   name: 'WritingAssistant',
-  components: { WritingToolsButton, InputWrapperMenuButton, InputWrapperChild },
+  components: { WritingAssistantButton, InputWrapperMenuButton, InputWrapperChild },
 
 
   methods: {

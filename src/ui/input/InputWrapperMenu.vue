@@ -19,7 +19,11 @@
 .menu {
   display: grid;
   grid-template-areas: ' up icons down ';
-  grid-template-columns: 20px var(--icon-width) 20px;
+  /*
+    sort of ugly: the sum of these 3 values has to be duplicated exactly and made 
+    into a negative in the `base.css` definition for .writing-tools-container 
+  */
+  grid-template-columns: var(--gutter-space) var(--icon-width) var(--gutter-space);
   justify-content: center;
   align-items: center;
 }

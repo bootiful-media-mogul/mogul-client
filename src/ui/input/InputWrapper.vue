@@ -155,6 +155,7 @@ export default {
     ' panel . ';
 
   grid-template-columns: auto min-content;
+  margin-right: calc(calc(var(--gutter-space) + var(--icon-width) + var(--gutter-space)) * -1);
 }
 
 .input-wrapper {

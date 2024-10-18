@@ -23,7 +23,8 @@ export default {
 
 <template>
   <h1>Home</h1>
-<!--
+  
+  
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form</legend>
@@ -50,5 +51,4 @@ export default {
 
   <div>what did the user type? {{ userInput }}</div>
   
-  -->
 </template>

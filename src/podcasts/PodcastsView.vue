@@ -10,7 +10,9 @@
 
         <InputWrapper v-model="title">
           <input type="text" required id="title" v-model="title" />
-          <WritingAssistant v-model="title" />
+
+          <InputTools v-model="title" />
+
         </InputWrapper>
       </div>
       <div class="pure-controls">
@@ -97,20 +99,21 @@ import { Podcast, podcasts } from '@/services'
 import { dateTimeToString } from '@/dates'
 import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
+import InputTools from '@/ui/InputTools.vue'
 
 async function refresh() {
   return await podcasts.podcasts()
 }
 
 export default {
-  components: { WritingAssistant, InputWrapper },
+  components: { InputTools, WritingAssistant, InputWrapper },
 
   async created() {
     this.podcasts = await refresh()
   },
 
   methods: {
-    dts: function (date: number) {
+    dts: function(date: number) {
       return dateTimeToString(date)
     },
     async deletePodcast(id: number) {

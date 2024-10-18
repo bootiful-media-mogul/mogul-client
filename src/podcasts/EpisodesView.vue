@@ -13,6 +13,7 @@ import { reactive } from 'vue'
 import { dateTimeToString } from '@/dates'
 import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
+import InputTools from '@/ui/InputTools.vue'
 
 export default {
   mounted(): void {
@@ -20,6 +21,7 @@ export default {
   },
 
   components: {
+    InputTools,
     InputWrapper,
     WritingAssistant,
     ManagedFileComponent
@@ -314,7 +316,7 @@ export default {
           </label>
           <InputWrapper v-model="title">
             <input id="episodeTitle" required v-model="title" type="text" />
-            <WritingAssistant v-model="title" />
+            <InputTools v-model="title" />
           </InputWrapper>
         </div>
         <div class="form-row">
@@ -323,7 +325,7 @@ export default {
           </label>
           <InputWrapper v-model="description">
             <textarea id="episodeDescription" rows="10" required v-model="description" />
-            <WritingAssistant v-model="description" />
+            <InputTools v-model="description" />
           </InputWrapper>
         </div>
         <div class="podcast-episode-controls-row">

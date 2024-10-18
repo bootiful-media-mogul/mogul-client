@@ -45,7 +45,6 @@ export default {
       if (this.timer && this.timer > -1) {
         clearTimeout(this.timer)
       }
-
       const mv = this.modelValue
       this.timer = window.setTimeout(async () => {
         await this.render(mv)

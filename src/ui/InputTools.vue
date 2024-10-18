@@ -9,7 +9,6 @@
       @update:modelValue="updateValue"
     />
 
-    [[ {{ modelValue }} ]]
   </div>
 </template>
 
@@ -25,7 +24,7 @@ export default {
   props: ['modelValue'],
   watch: {
     modelValue(o, n) {
-      console.log(o)
+      //console.log(o)
     }
   },
   emits: ['update:modelValue'],

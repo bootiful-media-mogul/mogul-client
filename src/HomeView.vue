@@ -1,19 +1,8 @@
 <script lang="ts">
-/*
-import InputWrapper from '@/ui/input/InputWrapper.vue'
-import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
-import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
-import WritingAssistant from '@/writing/WritingAssistant.vue'
-*/
-
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
-
-
-// import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
-// import MarkdownPreview from '@/ui/markdown/MarkdownPreview.vue'
 
 export default {
   name: 'HomeView',
@@ -46,7 +35,7 @@ export default {
 
           <textarea type="text" id="title" rows="10" name="title" :value="userInput"></textarea>
 
-          <InputTools :model-value="userInput" />
+          <InputTools v-model="userInput" />
 
         </InputWrapper>
       </div>

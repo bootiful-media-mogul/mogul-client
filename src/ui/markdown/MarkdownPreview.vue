@@ -52,7 +52,7 @@ export default {
       }, 1000)
     },
     async render(md: string) {
-      if (md.trim() === '') return
+      if ( !md || md.trim() === '') return
       this.rendered = await markdown.render(md)
     }
   },

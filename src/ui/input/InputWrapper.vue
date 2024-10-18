@@ -60,7 +60,7 @@ export default {
       const txt = elementTarget.value
       updateInputValue(txt)
     }
-    
+
     const events = 'input,change'.split(',')
 
     onMounted(() => {
@@ -80,8 +80,12 @@ export default {
       childSlots.value.push(slotPair)
     }
 
+    const readInputValue = () => {
+      return text.value || ''
+    }
     provide('updateInputValue', updateInputValue)
     provide('registerChild', registerChild)
+    provide('readInputValue', readInputValue)
 
     return {
       childSlots,

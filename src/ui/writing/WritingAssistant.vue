@@ -162,15 +162,17 @@ export default {
   name: 'WritingAssistant',
   components: { WritingAssistantButton, InputWrapperMenuButton, InputWrapperChild },
 
-  setup (props) {
+  setup(_) {
     const update = inject('updateInputValue')
+    const read = inject('readInputValue')
     return {
-      updateValue : update 
+      updateValue: update,
+      readValue: read
     }
-  } ,
+  },
   watch: {
     async modelValue(o, n) {
-      console.log(o + ':' + n)
+      //console.log(o + ':' + n)
     }
   },
   methods: {
@@ -192,7 +194,7 @@ export default {
     },
 
     proposeUpdatedText(updatedText: string) {
-      this.previousModelValue = this.modelValue
+      this.previousModelValue = this.readValue()
       this.$emit('update:modelValue', updatedText)
       this.proposalApprovalRequired = true
       console.log('proposed ' + updatedText)
@@ -201,52 +203,51 @@ export default {
 
 
     async proofread() {
-      if (this.modelValue.trim() === '') return
+      if (this.readValue().trim() === '') return
 
       if (this.rewriteStylesVisible) this.toggleRewriteTools()
 
       const proofread = await ai.chat(
         `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
         ==========================================
-        ${this.modelValue}
+        ${this.readValue()}
       `
       )
       this.proposeUpdatedText(proofread)
     },
 
     async rewriteProfessional() {
-      if (this.modelValue.trim() === '') return
+      if (this.readValue().trim() === '') return
       const updated = await ai.chat(
         `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
         ==========================================
-        ${this.modelValue}
+        ${this.readValue()}
       `
       )
       this.proposeUpdatedText(updated)
     },
 
     async rewriteConcise() {
-      if (this.modelValue.trim() === '') return
+      if (this.readValue().trim() === '') return
       const updated = await ai.chat(
         `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
         ==========================================
-        ${this.modelValue}
+        ${this.readValue()}
       `
       )
       this.proposeUpdatedText(updated)
     },
     async rewriteFriendly() {
-      if (this.modelValue.trim() === '') return
+      if (this.readValue().trim() === '') return
       const updated = await ai.chat(
         `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
         ==========================================
-        ${this.modelValue}
+        ${this.readValue()}
       `
       )
       this.proposeUpdatedText(updated)
     },
     toggleRewriteTools() {
-      console.log('toggling rewrite tools for ' + this.modelValue)
       this.rewriteStylesVisible = !this.rewriteStylesVisible
       if (this.rewriteStylesVisible) {
         this.rewriteStylesClasses += ' active'

@@ -172,7 +172,7 @@ export default {
     }
   },
   watch: {
-    async modelValue(o, n) {
+    async modelValue(o: string, n: string) {
       //console.log(o + ':' + n)
     }
   },

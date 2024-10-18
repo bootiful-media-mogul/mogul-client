@@ -14,6 +14,7 @@
     --date-column: calc(2 * 6em);
     --datetime-column: calc(2 * var(--date-column));
     --icon-size: 2.5em;
+    --icon-column-width: calc( var(--gutter-space) + var(--icon-width) + var(--gutter-space));
 }
 
 .managed-file-preview-image {
@@ -245,13 +246,13 @@ html {
 }
 
 .page {
-    
+
     display: grid;
     grid-template-areas:
     'welcome welcome welcome'
     'toolbar toolbar toolbar'
     'main . sidebar';
-    /*todo fix this extra row so its a fixed */
+    /* todo fix this extra row so it's a fixed */
     grid-template-rows: auto auto auto;
     grid-template-columns: auto var(--main-toolbar-gutter) minmax(
       min-content,

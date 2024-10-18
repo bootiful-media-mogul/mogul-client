@@ -149,13 +149,14 @@ export default {
 
 <style scoped>
 .writing-tools-container {
+  
   display: grid;
   grid-template-areas:
     ' input icons '
     ' panel . ';
 
-  grid-template-columns: auto min-content;
-  margin-right: calc(calc(var(--gutter-space) + var(--icon-width) + var(--gutter-space)) * -1);
+  grid-template-columns: auto var(--icon-column-width);
+  margin-right: calc(var(--icon-column-width) * -1);
 }
 
 .input-wrapper {

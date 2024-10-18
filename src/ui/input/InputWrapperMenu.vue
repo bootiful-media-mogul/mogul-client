@@ -18,14 +18,15 @@
 <style scoped>
 .menu {
   display: grid;
-  grid-template-areas: ' up icons down ';
+  grid-template-areas: ' . up icons down  . ';
   /*
     sort of ugly: the sum of these 3 values has to be duplicated exactly and made 
     into a negative in the `base.css` definition for .writing-tools-container 
   */
-  grid-template-columns: var(--gutter-space) var(--icon-width) var(--gutter-space);
+  grid-template-columns: auto  var(--gutter-space) var(--icon-width) var(--gutter-space) auto ;
   justify-content: center;
   align-items: center;
+  width: var( --icon-column-width );
 }
 
 .arrow {

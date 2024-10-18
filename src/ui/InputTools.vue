@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import MarkdownPreview from '@/ui/markdown/MarkdownPreview.vue'
 import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 
@@ -23,8 +23,7 @@ export default {
   },
   props: ['modelValue'],
   watch: {
-    modelValue(o, n) {
-      //console.log(o)
+    modelValue( oldValue: string,  newValue : string) {
     }
   },
   emits: ['update:modelValue'],

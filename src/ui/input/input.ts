@@ -14,4 +14,6 @@ export interface PanelSlot extends Slot {
   icon: HTMLElement
 }
 
+export type UpdateValueFunction = (text: string) => void
+export type ReadValueFunction = () => string
 export type RegisterChildFunction = (child: ChildRegistration) => void

@@ -157,14 +157,15 @@ import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { ai } from '@/services'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 import { inject } from 'vue'
+import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
 
 export default {
   name: 'WritingAssistant',
   components: { WritingAssistantButton, InputWrapperMenuButton, InputWrapperChild },
 
   setup(_) {
-    const update = inject('updateInputValue')
-    const read = inject('readInputValue')
+    const update = inject<UpdateValueFunction>('updateInputValue')!
+    const read = inject<ReadValueFunction>('readInputValue')!
     return {
       updateValue: update,
       readValue: read

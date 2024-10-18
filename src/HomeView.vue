@@ -45,8 +45,9 @@ export default {
         <InputWrapper v-model="userInput">
 
           <textarea type="text" id="title" rows="10" name="title" :value="userInput"></textarea>
-          <InputTools :v-model="userInput"></InputTools>
-          
+
+          <InputTools :model-value="userInput" />
+
         </InputWrapper>
       </div>
 

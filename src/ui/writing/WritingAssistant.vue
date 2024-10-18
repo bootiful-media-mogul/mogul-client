@@ -156,11 +156,23 @@ import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { ai } from '@/services'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
+import { inject } from 'vue'
 
 export default {
   name: 'WritingAssistant',
   components: { WritingAssistantButton, InputWrapperMenuButton, InputWrapperChild },
 
+  setup (props) {
+    const update = inject('updateInputValue')
+    return {
+      updateValue : update 
+    }
+  } ,
+  watch: {
+    async modelValue(o, n) {
+      console.log(o + ':' + n)
+    }
+  },
   methods: {
     reset() {
       this.proposalApprovalRequired = false
@@ -183,7 +195,10 @@ export default {
       this.previousModelValue = this.modelValue
       this.$emit('update:modelValue', updatedText)
       this.proposalApprovalRequired = true
+      console.log('proposed ' + updatedText)
+      this.updateValue(updatedText)
     },
+
 
     async proofread() {
       if (this.modelValue.trim() === '') return

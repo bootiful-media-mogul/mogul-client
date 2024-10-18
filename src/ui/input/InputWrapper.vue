@@ -51,13 +51,16 @@ export default {
     const root = ref<HTMLElement>()
     const inputElement = ref<HTMLInputElement>() //null as HTMLInputElement | null | undefined)
 
-    const updateValue = (event: Event) => {
-      const elementTarget = event?.target as HTMLInputElement
-      const txt = elementTarget.value
+    const updateInputValue = (txt: string) => {
       emit('update:modelValue', txt)
       text.value = txt
     }
-
+    const updateValue = (event: Event) => {
+      const elementTarget = event?.target as HTMLInputElement
+      const txt = elementTarget.value
+      updateInputValue(txt)
+    }
+    
     const events = 'input,change'.split(',')
 
     onMounted(() => {
@@ -72,13 +75,12 @@ export default {
         events.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
       }
     })
-
     const childSlots = ref<Array<PanelSlot>>([])
-
     const registerChild = (slotPair: PanelSlot) => {
       childSlots.value.push(slotPair)
     }
 
+    provide('updateInputValue', updateInputValue)
     provide('registerChild', registerChild)
 
     return {
@@ -98,6 +100,8 @@ export default {
     this.childSlots[0].iconVisible = true
   },
   methods: {
+
+
     move(direction: number) {
       const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
       const selected =

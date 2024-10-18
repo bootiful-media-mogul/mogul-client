@@ -38,9 +38,6 @@ import { markdown } from '@/services'
 
 export default {
   name: 'MarkdownPreview',
-  mounted() {
-    // console.log('window.setTimeout: ' + (window.setTimeout ? 'y' : 'n'))
-  },
   components: { InputWrapperMenuButton, InputWrapperChild },
   methods: {
 
@@ -49,12 +46,13 @@ export default {
         clearTimeout(this.timer)
       }
 
+      const mv = this.modelValue
       this.timer = window.setTimeout(async () => {
-        await this.render(this.modelValue)
+        await this.render(mv)
       }, 1000)
     },
     async render(md: string) {
-      if (this.modelValue.trim() === '') return
+      if (md.trim() === '') return
       this.rendered = await markdown.render(md)
     }
   },

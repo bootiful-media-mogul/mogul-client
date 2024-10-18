@@ -11,7 +11,7 @@ import {
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
 import { dateTimeToString } from '@/dates'
-import WritingAssistant from '@/writing/WritingAssistant.vue'
+import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
 export default {

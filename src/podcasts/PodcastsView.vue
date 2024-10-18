@@ -95,7 +95,7 @@
 <script lang="ts">
 import { Podcast, podcasts } from '@/services'
 import { dateTimeToString } from '@/dates'
-import WritingAssistant from '@/writing/WritingAssistant.vue'
+import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
 async function refresh() {

@@ -9,14 +9,16 @@ import WritingAssistant from '@/writing/WritingAssistant.vue'
 import pencilIcon from '@/assets/images/edit.png'
 import pencilIconHighlight from '@/assets/images/edit-highlight.png'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
-import WritingAssistant from '@/writing/WritingAssistant.vue'
-import MarkdownPreview from '@/markdown/MarkdownPreview.vue'
+import InputTools from '@/ui/InputTools.vue'
+
+
+// import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
+// import MarkdownPreview from '@/ui/markdown/MarkdownPreview.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    MarkdownPreview,
-    WritingAssistant,
+    InputTools,
     InputWrapper
   },
   methods: {},
@@ -41,23 +43,10 @@ export default {
         <label for="title">input </label>
 
         <InputWrapper v-model="userInput">
-          
+
           <textarea type="text" id="title" rows="10" name="title" :value="userInput"></textarea>
-
-          <MarkdownPreview v-model="userInput" />
-          <WritingAssistant v-model="userInput" />
-
-          <!--          <InputWrapperChild>
-            <template v-slot:icon>
-              <InputWrapperMenuButton :icon="aiIcon" :icon-hover="aiIconHighlight" />
-            </template>
-
-            <template v-slot:panel>
-              the default a {{ userInput }}
-
-              <a href="#" @click="console.log('moo')">moo</a>
-            </template>
-          </InputWrapperChild>-->
+          <InputTools :v-model="userInput"></InputTools>
+          
         </InputWrapper>
       </div>
 

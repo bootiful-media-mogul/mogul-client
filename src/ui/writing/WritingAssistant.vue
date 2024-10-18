@@ -104,7 +104,7 @@
         <div v-if="!proposalApprovalRequired">
           <div :class="toolsClasses">
             <WritingAssistantButton label="Proofread" class="proofread-button" @click="proofread">
-              <img alt="proofread" src="../assets/images/writing-tools/proofread.png" />
+              <img alt="proofread" src="../../assets/images/writing-tools/proofread.png" />
             </WritingAssistantButton>
 
             <WritingAssistantButton
@@ -112,7 +112,7 @@
               :class="rewriteToolsClasses"
               @click="toggleRewriteTools"
             >
-              <img alt="rewrite" src="../assets/images/writing-tools/rewrite.png" />
+              <img alt="rewrite" src="../../assets/images/writing-tools/rewrite.png" />
             </WritingAssistantButton>
           </div>
           <div :class="rewriteStylesClasses" v-if="rewriteStylesVisible">
@@ -121,11 +121,11 @@
               class="friendly-button"
               @click="rewriteFriendly"
             >
-              <img alt="friendly" src="../assets/images/writing-tools/friendly.png" />
+              <img alt="friendly" src="../../assets/images/writing-tools/friendly.png" />
             </WritingAssistantButton>
 
             <WritingAssistantButton label="Concise" class="concise-button" @click="rewriteConcise">
-              <img alt="concise" src="../assets/images/writing-tools/concise.png" />
+              <img alt="concise" src="../../assets/images/writing-tools/concise.png" />
             </WritingAssistantButton>
 
             <WritingAssistantButton
@@ -133,7 +133,7 @@
               class="professional-button"
               @click="rewriteProfessional"
             >
-              <img alt="professional" src="../assets/images/writing-tools/professional.png" />
+              <img alt="professional" src="../../assets/images/writing-tools/professional.png" />
             </WritingAssistantButton>
           </div>
         </div>
@@ -155,7 +155,7 @@ import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { ai } from '@/services'
-import WritingAssistantButton from '@/writing/WritingAssistantButton.vue'
+import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 
 export default {
   name: 'WritingAssistant',

@@ -49,12 +49,13 @@ export default {
   setup(props, { emit }) {
     const text = ref<String>('')
     const root = ref<HTMLElement>()
-    const inputElement = ref<HTMLInputElement>() //null as HTMLInputElement | null | undefined)
+    const inputElement = ref<HTMLInputElement>()
 
     const updateInputValue = (txt: string) => {
       emit('update:modelValue', txt)
       text.value = txt
     }
+
     const updateValue = (event: Event) => {
       const elementTarget = event?.target as HTMLInputElement
       const txt = elementTarget.value
@@ -105,7 +106,6 @@ export default {
   },
   methods: {
 
-
     move(direction: number) {
       const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
       const selected =
@@ -149,7 +149,7 @@ export default {
 
 <style scoped>
 .writing-tools-container {
-  
+
   display: grid;
   grid-template-areas:
     ' input icons '

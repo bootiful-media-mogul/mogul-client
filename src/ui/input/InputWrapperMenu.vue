@@ -53,18 +53,13 @@
 <script lang="ts">
 export default {
   methods: {
-
-
     upArrowCss() {
       const c = () => {
         if (this.disabled) return 'disabled'
         if (!this.enableUpArrow) return 'disabled'
         return ''
       }
-      const css = c()
-      console.log('css: ' + css)
-      return css
-
+      return c()
     },
     downArrowCss() {
       const c = () => {
@@ -72,9 +67,7 @@ export default {
         if (!this.enableDownArrow) return 'disabled'
         return ''
       }
-      const css =  c()
-      console.log('css: '+css)
-      return css        
+      return c()        
     },
 
 

@@ -1,4 +1,3 @@
-<!-- Parent.vue -->
 <template>
   <div class="writing-tools-container">
     <div ref="root" class="input-wrapper">
@@ -10,6 +9,8 @@
         class="icon-column-menu"
         @down="down"
         @up="up"
+        :enableUpArrow="enableUpArrow()"
+        :enableDownArrow="enableDownArrow()"
       >
         <div
           @click="togglePanel(slot)"
@@ -49,12 +50,13 @@ export default {
   setup(props, { emit }) {
     const text = ref<String>('')
     const root = ref<HTMLElement>()
-    const inputElement = ref<HTMLInputElement>() //null as HTMLInputElement | null | undefined)
+    const inputElement = ref<HTMLInputElement>()  
 
     const updateInputValue = (txt: string) => {
       emit('update:modelValue', txt)
       text.value = txt
     }
+    
     const updateValue = (event: Event) => {
       const elementTarget = event?.target as HTMLInputElement
       const txt = elementTarget.value
@@ -105,6 +107,25 @@ export default {
   },
   methods: {
 
+    current(): PanelSlot | null {
+      const visible = this.childSlots.filter((slot) => slot.panelVisible)
+      if (visible && visible.length > 0) {
+        return visible[0]
+      }
+      return null
+    },
+    enableDownArrow() {
+      const c = this.current()
+      if (c == null) return true
+      return c !== this.childSlots [this.childSlots.length - 1]
+    },
+
+    enableUpArrow() {
+      const c = this.current()
+      if (c == null) return false
+      return c !== this.childSlots [0]
+    },
+
 
     move(direction: number) {
       const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
@@ -149,7 +170,6 @@ export default {
 
 <style scoped>
 .writing-tools-container {
-  
   display: grid;
   grid-template-areas:
     ' input icons '

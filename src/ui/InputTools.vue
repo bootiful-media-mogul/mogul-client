@@ -8,7 +8,6 @@
       :model-value="modelValue"
       @update:modelValue="updateValue"
     />
-
   </div>
 </template>
 
@@ -22,10 +21,6 @@ export default {
     MarkdownPreview, WritingAssistant
   },
   props: ['modelValue'],
-  watch: {
-    modelValue( oldValue: string,  newValue : string) {
-    }
-  },
   emits: ['update:modelValue'],
   methods: {
     updateValue() {

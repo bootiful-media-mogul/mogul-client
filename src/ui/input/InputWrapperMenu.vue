@@ -1,16 +1,14 @@
 <template>
   <div class="menu">
-    <div :class="'unselectable arrow up ' + (disabled ? 'disabled' : '')" ref="up" @click="up">
+    <div :class="'unselectable arrow up '  + upArrowCss()" ref="up" @click="up">
       ◀
     </div>
     <div class="unselectable icons">
-      <slot> the buttons should go here otherwise this will look like crap!</slot>
+      <slot>
+        the buttons should go here otherwise this will look like crap!
+      </slot>
     </div>
-    <div
-      :class="'unselectable arrow down ' + (disabled ? 'disabled' : '')"
-      ref="down"
-      @click="down"
-    >
+    <div :class="'unselectable arrow down ' +  downArrowCss()" ref="down" @click="down">
       ▶
     </div>
   </div>
@@ -55,6 +53,31 @@
 <script lang="ts">
 export default {
   methods: {
+
+
+    upArrowCss() {
+      const c = () => {
+        if (this.disabled) return 'disabled'
+        if (!this.enableUpArrow) return 'disabled'
+        return ''
+      }
+      const css = c()
+      console.log('css: ' + css)
+      return css
+
+    },
+    downArrowCss() {
+      const c = () => {
+        if (this.disabled) return 'disabled'
+        if (!this.enableDownArrow) return 'disabled'
+        return ''
+      }
+      const css =  c()
+      console.log('css: '+css)
+      return css        
+    },
+
+
     up() {
       this.$emit('up')
     },
@@ -66,12 +89,15 @@ export default {
     },
     disable(r: HTMLElement) {
       r.classList.add('disabled')
-      // r.style.border = '1px solid orange'
     }
   },
   mounted() {
   },
-  props: { disabled: { type: Boolean, default: false } },
+  props: {
+    disabled: { type: Boolean, default: false },
+    enableUpArrow: { type: Boolean, default: false },
+    enableDownArrow: { type: Boolean, default: false }
+  },
   watch: {
     disabled(oldValue, newValue) {
       const up = this.$refs.up as HTMLElement
@@ -81,7 +107,7 @@ export default {
         elements.forEach(el => this.disable(el))
       }// 
       else {
-        elements.forEach(el => this.enable (el))
+        //elements.forEach(el => this.enable(el))
       }
     }
   },

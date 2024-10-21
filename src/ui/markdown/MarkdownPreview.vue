@@ -1,4 +1,4 @@
-<style scoped>
+<style>
 
 .rendered-preview {
   font-size: small;
@@ -7,7 +7,7 @@
 }
 
 .rendered-preview a {
-  text-transform: revert;
+  text-transform: unset;
 }
 
 .rendered-preview h1, h2, h3, h4, h5, h6 {
@@ -51,7 +51,7 @@ export default {
       }, 1000)
     },
     async render(md: string) {
-      if ( !md || md.trim() === '') return
+      if (!md || md.trim() === '') return
       this.rendered = await markdown.render(md)
     }
   },

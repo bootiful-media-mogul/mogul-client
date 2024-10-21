@@ -7,7 +7,8 @@ import { ref } from 'vue'
 
 const mogulUsername = ref<string>();
 (async function() {
-  mogulUsername.value = await mogul.user()
+  const res = await mogul.user()
+  mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`;
 })()
 </script>
 

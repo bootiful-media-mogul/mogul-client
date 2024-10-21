@@ -1,10 +1,14 @@
 <!-- Parent.vue -->
 <template>
-  <div class="writing-tools-container">
-    <div ref="root" class="input-wrapper">
+  <div
+    ref="rootDiv"
+    :class="{ 'writing-tools-container': true, 'expanded': isFocused }"
+    :style="{ height: containerHeight + 'px' }"
+  >
+    <div ref="inputDiv" class="input-wrapper">
       <slot></slot>
     </div>
-    <div class="icon-column">
+    <div ref="toolboxDiv" class="toolbox">
       <InputWrapperMenu
         :disabled="panelVisible || childSlots.length <= 1"
         class="icon-column-menu"
@@ -26,7 +30,7 @@
         </div>
       </InputWrapperMenu>
     </div>
-    <div class="panel" v-if="panelVisible">
+    <div ref="panelDiv" class="panel" :style="{ display: panelVisible ? 'block' :'none' }">
       <div v-for="(slot, index) in childSlots" :key="index">
         <div v-if="slot.panelVisible">
           <component :is="slot.panel"></component>
@@ -37,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
+import { onBeforeUnmount, onMounted, onUnmounted, provide, ref } from 'vue'
 import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import type { PanelSlot } from './input'
@@ -47,9 +51,73 @@ export default {
   components: { InputWrapperMenuButton, InputWrapperMenu },
 
   setup(props, { emit }) {
+    const rootDiv = ref<HTMLElement>()
     const text = ref<String>('')
-    const root = ref<HTMLElement>()
+    const inputDiv = ref<HTMLElement>()
+    const toolboxDiv = ref<HTMLDivElement>()
+    const panelDiv = ref<HTMLDivElement>()
     const inputElement = ref<HTMLInputElement>()
+
+    /// new shrinking code after this
+    const isFocused = ref(false)
+    const containerHeight = ref(0)
+
+    function calculateHeightFor(e: HTMLDivElement): number {
+      const computedStyle = window.getComputedStyle(e)
+      return parseFloat(computedStyle.height)
+    }
+
+    const updateHeight = () => {
+      if (inputElement.value) {
+        toolboxDiv.value.style.display = 'block'
+        const panelHeight = (panelDiv.value && panelDiv.value?.style.display !== '' ? calculateHeightFor(panelDiv.value) : 0)
+        const heightOfToolbar = calculateHeightFor(toolboxDiv.value) + panelHeight
+        const elementHeight = inputElement.value.scrollHeight
+        containerHeight.value = isFocused.value ? elementHeight + heightOfToolbar : elementHeight
+      }
+    }
+
+
+    const checkMousePosition = (event: MouseEvent) => {
+      if (rootDiv.value) {
+        const rect = rootDiv.value.getBoundingClientRect()
+        isFocused.value = (
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom
+        )
+        if (!isFocused.value)
+          console.log('in focus? ' + isFocused.value)
+      }
+    }
+
+// Alternative method using mouseenter and mouseleave events
+
+
+    const handleFocus = () => {
+      isFocused.value = true
+      updateHeight()
+    }
+
+    const handleBlur = () => {
+      isFocused.value = false
+      updateHeight()
+    }
+
+    const focusIfInContainer = (e: MouseEvent) => {
+      if (checkMousePosition(e))
+        handleFocus()
+      // else 
+      //   handleBlur()
+    }
+
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateHeight)
+    })
+
+    /// new shrinking code before this
 
     const updateInputValue = (txt: string) => {
       emit('update:modelValue', txt)
@@ -57,7 +125,7 @@ export default {
     }
 
     const updateValue = (event: Event) => {
-      const elementTarget = event?.target as HTMLInputElement
+      const elementTarget: HTMLInputElement = event?.target as HTMLInputElement
       const txt = elementTarget.value
       updateInputValue(txt)
     }
@@ -65,17 +133,38 @@ export default {
     const events = 'input,change'.split(',')
 
     onMounted(() => {
-      inputElement.value = root.value?.querySelector('input, textarea')!!
+      inputElement.value = inputDiv.value?.querySelector('input, textarea')!!
+      if (inputElement.value.length > 1) {
+        inputElement.value = inputElement.value.slice(0, inputElement.value.length - 1)
+      }
       if (inputElement.value) {
         events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
+
+        inputElement.value.addEventListener('focus', handleFocus)
+        // inputElement.value.addEventListener('blur', handleBlur)
       }
+
+      if (rootDiv.value) {
+        // todo 
+        //      figure out how to not show these things. maybe we move the toolbox 
+        //      above the input element so that no matter how big or small the input is,
+        //      we can see it? should we set a timeout and set visible = false if they're 
+        //      still not in the element in 1s?
+        // inputWrapper.value?.addEventListener('mouseleave', focusIfInContainer)
+        rootDiv.value?.addEventListener('mouseenter', focusIfInContainer)
+      }
+
+      updateHeight() // on
+      window.addEventListener('resize', updateHeight)
     })
 
     onBeforeUnmount(() => {
       if (inputElement.value) {
-        events.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
+        rootDiv.value?.removeEventListener('mouseenter', focusIfInContainer)
+        events.forEach((evt) => inputElement.value?.removeEventListener(evt, updateValue))
       }
     })
+
     const childSlots = ref<Array<PanelSlot>>([])
     const registerChild = (slotPair: PanelSlot) => {
       childSlots.value.push(slotPair)
@@ -89,9 +178,18 @@ export default {
     provide('readInputValue', readInputValue)
 
     return {
+      isFocused,
+      containerHeight,
+      toolboxDiv,
+      handleFocus,
+      handleBlur,
+      rootDiv,
+      panelDiv,
+      //
       childSlots,
-      root,
+      inputDiv,
       text,
+      updateHeight,
       inputElement
     }
   },
@@ -105,7 +203,6 @@ export default {
     this.childSlots[0].iconVisible = true
   },
   methods: {
-
     move(direction: number) {
       const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
       const selected =
@@ -134,6 +231,7 @@ export default {
       })
       this.childSlots[this.childSlots.indexOf(slot)].panelVisible = true
       this.panelVisible = !this.panelVisible
+      this.updateHeight()
     }
   },
   emits: ['update:modelValue'],
@@ -148,27 +246,40 @@ export default {
 </script>
 
 <style scoped>
+
 .writing-tools-container {
+  border: 1px solid black;
 
   display: grid;
   grid-template-areas:
-    ' input icons '
-    ' panel . ';
+    ' input '
+    ' icons '
+    ' panel ';
 
-  grid-template-columns: auto var(--icon-column-width);
-  margin-right: calc(var(--icon-column-width) * -1);
+
+  transition: height 0.3s ease;
+  overflow: hidden;
+}
+
+
+.writing-tools-container.expanded > .toolbox {
+  display: block;
+  border: 1px solid red;
 }
 
 .input-wrapper {
   grid-area: input;
 }
 
-.icon-column {
+.toolbox {
   display: grid;
   grid-area: icons;
+
 }
 
+
 .panel {
+  display: none;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
   grid-area: panel;
   margin-top: calc(-2 * var(--writing-tools-panel-padding));

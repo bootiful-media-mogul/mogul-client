@@ -23,7 +23,7 @@
     sort of ugly: the sum of these 3 values has to be duplicated exactly and made 
     into a negative in the `base.css` definition for .writing-tools-container 
   */
-  grid-template-columns: auto  var(--gutter-space) var(--icon-width) var(--gutter-space) auto;
+  grid-template-columns: auto var(--gutter-space) var(--icon-width) var(--gutter-space) auto;
   justify-content: center;
   align-items: center;
   width: var(--icon-column-width);
@@ -69,8 +69,7 @@ export default {
       // r.style.border = '1px solid orange'
     }
   },
-  mounted() {
-  },
+  mounted() {},
   props: { disabled: { type: Boolean, default: false } },
   watch: {
     disabled(oldValue, newValue) {
@@ -78,10 +77,10 @@ export default {
       const down = this.$refs.down as HTMLElement
       const elements = [up, down]
       if (!newValue) {
-        elements.forEach(el => this.disable(el))
-      }// 
+        elements.forEach((el) => this.disable(el))
+      } //
       else {
-        elements.forEach(el => this.enable (el))
+        elements.forEach((el) => this.enable(el))
       }
     }
   },

@@ -173,7 +173,6 @@ export default {
   },
   watch: {
     async modelValue(o: string, n: string) {
-      //console.log(o + ':' + n)
     }
   },
   methods: {
@@ -201,7 +200,6 @@ export default {
       console.log('proposed ' + updatedText)
       this.updateValue(updatedText)
     },
-
 
     async proofread() {
       if (this.readValue().trim() === '') return

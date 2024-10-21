@@ -1,14 +1,7 @@
 <template>
   <div>
-    <WritingAssistant
-      :model-value="modelValue"
-      @update:modelValue="updateValue"
-    />
-    <MarkdownPreview
-      :model-value="modelValue"
-      @update:modelValue="updateValue"
-    />
-
+    <WritingAssistant :model-value="modelValue" @update:modelValue="updateValue" />
+    <MarkdownPreview :model-value="modelValue" @update:modelValue="updateValue" />
   </div>
 </template>
 
@@ -19,12 +12,12 @@ import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 export default {
   name: 'InputTools',
   components: {
-    MarkdownPreview, WritingAssistant
+    MarkdownPreview,
+    WritingAssistant
   },
   props: ['modelValue'],
   watch: {
-    modelValue( oldValue: string,  newValue : string) {
-    }
+    modelValue(oldValue: string, newValue: string) {}
   },
   emits: ['update:modelValue'],
   methods: {
@@ -32,6 +25,5 @@ export default {
       this.$emit('update:modelValue', this.modelValue)
     }
   }
-
 }
 </script>

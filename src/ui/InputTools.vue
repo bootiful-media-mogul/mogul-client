@@ -21,14 +21,6 @@ export default {
     MarkdownPreview, WritingAssistant
   },
   props: ['modelValue'],
-  watch: {
-   
-  },
-  data() {
-    return {
-      assetHighlight
-    }
-  },
   emits: ['update:modelValue'],
   methods: {
     updateValue() {

@@ -8,7 +8,6 @@
       :model-value="modelValue"
       @update:modelValue="updateValue"
     />
-
   </div>
 </template>
 
@@ -23,7 +22,11 @@ export default {
   },
   props: ['modelValue'],
   watch: {
-    modelValue( oldValue: string,  newValue : string) {
+   
+  },
+  data() {
+    return {
+      assetHighlight
     }
   },
   emits: ['update:modelValue'],

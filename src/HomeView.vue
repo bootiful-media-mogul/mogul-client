@@ -4,7 +4,6 @@ import InputTools from '@/ui/InputTools.vue'
 import { ref } from 'vue'
 
 const userInput = ref<string>('')
-
 </script>
 
 <template>

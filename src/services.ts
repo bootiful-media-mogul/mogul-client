@@ -602,8 +602,8 @@ export class Markdown {
   constructor(client: Client) {
     this.client = client
   }
-  
-  async render( markdown: string): Promise<string> {
+
+  async render(markdown: string): Promise<string> {
     const query = `
         query AiChatQuery($markdown: String){ 
          renderMarkdown(markdown:$markdown) 

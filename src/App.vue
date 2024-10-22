@@ -5,10 +5,10 @@ import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
 import { ref } from 'vue'
 
-const mogulUsername = ref<string>();
-(async function() {
+const mogulUsername = ref<string>()
+;(async function () {
   const res = await mogul.user()
-  mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`;
+  mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
 })()
 </script>
 

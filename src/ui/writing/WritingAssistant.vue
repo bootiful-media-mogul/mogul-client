@@ -202,7 +202,6 @@ export default {
       this.updateValue(updatedText)
     },
 
-
     async proofread() {
       if (this.readValue().trim() === '') return
 

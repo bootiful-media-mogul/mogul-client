@@ -57,27 +57,26 @@
 </template>
 
 <script setup lang="ts">
-
 import { onMounted, ref } from 'vue'
 
 const square = ref<HTMLElement>()
 const button = ref<HTMLButtonElement>()
 
 onMounted(() => {
-
   const defaultStyle = 'panel-window-button-color-square-default'
   const hoverStyle = 'panel-window-button-color-square-hover'
 
-  button.value.addEventListener('mouseover', (_: MouseEvent) => {
-    square.value.classList.remove(defaultStyle)
-    square.value.classList.add(hoverStyle)
+  const btnValue = button.value
+  const squareValue = square.value
+
+  btnValue.addEventListener('mouseover', (_: MouseEvent) => {
+    squareValue.classList.remove(defaultStyle)
+    squareValue.classList.add(hoverStyle)
   })
 
-  button.value.addEventListener('mouseout', (_: MouseEvent) => {
-    square.value.classList.add(defaultStyle)
-    square.value.classList.remove(hoverStyle)
+  btnValue.addEventListener('mouseout', (_: MouseEvent) => {
+    squareValue.classList.add(defaultStyle)
+    squareValue.classList.remove(hoverStyle)
   })
-
-
 })
 </script>

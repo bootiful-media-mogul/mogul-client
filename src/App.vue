@@ -3,13 +3,14 @@ import { mogul } from '@/services'
 import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const mogulUsername = ref<string>()
-;(async function () {
+
+onMounted(async () => {
   const res = await mogul.user()
   mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
-})()
+})
 </script>
 
 <template>
@@ -36,6 +37,7 @@ const mogulUsername = ref<string>()
       </div>
 
       <div class="sidebar">
+        
         <SidebarPanelComponent title="Media Preview">
           <PreviewComponent />
         </SidebarPanelComponent>

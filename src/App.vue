@@ -1,32 +1,16 @@
-<!--
- renders a list of all the existing podcasts
--->
-<script lang="ts">
+<script setup lang="ts">
 import { mogul } from '@/services'
 import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
+import { onMounted, ref } from 'vue'
 
-export default {
-  components: {
-    NotificationBox,
-    PreviewComponent,
-    SidebarPanelComponent
-  },
+const mogulUsername = ref<string>()
 
-  methods: {},
-
-  data() {
-    const mogul = ''
-    return {
-      mogul
-    }
-  },
-  async created() {
-    const user = await mogul.user()
-    this.mogul = user.displayName
-  }
-}
+onMounted(async () => {
+  const res = await mogul.user()
+  mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
+})
 </script>
 
 <template>
@@ -35,7 +19,7 @@ export default {
   <div class="frame">
     <div class="page">
       <div class="welcome">
-        {{ $t('hello', { mogul: mogul }) }}
+        {{ $t('hello', { mogul: mogulUsername }) }}
       </div>
 
       <div class="view">
@@ -53,6 +37,7 @@ export default {
       </div>
 
       <div class="sidebar">
+        
         <SidebarPanelComponent title="Media Preview">
           <PreviewComponent />
         </SidebarPanelComponent>

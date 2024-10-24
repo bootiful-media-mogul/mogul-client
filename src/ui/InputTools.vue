@@ -1,32 +1,18 @@
 <template>
   <div>
-    <WritingAssistant
-      :model-value="modelValue"
-      @update:modelValue="updateValue"
-    />
-    <MarkdownPreview
-      :model-value="modelValue"
-      @update:modelValue="updateValue"
-    />
+    <WritingAssistant :model-value="modelValue" @update:modelValue="updateValue" />
+    <MarkdownPreview :model-value="modelValue" @update:modelValue="updateValue" />
   </div>
 </template>
-
-<script lang="ts">
+<script setup lang="ts">
 import MarkdownPreview from '@/ui/markdown/MarkdownPreview.vue'
 import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
-
-export default {
-  name: 'InputTools',
-  components: {
-    MarkdownPreview, WritingAssistant
-  },
-  props: ['modelValue'],
-  emits: ['update:modelValue'],
-  methods: {
-    updateValue() {
-      this.$emit('update:modelValue', this.modelValue)
-    }
-  }
-
+interface Props {
+  readonly modelValue: string
+}
+const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
+const props = defineProps<Props>()
+const updateValue = (value: string): void => {
+  emit('update:modelValue', props.modelValue)
 }
 </script>

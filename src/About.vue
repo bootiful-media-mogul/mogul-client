@@ -1,11 +1,15 @@
-<template>
-  <h1>{{ $t('about.title') }}</h1>
+<script setup lang="ts">
 
-  <span
-    v-html="
-      $t('app.made-with-love', {
-        josh: '<a href=\'https://youtube.com/@coffeesoftware\'>Josh Long</a>'
-      })
-    "
-  ></span>
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
+const about = t('about.title')
+
+const madeWithLove = t('app.made-with-love', {
+  josh: `<a href="https://youtube.com/@coffeesoftware">Josh Long</a>`
+})
+</script>
+<template>
+  <h1>{{ about }}</h1>
+  <span v-html="madeWithLove" />
 </template>

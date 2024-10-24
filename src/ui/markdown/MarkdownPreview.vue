@@ -8,7 +8,12 @@
   text-transform: unset;
 }
 
-.rendered-preview h1, h2, h3, h4, h5, h6 {
+.rendered-preview h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin-top: 0;
   margin-bottom: 0;
   line-height: 1;
@@ -17,9 +22,8 @@
 <template>
   <InputWrapperChild>
     <template v-slot:panel>
-
-      <div class="rendered-preview" v-if="props.modelValue.trim()!==''" v-html="rendered"></div>
-      <div v-if="props.modelValue.trim()===''">(nothing to preview)</div>
+      <div class="rendered-preview" v-if="props.modelValue.trim() !== ''" v-html="rendered"></div>
+      <div v-if="props.modelValue.trim() === ''">(nothing to preview)</div>
     </template>
     <template v-slot:icon>
       <InputWrapperMenuButton :icon="asset" :icon-hover="assetHighlight" />
@@ -35,7 +39,7 @@ import { markdown } from '@/services'
 import { ref, watch } from 'vue'
 
 interface Props {
-  readonly modelValue: string;
+  readonly modelValue: string
 }
 
 let timer = -1
@@ -57,7 +61,10 @@ const debouncingRender = async () => {
   }, 1000)
 }
 
-watch(() => props.modelValue, (o: string, n: string) => {
-  debouncingRender()
-})
+watch(
+  () => props.modelValue,
+  (o: string, n: string) => {
+    debouncingRender()
+  }
+)
 </script>

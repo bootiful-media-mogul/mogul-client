@@ -1,15 +1,3 @@
-<template>
-  <div ref="button" class="panel-window-button">
-    <div class="panel-window-button-icon">
-      <slot />
-    </div>
-    <div
-      ref="square"
-      class="panel-window-button-color-square panel-window-button-color-square-default"
-    ></div>
-  </div>
-</template>
-
 <style>
 :root {
   --panel-window-button-diameter: 20px;
@@ -56,34 +44,39 @@
 }
 </style>
 
-<script lang="ts">
-export default {
-  created() {},
-  mounted() {
-    const square = this.$refs.square as HTMLElement
-    const btn = this.$refs.button as HTMLButtonElement
-    const defaultStyle = 'panel-window-button-color-square-default'
-    const hoverStyle = 'panel-window-button-color-square-hover'
+<template>
+  <div ref="button" class="panel-window-button">
+    <div class="panel-window-button-icon">
+      <slot />
+    </div>
+    <div
+      ref="square"
+      class="panel-window-button-color-square panel-window-button-color-square-default"
+    ></div>
+  </div>
+</template>
 
-    btn.addEventListener('mouseover', (event: MouseEvent) => {
-      square.classList.remove(defaultStyle)
-      square.classList.add(hoverStyle)
-    })
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 
-    btn.addEventListener('mouseout', (event: MouseEvent) => {
-      square.classList.add(defaultStyle)
-      square.classList.remove(hoverStyle)
-    })
-  },
+const square = ref<HTMLElement>()
+const button = ref<HTMLButtonElement>()
 
-  data() {
-    return {
-      // enabled: true
-    }
-  },
+onMounted(() => {
+  const defaultStyle = 'panel-window-button-color-square-default'
+  const hoverStyle = 'panel-window-button-color-square-hover'
 
-  // props: ['enabled'],
-  methods: {},
-  computed: {}
-}
+  const btnValue = button.value
+  const squareValue = square.value
+
+  btnValue.addEventListener('mouseover', (_: MouseEvent) => {
+    squareValue.classList.remove(defaultStyle)
+    squareValue.classList.add(hoverStyle)
+  })
+
+  btnValue.addEventListener('mouseout', (_: MouseEvent) => {
+    squareValue.classList.add(defaultStyle)
+    squareValue.classList.remove(hoverStyle)
+  })
+})
 </script>

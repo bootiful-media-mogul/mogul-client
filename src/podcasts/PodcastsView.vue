@@ -12,7 +12,6 @@
           <input type="text" required id="title" v-model="title" />
 
           <InputTools v-model="title" />
-
         </InputWrapper>
       </div>
       <div class="pure-controls">
@@ -113,7 +112,7 @@ export default {
   },
 
   methods: {
-    dts: function(date: number) {
+    dts: function (date: number) {
       return dateTimeToString(date)
     },
     async deletePodcast(id: number) {

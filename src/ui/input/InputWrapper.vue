@@ -50,13 +50,13 @@ export default {
   setup(props, { emit }) {
     const text = ref<String>('')
     const root = ref<HTMLElement>()
-    const inputElement = ref<HTMLInputElement>()  
+    const inputElement = ref<HTMLInputElement>()
 
     const updateInputValue = (txt: string) => {
       emit('update:modelValue', txt)
       text.value = txt
     }
-    
+
     const updateValue = (event: Event) => {
       const elementTarget = event?.target as HTMLInputElement
       const txt = elementTarget.value
@@ -106,7 +106,6 @@ export default {
     this.childSlots[0].iconVisible = true
   },
   methods: {
-
     current(): PanelSlot | null {
       const visible = this.childSlots.filter((slot) => slot.panelVisible)
       if (visible && visible.length > 0) {
@@ -117,15 +116,14 @@ export default {
     enableDownArrow() {
       const c = this.current()
       if (c == null) return true
-      return c !== this.childSlots [this.childSlots.length - 1]
+      return c !== this.childSlots[this.childSlots.length - 1]
     },
 
     enableUpArrow() {
       const c = this.current()
       if (c == null) return false
-      return c !== this.childSlots [0]
+      return c !== this.childSlots[0]
     },
-
 
     move(direction: number) {
       const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)

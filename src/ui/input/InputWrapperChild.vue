@@ -17,7 +17,6 @@ export default defineComponent({
           panel: slots.panel,
           icon: slots.icon
         })
-        console.log('registering ...')
       }
     })
 

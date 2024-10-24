@@ -104,7 +104,7 @@ const i18n = createI18n({
   fallbackLocale: 'en',
   messages: translations,
   // warnHtmlInMessage : false
-
+  legacy: false,// why is this defaulted to true?
   warnHtmlInMessage: 'off'
 })
 

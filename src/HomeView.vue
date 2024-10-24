@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import InputWrapper from '@/ui/input/InputWrapper.vue'
-import InputTools from '@/ui/InputTools.vue'
-import { ref } from 'vue'
-
-const userInput = ref<string>('')
+// import InputWrapper from '@/ui/input/InputWrapper.vue'
+// import InputTools from '@/ui/InputTools.vue'
+// import { ref } from 'vue'
+//
+// const userInput = ref<string>('')
 </script>
 
 <template>
   <h1>Home</h1>
-  <form class="pure-form pure-form-stacked">
+<!--  <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form</legend>
       <div class="pure-control-group">
@@ -25,5 +25,5 @@ const userInput = ref<string>('')
       </div>
     </fieldset>
   </form>
-  <div>what did the user type? {{ userInput }}</div>
+  <div>what did the user type? {{ userInput }}</div>-->
 </template>

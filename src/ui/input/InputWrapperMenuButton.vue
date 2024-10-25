@@ -1,23 +1,25 @@
-<script lang="ts">
-export default {
-  props: {
-    iconHover: { type: String, default: '' },
-    icon: { type: String, default: '' }
-  },
-  data() {
-    return {
-      src: this.iconHover
-    }
-  },
-  mounted() {
-    this.src = this.icon
-  },
-  methods: {
-    swap() {
-      if (this.iconHover) this.src = this.icon == this.src ? this.iconHover : this.icon
-    }
-  }
+<script setup lang="ts">
+
+import { onMounted, ref } from 'vue'
+
+interface Props {
+  readonly modelValue: string
+  readonly iconHover: string
+  readonly icon: string
 }
+
+const props = defineProps<Props>()
+const src = ref<string>()
+
+const swap = function() {
+  if (props.iconHover)
+    src.value = props.icon == src.value ? props.iconHover : props.icon
+}
+
+onMounted(() => {
+  src.value = props.icon
+})
+
 </script>
 <style scoped>
 .input-wrapper-menu-button {

@@ -1,9 +1,7 @@
 <script setup lang="ts">
-
 import { onMounted, ref } from 'vue'
 
 interface Props {
-  readonly modelValue: string
   readonly iconHover: string
   readonly icon: string
 }

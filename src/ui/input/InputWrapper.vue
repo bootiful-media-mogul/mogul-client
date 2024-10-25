@@ -37,133 +37,108 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+
 import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
-import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import type { PanelSlot } from './input'
 
-export default {
-  name: 'InputWrapper',
-  components: { InputWrapperMenuButton, InputWrapperMenu },
+const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
+const text = ref<String>('')
+const root = ref<HTMLElement>()
+const inputElement = ref<HTMLInputElement>()
+const childSlots = ref<Array<PanelSlot>>([])
+const events = 'input,change'.split(',')
+const panelVisible = ref<boolean>(false)
 
-  setup(props, { emit }) {
-    const text = ref<String>('')
-    const root = ref<HTMLElement>()
-    const inputElement = ref<HTMLInputElement>()
-
-    const updateInputValue = (txt: string) => {
-      emit('update:modelValue', txt)
-      text.value = txt
-    }
-
-    const updateValue = (event: Event) => {
-      const elementTarget = event?.target as HTMLInputElement
-      const txt = elementTarget.value
-      updateInputValue(txt)
-    }
-
-    const events = 'input,change'.split(',')
-
-    onMounted(() => {
-      inputElement.value = root.value?.querySelector('input, textarea')!!
-      if (inputElement.value) {
-        events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
-      }
-    })
-
-    onBeforeUnmount(() => {
-      if (inputElement.value) {
-        events.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
-      }
-    })
-    const childSlots = ref<Array<PanelSlot>>([])
-    const registerChild = (slotPair: PanelSlot) => {
-      childSlots.value.push(slotPair)
-    }
-
-    const readInputValue = () => {
-      return text.value || ''
-    }
-    provide('updateInputValue', updateInputValue)
-    provide('registerChild', registerChild)
-    provide('readInputValue', readInputValue)
-
-    return {
-      childSlots,
-      root,
-      text,
-      inputElement
-    }
-  },
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    }
-  },
-  mounted() {
-    this.childSlots[0].iconVisible = true
-  },
-  methods: {
-    current(): PanelSlot | null {
-      const visible = this.childSlots.filter((slot) => slot.panelVisible)
-      if (visible && visible.length > 0) {
-        return visible[0]
-      }
-      return null
-    },
-    enableDownArrow() {
-      const c = this.current()
-      if (c == null) return true
-      return c !== this.childSlots[this.childSlots.length - 1]
-    },
-
-    enableUpArrow() {
-      const c = this.current()
-      if (c == null) return false
-      return c !== this.childSlots[0]
-    },
-
-    move(direction: number) {
-      const currentlyVisiblePanel = this.childSlots.filter((slot) => slot.panelVisible)
-      const selected =
-        currentlyVisiblePanel && currentlyVisiblePanel.length > 0
-          ? currentlyVisiblePanel[0]
-          : this.childSlots[0]
-      let index = this.childSlots.indexOf(selected)
-      if (index + direction >= 0 && index + direction < this.childSlots.length)
-        index = index + direction
-      this.childSlots.forEach((slot) => {
-        slot.iconVisible = false
-        slot.panelVisible = false
-      })
-      this.childSlots[index].iconVisible = true
-      this.childSlots[index].panelVisible = true
-    },
-    down() {
-      this.move(+1)
-    },
-    up() {
-      this.move(-1)
-    },
-    togglePanel(slot: PanelSlot) {
-      this.childSlots.forEach((slot) => {
-        slot.panelVisible = false
-      })
-      this.childSlots[this.childSlots.indexOf(slot)].panelVisible = true
-      this.panelVisible = !this.panelVisible
-    }
-  },
-  emits: ['update:modelValue'],
-  data() {
-    return {
-      panelVisible: false,
-      previousModelValue: '',
-      activeIndex: -1
-    }
-  }
+const updateInputValue = (txt: string) => {
+  emit('update:modelValue', txt)
+  text.value = txt
 }
+
+const updateValue = (event: Event) => {
+  const elementTarget = event?.target as HTMLInputElement
+  const txt = elementTarget.value
+  updateInputValue(txt)
+}
+
+const registerChild = (slotPair: PanelSlot) => {
+  childSlots.value.push(slotPair)
+}
+
+const readInputValue = () => {
+  return text.value || ''
+}
+
+const current = function(): PanelSlot | null {
+  const visible = childSlots.value.filter(slot => slot.panelVisible)
+  if (visible && visible.length > 0) {
+    return visible[0]
+  }
+  return null
+}
+
+const enableUpArrow = function(): boolean {
+  const c = current()
+  if (c == null) return false
+  return c !== childSlots.value[0]
+}
+
+const enableDownArrow = function(): boolean {
+  const c = current()
+  if (c == null) return true
+  return c !== childSlots.value[childSlots.value.length - 1]
+}
+
+const move = function(direction: number): void {
+  const currentlyVisiblePanel = childSlots.value.filter((slot) => slot.panelVisible)
+  const selected = currentlyVisiblePanel && currentlyVisiblePanel.length > 0 ? currentlyVisiblePanel[0] : childSlots.value[0]
+  let index = childSlots.value.indexOf(selected)
+  if (index + direction >= 0 && index + direction < childSlots.value.length) {
+    index = index + direction
+  }
+  childSlots.value.forEach((slot) => {
+    slot.iconVisible = false
+    slot.panelVisible = false
+  })
+  childSlots.value[index].iconVisible = true
+  childSlots.value[index].panelVisible = true
+}
+
+const down = function() {
+  move(+1)
+}
+
+const up = function() {
+  move(-1)
+}
+
+const togglePanel = function(slot: PanelSlot) {
+  childSlots.value.forEach((slot) => {
+    slot.panelVisible = false
+  })
+  childSlots.value[childSlots.value.indexOf(slot)].panelVisible = true
+  panelVisible.value = !panelVisible.value
+}
+
+
+onMounted(() => {
+  inputElement.value = root.value?.querySelector('input, textarea')!!
+  if (inputElement.value) {
+    events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
+  }
+  childSlots.value[0].iconVisible = true
+})
+
+onBeforeUnmount(() => {
+  if (inputElement.value) {
+    events.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
+  }
+})
+
+provide('updateInputValue', updateInputValue)
+provide('registerChild', registerChild)
+provide('readInputValue', readInputValue)
 </script>
 
 <style scoped>

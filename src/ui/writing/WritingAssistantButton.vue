@@ -42,23 +42,11 @@
   grid-area: icon;
 }
 </style>
-
-<script lang="ts">
-export default {
-  name: 'WritingAssistantButton',
-  mounted() {},
-  data() {
-    return {
-      backgroundStyle: `background-image: url('${this.iconImage}')  `
-    }
-  },
-  props: {
-    label: { type: String, default: '' },
-    iconImage: { type: String, default: '' }
-  },
-  setup() {
-    return {}
-  },
-  methods: {}
+<script setup lang="ts">
+import { ref } from 'vue'
+interface Props {
+  readonly label: string
 }
+const props = defineProps<Props>()
+const label = ref<string>(props.label)
 </script>

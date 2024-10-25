@@ -8,8 +8,17 @@ import { onMounted, ref } from 'vue'
 const mogulUsername = ref<string>()
 
 onMounted(async () => {
-  const res = await mogul.user()
-  mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
+  const max = 3
+  let i = 0
+  while (i < max) {
+    const res = await mogul.user()
+    if (res.email) {
+      mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
+      break
+    } 
+    i+=1
+    console.debug('it did not work the first time, trying to authenticate again...')
+  }
 })
 </script>
 
@@ -37,7 +46,7 @@ onMounted(async () => {
       </div>
 
       <div class="sidebar">
-        
+
         <SidebarPanelComponent title="Media Preview">
           <PreviewComponent />
         </SidebarPanelComponent>

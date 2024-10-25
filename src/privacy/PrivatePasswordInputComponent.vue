@@ -26,31 +26,27 @@ label .private-password-preview-link {
 }
 </style>
 
-<script lang="ts">
-import { formInputForLabel, positionIconRelativeToFormInputForParentLabel } from '@/components'
+<script setup lang="ts">
 
-export default {
-  data() {
-    return {
-      description: ''
-    }
-  },
-  mounted() {
-    positionIconRelativeToFormInputForParentLabel(this.$refs.icon as HTMLElement, (x) => x)
-  },
-  methods: {
-    togglePreview: function (e: Event) {
-      e.preventDefault()
-      const icon = this.$refs.icon as HTMLElement
-      const input = formInputForLabel(icon.parentElement as HTMLElement) as HTMLInputElement
-      input.type = input.type.toLowerCase() === 'password' ? 'text' : 'password'
-      if (input.type == 'text') {
-        icon.classList.add('clicked')
-      } //
-      else {
-        icon.classList.remove('clicked')
-      }
-    }
+import { formInputForLabel, positionIconRelativeToFormInputForParentLabel } from '@/components'
+import { onMounted, ref } from 'vue'
+
+const icon = ref<HTMLElement>()
+
+const togglePreview = function(e: Event) {
+  e.preventDefault()
+  const iconEl = icon.value!!
+  const input = formInputForLabel(iconEl.parentElement as HTMLElement) as HTMLInputElement
+  input.type = input.type.toLowerCase() === 'password' ? 'text' : 'password'
+  if (input.type == 'text') {
+    iconEl.classList.add('clicked')
+  } //
+  else {
+    iconEl.classList.remove('clicked')
   }
 }
+
+onMounted(() => {
+  positionIconRelativeToFormInputForParentLabel(icon.value!!, (x) => x)
+})
 </script>

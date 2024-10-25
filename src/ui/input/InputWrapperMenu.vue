@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <div :class="'unselectable arrow up ' + upArrowCss()" ref="up" @click="up">◀</div>
+    <div :class="'unselectable arrow up ' + upArrowCss()" ref="up" @click="emit('up')">◀</div>
     <div class="unselectable icons">
-      <slot> the buttons should go here otherwise this will look like crap! </slot>
+      <slot> the buttons should go here otherwise this will look like crap!</slot>
     </div>
-    <div :class="'unselectable arrow down ' + downArrowCss()" ref="down" @click="down">▶</div>
+    <div :class="'unselectable arrow down ' + downArrowCss()" ref="down" @click="emit('down')">▶</div>
   </div>
 </template>
 <style scoped>
@@ -44,58 +44,38 @@
   pointer-events: none;
 }
 </style>
-<script lang="ts">
-export default {
-  methods: {
-    upArrowCss() {
-      const c = () => {
-        if (this.disabled) return 'disabled'
-        if (!this.enableUpArrow) return 'disabled'
-        return ''
-      }
-      return c()
-    },
-    downArrowCss() {
-      const c = () => {
-        if (this.disabled) return 'disabled'
-        if (!this.enableDownArrow) return 'disabled'
-        return ''
-      }
-      return c()
-    },
-
-    up() {
-      this.$emit('up')
-    },
-    down() {
-      this.$emit('down')
-    },
-    enable(r: HTMLElement) {
-      r.classList.remove('disabled')
-    },
-    disable(r: HTMLElement) {
-      r.classList.add('disabled')
-    }
-  },
-  mounted() {},
-  props: {
-    disabled: { type: Boolean, default: false },
-    enableUpArrow: { type: Boolean, default: false },
-    enableDownArrow: { type: Boolean, default: false }
-  },
-  watch: {
-    disabled(oldValue, newValue) {
-      const up = this.$refs.up as HTMLElement
-      const down = this.$refs.down as HTMLElement
-      const elements = [up, down]
-      if (!newValue) {
-        elements.forEach((el) => this.disable(el))
-      } //
-      else {
-        //elements.forEach(el => this.enable(el))
-      }
-    }
-  },
-  emits: ['up', 'down']
+<script setup lang="ts">
+import { ref, watch } from 'vue'
+interface Props {
+  readonly disabled: boolean
+  readonly enableUpArrow: boolean
+  readonly enableDownArrow: boolean
 }
+const emit = defineEmits<{
+  (e: 'down'): void
+  (e: 'up'): void
+}
+>()
+const props = defineProps<Props>()
+const downArrowCss = function() {
+  if (props.disabled) return 'disabled'
+  if (!props.enableDownArrow) return 'disabled'
+  return ''
+}
+const upArrowCss = () => {
+  if (props.disabled) return 'disabled'
+  if (!props.enableUpArrow) return 'disabled'
+  return ''
+}
+const disable = function(r: HTMLElement) {
+  r.classList.add('disabled')
+}
+const up = ref<HTMLElement>()
+const down = ref<HTMLElement>()
+
+watch(() => props.disabled, (_, newValue) => {
+  if (!newValue) {
+    [up, down].forEach((el) => disable(el.value!!))
+  }
+})
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <form class="pure-form pure-form-stacked">
+  <form  ref="el" class="pure-form pure-form-stacked">
     <fieldset>
       <legend>Media Preview</legend>
       <div>
@@ -27,60 +27,55 @@
   </form>
 </template>
 <style></style>
-<script lang="ts">
+<script setup lang="ts">
 import { events, managedFiles } from '@/services'
 import { prettyPrintInBytes } from '@/managedfiles/files'
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
-export default {
-  async created() {
-    const callback = async (id: any) => await this.doLoad(id)
+const el = ref<HTMLElement>()
+const isImage = ref(false)
+const isAudio = ref(false)
+const url = ref('')
+const filename = ref('')
+const size = ref('')
+const contentType = ref('')
 
-    events.on('preview-managed-file-event', async (event) => {
-      console.log('received an event for a preview for managed file ' + event)
-      await callback(event)
-      events.emit('sidebar-panel-opened', this.$el)
-    })
-  },
-  async mounted() {
-    await this.load()
-  },
-
-  props: ['managedFileId'],
-
-  watch: {
-    async managedFileId(newVal: number, oldVal: number) {
-      await this.load()
-    }
-  },
-  data() {
-    return {
-      isImage: ref(false),
-      isAudio: ref(false),
-      url: ref(''),
-      filename: ref(''),
-      size: ref(''),
-      contentType: ref('')
-    }
-  },
-  methods: {
-    async doLoad(mfid: any) {
-      const managedFile = await managedFiles.getManagedFileById(parseInt(mfid))
-      this.url = '/api/managedfiles/' + managedFile.id
-      const ext = managedFile.contentType.toLowerCase()
-      this.isImage =
-        ext.endsWith('jpg') || ext.endsWith('jpeg') || ext.endsWith('png') || ext.endsWith('gif')
-      this.isAudio = ext.endsWith('mp3') || ext.endsWith('wav') || ext.endsWith('mpeg')
-      this.contentType = ext
-      this.size = prettyPrintInBytes(managedFile.size)
-      this.filename = managedFile.filename
-    },
-
-    async load() {
-      if (!this.managedFileId) return
-
-      await this.doLoad(this.managedFileId)
-    }
-  }
+async function doLoad(mfid: any) {
+  const managedFile = await managedFiles.getManagedFileById(parseInt(mfid))
+  url.value = '/api/managedfiles/' + managedFile.id
+  const ext = managedFile.contentType.toLowerCase()
+  isImage.value = ext.endsWith('jpg') || ext.endsWith('jpeg') || ext.endsWith('png') || ext.endsWith('gif')
+  isAudio.value = ext.endsWith('mp3') || ext.endsWith('wav') || ext.endsWith('mpeg')
+  contentType.value = ext
+  size.value = prettyPrintInBytes(managedFile.size)
+  filename.value = managedFile.filename
 }
+
+interface Props {
+  readonly managedFileId?: string | number
+}
+
+const props = defineProps<Props>()
+
+async function load() {
+  if (!props.managedFileId) return
+  await doLoad(props.managedFileId)
+}
+
+const callback = async (id: any) => await doLoad(id)
+
+events.on('preview-managed-file-event', async (event) => {
+  console.log('received an event for a preview for managed file ' + event)
+  await callback(event)
+  events.emit('sidebar-panel-opened', el.value)
+})
+
+onMounted(async () => {
+  await load()
+})
+
+watch(() => props.managedFileId, async (o: any, n: any) => {
+  await load()
+})
+
 </script>

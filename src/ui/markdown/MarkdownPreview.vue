@@ -67,12 +67,12 @@ const debouncingRender = async () => {
 }
 
 onMounted(() => {
-  console.log('the markdown preview is needed!')
+  // console.log('the markdown preview is needed!')
   needed.value = true
 })
 
 onUnmounted(() => {
-  console.log('the markdown preview is not mounted any more')
+  // console.log('the markdown preview is not mounted any more')
   needed.value = false
 })
 

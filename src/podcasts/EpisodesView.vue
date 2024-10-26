@@ -508,11 +508,6 @@ onMounted(async () => {
 }
 
 .podcast-episode-controls-row {
-  /*
-  display: grid;
-  grid-template-areas: 'save . cancel . publish';
-  grid-template-columns: min-content var(--form-buttons-gutter-space) min-content auto min-content;
-  */
 }
 
 .podcast-episode-controls-row .save {

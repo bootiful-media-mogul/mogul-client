@@ -1,5 +1,5 @@
 <template>
-  <form  ref="el" class="pure-form pure-form-stacked">
+  <form ref="el" class="pure-form pure-form-stacked">
     <fieldset>
       <legend>Media Preview</legend>
       <div>
@@ -77,5 +77,4 @@ onMounted(async () => {
 watch(() => props.managedFileId, async (o: any, n: any) => {
   await load()
 })
-
 </script>

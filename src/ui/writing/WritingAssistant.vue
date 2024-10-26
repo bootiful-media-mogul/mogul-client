@@ -148,7 +148,7 @@
     </template>
   </InputWrapperChild>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import asset from '@/assets/images/writing-tools/rewrite.png'
 import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
 
@@ -156,129 +156,112 @@ import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { ai } from '@/services'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
 
-export default {
-  name: 'WritingAssistant',
-  components: { WritingAssistantButton, InputWrapperMenuButton, InputWrapperChild },
 
-  setup(_) {
-    const update = inject<UpdateValueFunction>('updateInputValue')!
-    const read = inject<ReadValueFunction>('readInputValue')!
-    return {
-      updateValue: update,
-      readValue: read
-    }
-  },
-  watch: {
-    async modelValue(o: string, n: string) {
-      //console.log(o + ':' + n)
-    }
-  },
-  methods: {
-    reset() {
-      this.proposalApprovalRequired = false
-      this.rewriteStylesVisible = false
-      this.rewriteStylesClasses = 'styles'
-      this.toolsClasses = 'tools'
-      this.toggleButtonClasses = 'toggle-icon edit-icon'
-      this.rewriteToolsClasses = 'rewrite-button'
-    },
-    revert() {
-      this.proposeUpdatedText(this.previousModelValue)
-      this.reset()
-    },
-    accept() {
-      this.proposalApprovalRequired = false
-      this.reset()
-    },
+const updateValue = inject<UpdateValueFunction>('updateInputValue')!
+const readValue = inject<ReadValueFunction>('readInputValue')!
 
-    proposeUpdatedText(updatedText: string) {
-      this.previousModelValue = this.readValue()
-      this.$emit('update:modelValue', updatedText)
-      this.proposalApprovalRequired = true
-      console.log('proposed ' + updatedText)
-      this.updateValue(updatedText)
-    },
 
-    async proofread() {
-      if (this.readValue().trim() === '') return
+const previousModelValue = ref<string>('')
+const proposalApprovalRequired = ref<boolean>(false)
 
-      if (this.rewriteStylesVisible) this.toggleRewriteTools()
 
-      const proofread = await ai.chat(
-        `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
+const toolsClasses = ref<string>('tools')
+const rewriteStylesVisible = ref<boolean>(false)
+const rewriteStylesClasses = ref<string>('styles')
+const rewriteToolsClasses = ref<string>('rewrite-button')
+const toggleButtonClasses = ref<string>('toggle-icon edit-icon')
+
+const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
+
+function reset() {
+  proposalApprovalRequired.value = false
+  rewriteStylesVisible.value = false
+  rewriteStylesClasses.value = 'styles'
+  toolsClasses.value = 'tools'
+  toggleButtonClasses.value = 'toggle-icon edit-icon'
+  rewriteToolsClasses.value = 'rewrite-button'
+}
+
+function revert() {
+  proposeUpdatedText(previousModelValue.value)
+  reset()
+}
+
+function accept() {
+  proposalApprovalRequired.value = false
+  reset()
+}
+
+function proposeUpdatedText(updatedText: string) {
+  previousModelValue.value = readValue()
+  emit('update:modelValue', updatedText)
+  proposalApprovalRequired.value = true
+  console.log('proposed ' + updatedText)
+  updateValue(updatedText)
+}
+
+async function proofread() {
+  if (readValue().trim() === '') return;
+
+  if (rewriteStylesVisible.value) 
+    await toggleRewriteTools()
+
+  const proofread = await ai.chat(
+    `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
         ==========================================
-        ${this.readValue()}
+        ${readValue()}
       `
-      )
-      this.proposeUpdatedText(proofread)
-    },
+  )
+  proposeUpdatedText(proofread)
+}
 
-    async rewriteProfessional() {
-      if (this.readValue().trim() === '') return
-      const updated = await ai.chat(
-        `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
+async function rewriteProfessional() {
+  if (readValue().trim() === '') return
+  const updated = await ai.chat(
+    `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
         ==========================================
-        ${this.readValue()}
+        ${readValue()}
       `
-      )
-      this.proposeUpdatedText(updated)
-    },
+  )
+  proposeUpdatedText(updated)
+}
 
-    async rewriteConcise() {
-      if (this.readValue().trim() === '') return
-      const updated = await ai.chat(
-        `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
+async function rewriteConcise() {
+  if (readValue().trim() === '') return
+  const updated = await ai.chat(
+    `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
         ==========================================
-        ${this.readValue()}
+        ${readValue()}
       `
-      )
-      this.proposeUpdatedText(updated)
-    },
-    async rewriteFriendly() {
-      if (this.readValue().trim() === '') return
-      const updated = await ai.chat(
-        `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
-        ==========================================
-        ${this.readValue()}
-      `
-      )
-      this.proposeUpdatedText(updated)
-    },
-    toggleRewriteTools() {
-      this.rewriteStylesVisible = !this.rewriteStylesVisible
-      if (this.rewriteStylesVisible) {
-        this.rewriteStylesClasses += ' active'
-        this.toolsClasses += ' active'
-        this.rewriteToolsClasses += ' active'
-      } else {
-        this.rewriteStylesClasses = 'styles'
-        this.toolsClasses = 'tools'
-        this.rewriteToolsClasses = 'rewrite-button'
-      }
-    }
-  },
+  )
+  proposeUpdatedText(updated)
+}
 
-  data() {
-    return {
-      previousModelValue: '',
-      proposalApprovalRequired: false,
-      asset: asset,
-      assetHighlight: assetHighlight,
-      toolsClasses: 'tools',
-      rewriteStylesVisible: false,
-      rewriteStylesClasses: 'styles',
-      rewriteToolsClasses: 'rewrite-button',
-      toggleButtonClasses: 'toggle-icon edit-icon'
-    }
-  },
-  props: {
-    modelValue: {
-      type: String,
-      default: ''
-    }
+async function toggleRewriteTools() {
+  rewriteStylesVisible.value = !rewriteStylesVisible.value
+  if (rewriteStylesVisible.value) {
+    rewriteStylesClasses.value += ' active'
+    toolsClasses.value += ' active'
+    rewriteToolsClasses.value += ' active'
+  } else {
+    rewriteStylesClasses.value = 'styles'
+    toolsClasses.value = 'tools'
+    rewriteToolsClasses.value = 'rewrite-button'
   }
 }
+
+async function rewriteFriendly() {
+  if (readValue().trim() === '') return
+  const updated = await ai.chat(
+    `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
+        ==========================================
+        ${readValue()}
+      `
+  )
+  proposeUpdatedText(updated)
+}
+
 </script>

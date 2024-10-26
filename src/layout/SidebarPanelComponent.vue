@@ -1,10 +1,11 @@
 <template>
-  <div :class="visibilityCss">
+  <div ref="element" :class="visibilityCss">
     <div class="top">
       <div class="title navigable-section">
         {{ title }}
       </div>
       <div class="controls">
+
         <SidebarPanelWindowButtonComponent v-if="!maximized" class="maximize">
           <img @click="maximize" src="../assets/images/panel-maximize.png" alt="maximize" />
         </SidebarPanelWindowButtonComponent>
@@ -16,7 +17,9 @@
         <SidebarPanelWindowButtonComponent v-if="expanded || maximized" class="show-hide">
           <img @click="hide" src="../assets/images/panel-close.png" alt="close" />
         </SidebarPanelWindowButtonComponent>
+
       </div>
+
     </div>
     <div class="content">
       <slot />
@@ -116,76 +119,61 @@
 }
 </style>
 
-<script lang="ts">
+<script setup lang="ts">
 import { events } from '@/services'
 import SidebarPanelWindowButtonComponent from './SidebarPanelWindowButtonComponent.vue'
+import { ref, computed, onMounted } from 'vue'
 
-export default {
-  computed: {
-    visibilityCss() {
-      return (
-        ' panel sidebar-panel ' +
-        (this.expanded ? 'expanded' : 'closed') +
-        ' ' +
-        (this.maximized ? 'maximized' : '')
-      )
-    }
-  },
-  mounted() {
-    const bgPanelNode = document.createElement('div')
-    bgPanelNode.classList.add('bg-panel')
-    document.body.appendChild(bgPanelNode)
-    this.bgPanelNode = bgPanelNode
-  },
-  created() {
-    // allow child components to ask for visibility in their parent panels
-    events.on('sidebar-panel-closed', (event: any) => {
-      if (this.$el.contains(event)) {
-        this.hide()
-      }
-    })
-    events.on('sidebar-panel-opened', (event: any) => {
-      const contains = this.$el.contains(event)
-      if (contains) {
-        this.show()
-      }
-    })
-  },
+const bgPanelNode = ref<HTMLElement>()
+const expanded = ref<boolean>(false)
+const maximized = ref<boolean>(false)
+const element = ref<HTMLElement>()
+const visibilityCss = computed(() => {
+  return (
+    ' panel sidebar-panel ' +
+    (expanded.value ? 'expanded' : 'closed') +
+    ' ' +
+    (maximized.value ? 'maximized' : '')
+  )
+})
 
-  components: {
-    SidebarPanelWindowButtonComponent
-  },
-
-  data() {
-    return {
-      bgPanelNode: null as HTMLElement | null,
-      expanded: false,
-      maximized: false
-    }
-  },
-
-  props: ['title'],
-  methods: {
-    debug() {},
-    hide() {
-      this.maximized = false
-      this.expanded = false
-      if (this.bgPanelNode) this.bgPanelNode.style.display = 'none'
-      this.debug()
-    },
-    show() {
-      this.expanded = true
-      this.maximized = false
-      this.debug()
-    },
-    maximize() {
-      this.expanded = true
-      this.maximized = true
-
-      if (this.bgPanelNode) this.bgPanelNode.style.display = 'block'
-
-      this.debug()
-    }
-  }
+interface Props {
+  readonly title: string
 }
+
+const props = defineProps<Props>()
+const hide = function() {
+  maximized.value = false
+  expanded.value = false
+  if (bgPanelNode.value)
+    bgPanelNode.value.style.display = 'none'
+}
+const show = function() {
+  expanded.value = true
+  maximized.value = false
+}
+const maximize = function() {
+  expanded.value = true
+  maximized.value = true
+  if (bgPanelNode.value)
+    bgPanelNode.value.style.display = 'block'
+}
+onMounted(() => {
+  const bpn = document.createElement('div')
+  bpn.classList.add('bg-panel')
+  document.body.appendChild(bpn)
+  bgPanelNode.value = bpn
+  // 
+  events.on('sidebar-panel-closed', (event: any) => {
+    if (element.value!!.contains(event)) {
+      hide()
+    }
+  })
+  events.on('sidebar-panel-opened', (event: any) => {
+    const contains = element.value!!.contains(event)
+    if (contains) {
+      show()
+    }
+  })
+})
 </script>

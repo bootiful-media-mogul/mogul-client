@@ -255,6 +255,7 @@ onMounted(async () => {
     {{ $t('episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
   </h1>
 
+
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>
@@ -265,6 +266,19 @@ onMounted(async () => {
           {{ $t('episodes.new-episode') }}
         </span>
       </legend>
+      <!--
+      todo: 
+        create an icon for the podcast thing
+        build out the podcast subsystem
+        show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
+      -->
+      <div class="episode-actions subject-actions">
+        <a v-if="draftEpisode.id" href="#">create blog from episode
+        </a> <!--|
+        <a href="#">ss</a> -->
+      </div>
+
+
       <div class="form-section">
         <div class="form-section-title">{{ $t('episodes.basics') }}</div>
         <div class="form-row">
@@ -342,19 +356,27 @@ onMounted(async () => {
                   <div class="segment-controls">
                     <a
                       @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                      href="#"
                       :class="upArrowClasses(draftEpisode, segment)"
+                      href="#"
                     ></a>
                     <a
                       @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                      href="#"
                       :class="downArrowClasses(draftEpisode, segment)"
+                      href="#"
                     ></a>
                     <a
                       @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
-                      href="#"
                       class="delete-icon"
+                      href="#"
                     ></a>
+
+                    
+                    <a
+                      @click.prevent="console.log('transcript time for ' + segment.id)"
+                      class="transcript-icon"
+                      href="#"
+                    ></a>
+
                   </div>
                 </ManagedFileComponent>
               </div>
@@ -470,6 +492,9 @@ onMounted(async () => {
 </template>
 
 <style>
+.episode-actions {
+}
+
 /* publications */
 .publications {
   margin-top: var(--gutter-space);
@@ -568,7 +593,7 @@ fieldset.episodes-table {
 
 div.segment-controls {
   display: grid;
-  grid-template-areas: 'up down delete ';
-  grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column);
+  grid-template-areas: 'up down delete transcript ';
+  grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
 </style>

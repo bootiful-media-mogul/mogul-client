@@ -55,6 +55,14 @@ const translations = {
 
     // episodes
     ok: 'OK',
+    transcripts: {
+      text: 'Transcript',
+      buttons: {
+        'cancel': 'Cancel',
+        'save': 'Save Transcript'
+      }
+    },
+
 
     'about.title': 'About',
 

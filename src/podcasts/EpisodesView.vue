@@ -11,7 +11,7 @@ import {
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import { reactive } from 'vue'
 import { dateTimeToString } from '@/dates'
-import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
+// import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 
@@ -23,7 +23,6 @@ export default {
   components: {
     InputTools,
     InputWrapper,
-    WritingAssistant,
     ManagedFileComponent
   },
 
@@ -363,7 +362,7 @@ export default {
             <div class="pure-u-21-24">
               <ManagedFileComponent
                 accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
-                v-model:managed-file-id="draftEpisode.graphic.id"
+               :managed-file-id="draftEpisode.graphic.id"
               >
                 <div class="segment-controls"></div>
               </ManagedFileComponent>
@@ -380,7 +379,7 @@ export default {
               <div class="pure-u-21-24">
                 <ManagedFileComponent
                   accept=".mp3,audio/mpeg"
-                  v-model:managed-file-id="segment.audio.id"
+                  :managed-file-id="segment.audio.id"
                 >
                   <div class="segment-controls">
                     <a

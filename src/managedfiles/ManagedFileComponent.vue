@@ -55,9 +55,11 @@
     auto;
   display: grid;
 }
+
 .managed-file-row .controls {
   grid-area: controls;
 }
+
 .managed-file-row .filename {
   grid-area: filename;
 }
@@ -95,76 +97,77 @@
   left: -1000px;
 }
 </style>
-<script lang="ts">
+<script setup lang="ts">
 import axios from 'axios'
-import { previewManagedFile, managedFiles } from '@/services'
-import { ref } from 'vue'
+import { managedFiles, previewManagedFile } from '@/services'
+import { onMounted, ref, watch } from 'vue'
 
-export default {
-  async mounted() {
-    await this.loadManagedFileIntoEditor()
-  },
+interface Props {
+  readonly disabled?: boolean
+  readonly accept: string
+  readonly managedFileId: number | string
+}
 
-  emits: ['update:managedFile'],
-  props: ['disabled', 'accept', 'managedFileId'],
+const props = defineProps<Props>()
+const filename = ref<string>('')
+const contentType = ref<string>('')
+const size = ref<number>(0)
+const uploading = ref<boolean>(false)
+const written = ref<boolean>(false)
+const realFileUploadInputField = ref<HTMLElement>()
 
-  watch: {
-    async managedFileId(newVal: number, oldVal: number) {
-      await this.loadManagedFileIntoEditor()
-    }
-  },
-  data() {
-    return {
-      filename: ref(''),
-      contentType: ref(''),
-      size: ref(0),
-      uploading: ref(false),
-      written: ref(false)
-    }
-  },
+onMounted(async () => {
+  await loadManagedFileIntoEditor()
+})
 
-  methods: {
-    async preview() {
-      if (this.written) {
-        previewManagedFile(this.managedFileId)
-      }
-    },
+watch(() => props.managedFileId, async (o: any, n: any) => {
+  await loadManagedFileIntoEditor()
+})
 
-    launchFileUpload() {
-      const realFileUploadInputField = this.$refs.realFileUploadInputField as HTMLElement
-      realFileUploadInputField.click()
-    },
-
-    async loadManagedFileIntoEditor() {
-      const managedFile = await managedFiles.getManagedFileById(parseInt(this.managedFileId))
-      this.filename = managedFile.filename
-      this.written = managedFile.written
-      this.contentType = managedFile.contentType
-      this.size = managedFile.size
-    },
-
-    async uploadFile(event: any) {
-      event.preventDefault()
-
-      const data = new FormData()
-      const file = event.target.files[0] as File
-      data.set('file', file)
-      const uploadPath: string = '/api/managedfiles/' + this.managedFileId
-      this.uploading = true
-      const response = await axios.post(uploadPath, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      console.assert(
-        response.status >= 200 && response.status <= 300,
-        'the http post to upload the archive did not succeed.'
-      )
-
-      this.written = true
-      this.uploading = false
-      await this.loadManagedFileIntoEditor()
-    }
+function mfId(): number {
+  // sigh. typescript is not great at types. 
+  function isNumber(value: any): value is number {
+    return typeof value === 'number' && !isNaN(value)
   }
+
+  const m: any = props.managedFileId
+  if (isNumber(m))
+    return m as number
+  else return parseInt(props.managedFileId as string)
+}
+const preview = async () => {
+  if (written.value)
+    previewManagedFile(mfId())
+}
+const launchFileUpload = async () => {
+  realFileUploadInputField.value!!.click()
+}
+const loadManagedFileIntoEditor = async () => {
+  const managedFile = await managedFiles.getManagedFileById(mfId())
+  filename.value = managedFile.filename
+  written.value = managedFile.written
+  contentType.value = managedFile.contentType
+  size.value = managedFile.size
+}
+const uploadFile = async (event: Event) => {
+  event.preventDefault()
+  const target = event.target as HTMLInputElement
+  const data = new FormData()
+  const file = target!!.files!![0] as File
+  data.set('file', file)
+  const uploadPath: string = '/api/managedfiles/' + props.managedFileId
+  uploading.value = true
+  const response = await axios.post(uploadPath, data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+  console.assert(
+    response.status >= 200 && response.status <= 300,
+    'the http post to upload the archive did not succeed.'
+  )
+  written.value = true
+  uploading.value = false
+  await loadManagedFileIntoEditor()
 }
 </script>

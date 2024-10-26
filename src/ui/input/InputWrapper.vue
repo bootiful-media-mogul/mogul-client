@@ -70,7 +70,7 @@ const readInputValue = () => {
   return text.value || ''
 }
 
-const current = function(): PanelSlot | null {
+const current = (): PanelSlot | null => {
   const visible = childSlots.value.filter(slot => slot.panelVisible)
   if (visible && visible.length > 0) {
     return visible[0]
@@ -78,26 +78,26 @@ const current = function(): PanelSlot | null {
   return null
 }
 
-const enableUpArrow = function(): boolean {
+const enableUpArrow = (): boolean => {
   const c = current()
   if (c == null) return false
   return c !== childSlots.value[0]
 }
 
-const enableDownArrow = function(): boolean {
+const enableDownArrow = (): boolean => {
   const c = current()
   if (c == null) return true
   return c !== childSlots.value[childSlots.value.length - 1]
 }
 
-const move = function(direction: number): void {
+const move = (direction: number): void => {
   const currentlyVisiblePanel = childSlots.value.filter((slot) => slot.panelVisible)
   const selected = currentlyVisiblePanel && currentlyVisiblePanel.length > 0 ? currentlyVisiblePanel[0] : childSlots.value[0]
   let index = childSlots.value.indexOf(selected)
   if (index + direction >= 0 && index + direction < childSlots.value.length) {
     index = index + direction
   }
-  childSlots.value.forEach((slot) => {
+  childSlots.value.forEach(slot => {
     slot.iconVisible = false
     slot.panelVisible = false
   })
@@ -105,15 +105,15 @@ const move = function(direction: number): void {
   childSlots.value[index].panelVisible = true
 }
 
-const down = function() {
+const down = () => {
   move(+1)
 }
 
-const up = function() {
+const up = () => {
   move(-1)
 }
 
-const togglePanel = function(slot: PanelSlot) {
+const togglePanel = (slot: PanelSlot) => {
   childSlots.value.forEach((slot) => {
     slot.panelVisible = false
   })

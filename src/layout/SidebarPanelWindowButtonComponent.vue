@@ -66,8 +66,8 @@ onMounted(() => {
   const defaultStyle = 'panel-window-button-color-square-default'
   const hoverStyle = 'panel-window-button-color-square-hover'
 
-  const btnValue = button.value
-  const squareValue = square.value
+  const btnValue = button.value!!
+  const squareValue = square.value!!
 
   btnValue.addEventListener('mouseover', (_: MouseEvent) => {
     squareValue.classList.remove(defaultStyle)

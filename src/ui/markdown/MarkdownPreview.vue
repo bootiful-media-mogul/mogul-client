@@ -36,19 +36,24 @@ import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { markdown } from '@/services'
-import { ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch } from 'vue'
 
 interface Props {
   readonly modelValue: string
 }
 
+const needed = ref<boolean>(false)
 let timer = -1
 const props = defineProps<Props>()
 const rendered = ref<string>('')
 
 const render = async (md: string) => {
-  if (!md || md.trim() === '') return
+  
+  if (!md || md.trim() === '' || !needed.value) 
+    return
+  
   rendered.value = await markdown.render(md)
+  
   console.log(rendered.value)
 }
 
@@ -60,6 +65,16 @@ const debouncingRender = async () => {
     await render(props.modelValue)
   }, 1000)
 }
+
+onMounted(() => {
+  console.log('the markdown preview is needed!')
+  needed.value = true
+})
+
+onUnmounted(() => {
+  console.log('the markdown preview is not mounted any more')
+  needed.value = false
+})
 
 watch(
   () => props.modelValue,

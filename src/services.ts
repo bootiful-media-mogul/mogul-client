@@ -596,6 +596,8 @@ export class Ai {
   }
 }
 
+import { marked } from 'marked'
+
 export class Markdown {
   private readonly client: Client
 
@@ -604,6 +606,9 @@ export class Markdown {
   }
 
   async render(markdown: string): Promise<string> {
+    return Promise.resolve(marked.parse(markdown, {}))
+
+    /*
     const query = `
         query AiChatQuery($markdown: String){ 
          renderMarkdown(markdown:$markdown) 
@@ -613,6 +618,7 @@ export class Markdown {
       markdown: markdown
     })
     return (await result['data']['renderMarkdown']) as string
+    */
   }
 }
 

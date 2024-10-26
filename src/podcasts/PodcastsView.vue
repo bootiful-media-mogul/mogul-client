@@ -10,7 +10,6 @@
 
         <InputWrapper v-model="title">
           <input type="text" required id="title" v-model="title" />
-
           <InputTools v-model="title" />
         </InputWrapper>
       </div>
@@ -31,7 +30,7 @@
     <fieldset>
       <legend>Podcasts</legend>
 
-      <div class="pure-g form-row podcast-rows" v-for="podcast in podcasts" v-bind:key="podcast.id">
+      <div class="pure-g form-row podcast-rows" v-for="podcast in all" v-bind:key="podcast.id">
         <div class="id">
           #<b>{{ podcast.id }}</b>
         </div>
@@ -46,12 +45,12 @@
         </div>
         <div class="delete">
           <a
-            v-if="podcasts.length > 1"
+            v-if="all.length > 1"
             @click.prevent="deletePodcast(podcast.id)"
             href="#"
             class="delete-icon"
           ></a>
-          <span v-if="podcasts.length == 1" href="#" class="delete-icon disabled"></span>
+          <span v-if="all.length == 1" href="#" class="delete-icon disabled"></span>
         </div>
         <div class="title">
           {{ podcast.title }}
@@ -93,56 +92,41 @@
   grid-template-columns: var(--id-column) 30px 100px var(--date-column) auto;
 }
 </style>
-<script lang="ts">
+<script setup lang="ts">
 import { Podcast, podcasts } from '@/services'
 import { dateTimeToString } from '@/dates'
-import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-async function refresh() {
+const router = useRouter()
+const title = ref<string>('')
+const all = ref<Array<Podcast>>([])
+const refresh = async function() {
   return await podcasts.podcasts()
 }
-
-export default {
-  components: { InputTools, WritingAssistant, InputWrapper },
-
-  async created() {
-    this.podcasts = await refresh()
-  },
-
-  methods: {
-    dts: function (date: number) {
-      return dateTimeToString(date)
-    },
-    async deletePodcast(id: number) {
-      const deleted = await podcasts.deletePodcast(id)
-      // nb: i tried just setting the variable podcasts to a new array, but vue.js didn't 'see' that
-      // so it's safer to modify the existing collection
-      this.podcasts = this.podcasts.filter((p) => p.id != deleted)
-    },
-
-    async navigateToEpisodesPageForPodcast(podcastId: number, e: Event) {
-      e.preventDefault()
-      this.$router.push({
-        name: 'podcast-episodes',
-        params: { id: podcastId }
-      })
-    },
-
-    async createPodcast(e: Event) {
-      e.preventDefault()
-      await podcasts.create(this.title)
-      this.podcasts = await refresh()
-      this.title = ''
-    }
-  },
-
-  data() {
-    return {
-      podcasts: [] as Array<Podcast>,
-      title: ''
-    }
-  }
+const dts = function(date: number) {
+  return dateTimeToString(date)
 }
+const deletePodcast = async (id: number) => {
+  const deleted = await podcasts.deletePodcast(id)
+  all.value = all.value.filter(p => p.id != deleted)
+}
+const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
+  e.preventDefault()
+  await router.push({
+    name: 'podcast-episodes',
+    params: { id: podcastId }
+  })
+}
+const createPodcast = async function(e: Event) {
+  e.preventDefault()
+  await podcasts.create(title.value)
+  all.value = await refresh()
+  title.value = ''
+}
+onMounted(async () => {
+  all.value = await refresh()
+})
 </script>

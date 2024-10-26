@@ -135,13 +135,16 @@ function mfId(): number {
     return m as number
   else return parseInt(props.managedFileId as string)
 }
+
 const preview = async () => {
   if (written.value)
     previewManagedFile(mfId())
 }
+
 const launchFileUpload = async () => {
   realFileUploadInputField.value!!.click()
 }
+
 const loadManagedFileIntoEditor = async () => {
   const managedFile = await managedFiles.getManagedFileById(mfId())
   filename.value = managedFile.filename
@@ -149,6 +152,7 @@ const loadManagedFileIntoEditor = async () => {
   contentType.value = managedFile.contentType
   size.value = managedFile.size
 }
+
 const uploadFile = async (event: Event) => {
   event.preventDefault()
   const target = event.target as HTMLInputElement

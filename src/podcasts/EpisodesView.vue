@@ -1,4 +1,13 @@
-<script lang="ts">
+<script setup lang="ts">
+import {
+  ref,
+  reactive,
+  onMounted,
+  computed
+} from 'vue'
+
+import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
+
 import {
   Notification,
   notifications,
@@ -8,290 +17,239 @@ import {
   podcasts,
   Publication
 } from '@/services'
-import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import { reactive } from 'vue'
 import { dateTimeToString } from '@/dates'
-// import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 
-export default {
-  mounted(): void {
-    this.loadPodcast()
-  },
+// Props
+const props = defineProps<{ id: number | string }>()
 
-  components: {
-    InputTools,
-    InputWrapper,
-    ManagedFileComponent
-  },
+// State
+const draftEpisodeSegments = ref<PodcastEpisodeSegment[]>([])
+const selectedPlugin = ref('')
+const created = ref(-1)
+const draftEpisode = reactive<PodcastEpisode>({} as PodcastEpisode)
+const episodes = ref<PodcastEpisode[]>([])
+const publications = ref<Publication[]>([])
+const currentPodcast = ref<Podcast>()
+const selectedPodcastId = ref(props.id)
+const title = ref('')
+const description = ref('')
+const dirtyKey = ref('')
 
-  props: ['id'],
+// Computed
+const publishButtonDisabled = computed(() => {
+  return !draftEpisode.complete || !selectedPlugin.value || selectedPlugin.value === ''
+})
 
-  methods: {
-    dts(date: number): string | null {
-      return dateTimeToString(date)
-    },
-
-    publishButtonDisabled() {
-      return !this.draftEpisode.complete || !this.selectedPlugin || this.selectedPlugin == ''
-    },
-
-    // todo we're calling this from loadEpisode. any chance this is grossly inefficient and could be optimized away?
-    async loadPodcast() {
-      const newPodcastId = this.selectedPodcastId
-      this.currentPodcast = await podcasts.podcastById(newPodcastId)
-      const episodes = await podcasts.podcastEpisodes(newPodcastId)
-      if (episodes) {
-        episodes.sort((a: PodcastEpisode, b: PodcastEpisode) => b.created - a.created)
-      }
-      this.episodes = episodes
-    },
-
-    async movePodcastEpisodeSegmentDown(
-      episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment
-    ) {
-      await podcasts.movePodcastEpisodeSegmentDown(episode.id, episodeSegment.id)
-      await this.loadEpisodeSegments(episode)
-    },
-
-    async movePodcastEpisodeSegmentUp(
-      episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment
-    ) {
-      await podcasts.movePodcastEpisodeSegmentUp(episode.id, episodeSegment.id)
-      await this.loadEpisodeSegments(episode)
-    },
-    async deletePodcastEpisodeSegment(
-      episode: PodcastEpisode,
-      episodeSegment: PodcastEpisodeSegment
-    ) {
-      this.draftEpisode.complete = false
-      await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
-      await this.loadEpisodeSegments(episode)
-    },
-    async deletePodcastEpisode(episode: PodcastEpisode) {
-      await podcasts.deletePodcastEpisode(episode.id)
-      await this.cancel(new Event(''))
-    },
-    async addNewPodcastEpisodeSegment(episode: PodcastEpisode) {
-      this.draftEpisode.complete = false
-      await podcasts.addPodcastEpisodeSegment(episode.id)
-      await this.loadEpisodeSegments(episode)
-    },
-
-    async refreshEpisode(episodeId: number) {
-      if (!episodeId)
-        console.error('the episode you gave to refresh is not valid ' + episodeId + '!')
-      const ep = await podcasts.podcastEpisodeById(episodeId)
-      await this.loadEpisode(ep)
-    },
-
-    async refreshPublications(episode: PodcastEpisode) {
-      if (episode.publications && episode.publications.length > 0) {
-        console.debug('there are ' + episode.publications.length + ' publications.')
-        this.publications = episode.publications.sort(
-          (a: Publication, b: Publication) => b.created - a.created
-        )
-        episode.publications = this.publications
-      } //
-      else {
-        this.publications = []
-      }
-    },
-
-    async refreshEpisodePublicationControls(id: number, completed: boolean) {
-      this.draftEpisode.complete = completed // set it up so that the UI sees the change.
-      if (!id) {
-        console.error('no episode provided in refreshEpisodePublicationControls, returning')
-      }
-      const episode = await podcasts.podcastEpisodeById(id)
-      if (episode) {
-        await this.refreshPublications(episode)
-
-        if (episode.availablePlugins) {
-          const plugins = episode.availablePlugins
-          if (plugins && plugins.length == 1) this.selectedPlugin = plugins[0]
-        }
-      } else {
-        console.error(
-          'there is no episode in the SQL DB for refreshEpisodePublicationControls. returning. '
-        )
-      }
-    },
-    async loadEpisode(episode: PodcastEpisode) {
-      this.draftEpisode.id = episode.id
-      this.draftEpisode.graphic = episode.graphic
-      this.draftEpisode.title = episode.title
-      this.draftEpisode.description = episode.description
-      this.draftEpisode.complete = episode.complete
-      this.draftEpisode.created = episode.created
-      this.draftEpisode.availablePlugins = episode.availablePlugins
-      this.description = this.draftEpisode.description
-      this.title = this.draftEpisode.title
-      this.created = this.draftEpisode.created
-      this.dirtyKey = this.computeDirtyKey()
-      this.draftEpisodeSegments = episode.segments
-      await this.refreshEpisodePublicationControls(episode.id, this.draftEpisode.complete)
-    },
-
-    async save(e: Event) {
-      e.preventDefault()
-
-      if (this.draftEpisode.id) {
-        // we're editing a record, so update it
-        const episode = await podcasts.updatePodcastEpisode(
-          this.draftEpisode.id,
-          this.title,
-          this.description
-        )
-        await this.loadEpisode(await podcasts.podcastEpisodeById(this.draftEpisode.id))
-      } //
-      else {
-        const episode = await podcasts.createPodcastEpisodeDraft(
-          this.selectedPodcastId,
-          this.title,
-          this.description
-        )
-        await this.loadEpisode(await podcasts.podcastEpisodeById(episode.id))
-      }
-    },
-
-    downArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
-      return {
-        'down-arrow-icon': true,
-        disabled: this.draftEpisodeSegments[this.draftEpisodeSegments.length - 1].id == segment.id
-      }
-    },
-
-    upArrowClasses(episode: PodcastEpisode, segment: PodcastEpisodeSegment) {
-      return {
-        'up-arrow-icon': true,
-        disabled: this.draftEpisodeSegments && this.draftEpisodeSegments[0].id == segment.id
-      }
-    },
-
-    async unpublish(publication: Publication) {
-      await podcasts.unpublish(publication)
-    },
-
-    async publish(e: Event) {
-      e.preventDefault()
-      await podcasts.publishPodcastEpisode(this.draftEpisode.id, this.selectedPlugin)
-    },
-
-    pluginSelected(e: Event) {
-      e.preventDefault()
-    },
-
-    /**
-     * returns TRUE if the buttons should be disabled because there's no change in the data in the form.
-     */
-    buttonsDisabled() {
-      let changed = false
-      if (!this.draftEpisode.id) {
-        const hasData: boolean = this.description.trim() != '' && this.title.trim() != ''
-        if (hasData) {
-          changed = true
-        }
-      } //
-      else {
-        changed = this.dirtyKey != this.computeDirtyKey()
-      }
-
-      return !changed
-    },
-
-    computeDirtyKey(): string {
-      return (
-        '' +
-        (this.draftEpisode.id ? this.draftEpisode.id : '') +
-        this.description +
-        ':' +
-        this.title
-      )
-    },
-
-    async cancel(e: Event) {
-      e.preventDefault()
-      this.draftEpisode = reactive({} as PodcastEpisode)
-      this.title = ''
-      this.description = ''
-      this.draftEpisodeSegments = []
-      this.publications = []
-      await this.loadPodcast()
-    },
-
-    async loadEpisodeSegments(episode: PodcastEpisode) {
-      const ep = await podcasts.podcastEpisodeById(episode.id)
-      if (ep && ep.segments && ep.segments.length > 0) {
-        this.draftEpisodeSegments = ep.segments
-      }
+const buttonsDisabled = computed(() => {
+  let changed = false
+  if (!draftEpisode.id) {
+    const hasData = description.value.trim() !== '' && title.value.trim() !== ''
+    if (hasData) {
+      changed = true
     }
-  },
-  created() {
-    this.dirtyKey = this.computeDirtyKey()
-    const that = this
+  } else {
+    changed = dirtyKey.value !== computeDirtyKey()
+  }
+  return !changed
+})
 
-    // todo these event handlers should <em>only</em> reload the UI
-    //  state if the user is doing something w/ an entity
-    //  affected by the event. that is, why refresh a screen
-    //  belonging to something else completely if that thing isn't
-    //  visible on the screen in the first place?
 
-    notifications.listenForCategory(
-      'podcast-episode-completion-event',
-      async function (notification: Notification) {
-        const jsonMap = JSON.parse(notification.context) as any
-        const complete = jsonMap['complete'] as boolean
-        const episodeId = parseInt(notification.key)
-        await that.refreshEpisodePublicationControls(episodeId, complete) // get it from the event
-      }
-    )
+const refreshEpisode = async (episodeId: number) => {
+  if (!episodeId)
+    console.error('the episode you gave to refresh is not valid ' + episodeId + '!')
+  const ep = await podcasts.podcastEpisodeById(episodeId)
+  await loadEpisode(ep)
+}
 
-    notifications.listenForCategory(
-      'publication-completed-event',
-      async function (notification: Notification) {
-        await that.refreshEpisode(that.draftEpisode.id)
-      }
-    )
+// Methods
+const dts = (date: number): string | null => {
+  return dateTimeToString(date)
+}
 
-    notifications.listenForCategory(
-      'publication-started-event',
-      async function (notification: Notification) {
-        await that.refreshEpisode(that.draftEpisode.id)
-        that.publications
-          .filter((pub) => pub.id === parseInt(notification.key))
-          .forEach((p) => {
-            p.publishing = true
-          })
-      }
-    )
-  },
-  setup() {
-    return {}
-  },
-  data() {
-    return {
-      draftEpisodeSegments: [] as Array<PodcastEpisodeSegment>,
-      completionEventListenersEventSource: null as any as EventSource,
-      completionEventListeners: [],
-      selectedPlugin: '',
-      created: -1,
-      draftEpisode: reactive({} as PodcastEpisode),
-      episodes: [] as Array<PodcastEpisode>,
-      publications: [] as Array<Publication>,
-      currentPodcast: null as any as Podcast,
-      selectedPodcastId: this.id,
-      title: '',
-      description: '',
-      dirtyKey: ''
+const computeDirtyKey = (): string => {
+  return `${draftEpisode.id ? draftEpisode.id : ''}${description.value}:${title.value}`
+}
+
+const loadPodcast = async () => {
+  const newPodcastId = parseInt(selectedPodcastId.value + '')
+  currentPodcast.value = await podcasts.podcastById(newPodcastId)
+  const podcastEpisodes = await podcasts.podcastEpisodes(newPodcastId)
+  if (podcastEpisodes) {
+    podcastEpisodes.sort((a, b) => b.created - a.created)
+  }
+  episodes.value = podcastEpisodes
+}
+
+const loadEpisodeSegments = async (episode: PodcastEpisode) => {
+  const ep = await podcasts.podcastEpisodeById(episode.id)
+  if (ep?.segments?.length > 0) {
+    draftEpisodeSegments.value = ep.segments
+  }
+}
+
+const refreshPublications = async (episode: PodcastEpisode) => {
+  if (episode.publications?.length > 0) {
+    console.debug('there are ' + episode.publications.length + ' publications.')
+    publications.value = episode.publications.sort((a, b) => b.created - a.created)
+    episode.publications = publications.value
+  } else {
+    publications.value = []
+  }
+}
+
+const loadEpisode = async (episode: PodcastEpisode) => {
+  Object.assign(draftEpisode, episode)
+  description.value = episode.description
+  title.value = episode.title
+  created.value = episode.created
+  dirtyKey.value = computeDirtyKey()
+  draftEpisodeSegments.value = episode.segments
+  await refreshEpisodePublicationControls(episode.id, draftEpisode.complete)
+}
+
+const refreshEpisodePublicationControls = async (id: number, completed: boolean) => {
+  draftEpisode.complete = completed
+  if (!id) {
+    console.error('no episode provided in refreshEpisodePublicationControls, returning')
+    return
+  }
+
+  const episode = await podcasts.podcastEpisodeById(id)
+  if (episode) {
+    await refreshPublications(episode)
+    if (episode.availablePlugins?.length === 1) {
+      selectedPlugin.value = episode.availablePlugins[0]
     }
   }
 }
-</script>
 
+const save = async (e: Event) => {
+
+  e.preventDefault()
+
+  if (draftEpisode.id) {
+    await podcasts.updatePodcastEpisode(draftEpisode.id, title.value, description.value)
+    await loadEpisode(await podcasts.podcastEpisodeById(draftEpisode.id))
+  } else {
+    const episode = await podcasts.createPodcastEpisodeDraft(
+      parseInt(selectedPodcastId.value + ''),
+      title.value,
+      description.value
+    )
+    await loadEpisode(await podcasts.podcastEpisodeById(episode.id))
+  }
+}
+
+const cancel = async (e: Event) => {
+  e.preventDefault()
+  Object.assign(draftEpisode, {} as PodcastEpisode)
+  title.value = ''
+  description.value = ''
+  draftEpisodeSegments.value = []
+  publications.value = []
+  await loadPodcast()
+}
+
+// Segment Methods
+const movePodcastEpisodeSegmentDown = async (
+  episode: PodcastEpisode,
+  episodeSegment: PodcastEpisodeSegment
+) => {
+  await podcasts.movePodcastEpisodeSegmentDown(episode.id, episodeSegment.id)
+  await loadEpisodeSegments(episode)
+}
+
+const movePodcastEpisodeSegmentUp = async (
+  episode: PodcastEpisode,
+  episodeSegment: PodcastEpisodeSegment
+) => {
+  await podcasts.movePodcastEpisodeSegmentUp(episode.id, episodeSegment.id)
+  await loadEpisodeSegments(episode)
+}
+
+const deletePodcastEpisodeSegment = async (
+  episode: PodcastEpisode,
+  episodeSegment: PodcastEpisodeSegment
+) => {
+  draftEpisode.complete = false
+  await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
+  await loadEpisodeSegments(episode)
+}
+
+const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
+  draftEpisode.complete = false
+  await podcasts.addPodcastEpisodeSegment(episode.id)
+  await loadEpisodeSegments(episode)
+}
+
+// Publication Methods
+const publish = async (e: Event) => {
+  e.preventDefault()
+  await podcasts.publishPodcastEpisode(draftEpisode.id, selectedPlugin.value)
+}
+
+const pluginSelected = async (e: Event) => {
+  e.preventDefault()
+}
+
+const deletePodcastEpisode = async (episode: PodcastEpisode) => {
+  await podcasts.deletePodcastEpisode(episode.id)
+  await cancel(new Event(''))
+}
+
+const unpublish = async (publication: Publication) => {
+  await podcasts.unpublish(publication)
+}
+
+// Arrow Classes
+const downArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
+  'down-arrow-icon': true,
+  disabled: draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
+})
+
+const upArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
+  'up-arrow-icon': true,
+  disabled: draftEpisodeSegments.value?.[0]?.id === segment.id
+})
+
+// Lifecycle Hooks
+onMounted(async () => {
+  await loadPodcast()
+  dirtyKey.value = computeDirtyKey()
+
+  // Event Listeners
+  notifications.listenForCategory(
+    'podcast-episode-completion-event',
+    async (notification: Notification) => {
+      const jsonMap = JSON.parse(notification.context) as any
+      const complete = jsonMap['complete'] as boolean
+      const episodeId = parseInt(notification.key)
+      await refreshEpisodePublicationControls(episodeId, complete)
+    }
+  )
+
+  notifications.listenForCategory(
+    'publication-completed-event',
+    async (_: Notification) => {
+      await refreshEpisode(draftEpisode.id)
+    }
+  )
+
+  notifications.listenForCategory(
+    'publication-started-event',
+    async (notification: Notification) => {
+      await refreshEpisode(draftEpisode.id)
+      publications.value
+        .filter((pub) => pub.id === parseInt(notification.key))
+        .forEach((p) => {
+          p.publishing = true
+        })
+    }
+  )
+})
+</script>
 <template>
   <h1 v-if="currentPodcast">
     {{ $t('episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
@@ -331,7 +289,7 @@ export default {
           <span class="save">
             <button
               @click="save"
-              :disabled="buttonsDisabled()"
+              :disabled="buttonsDisabled "
               type="submit"
               class="pure-button pure-button-primary"
             >
@@ -362,7 +320,7 @@ export default {
             <div class="pure-u-21-24">
               <ManagedFileComponent
                 accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
-               :managed-file-id="draftEpisode.graphic.id"
+                :managed-file-id="draftEpisode.graphic.id"
               >
                 <div class="segment-controls"></div>
               </ManagedFileComponent>
@@ -443,7 +401,7 @@ export default {
                 :key="draftEpisode.id"
                 ref="publishButton"
                 class="pure-button pure-button-primary publish-button"
-                :disabled="publishButtonDisabled()"
+                :disabled="publishButtonDisabled"
               >
                 {{ $t('episodes.buttons.publish') }}
               </button>

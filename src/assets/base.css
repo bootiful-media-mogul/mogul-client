@@ -121,18 +121,15 @@ html {
     background-size: var(--icon-width) var(--icon-width);
 }
 
-
 .transcript-icon {
     background: url('../assets/images/transcript-highlight.png');
     height: var(--icon-width);
     display: inline-block;
     width: var(--icon-width);
     background-size: var(--icon-width) var(--icon-width);
-
 }
 
 .transcript-icon:hover {
-
     background: url('../assets/images/transcript.png');
     height: var(--icon-width);
     display: inline-block;

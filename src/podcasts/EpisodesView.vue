@@ -128,13 +128,12 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
   }
 }
 
-const editPodcastEpisodeSegmentTranscript = (episode: PodcastEpisode, seg: PodcastEpisodeSegment) => {
-  console.log('editing the transcript for ' + seg.id + ' with value [' +
-    seg.transcript +
-    ']')
 
-  editTranscript(seg.transcript)
+const transcriptEventPrefix = 'podcast-episode-segment'
 
+const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
+  console.log('editing the transcript for ' + seg.id + ' with value [' + seg.transcript + ']')
+  editTranscript(transcriptEventPrefix + '-' + seg.id.toString(), seg.transcript)
 }
 
 const save = async (e: Event) => {
@@ -284,11 +283,11 @@ onMounted(async () => {
         build out the podcast subsystem
         show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
       -->
-      <div class="episode-actions subject-actions">
-        <a v-if="draftEpisode.id" href="#">create blog from episode
-        </a> | 
-        <a v-if="draftEpisode.id" href="#"> 
-          analyse (for improvements, clippability, etc.)
+      <div v-if="draftEpisode.id" class="episode-actions subject-actions">
+        <a href="#"> blog<!-- from episode-->
+        </a> |
+        <a href="#">
+          analyse<!-- (for improvements, clippability, etc.)-->
         </a>
       </div>
 
@@ -383,10 +382,8 @@ onMounted(async () => {
                       class="delete-icon"
                       href="#"
                     ></a>
-
-
                     <a
-                      @click.prevent="editPodcastEpisodeSegmentTranscript(draftEpisode, segment)"
+                      @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
                       class="transcript-icon"
                       href="#"
                     ></a>

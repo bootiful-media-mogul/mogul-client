@@ -24,8 +24,20 @@ export function previewManagedFile(managedFileId: number) {
   events.emit('preview-managed-file-event', managedFileId)
 }
 
-export function editTranscript ( text:string) {
-  events.emit('edit-transcript-event', text)
+export interface TranscriptEditEvent {
+  readonly key: string
+  readonly transcript: string
+}
+
+export interface TranscriptEditedEvent {
+  readonly key: string
+  readonly transcript: string
+}
+
+export function editTranscript(key: string, text: string) {
+  events.emit('edit-transcript-event', {
+    key: key, transcript: text
+  } as TranscriptEditEvent)
 }
 
 export class Podcast {
@@ -611,7 +623,7 @@ export class Ai {
 
 
 export class Markdown {
-  
+
   private readonly client: Client
 
   constructor(client: Client) {

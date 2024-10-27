@@ -202,6 +202,11 @@ html {
     background-size: var(--icon-width) var(--icon-width);
 }
 
+input, textarea {
+    z-index: 20;
+    position: relative;
+}
+
 .unselectable {
     user-select: none; /* For modern browsers */
     -webkit-user-select: none; /* For Safari */

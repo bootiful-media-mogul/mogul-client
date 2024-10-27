@@ -10,43 +10,54 @@
 </template>
 <style>
 .writing-tools-button {
+
   cursor: pointer;
   display: grid;
-  grid-template-areas: ' . content . ';
-  grid-template-columns: auto min-content auto;
+  grid-template-areas: '   content  ';
+  
   border-radius: var(--button-radius);
   background-color: lightgrey;
   padding: calc(var(--gutter-space) / 3);
   font-size: small;
+  
 }
+
 
 .writing-tools-button-content {
   display: grid;
   grid-area: content;
-  grid-template-areas: 'icon label';
-  grid-template-columns: var(--writing-tools-panel-icon-size) auto;
-  align-items: center;
-  height: var(--writing-tools-panel-icon-size);
+  grid-template-areas: '. icon . '
+                      'label label label';
+  grid-template-columns:  auto auto auto;
+  place-items: center;
 }
+
 
 .writing-tools-button-content-label {
-  padding-left: calc(var(--gutter-space) / 2);
+  grid-area: label;
+  
+
 }
 
+
 .writing-tools-button-content-icon {
+  
+  grid-area: icon;
   height: var(--writing-tools-panel-icon-size);
 }
 
 .writing-tools-button-content-icon img {
   width: var(--writing-tools-panel-icon-size);
-  grid-area: icon;
 }
+
 </style>
 <script setup lang="ts">
 import { ref } from 'vue'
+
 interface Props {
   readonly label: string
 }
+
 const props = defineProps<Props>()
 const label = ref<string>(props.label)
 </script>

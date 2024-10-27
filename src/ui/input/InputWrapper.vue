@@ -44,7 +44,7 @@ import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import type { PanelSlot } from './input'
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
-const text = ref<String>('')
+// const text = ref<String>('')
 const root = ref<HTMLElement>()
 const inputElement = ref<HTMLInputElement>()
 const childSlots = ref<Array<PanelSlot>>([])
@@ -53,7 +53,7 @@ const panelVisible = ref<boolean>(false)
 
 const updateInputValue = (txt: string) => {
   emit('update:modelValue', txt)
-  text.value = txt
+  //text.value = txt
 }
 
 const updateValue = (event: Event) => {
@@ -67,7 +67,9 @@ const registerChild = (slotPair: PanelSlot) => {
 }
 
 const readInputValue = () => {
-  return text.value || ''
+  // console.log('readInputValue ' + inputElement.value!!.value + ' text.value=' + text.value)
+ // return text.value || ''
+  return inputElement.value!!.value
 }
 
 const current = (): PanelSlot | null => {
@@ -128,6 +130,7 @@ onMounted(() => {
     events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
   }
   childSlots.value[0].iconVisible = true
+  // text.value = inputElement.value!!.value
 })
 
 onBeforeUnmount(() => {
@@ -142,14 +145,16 @@ provide('readInputValue', readInputValue)
 </script>
 
 <style scoped>
+
 .writing-tools-container {
   display: grid;
   grid-template-areas:
-    ' input icons '
-    ' panel . ';
-
-  grid-template-columns: auto var(--icon-column-width);
-  margin-right: calc(var(--icon-column-width) * -1);
+    ' input input  input '
+    ' . icons .  '
+    ' panel panel panel  ';
+  grid-template-columns: auto min-content auto;
+  grid-template-rows:  auto calc(var(--icon-width) * 1.2 ) auto;
+  margin-bottom: var(--gutter-space);
 }
 
 .input-wrapper {
@@ -161,16 +166,26 @@ provide('readInputValue', readInputValue)
   grid-area: icons;
 }
 
+
 .panel {
+  z-index: 8;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
   grid-area: panel;
-  margin-top: calc(-2 * var(--writing-tools-panel-padding));
+  margin-top: calc(-2 * var(--icon-width));
   padding-bottom: var(--writing-tools-panel-padding);
   padding-left: var(--writing-tools-panel-padding);
   padding-right: var(--writing-tools-panel-padding);
-  padding-top: calc(3 * var(--writing-tools-panel-padding));
-  background-color: rgba(255, 255, 255, 0.3);
+  padding-top: calc(2.5 * var(--icon-width));
+  background-color: rgba(255, 255, 255, 0.5); 
+  
+  
   border-radius: 4px;
+}
+
+.icon-column-menu {
+  z-index: 10;
+  height: calc(1.5 * var(--icon-width));
+
 }
 
 .icon {

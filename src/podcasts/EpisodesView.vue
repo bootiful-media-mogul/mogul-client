@@ -5,10 +5,12 @@ import {
   onMounted,
   computed
 } from 'vue'
+import { events, type TranscriptEditedEvent } from '@/services'
 
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 
 import {
+  editTranscript,
   Notification,
   notifications,
   Podcast,
@@ -17,9 +19,20 @@ import {
   podcasts,
   Publication
 } from '@/services'
+
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
+
+
+const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
+
+events.on('transcript-edited-event', async (event) => {
+  const updatedEvent = event as TranscriptEditedEvent
+  if (!updatedEvent.key.startsWith(transcriptEventPrefix))
+    return
+  await podcasts.setPodcastEpisodesSegmentTranscript(updatedEvent.id, true, updatedEvent.transcript)
+})
 
 // Props
 const props = defineProps<{ id: number | string }>()
@@ -57,8 +70,10 @@ const buttonsDisabled = computed(() => {
 
 
 const refreshEpisode = async (episodeId: number) => {
-  if (!episodeId)
+  if (!episodeId) {
     console.error('the episode you gave to refresh is not valid ' + episodeId + '!')
+    return
+  }
   const ep = await podcasts.podcastEpisodeById(episodeId)
   await loadEpisode(ep)
 }
@@ -123,6 +138,11 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
       selectedPlugin.value = episode.availablePlugins[0]
     }
   }
+}
+
+
+const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
+  editTranscript(transcriptEventPrefix, seg.id, seg.transcript)
 }
 
 const save = async (e: Event) => {
@@ -249,6 +269,8 @@ onMounted(async () => {
     }
   )
 })
+
+
 </script>
 <template>
   <h1 v-if="currentPodcast">
@@ -272,10 +294,12 @@ onMounted(async () => {
         build out the podcast subsystem
         show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
       -->
-      <div class="episode-actions subject-actions">
-        <a v-if="draftEpisode.id" href="#">create blog from episode
-        </a> <!--|
-        <a href="#">ss</a> -->
+      <div v-if="draftEpisode.id" class="episode-actions subject-actions">
+        <a href="#"> blog<!-- from episode-->
+        </a> |
+        <a href="#">
+          analyse<!-- (for improvements, clippability, etc.)-->
+        </a>
       </div>
 
 
@@ -369,10 +393,8 @@ onMounted(async () => {
                       class="delete-icon"
                       href="#"
                     ></a>
-
-                    
                     <a
-                      @click.prevent="console.log('transcript time for ' + segment.id)"
+                      @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
                       class="transcript-icon"
                       href="#"
                     ></a>

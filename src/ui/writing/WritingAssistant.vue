@@ -91,11 +91,7 @@
   font-size: small;
 }
 
-.proposal-approval {
-}
-
-.proposal-approval .accept-link {
-}
+ 
 </style>
 <template>
   <InputWrapperChild>
@@ -138,8 +134,8 @@
           </div>
         </div>
         <div class="proposal-approval" v-if="proposalApprovalRequired">
-          <a class="accept-link" href="#" @click.prevent="accept">accept</a> |
-          <a class="revert-link" href="#" @click.prevent="revert">revert</a>
+          <a class="accept-link" href="#" @click.prevent="accept"> {{ $t('accept')}}</a> |
+          <a class="revert-link" href="#" @click.prevent="revert"> {{ $t('revert')}}</a>
         </div>
       </div>
     </template>
@@ -159,21 +155,15 @@ import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 import { inject, ref } from 'vue'
 import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
 
-
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
-
-
 const previousModelValue = ref<string>('')
 const proposalApprovalRequired = ref<boolean>(false)
-
-
 const toolsClasses = ref<string>('tools')
 const rewriteStylesVisible = ref<boolean>(false)
 const rewriteStylesClasses = ref<string>('styles')
 const rewriteToolsClasses = ref<string>('rewrite-button')
 const toggleButtonClasses = ref<string>('toggle-icon edit-icon')
-
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 
 function reset() {
@@ -204,15 +194,19 @@ function proposeUpdatedText(updatedText: string) {
 }
 
 async function proofread() {
-  if (readValue().trim() === '') return;
+  const contents = readValue().trim()
+  console.log('proofread [' + contents + ']')
 
-  if (rewriteStylesVisible.value) 
+  if (contents === '')
+    return
+
+  if (rewriteStylesVisible.value)
     await toggleRewriteTools()
 
   const proofread = await ai.chat(
     `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
         ==========================================
-        ${readValue()}
+        ${contents}
       `
   )
   proposeUpdatedText(proofread)
@@ -230,6 +224,7 @@ async function rewriteProfessional() {
 }
 
 async function rewriteConcise() {
+  console.log('you want to rewrite: ' + readValue().substring(0, 10) + '...')
   if (readValue().trim() === '') return
   const updated = await ai.chat(
     `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.

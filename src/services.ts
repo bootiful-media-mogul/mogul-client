@@ -26,17 +26,19 @@ export function previewManagedFile(managedFileId: number) {
 
 export interface TranscriptEditEvent {
   readonly key: string
+  readonly id : number
   readonly transcript: string
 }
 
 export interface TranscriptEditedEvent {
   readonly key: string
+  readonly id: number
   readonly transcript: string
 }
 
-export function editTranscript(key: string, text: string) {
+export function editTranscript(key: string, id: number, text: string) {
   events.emit('edit-transcript-event', {
-    key: key, transcript: text
+    key: key, transcript: text , id: id 
   } as TranscriptEditEvent)
 }
 
@@ -71,6 +73,7 @@ class Podcasts {
     })
     return true
   }
+
 
   async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
     const mutation = ` 
@@ -183,6 +186,25 @@ class Podcasts {
     const res = await this.client.query(q, { podcastId: podcastId })
     return (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
   }
+
+
+// transcript
+  async setPodcastEpisodesSegmentTranscript(episodeSegmentId: number, transcribable: boolean, transcript: string): Promise<boolean> {
+    // episodeSegmentId: ID, transcribable: Boolean, transcript: String)
+    const mutation = ` 
+          mutation SetPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID, $transcribable: Boolean , $transcript:String ){ 
+            setPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId,  transcribable: $transcribable, transcript: $transcript )  
+          }
+    `
+    const publication = await this.client.mutation(mutation, {
+      episodeSegmentId: episodeSegmentId,
+      transcribable: transcribable,
+      transcript: transcript
+    })
+    return (await publication.data['publishPodcastEpisode']) as boolean
+  }
+
+// transcript
 
   async deletePodcastEpisodeSegment(id: number) {
     const mutation = `

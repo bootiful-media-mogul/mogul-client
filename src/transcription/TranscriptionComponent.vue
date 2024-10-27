@@ -8,14 +8,20 @@ const transcript = ref<string>('')
 const el = ref<HTMLElement>()
 const dirty = ref<boolean>()
 const key = ref<string>('')
+const id = ref<number>(0)
 const fresh = ref<boolean>(true)
 
 events.on('edit-transcript-event', async (event) => {
+  
   const editEvent: TranscriptEditEvent = event as TranscriptEditEvent
-  console.log('received an event for a transcript ' + editEvent.key)
+  
+  
   transcript.value = '' + editEvent.transcript
   key.value = editEvent.key
+  id.value = editEvent.id
+  
   dirty.value = false
+  
   events.emit('sidebar-panel-opened', el.value)
 
 })
@@ -26,6 +32,7 @@ function isDirty() {
 
 const cancel = () => {
   key.value = ''
+  id.value = 0
   transcript.value = ''
   fresh.value = true
   dirty.value = false
@@ -41,9 +48,9 @@ watch(() => transcript.value, (o: string, n: string) => {
 })
 
 const saveTranscript = () => {
-  
+
   events.emit('transcript-edited-event', {
-    key: key.value, transcript: transcript.value
+    key: key.value, transcript: transcript.value, id: id.value
   })
   dirty.value = false
 }
@@ -52,9 +59,13 @@ const saveTranscript = () => {
   <form ref="el" class="pure-form pure-form-stacked">
     <fieldset>
       <div class="pure-control-group">
-        <label for="transcript">
-          {{ $t('transcripts.text') }}
+        <label v-if="key" for="transcript">
+       
+          {{ $t('transcripts.text', {
+          key : $t(  key ) ,  id: id 
+        }) }}
         </label>
+        
         <InputWrapper v-model="transcript">
           <textarea id="transcript" required v-model="transcript" rows="10" />
           <InputTools v-model="transcript" />

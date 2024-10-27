@@ -25,17 +25,13 @@ import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 
 
-const transcriptEventPrefix = 'podcast-episode-segment'
+const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
 
 events.on('transcript-edited-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent
   if (!updatedEvent.key.startsWith(transcriptEventPrefix))
     return
-
-  // todo call the backend api with the updated podcast details
-  
-
-  console.log('updatedEvent!', updatedEvent)
+  await podcasts.setPodcastEpisodesSegmentTranscript(updatedEvent.id, true, updatedEvent.transcript)
 })
 
 // Props
@@ -146,8 +142,7 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
 
 
 const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
-  // console.log('editing the transcript for ' + seg.id + ' with value [' + seg.transcript + ']')
-  editTranscript(transcriptEventPrefix + '-' + seg.id.toString(), seg.transcript)
+  editTranscript(transcriptEventPrefix, seg.id, seg.transcript)
 }
 
 const save = async (e: Event) => {

@@ -54,7 +54,7 @@ const render = async (md: string) => {
   
   rendered.value = await markdown.render(md)
   
-  console.log(rendered.value)
+  
 }
 
 const debouncingRender = async () => {
@@ -67,12 +67,10 @@ const debouncingRender = async () => {
 }
 
 onMounted(() => {
-  // console.log('the markdown preview is needed!')
   needed.value = true
 })
 
 onUnmounted(() => {
-  // console.log('the markdown preview is not mounted any more')
   needed.value = false
 })
 

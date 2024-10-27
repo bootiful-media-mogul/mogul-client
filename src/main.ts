@@ -61,7 +61,7 @@ const translations = {
         'accept' : 'Accept',
         'revert' : 'Revert',
         'cancel': 'Cancel',
-        'save': 'Save Transcript'
+        'save': 'Update Transcript'
       }
     },
 

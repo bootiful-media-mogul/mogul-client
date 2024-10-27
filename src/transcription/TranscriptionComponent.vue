@@ -39,7 +39,9 @@ watch(() => transcript.value, (o: string, n: string) => {
     dirty.value = true
   }
 })
+
 const saveTranscript = () => {
+  
   events.emit('transcript-edited-event', {
     key: key.value, transcript: transcript.value
   })

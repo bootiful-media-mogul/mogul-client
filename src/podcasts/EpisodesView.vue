@@ -5,6 +5,7 @@ import {
   onMounted,
   computed
 } from 'vue'
+import { events, type TranscriptEditedEvent } from '@/services'
 
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 
@@ -18,9 +19,24 @@ import {
   podcasts,
   Publication
 } from '@/services'
+
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
+
+
+const transcriptEventPrefix = 'podcast-episode-segment'
+
+events.on('transcript-edited-event', async (event) => {
+  const updatedEvent = event as TranscriptEditedEvent
+  if (!updatedEvent.key.startsWith(transcriptEventPrefix))
+    return
+
+  // todo call the backend api with the updated podcast details
+  
+
+  console.log('updatedEvent!', updatedEvent)
+})
 
 // Props
 const props = defineProps<{ id: number | string }>()
@@ -129,10 +145,8 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
 }
 
 
-const transcriptEventPrefix = 'podcast-episode-segment'
-
 const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
-  console.log('editing the transcript for ' + seg.id + ' with value [' + seg.transcript + ']')
+  // console.log('editing the transcript for ' + seg.id + ' with value [' + seg.transcript + ']')
   editTranscript(transcriptEventPrefix + '-' + seg.id.toString(), seg.transcript)
 }
 
@@ -260,6 +274,8 @@ onMounted(async () => {
     }
   )
 })
+
+
 </script>
 <template>
   <h1 v-if="currentPodcast">

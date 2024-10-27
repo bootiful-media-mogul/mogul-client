@@ -121,24 +121,25 @@ html {
     background-size: var(--icon-width) var(--icon-width);
 }
 
+
 .transcript-icon {
-    background: url('../assets/images/transcription-highlight.png');
+    background: url('../assets/images/transcript-highlight.png');
     height: var(--icon-width);
     display: inline-block;
     width: var(--icon-width);
     background-size: var(--icon-width) var(--icon-width);
-    grid-area: transcript;
 
 }
 
 .transcript-icon:hover {
+
+    background: url('../assets/images/transcript.png');
     height: var(--icon-width);
     display: inline-block;
     width: var(--icon-width);
     background-size: var(--icon-width) var(--icon-width);
-    grid-area: transcript;
-    background: url('../assets/images/transcription.png');
 }
+
 
 .down-arrow-icon {
     background: url('../assets/images/down-highlight.png');

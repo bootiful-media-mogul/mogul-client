@@ -2,6 +2,7 @@ import Mogul from '@/mogul'
 import mitt from 'mitt'
 import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
+import { marked } from 'marked'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -21,6 +22,10 @@ export const graphqlClient = new Client({
 
 export function previewManagedFile(managedFileId: number) {
   events.emit('preview-managed-file-event', managedFileId)
+}
+
+export function editTranscript ( text:string) {
+  events.emit('edit-transcript-event', text)
 }
 
 export class Podcast {
@@ -104,7 +109,7 @@ class Podcasts {
               complete,  
               graphic { id  },
               segments { 
-                id, name, audio { id } , order , crossFadeDuration 
+                id, name, audio { id } , order , crossFadeDuration , transcript 
               }
               publications {
                 id,
@@ -157,7 +162,8 @@ class Podcasts {
                   name, 
                   audio { id } , 
                   order , 
-                  crossFadeDuration 
+                  crossFadeDuration,
+                  transcript 
                 } 
             }
         }
@@ -343,16 +349,23 @@ export class ManagedFile {
 }
 
 export class PodcastEpisodeSegment {
+
   id: number
   name: string
   audio: ManagedFile
   order: number
+  transcript: string
 
-  constructor(id: number, name: string, audio: ManagedFile, order: number) {
+  constructor(id: number,
+              name: string,
+              audio: ManagedFile,
+              order: number,
+              transcript: string) {
     this.id = id
     this.name = name
     this.audio = audio
     this.order = order
+    this.transcript = transcript
   }
 }
 
@@ -582,7 +595,7 @@ export class Ai {
     return (await result['data']['aiChat']) as string
   }
 
-  /** renders images given a prompt */
+  /** todo renders images given a prompt */
   render(prompt: string): string {
     return ''
   }
@@ -596,9 +609,9 @@ export class Ai {
   }
 }
 
-import { marked } from 'marked'
 
 export class Markdown {
+  
   private readonly client: Client
 
   constructor(client: Client) {

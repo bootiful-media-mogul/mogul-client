@@ -9,6 +9,7 @@ import {
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 
 import {
+  editTranscript,
   Notification,
   notifications,
   Podcast,
@@ -57,8 +58,10 @@ const buttonsDisabled = computed(() => {
 
 
 const refreshEpisode = async (episodeId: number) => {
-  if (!episodeId)
+  if (!episodeId) {
     console.error('the episode you gave to refresh is not valid ' + episodeId + '!')
+    return
+  }
   const ep = await podcasts.podcastEpisodeById(episodeId)
   await loadEpisode(ep)
 }
@@ -123,6 +126,15 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
       selectedPlugin.value = episode.availablePlugins[0]
     }
   }
+}
+
+const editPodcastEpisodeSegmentTranscript = (episode: PodcastEpisode, seg: PodcastEpisodeSegment) => {
+  console.log('editing the transcript for ' + seg.id + ' with value [' +
+    seg.transcript +
+    ']')
+
+  editTranscript(seg.transcript)
+
 }
 
 const save = async (e: Event) => {
@@ -370,9 +382,9 @@ onMounted(async () => {
                       href="#"
                     ></a>
 
-                    
+
                     <a
-                      @click.prevent="console.log('transcript time for ' + segment.id)"
+                      @click.prevent="editPodcastEpisodeSegmentTranscript(draftEpisode, segment)"
                       class="transcript-icon"
                       href="#"
                     ></a>

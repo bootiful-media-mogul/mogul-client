@@ -168,7 +168,7 @@ provide('readInputValue', readInputValue)
 
 
 .panel {
-  z-index: 10;
+  z-index: 8;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
   grid-area: panel;
   margin-top: calc(-2 * var(--icon-width));
@@ -176,18 +176,19 @@ provide('readInputValue', readInputValue)
   padding-left: var(--writing-tools-panel-padding);
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2.5 * var(--icon-width));
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.5); 
+  
+  
   border-radius: 4px;
 }
 
 .icon-column-menu {
-  z-index: 1000;
+  z-index: 10;
   height: calc(1.5 * var(--icon-width));
 
 }
 
 .icon {
-
   height: var(--icon-width);
   display: inline-block;
   background-size: var(--icon-width) var(--icon-width);

@@ -29,7 +29,7 @@
 
 <style>
 .bg-panel {
-  background-color: white;
+
   opacity: 0.6;
   width: 100%;
   height: 100%;
@@ -44,7 +44,7 @@
   right: 0;
   overflow: hidden;
   padding: var(--gutter-space);
-  background-color: white;
+  background-color: #e6e6e6;
   margin-bottom: var(--gutter-space);
 }
 
@@ -106,7 +106,7 @@
   width: 80%;
   height: 80%;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-  z-index: 1000;
+  z-index: 100;
   border-radius: 10px;
 }
 

@@ -1,7 +1,6 @@
 <template>
   <form ref="el" class="pure-form pure-form-stacked">
     <fieldset>
-      <legend>Media Preview</legend>
       <div>
         <img
           v-if="isImage"

@@ -286,8 +286,10 @@ onMounted(async () => {
       -->
       <div class="episode-actions subject-actions">
         <a v-if="draftEpisode.id" href="#">create blog from episode
-        </a> <!--|
-        <a href="#">ss</a> -->
+        </a> | 
+        <a v-if="draftEpisode.id" href="#"> 
+          analyse (for improvements, clippability, etc.)
+        </a>
       </div>
 
 

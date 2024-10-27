@@ -91,11 +91,7 @@
   font-size: small;
 }
 
-.proposal-approval {
-}
-
-.proposal-approval .accept-link {
-}
+ 
 </style>
 <template>
   <InputWrapperChild>
@@ -138,8 +134,8 @@
           </div>
         </div>
         <div class="proposal-approval" v-if="proposalApprovalRequired">
-          <a class="accept-link" href="#" @click.prevent="accept">accept</a> |
-          <a class="revert-link" href="#" @click.prevent="revert">revert</a>
+          <a class="accept-link" href="#" @click.prevent="accept"> {{ $t('accept')}}</a> |
+          <a class="revert-link" href="#" @click.prevent="revert"> {{ $t('revert')}}</a>
         </div>
       </div>
     </template>
@@ -200,10 +196,10 @@ function proposeUpdatedText(updatedText: string) {
 async function proofread() {
   const contents = readValue().trim()
   console.log('proofread [' + contents + ']')
-  
+
   if (contents === '')
     return
-  
+
   if (rewriteStylesVisible.value)
     await toggleRewriteTools()
 

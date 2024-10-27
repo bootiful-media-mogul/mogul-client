@@ -58,6 +58,8 @@ const translations = {
     transcripts: {
       text: 'Transcript',
       buttons: {
+        'accept' : 'Accept',
+        'revert' : 'Revert',
         'cancel': 'Cancel',
         'save': 'Save Transcript'
       }

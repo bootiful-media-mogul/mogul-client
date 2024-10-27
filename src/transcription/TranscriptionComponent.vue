@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { events, managedFiles } from '@/services'
+import { events } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
 const transcript = ref<string>('')
-
 const el = ref<HTMLElement>()
 
 events.on('edit-transcript-event', async (event) => {
@@ -13,8 +12,6 @@ events.on('edit-transcript-event', async (event) => {
   transcript.value = '' + event
   events.emit('sidebar-panel-opened', el.value)
 })
-
-
 </script>
 <template>
   <form ref="el" class="pure-form pure-form-stacked">
@@ -28,8 +25,6 @@ events.on('edit-transcript-event', async (event) => {
           <InputTools v-model="transcript" />
         </InputWrapper>
       </div>
-
-
       <div>
         <span class="save">
             <button

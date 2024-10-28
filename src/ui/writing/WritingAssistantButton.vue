@@ -10,38 +10,31 @@
 </template>
 <style>
 .writing-tools-button {
-
   cursor: pointer;
   display: grid;
   grid-template-areas: '   content  ';
-  
+
   border-radius: var(--button-radius);
   background-color: lightgrey;
   padding: calc(var(--gutter-space) / 3);
   font-size: small;
-  
 }
-
 
 .writing-tools-button-content {
   display: grid;
   grid-area: content;
-  grid-template-areas: '. icon . '
-                      'label label label';
-  grid-template-columns:  auto auto auto;
+  grid-template-areas:
+    '. icon . '
+    'label label label';
+  grid-template-columns: auto auto auto;
   place-items: center;
 }
 
-
 .writing-tools-button-content-label {
   grid-area: label;
-  
-
 }
 
-
 .writing-tools-button-content-icon {
-  
   grid-area: icon;
   height: var(--writing-tools-panel-icon-size);
 }
@@ -49,7 +42,6 @@
 .writing-tools-button-content-icon img {
   width: var(--writing-tools-panel-icon-size);
 }
-
 </style>
 <script setup lang="ts">
 import { ref } from 'vue'

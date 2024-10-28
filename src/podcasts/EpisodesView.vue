@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {
-  ref,
-  reactive,
-  onMounted,
-  computed
-} from 'vue'
+import { ref, reactive, onMounted, computed } from 'vue'
 import { events, type TranscriptEditedEvent } from '@/services'
 
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
@@ -24,13 +19,11 @@ import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 
-
 const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
 
 events.on('transcript-edited-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent
-  if (!updatedEvent.key.startsWith(transcriptEventPrefix))
-    return
+  if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
   await podcasts.setPodcastEpisodesSegmentTranscript(updatedEvent.id, true, updatedEvent.transcript)
 })
 
@@ -67,7 +60,6 @@ const buttonsDisabled = computed(() => {
   }
   return !changed
 })
-
 
 const refreshEpisode = async (episodeId: number) => {
   if (!episodeId) {
@@ -140,13 +132,11 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
   }
 }
 
-
 const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
   editTranscript(transcriptEventPrefix, seg.id, seg.transcript)
 }
 
 const save = async (e: Event) => {
-
   e.preventDefault()
 
   if (draftEpisode.id) {
@@ -250,12 +240,9 @@ onMounted(async () => {
     }
   )
 
-  notifications.listenForCategory(
-    'publication-completed-event',
-    async (_: Notification) => {
-      await refreshEpisode(draftEpisode.id)
-    }
-  )
+  notifications.listenForCategory('publication-completed-event', async (_: Notification) => {
+    await refreshEpisode(draftEpisode.id)
+  })
 
   notifications.listenForCategory(
     'publication-started-event',
@@ -269,14 +256,11 @@ onMounted(async () => {
     }
   )
 })
-
-
 </script>
 <template>
   <h1 v-if="currentPodcast">
     {{ $t('episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
   </h1>
-
 
   <form class="pure-form pure-form-stacked">
     <fieldset>
@@ -295,13 +279,9 @@ onMounted(async () => {
         show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
       -->
       <div v-if="draftEpisode.id" class="episode-actions subject-actions">
-        <a href="#"> blog<!-- from episode-->
-        </a> |
-        <a href="#">
-          analyse<!-- (for improvements, clippability, etc.)-->
-        </a>
+        <a href="#"> blog<!-- from episode--> </a> |
+        <a href="#"> analyse<!-- (for improvements, clippability, etc.)--> </a>
       </div>
-
 
       <div class="form-section">
         <div class="form-section-title">{{ $t('episodes.basics') }}</div>
@@ -327,7 +307,7 @@ onMounted(async () => {
           <span class="save">
             <button
               @click="save"
-              :disabled="buttonsDisabled "
+              :disabled="buttonsDisabled"
               type="submit"
               class="pure-button pure-button-primary"
             >
@@ -373,10 +353,7 @@ onMounted(async () => {
                 </label>
               </div>
               <div class="pure-u-21-24">
-                <ManagedFileComponent
-                  accept=".mp3,audio/mpeg"
-                  :managed-file-id="segment.audio.id"
-                >
+                <ManagedFileComponent accept=".mp3,audio/mpeg" :managed-file-id="segment.audio.id">
                   <div class="segment-controls">
                     <a
                       @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
@@ -398,7 +375,6 @@ onMounted(async () => {
                       class="transcript-icon"
                       href="#"
                     ></a>
-
                   </div>
                 </ManagedFileComponent>
               </div>
@@ -618,6 +594,4 @@ div.segment-controls {
   grid-template-areas: 'up down delete transcript ';
   grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
-
-
 </style>

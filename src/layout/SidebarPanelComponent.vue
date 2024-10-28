@@ -5,7 +5,6 @@
         {{ title }}
       </div>
       <div class="controls">
-
         <SidebarPanelWindowButtonComponent v-if="!maximized" class="maximize">
           <img @click="maximize" src="../assets/images/panel-maximize.png" alt="maximize" />
         </SidebarPanelWindowButtonComponent>
@@ -17,9 +16,7 @@
         <SidebarPanelWindowButtonComponent v-if="expanded || maximized" class="show-hide">
           <img @click="hide" src="../assets/images/panel-close.png" alt="close" />
         </SidebarPanelWindowButtonComponent>
-
       </div>
-
     </div>
     <div class="content">
       <slot />
@@ -29,7 +26,6 @@
 
 <style>
 .bg-panel {
-
   opacity: 0.6;
   width: 100%;
   height: 100%;
@@ -142,28 +138,26 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const hide = function() {
+const hide = function () {
   maximized.value = false
   expanded.value = false
-  if (bgPanelNode.value)
-    bgPanelNode.value.style.display = 'none'
+  if (bgPanelNode.value) bgPanelNode.value.style.display = 'none'
 }
-const show = function() {
+const show = function () {
   expanded.value = true
   maximized.value = false
 }
-const maximize = function() {
+const maximize = function () {
   expanded.value = true
   maximized.value = true
-  if (bgPanelNode.value)
-    bgPanelNode.value.style.display = 'block'
+  if (bgPanelNode.value) bgPanelNode.value.style.display = 'block'
 }
 onMounted(() => {
   const bpn = document.createElement('div')
   bpn.classList.add('bg-panel')
   document.body.appendChild(bpn)
   bgPanelNode.value = bpn
-  // 
+  //
   events.on('sidebar-panel-closed', (event: any) => {
     if (element.value!!.contains(event)) {
       hide()

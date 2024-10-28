@@ -43,7 +43,8 @@ async function doLoad(mfid: any) {
   const managedFile = await managedFiles.getManagedFileById(parseInt(mfid))
   url.value = '/api/managedfiles/' + managedFile.id
   const ext = managedFile.contentType.toLowerCase()
-  isImage.value = ext.endsWith('jpg') || ext.endsWith('jpeg') || ext.endsWith('png') || ext.endsWith('gif')
+  isImage.value =
+    ext.endsWith('jpg') || ext.endsWith('jpeg') || ext.endsWith('png') || ext.endsWith('gif')
   isAudio.value = ext.endsWith('mp3') || ext.endsWith('wav') || ext.endsWith('mpeg')
   contentType.value = ext
   size.value = prettyPrintInBytes(managedFile.size)
@@ -73,7 +74,10 @@ onMounted(async () => {
   await load()
 })
 
-watch(() => props.managedFileId, async (o: any, n: any) => {
-  await load()
-})
+watch(
+  () => props.managedFileId,
+  async (o: any, n: any) => {
+    await load()
+  }
+)
 </script>

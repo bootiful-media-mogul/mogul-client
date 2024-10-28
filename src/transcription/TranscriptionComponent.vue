@@ -12,18 +12,15 @@ const id = ref<number>(0)
 const fresh = ref<boolean>(true)
 
 events.on('edit-transcript-event', async (event) => {
-  
   const editEvent: TranscriptEditEvent = event as TranscriptEditEvent
-  
-  
+
   transcript.value = '' + editEvent.transcript
   key.value = editEvent.key
   id.value = editEvent.id
-  
-  dirty.value = false
-  
-  events.emit('sidebar-panel-opened', el.value)
 
+  dirty.value = false
+
+  events.emit('sidebar-panel-opened', el.value)
 })
 
 function isDirty() {
@@ -38,19 +35,23 @@ const cancel = () => {
   dirty.value = false
 }
 
-watch(() => transcript.value, (o: string, n: string) => {
-  if (fresh.value) {
-    fresh.value = false
-  } else {
-    console.log('you changed something')
-    dirty.value = true
+watch(
+  () => transcript.value,
+  (o: string, n: string) => {
+    if (fresh.value) {
+      fresh.value = false
+    } else {
+      console.log('you changed something')
+      dirty.value = true
+    }
   }
-})
+)
 
 const saveTranscript = () => {
-
   events.emit('transcript-edited-event', {
-    key: key.value, transcript: transcript.value, id: id.value
+    key: key.value,
+    transcript: transcript.value,
+    id: id.value
   })
   dirty.value = false
 }
@@ -60,12 +61,14 @@ const saveTranscript = () => {
     <fieldset>
       <div class="pure-control-group">
         <label v-if="key" for="transcript">
-       
-          {{ $t('transcripts.text', {
-          key : $t(  key ) ,  id: id 
-        }) }}
+          {{
+            $t('transcripts.text', {
+              key: $t(key),
+              id: id
+            })
+          }}
         </label>
-        
+
         <InputWrapper v-model="transcript">
           <textarea id="transcript" required v-model="transcript" rows="10" />
           <InputTools v-model="transcript" />
@@ -73,28 +76,25 @@ const saveTranscript = () => {
       </div>
       <div>
         <span class="save">
-            <button
-              @click.prevent="saveTranscript"
-              type="submit"
-              :class="'pure-button pure-button-primary ' + (isDirty()?'':'disabled')"
-            >
-              {{ $t('transcripts.buttons.save') }}
-            </button>
+          <button
+            @click.prevent="saveTranscript"
+            type="submit"
+            :class="'pure-button pure-button-primary ' + (isDirty() ? '' : 'disabled')"
+          >
+            {{ $t('transcripts.buttons.save') }}
+          </button>
         </span>
 
         <span class="cancel">
-            <button
-              @click.prevent="cancel"
-              type="submit"
-              :class="'pure-button ' + (isDirty() ? '' : 'disabled')"
-            >
-              {{ $t('transcripts.buttons.cancel') }}
-            </button>
-          </span>
-
+          <button
+            @click.prevent="cancel"
+            type="submit"
+            :class="'pure-button ' + (isDirty() ? '' : 'disabled')"
+          >
+            {{ $t('transcripts.buttons.cancel') }}
+          </button>
+        </span>
       </div>
-
-
     </fieldset>
   </form>
 </template>

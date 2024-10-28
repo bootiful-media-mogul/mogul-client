@@ -38,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-
 import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import type { PanelSlot } from './input'
@@ -68,12 +67,12 @@ const registerChild = (slotPair: PanelSlot) => {
 
 const readInputValue = () => {
   // console.log('readInputValue ' + inputElement.value!!.value + ' text.value=' + text.value)
- // return text.value || ''
+  // return text.value || ''
   return inputElement.value!!.value
 }
 
 const current = (): PanelSlot | null => {
-  const visible = childSlots.value.filter(slot => slot.panelVisible)
+  const visible = childSlots.value.filter((slot) => slot.panelVisible)
   if (visible && visible.length > 0) {
     return visible[0]
   }
@@ -94,12 +93,15 @@ const enableDownArrow = (): boolean => {
 
 const move = (direction: number): void => {
   const currentlyVisiblePanel = childSlots.value.filter((slot) => slot.panelVisible)
-  const selected = currentlyVisiblePanel && currentlyVisiblePanel.length > 0 ? currentlyVisiblePanel[0] : childSlots.value[0]
+  const selected =
+    currentlyVisiblePanel && currentlyVisiblePanel.length > 0
+      ? currentlyVisiblePanel[0]
+      : childSlots.value[0]
   let index = childSlots.value.indexOf(selected)
   if (index + direction >= 0 && index + direction < childSlots.value.length) {
     index = index + direction
   }
-  childSlots.value.forEach(slot => {
+  childSlots.value.forEach((slot) => {
     slot.iconVisible = false
     slot.panelVisible = false
   })
@@ -123,7 +125,6 @@ const togglePanel = (slot: PanelSlot) => {
   panelVisible.value = !panelVisible.value
 }
 
-
 onMounted(() => {
   inputElement.value = root.value?.querySelector('input, textarea')!!
   if (inputElement.value) {
@@ -145,7 +146,6 @@ provide('readInputValue', readInputValue)
 </script>
 
 <style scoped>
-
 .writing-tools-container {
   display: grid;
   grid-template-areas:
@@ -153,7 +153,7 @@ provide('readInputValue', readInputValue)
     ' . icons .  '
     ' panel panel panel  ';
   grid-template-columns: auto min-content auto;
-  grid-template-rows:  auto calc(var(--icon-width) * 1.2 ) auto;
+  grid-template-rows: auto calc(var(--icon-width) * 1.2) auto;
   margin-bottom: var(--gutter-space);
 }
 
@@ -166,7 +166,6 @@ provide('readInputValue', readInputValue)
   grid-area: icons;
 }
 
-
 .panel {
   z-index: 8;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
@@ -176,16 +175,14 @@ provide('readInputValue', readInputValue)
   padding-left: var(--writing-tools-panel-padding);
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2.5 * var(--icon-width));
-  background-color: rgba(255, 255, 255, 0.5); 
-  
-  
+  background-color: rgba(255, 255, 255, 0.5);
+
   border-radius: 4px;
 }
 
 .icon-column-menu {
   z-index: 10;
   height: calc(1.5 * var(--icon-width));
-
 }
 
 .icon {

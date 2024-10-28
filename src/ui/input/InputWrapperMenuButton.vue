@@ -9,15 +9,13 @@ interface Props {
 const props = defineProps<Props>()
 const src = ref<string>()
 
-const swap = function() {
-  if (props.iconHover)
-    src.value = props.icon == src.value ? props.iconHover : props.icon
+const swap = function () {
+  if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
 
 onMounted(() => {
   src.value = props.icon
 })
-
 </script>
 <style scoped>
 .input-wrapper-menu-button {

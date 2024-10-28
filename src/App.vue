@@ -16,8 +16,8 @@ onMounted(async () => {
     if (res.email) {
       mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
       break
-    } 
-    i+=1
+    }
+    i += 1
     console.debug('it did not work the first time, trying to authenticate again...')
   }
 })
@@ -47,17 +47,15 @@ onMounted(async () => {
       </div>
 
       <div class="sidebar">
-
         <SidebarPanelComponent title="Media Preview">
           <PreviewComponent />
         </SidebarPanelComponent>
-        
+
         <SidebarPanelComponent title="Transcription">
           <TranscriptionPanel />
         </SidebarPanelComponent>
-        
+
         <SidebarPanelComponent title="Notes" />
-        
       </div>
     </div>
   </div>

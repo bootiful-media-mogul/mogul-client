@@ -90,8 +90,6 @@
 .proposal-approval a {
   font-size: small;
 }
-
- 
 </style>
 <template>
   <InputWrapperChild>
@@ -134,8 +132,8 @@
           </div>
         </div>
         <div class="proposal-approval" v-if="proposalApprovalRequired">
-          <a class="accept-link" href="#" @click.prevent="accept"> {{ $t('accept')}}</a> |
-          <a class="revert-link" href="#" @click.prevent="revert"> {{ $t('revert')}}</a>
+          <a class="accept-link" href="#" @click.prevent="accept"> {{ $t('accept') }}</a> |
+          <a class="revert-link" href="#" @click.prevent="revert"> {{ $t('revert') }}</a>
         </div>
       </div>
     </template>
@@ -197,11 +195,9 @@ async function proofread() {
   const contents = readValue().trim()
   console.log('proofread [' + contents + ']')
 
-  if (contents === '')
-    return
+  if (contents === '') return
 
-  if (rewriteStylesVisible.value)
-    await toggleRewriteTools()
+  if (rewriteStylesVisible.value) await toggleRewriteTools()
 
   const proofread = await ai.chat(
     `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
@@ -258,5 +254,4 @@ async function rewriteFriendly() {
   )
   proposeUpdatedText(updated)
 }
-
 </script>

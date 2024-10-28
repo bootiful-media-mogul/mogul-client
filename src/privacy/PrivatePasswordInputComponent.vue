@@ -27,13 +27,12 @@ label .private-password-preview-link {
 </style>
 
 <script setup lang="ts">
-
 import { formInputForLabel, positionIconRelativeToFormInputForParentLabel } from '@/components'
 import { onMounted, ref } from 'vue'
 
 const icon = ref<HTMLElement>()
 
-const togglePreview = function(e: Event) {
+const togglePreview = function (e: Event) {
   e.preventDefault()
   const iconEl = icon.value!!
   const input = formInputForLabel(iconEl.parentElement as HTMLElement) as HTMLInputElement

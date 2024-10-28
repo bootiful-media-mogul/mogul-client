@@ -26,7 +26,7 @@ export function previewManagedFile(managedFileId: number) {
 
 export interface TranscriptEditEvent {
   readonly key: string
-  readonly id : number
+  readonly id: number
   readonly transcript: string
 }
 
@@ -38,7 +38,9 @@ export interface TranscriptEditedEvent {
 
 export function editTranscript(key: string, id: number, text: string) {
   events.emit('edit-transcript-event', {
-    key: key, transcript: text , id: id 
+    key: key,
+    transcript: text,
+    id: id
   } as TranscriptEditEvent)
 }
 
@@ -73,7 +75,6 @@ class Podcasts {
     })
     return true
   }
-
 
   async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
     const mutation = ` 
@@ -187,9 +188,12 @@ class Podcasts {
     return (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
   }
 
-
-// transcript
-  async setPodcastEpisodesSegmentTranscript(episodeSegmentId: number, transcribable: boolean, transcript: string): Promise<boolean> {
+  // transcript
+  async setPodcastEpisodesSegmentTranscript(
+    episodeSegmentId: number,
+    transcribable: boolean,
+    transcript: string
+  ): Promise<boolean> {
     // episodeSegmentId: ID, transcribable: Boolean, transcript: String)
     const mutation = ` 
           mutation SetPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID, $transcribable: Boolean , $transcript:String ){ 
@@ -204,7 +208,7 @@ class Podcasts {
     return (await publication.data['publishPodcastEpisode']) as boolean
   }
 
-// transcript
+  // transcript
 
   async deletePodcastEpisodeSegment(id: number) {
     const mutation = `
@@ -383,18 +387,13 @@ export class ManagedFile {
 }
 
 export class PodcastEpisodeSegment {
-
   id: number
   name: string
   audio: ManagedFile
   order: number
   transcript: string
 
-  constructor(id: number,
-              name: string,
-              audio: ManagedFile,
-              order: number,
-              transcript: string) {
+  constructor(id: number, name: string, audio: ManagedFile, order: number, transcript: string) {
     this.id = id
     this.name = name
     this.audio = audio
@@ -643,9 +642,7 @@ export class Ai {
   }
 }
 
-
 export class Markdown {
-
   private readonly client: Client
 
   constructor(client: Client) {

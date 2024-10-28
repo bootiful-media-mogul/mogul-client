@@ -120,25 +120,25 @@ onMounted(async () => {
   await loadManagedFileIntoEditor()
 })
 
-watch(() => props.managedFileId, async (o: any, n: any) => {
-  await loadManagedFileIntoEditor()
-})
+watch(() => props.managedFileId,
+  async (o: any, n: any) => {
+    await loadManagedFileIntoEditor()
+  }
+)
 
 function mfId(): number {
-  // sigh. typescript is not great at types. 
+  // sigh. typescript is not great at types.
   function isNumber(value: any): value is number {
     return typeof value === 'number' && !isNaN(value)
   }
 
   const m: any = props.managedFileId
-  if (isNumber(m))
-    return m as number
+  if (isNumber(m)) return m as number
   else return parseInt(props.managedFileId as string)
 }
 
 const preview = async () => {
-  if (written.value)
-    previewManagedFile(mfId())
+  if (written.value) previewManagedFile(mfId())
 }
 
 const launchFileUpload = async () => {

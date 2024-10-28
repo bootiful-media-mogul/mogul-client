@@ -4,7 +4,9 @@
     <div class="unselectable icons">
       <slot> the buttons should go here otherwise this will look like crap!</slot>
     </div>
-    <div :class="'unselectable arrow down ' + downArrowCss()" ref="down" @click="emit('down')">▶</div>
+    <div :class="'unselectable arrow down ' + downArrowCss()" ref="down" @click="emit('down')">
+      ▶
+    </div>
   </div>
 </template>
 <style scoped>
@@ -54,10 +56,9 @@ interface Props {
 const emit = defineEmits<{
   (e: 'down'): void
   (e: 'up'): void
-}
->()
+}>()
 const props = defineProps<Props>()
-const downArrowCss = function() {
+const downArrowCss = function () {
   if (props.disabled) return 'disabled'
   if (!props.enableDownArrow) return 'disabled'
   return ''
@@ -67,15 +68,18 @@ const upArrowCss = () => {
   if (!props.enableUpArrow) return 'disabled'
   return ''
 }
-const disable = function(r: HTMLElement) {
+const disable = function (r: HTMLElement) {
   r.classList.add('disabled')
 }
 const up = ref<HTMLElement>()
 const down = ref<HTMLElement>()
 
-watch(() => props.disabled, (_, newValue) => {
-  if (!newValue) {
-    [up, down].forEach((el) => disable(el.value!!))
+watch(
+  () => props.disabled,
+  (_, newValue) => {
+    if (!newValue) {
+      ;[up, down].forEach((el) => disable(el.value!!))
+    }
   }
-})
+)
 </script>

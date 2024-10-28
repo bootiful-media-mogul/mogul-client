@@ -55,18 +55,17 @@ const translations = {
 
     // episodes
     ok: 'OK',
-    'transcripts.podcasts.episodes.segments' :'Podcast Episode Segment' ,
+    'transcripts.podcasts.episodes.segments': 'Podcast Episode Segment',
     transcripts: {
       // 'podcasts.episodes.segments': 'Podcast Episode Segment' ,
       text: 'Transcript for {key} #{id}',
       buttons: {
-        'accept' : 'Accept',
-        'revert' : 'Revert',
-        'cancel': 'Cancel',
-        'save': 'Update Transcript'
+        accept: 'Accept',
+        revert: 'Revert',
+        cancel: 'Cancel',
+        save: 'Update Transcript'
       }
     },
-
 
     'about.title': 'About',
 

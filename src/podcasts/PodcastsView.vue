@@ -103,24 +103,24 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
-const refresh = async function() {
+const refresh = async function () {
   return await podcasts.podcasts()
 }
-const dts = function(date: number) {
+const dts = function (date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (id: number) => {
   const deleted = await podcasts.deletePodcast(id)
-  all.value = all.value.filter(p => p.id != deleted)
+  all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
     params: { id: podcastId }
   })
 }
-const createPodcast = async function(e: Event) {
+const createPodcast = async function (e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()

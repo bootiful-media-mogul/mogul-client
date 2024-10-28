@@ -48,13 +48,9 @@ const props = defineProps<Props>()
 const rendered = ref<string>('')
 
 const render = async (md: string) => {
-  
-  if (!md || md.trim() === '' || !needed.value) 
-    return
-  
+  if (!md || md.trim() === '' || !needed.value) return
+
   rendered.value = await markdown.render(md)
-  
-  
 }
 
 const debouncingRender = async () => {

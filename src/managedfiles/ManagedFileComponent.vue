@@ -120,7 +120,8 @@ onMounted(async () => {
   await loadManagedFileIntoEditor()
 })
 
-watch(() => props.managedFileId,
+watch(
+  () => props.managedFileId,
   async (o: any, n: any) => {
     await loadManagedFileIntoEditor()
   }

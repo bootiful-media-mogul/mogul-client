@@ -42,8 +42,8 @@ interface Props {
   readonly modelValue: string
 }
 
-const needed = ref<boolean>(false)
 let timer = -1
+const needed = ref<boolean>(false)
 const props = defineProps<Props>()
 const rendered = ref<string>('')
 

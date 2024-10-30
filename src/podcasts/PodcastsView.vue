@@ -42,6 +42,9 @@
           <a href="#" @click="navigateToEpisodesPageForPodcast(podcast.id, $event)">
             {{ $t('podcasts.podcasts.episodes') }}
           </a>
+          |
+          <a :href="podcastRssFeedUrl(podcast)">RSS</a>
+
         </div>
         <div class="delete">
           <a
@@ -89,11 +92,11 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete links created title';
-  grid-template-columns: var(--id-column) 30px 100px var(--date-column) auto;
+  grid-template-columns: var(--id-column) 30px 150px var(--date-column) auto;
 }
 </style>
 <script setup lang="ts">
-import { Podcast, podcasts } from '@/services'
+import { mogul, Podcast, podcasts } from '@/services'
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
@@ -103,30 +106,41 @@ import { useRouter } from 'vue-router'
 const router = useRouter()
 const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
-const refresh = async function () {
+const mogulId = ref<number>(0)
+
+const refresh = async function() {
   return await podcasts.podcasts()
 }
-const dts = function (date: number) {
+const dts = function(date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (id: number) => {
   const deleted = await podcasts.deletePodcast(id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
     params: { id: podcastId }
   })
 }
-const createPodcast = async function (e: Event) {
+
+
+const podcastRssFeedUrl = (podcast: Podcast): string => {
+  //http://127.0.0.1:1010/api/feeds/moguls/16386/podcasts/1/episodes.atom
+  return '/api/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
+}
+
+
+const createPodcast = async function(e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()
   title.value = ''
 }
 onMounted(async () => {
+  mogulId.value = (await mogul.user()).id
   all.value = await refresh()
 })
 </script>

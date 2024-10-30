@@ -10,12 +10,12 @@ export default class Mogul {
   async user(): Promise<User> {
     const query = `
             query { 
-             me {  name, email, givenName, familyName  } 
+             me { id,   name, email, givenName, familyName  } 
             } 
     `
     const result = await this.client.query(query, {})
     const me = result.data['me']
-    return new User(me.name, me.email, me.givenName, me.familyName)
+    return new User(me.id as number, me.name, me.email, me.givenName, me.familyName)
   }
 
   async me(): Promise<string> {
@@ -38,12 +38,14 @@ export class User {
   email: string
   givenName: string
   familyName: string
+  id: number
 
   // materialized view
   readonly displayName: string
 
-  constructor(name: string, email: string, givenName: string, familyName: string) {
+  constructor(id: number, name: string, email: string, givenName: string, familyName: string) {
     this.name = name
+    this.id = id
     this.email = email
     this.givenName = givenName
     this.familyName = familyName

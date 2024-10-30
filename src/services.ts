@@ -651,18 +651,6 @@ export class Markdown {
 
   async render(markdown: string): Promise<string> {
     return Promise.resolve(marked.parse(markdown, {}))
-
-    /*
-    const query = `
-        query AiChatQuery($markdown: String){ 
-         renderMarkdown(markdown:$markdown) 
-        }
-    `
-    const result = await this.client.query(query, {
-      markdown: markdown
-    })
-    return (await result['data']['renderMarkdown']) as string
-    */
   }
 }
 

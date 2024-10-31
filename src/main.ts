@@ -52,8 +52,12 @@ const translations = {
     'episodes.episode.segments.number': 'segment {order} ',
     'episodes.episode.graphic': 'graphic',
     'episodes.buttons.add-segment': 'add a new segment',
+    'episodes.episode.reference': 'the episode titled: {title}',
 
-    // episodes
+
+    'confirm.deletion': `Are you sure you want to delete {title}? 
+    
+This is NOT reversible! `,
     ok: 'OK',
     'transcripts.podcasts.episodes.segments': 'Podcast Episode Segment',
     transcripts: {
@@ -74,6 +78,7 @@ const translations = {
     'episodes.publications': 'Publications',
     'episodes.basics': 'Basics',
     'episodes.segments': 'Segments',
+    'episodes.segments.number': 'episode segment # {id}',
     'episodes.publish': 'Publish',
     'episodes.episodes': 'episodes for podcast #{id} - "{title}"',
     'episodes.new-episode': 'new episode',

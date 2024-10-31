@@ -4,6 +4,7 @@ import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
 import { marked } from 'marked'
 
+
 export const graphqlClient = new Client({
   url: '/api/graphql',
   exchanges: [
@@ -56,7 +57,8 @@ export class Podcast {
   }
 }
 
-class Podcasts {
+
+export class Podcasts {
   private readonly client: Client
 
   constructor(client: Client) {
@@ -654,6 +656,15 @@ export class Markdown {
   }
 }
 
+
+export class Utils {
+
+  confirmDeletion(msg: string): boolean {
+    return window.confirm(msg)
+  }
+}
+
+export const utils = new Utils()
 export const markdown = new Markdown(graphqlClient)
 export const ai = new Ai(graphqlClient)
 export const notifications = new Notifications(graphqlClient)

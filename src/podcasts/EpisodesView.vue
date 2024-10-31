@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, computed } from 'vue'
-import { events, type TranscriptEditedEvent } from '@/services'
+import { events, type TranscriptEditedEvent, utils } from '@/services'
 
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 import {
   editTranscript,
   Notification,
@@ -183,6 +185,13 @@ const deletePodcastEpisodeSegment = async (
   episode: PodcastEpisode,
   episodeSegment: PodcastEpisodeSegment
 ) => {
+
+
+  const segmentDetails = t('episodes.segments.number', { id: episodeSegment.order })
+  const msg = t('confirm.deletion', { title: segmentDetails })
+  if (!utils.confirmDeletion(msg))
+    return
+
   draftEpisode.complete = false
   await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
   await loadEpisodeSegments(episode)
@@ -205,6 +214,13 @@ const pluginSelected = async (e: Event) => {
 }
 
 const deletePodcastEpisode = async (episode: PodcastEpisode) => {
+
+
+  const podcastEpisodeDescription = t('episodes.episode.reference', { title: episode.title })
+  const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
+  if (!utils.confirmDeletion(msg))
+    return
+
   await podcasts.deletePodcastEpisode(episode.id)
   await cancel(new Event(''))
 }

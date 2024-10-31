@@ -49,7 +49,7 @@
         <div class="delete">
           <a
             v-if="all.length > 1"
-            @click.prevent="deletePodcast(podcast.id)"
+            @click.prevent="deletePodcast(podcast)"
             href="#"
             class="delete-icon"
           ></a>
@@ -93,7 +93,7 @@
 .created {
   grid-area: created;
   padding-left: var(--gutter-space);
-  
+
 }
 
 .id b {
@@ -119,12 +119,15 @@
 }
 </style>
 <script setup lang="ts">
-import { mogul, Podcast, podcasts } from '@/services'
+import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const router = useRouter()
 const title = ref<string>('')
@@ -137,8 +140,12 @@ const refresh = async function() {
 const dts = function(date: number) {
   return dateTimeToString(date)
 }
-const deletePodcast = async (id: number) => {
-  const deleted = await podcasts.deletePodcast(id)
+const deletePodcast = async (podcast: Podcast) => {
+  const msg = t('confirm.deletion', { title: podcast.title })
+  if (!utils.confirmDeletion(msg))
+    return
+  
+  const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
 const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {

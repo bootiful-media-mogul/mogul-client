@@ -75,7 +75,7 @@ const translations = {
     'episodes.basics': 'Basics',
     'episodes.segments': 'Segments',
     'episodes.publish': 'Publish',
-    'episodes.episodes': 'episodes for #{id} - "{title}"',
+    'episodes.episodes': 'episodes for podcast #{id} - "{title}"',
     'episodes.new-episode': 'new episode',
     'episodes.buttons.publish': 'publish',
     'episodes.buttons.cancel': 'cancel',

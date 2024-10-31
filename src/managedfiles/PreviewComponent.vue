@@ -75,9 +75,10 @@ async function doLoad(mfid: any) {
   publicUrl.value = '/api' + managedFile.publicUrl
 }
 
-const launchPublicUrl = () =>{
-  window.open( publicUrl.value , 'managedFilePublicUrl')
+const launchPublicUrl = () => {
+  window.open(publicUrl.value, 'managedFilePublicUrl')
 }
+
 interface Props {
   readonly managedFileId?: string | number
 }

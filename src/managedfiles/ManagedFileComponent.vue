@@ -6,22 +6,14 @@
     :accept="accept ? accept : '*/*'"
     @change="uploadFile($event)"
   />
-
-<!--  'managedfiles.please-upload-a-file': '(please upload a file.)',-->
-<!--  'managedfiles.visible': 'is this file publicly visible and accessible?',-->
-<!--  'managedfiles.delete': 'delete this file',-->
-<!--  'managedfiles.preview': 'preview this file',-->
-<!--  'managedfiles.upload': 'upload a file',-->
-<!--  'managedfiles.uploaded': 'has this file been uploaded?',-->
-<!--  'managedfiles.content-type': "this file's content type",-->
-<!--  'managedfiles.file-name': "this file's name",-->
+  
 
   <div class="managed-file-row">
     <span class="controls">
       <slot></slot>
     </span>
 
-    
+
     <a class="choose" href="#" @click="launchFileUpload">
       <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
     </a>
@@ -34,7 +26,8 @@
     <span class="written">
       <span v-if="uploading">🕒</span>
       <span v-else>
-        <span :title="$t('managedfiles.uploaded')"  :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"></span>
+        <span :title="$t('managedfiles.uploaded')"
+              :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"></span>
       </span>
     </span>
     <span class="preview">
@@ -49,12 +42,12 @@
 
     <span class="contentType">
       <span v-if="contentType">
-        <code   :title="$t('managedfiles.content-type')" >{{ contentType }}</code>
+        <code :title="$t('managedfiles.content-type')">{{ contentType }}</code>
       </span>
     </span>
 
     <span class="filename">
-      <span class="form-prompt"  :title="$t('managedfiles.file-name')"  v-if="filename">{{ filename }} </span>
+      <span class="form-prompt" :title="$t('managedfiles.file-name')" v-if="filename">{{ filename }} </span>
       <span class="form-prompt" v-else>{{ $t('managedfiles.please-upload-a-file') }}</span>
     </span>
   </div>

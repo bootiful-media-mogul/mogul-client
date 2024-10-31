@@ -43,8 +43,7 @@
             {{ $t('podcasts.podcasts.episodes') }}
           </a>
           |
-          <a :href="podcastRssFeedUrl(podcast)">RSS</a>
-
+          <a :href="podcastRssFeedUrl (podcast)" @click.prevent="openRssFeed(podcast.id ,podcastRssFeedUrl (podcast))">RSS</a>
         </div>
         <div class="delete">
           <a
@@ -126,12 +125,13 @@ const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Ev
   })
 }
 
-
 const podcastRssFeedUrl = (podcast: Podcast): string => {
-  //http://127.0.0.1:1010/api/feeds/moguls/16386/podcasts/1/episodes.atom
   return '/api/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
 }
 
+const openRssFeed = async function(podcastId: number, url: string) {
+  window.open(url, 'rssWindowForPodcastNo' + podcastId)
+}
 
 const createPodcast = async function(e: Event) {
   e.preventDefault()

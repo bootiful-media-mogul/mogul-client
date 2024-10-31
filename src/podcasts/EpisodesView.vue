@@ -279,8 +279,8 @@ onMounted(async () => {
         show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
       -->
       <div v-if="draftEpisode.id" class="episode-actions subject-actions">
-        <a href="#"> blog<!-- from episode--> </a> |
-        <a href="#"> analyse<!-- (for improvements, clippability, etc.)--> </a>
+        <a href="#">blog</a> |
+        <a href="#">analyse</a>
       </div>
 
       <div class="form-section">

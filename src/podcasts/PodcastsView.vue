@@ -37,13 +37,14 @@
         <div class="created">
           {{ dts(podcast.created) }}
         </div>
-
-        <div class="links">
-          <a href="#" @click="navigateToEpisodesPageForPodcast(podcast.id, $event)">
+        <div class="episodes">
+          <a href="#" @click="navigateToEpisodesPageForPodcast(podcast.id, $event)" class="podcasts-icon">
             {{ $t('podcasts.podcasts.episodes') }}
           </a>
-          |
-          <a :href="podcastRssFeedUrl (podcast)" @click.prevent="openRssFeed(podcast.id ,podcastRssFeedUrl (podcast))">RSS</a>
+        </div>
+        <div class="rss">
+          <a class="rss-icon" :href="podcastRssFeedUrl (podcast)"
+             @click.prevent="openRssFeed(podcast.id ,podcastRssFeedUrl (podcast))"></a>
         </div>
         <div class="delete">
           <a
@@ -52,9 +53,9 @@
             href="#"
             class="delete-icon"
           ></a>
-          <span v-if="all.length == 1" href="#" class="delete-icon disabled"></span>
+          <a v-if="all.length == 1" href="#" class="unselectable delete-icon disabled"></a>
         </div>
-        <div class="title">
+        <div class="podcast-title">
           {{ podcast.title }}
         </div>
       </div>
@@ -67,12 +68,32 @@
   font-weight: normal;
 }
 
-.links {
-  grid-area: links;
+.rss {
+  grid-area: rss;
+
+}
+
+.rss-icon {
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/rss-highlight.png');
+}
+
+.rss-icon:hover {
+  background: url('../assets/images/rss.png');
+}
+
+.episodes {
+  grid-area: episodes;
+  padding-left: var(--gutter-space);
 }
 
 .created {
   grid-area: created;
+  padding-left: var(--gutter-space);
+  
 }
 
 .id b {
@@ -84,14 +105,17 @@
   grid-area: delete;
 }
 
-.title {
-  grid-area: title;
+.podcast-title {
+  grid-area: podcast-title;
+  padding-left: var(--gutter-space);
 }
 
 .podcast-rows {
   display: grid;
-  grid-template-areas: 'id delete links created title';
-  grid-template-columns: var(--id-column) 30px 150px var(--date-column) auto;
+  grid-template-areas: 'id delete rss           episodes   created  podcast-title';
+  grid-template-columns:  var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%) auto;
+
+
 }
 </style>
 <script setup lang="ts">

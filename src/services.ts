@@ -367,6 +367,7 @@ export class ManagedFile {
   filename: string
   size: number
   written: boolean
+  visible: boolean
   contentType: string
 
   constructor(
@@ -376,7 +377,8 @@ export class ManagedFile {
     filename: string,
     size: number,
     written: boolean,
-    contentType: string
+    contentType: string,
+    visible: boolean
   ) {
     this.id = id
     this.bucket = bucket
@@ -385,6 +387,7 @@ export class ManagedFile {
     this.written = written
     this.size = size
     this.contentType = contentType
+    this.visible = visible
   }
 }
 
@@ -596,11 +599,24 @@ export class ManagedFiles {
     this.client = client
   }
 
+  async setManagedFileVisibility(managedFileId: number, visible: boolean) {
+    const mutation = `
+      mutation SetManagedFileVisibility( $managedFileId : ID , $visible:Boolean ){ 
+       setManagedFileVisibility (  managedFileId: $managedFileId, visible: $visible )
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      managedFileId: managedFileId ,
+      visible: visible
+    })
+    return (await result.data['setManagedFileVisibility']) as boolean
+  }
+
   async getManagedFileById(id: number): Promise<ManagedFile> {
     const q = `
         query ($id: ID) {
           managedFileById( id : $id )  { 
-            id, bucket, folder, filename, size, written ,contentType
+            id, bucket, folder, filename, size, written ,contentType, visible
           }
         }
         `

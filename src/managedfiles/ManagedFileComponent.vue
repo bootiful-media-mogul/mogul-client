@@ -15,6 +15,9 @@
     <a class="choose" href="#" @click="launchFileUpload">
       <span class="folder-icon"></span>
     </a>
+    <a class="visible" href="#">
+      <input type="checkbox" v-model="visible">
+    </a>
 
     <span class="written">
       <span v-if="uploading">🕒</span>
@@ -115,9 +118,14 @@ const size = ref<number>(0)
 const uploading = ref<boolean>(false)
 const written = ref<boolean>(false)
 const realFileUploadInputField = ref<HTMLElement>()
+const visible = ref<boolean>(false)
 
 onMounted(async () => {
   await loadManagedFileIntoEditor()
+})
+
+watch(() => visible.value, async (n: boolean, o: boolean) => {
+  await managedFiles.setManagedFileVisibility(props.managedFileId as number, n)
 })
 
 watch(
@@ -152,6 +160,8 @@ const loadManagedFileIntoEditor = async () => {
   written.value = managedFile.written
   contentType.value = managedFile.contentType
   size.value = managedFile.size
+  visible.value = managedFile.visible
+
 }
 
 const uploadFile = async (event: Event) => {

@@ -7,26 +7,39 @@
     @change="uploadFile($event)"
   />
 
+<!--  'managedfiles.please-upload-a-file': '(please upload a file.)',-->
+<!--  'managedfiles.visible': 'is this file publicly visible and accessible?',-->
+<!--  'managedfiles.delete': 'delete this file',-->
+<!--  'managedfiles.preview': 'preview this file',-->
+<!--  'managedfiles.upload': 'upload a file',-->
+<!--  'managedfiles.uploaded': 'has this file been uploaded?',-->
+<!--  'managedfiles.content-type': "this file's content type",-->
+<!--  'managedfiles.file-name': "this file's name",-->
+
   <div class="managed-file-row">
     <span class="controls">
       <slot></slot>
     </span>
 
+    
     <a class="choose" href="#" @click="launchFileUpload">
-      <span class="folder-icon"></span>
+      <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
     </a>
     <a class="visible" href="#">
-      <input type="checkbox" v-model="visible">
+      <input
+        :title="$t('managedfiles.visible')"
+        type="checkbox" v-model="visible">
     </a>
 
     <span class="written">
       <span v-if="uploading">🕒</span>
       <span v-else>
-        <span :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"></span>
+        <span :title="$t('managedfiles.uploaded')"  :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"></span>
       </span>
     </span>
     <span class="preview">
       <a
+        :title="$t('managedfiles.preview')"
         href="#"
         :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
         @click="preview"
@@ -36,27 +49,32 @@
 
     <span class="contentType">
       <span v-if="contentType">
-        <code>{{ contentType }}</code>
+        <code   :title="$t('managedfiles.content-type')" >{{ contentType }}</code>
       </span>
     </span>
 
     <span class="filename">
-      <span class="form-prompt" v-if="filename">{{ filename }} </span>
+      <span class="form-prompt"  :title="$t('managedfiles.file-name')"  v-if="filename">{{ filename }} </span>
       <span class="form-prompt" v-else>{{ $t('managedfiles.please-upload-a-file') }}</span>
     </span>
   </div>
 </template>
 <style>
 .managed-file-row {
-  grid-template-areas: 'controls choose written  preview   contentType   filename';
+  grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
     min-content
+    var(--icon-column)
     var(--icon-column)
     var(--icon-column)
     var(--icon-column)
     8em
     auto;
   display: grid;
+}
+
+.managed-file-row .visible {
+  grid-area: visible;
 }
 
 .managed-file-row .controls {

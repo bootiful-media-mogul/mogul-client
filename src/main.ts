@@ -41,6 +41,15 @@ const translations = {
 
     // managed files
     'managedfiles.please-upload-a-file': '(please upload a file.)',
+    'managedfiles.visible': "is this file publicly visible and accessible? If so, its public URL will show up in the preview panel.",
+    'managedfiles.delete': 'delete this file',
+    'managedfiles.preview': 'preview this file',
+    'managedfiles.upload': 'upload a file',
+    'managedfiles.uploaded': 'has this file been uploaded?',
+    'managedfiles.content-type': "this file's content type",
+    'managedfiles.file-name': "this file's name",
+     
+    
     // app
     'app.menu.home': 'home',
     'app.menu.settings': 'settings',

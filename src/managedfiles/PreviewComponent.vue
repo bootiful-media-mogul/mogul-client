@@ -21,11 +21,33 @@
         <div>
           <code>{{ size }}</code>
         </div>
+        <div v-if="publicUrl">
+          <a :title="publicUrl" @click.prevent="launchPublicUrl" class="link-icon" :href="publicUrl"></a>
+        </div>
       </div>
     </fieldset>
   </form>
 </template>
-<style></style>
+<style>
+
+.link-icon {
+  background: url('../assets/images/link-highlight.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
+}
+
+.link-icon:hover {
+  background: url('../assets/images/link.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
+}
+
+
+</style>
 <script setup lang="ts">
 import { events, managedFiles } from '@/services'
 import { prettyPrintInBytes } from '@/managedfiles/files'
@@ -38,6 +60,7 @@ const url = ref('')
 const filename = ref('')
 const size = ref('')
 const contentType = ref('')
+const publicUrl = ref<string>()
 
 async function doLoad(mfid: any) {
   const managedFile = await managedFiles.getManagedFileById(parseInt(mfid))
@@ -49,8 +72,12 @@ async function doLoad(mfid: any) {
   contentType.value = ext
   size.value = prettyPrintInBytes(managedFile.size)
   filename.value = managedFile.filename
+  publicUrl.value = '/api' + managedFile.publicUrl
 }
 
+const launchPublicUrl = () =>{
+  window.open( publicUrl.value , 'managedFilePublicUrl')
+}
 interface Props {
   readonly managedFileId?: string | number
 }

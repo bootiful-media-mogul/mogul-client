@@ -4,7 +4,6 @@ import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
 import { marked } from 'marked'
 
-
 export const graphqlClient = new Client({
   url: '/api/graphql',
   exchanges: [
@@ -56,7 +55,6 @@ export class Podcast {
     this.created = created
   }
 }
-
 
 export class Podcasts {
   private readonly client: Client

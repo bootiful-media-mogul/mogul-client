@@ -118,9 +118,9 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete rss           episodes   created  podcast-title';
-  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(
-      100%
-    ) auto;
+  grid-template-columns:
+    var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%)
+    auto;
 }
 </style>
 <script setup lang="ts">
@@ -131,6 +131,7 @@ import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import * as process from 'node:process'
 
 const { t } = useI18n()
 
@@ -139,10 +140,10 @@ const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
 const mogulId = ref<number>(0)
 
-const refresh = async function () {
+const refresh = async function() {
   return await podcasts.podcasts()
 }
-const dts = function (date: number) {
+const dts = function(date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (podcast: Podcast) => {
@@ -152,7 +153,7 @@ const deletePodcast = async (podcast: Podcast) => {
   const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
@@ -161,14 +162,22 @@ const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: E
 }
 
 const podcastRssFeedUrl = (podcast: Podcast): string => {
-  return 'https://api.media-mogul.io/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
+  const api = import.meta.env.VITE_API_URL
+
+  return (
+    api + '/public/feeds/moguls/' +
+    mogulId.value +
+    '/podcasts/' +
+    podcast.id +
+    '/episodes.atom'
+  )
 }
 
-const openRssFeed = async function (podcastId: number, url: string) {
+const openRssFeed = async function(podcastId: number, url: string) {
   window.open(url, 'rssWindowForPodcastNo' + podcastId)
 }
 
-const createPodcast = async function (e: Event) {
+const createPodcast = async function(e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()

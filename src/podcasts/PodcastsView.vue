@@ -161,7 +161,7 @@ const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: E
 }
 
 const podcastRssFeedUrl = (podcast: Podcast): string => {
-  return '/api/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
+  return 'https://api.media-mogul.io/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
 }
 
 const openRssFeed = async function (podcastId: number, url: string) {

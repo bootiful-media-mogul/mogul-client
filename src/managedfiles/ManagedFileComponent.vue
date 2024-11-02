@@ -6,28 +6,26 @@
     :accept="accept ? accept : '*/*'"
     @change="uploadFile($event)"
   />
-  
 
   <div class="managed-file-row">
     <span class="controls">
       <slot></slot>
     </span>
 
-
     <a class="choose" href="#" @click="launchFileUpload">
       <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
     </a>
     <a class="visible" href="#">
-      <input
-        :title="$t('managedfiles.visible')"
-        type="checkbox" v-model="visible">
+      <input :title="$t('managedfiles.visible')" type="checkbox" v-model="visible" />
     </a>
 
     <span class="written">
       <span v-if="uploading">🕒</span>
       <span v-else>
-        <span :title="$t('managedfiles.uploaded')"
-              :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"></span>
+        <span
+          :title="$t('managedfiles.uploaded')"
+          :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"
+        ></span>
       </span>
     </span>
     <span class="preview">
@@ -47,7 +45,9 @@
     </span>
 
     <span class="filename">
-      <span class="form-prompt" :title="$t('managedfiles.file-name')" v-if="filename">{{ filename }} </span>
+      <span class="form-prompt" :title="$t('managedfiles.file-name')" v-if="filename"
+        >{{ filename }}
+      </span>
       <span class="form-prompt" v-else>{{ $t('managedfiles.please-upload-a-file') }}</span>
     </span>
   </div>
@@ -135,9 +135,12 @@ onMounted(async () => {
   await loadManagedFileIntoEditor()
 })
 
-watch(() => visible.value, async (n: boolean, o: boolean) => {
-  await managedFiles.setManagedFileVisibility(props.managedFileId as number, n)
-})
+watch(
+  () => visible.value,
+  async (n: boolean, o: boolean) => {
+    await managedFiles.setManagedFileVisibility(props.managedFileId as number, n)
+  }
+)
 
 watch(
   () => props.managedFileId,
@@ -172,7 +175,6 @@ const loadManagedFileIntoEditor = async () => {
   contentType.value = managedFile.contentType
   size.value = managedFile.size
   visible.value = managedFile.visible
-
 }
 
 const uploadFile = async (event: Event) => {

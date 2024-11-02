@@ -38,13 +38,20 @@
           {{ dts(podcast.created) }}
         </div>
         <div class="episodes">
-          <a href="#" @click="navigateToEpisodesPageForPodcast(podcast.id, $event)" class="podcasts-icon">
+          <a
+            href="#"
+            @click="navigateToEpisodesPageForPodcast(podcast.id, $event)"
+            class="podcasts-icon"
+          >
             {{ $t('podcasts.podcasts.episodes') }}
           </a>
         </div>
         <div class="rss">
-          <a class="rss-icon" :href="podcastRssFeedUrl (podcast)"
-             @click.prevent="openRssFeed(podcast.id ,podcastRssFeedUrl (podcast))"></a>
+          <a
+            class="rss-icon"
+            :href="podcastRssFeedUrl(podcast)"
+            @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
+          ></a>
         </div>
         <div class="delete">
           <a
@@ -70,7 +77,6 @@
 
 .rss {
   grid-area: rss;
-
 }
 
 .rss-icon {
@@ -93,7 +99,6 @@
 .created {
   grid-area: created;
   padding-left: var(--gutter-space);
-
 }
 
 .id b {
@@ -113,9 +118,9 @@
 .podcast-rows {
   display: grid;
   grid-template-areas: 'id delete rss           episodes   created  podcast-title';
-  grid-template-columns:  var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%) auto;
-
-
+  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(
+      100%
+    ) auto;
 }
 </style>
 <script setup lang="ts">
@@ -134,21 +139,20 @@ const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
 const mogulId = ref<number>(0)
 
-const refresh = async function() {
+const refresh = async function () {
   return await podcasts.podcasts()
 }
-const dts = function(date: number) {
+const dts = function (date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (podcast: Podcast) => {
   const msg = t('confirm.deletion', { title: podcast.title })
-  if (!utils.confirmDeletion(msg))
-    return
-  
+  if (!utils.confirmDeletion(msg)) return
+
   const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
@@ -160,11 +164,11 @@ const podcastRssFeedUrl = (podcast: Podcast): string => {
   return '/api/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
 }
 
-const openRssFeed = async function(podcastId: number, url: string) {
+const openRssFeed = async function (podcastId: number, url: string) {
   window.open(url, 'rssWindowForPodcastNo' + podcastId)
 }
 
-const createPodcast = async function(e: Event) {
+const createPodcast = async function (e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()

@@ -22,14 +22,18 @@
           <code>{{ size }}</code>
         </div>
         <div v-if="publicUrl">
-          <a :title="publicUrl" @click.prevent="launchPublicUrl" class="link-icon" :href="publicUrl"></a>
+          <a
+            :title="publicUrl"
+            @click.prevent="launchPublicUrl"
+            class="link-icon"
+            :href="publicUrl"
+          ></a>
         </div>
       </div>
     </fieldset>
   </form>
 </template>
 <style>
-
 .link-icon {
   background: url('../assets/images/link-highlight.png');
   height: var(--icon-width);
@@ -45,8 +49,6 @@
   width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
 }
-
-
 </style>
 <script setup lang="ts">
 import { events, managedFiles } from '@/services'

@@ -379,7 +379,7 @@ export class ManagedFile {
     size: number,
     written: boolean,
     contentType: string,
-    visible: boolean ,
+    visible: boolean,
     publicUrl: string
   ) {
     this.id = id
@@ -609,7 +609,7 @@ export class ManagedFiles {
       }
     `
     const result = await this.client.mutation(mutation, {
-      managedFileId: managedFileId ,
+      managedFileId: managedFileId,
       visible: visible
     })
     return (await result.data['setManagedFileVisibility']) as boolean
@@ -675,9 +675,7 @@ export class Markdown {
   }
 }
 
-
 export class Utils {
-
   confirmDeletion(msg: string): boolean {
     return window.confirm(msg)
   }

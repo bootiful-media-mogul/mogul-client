@@ -185,12 +185,9 @@ const deletePodcastEpisodeSegment = async (
   episode: PodcastEpisode,
   episodeSegment: PodcastEpisodeSegment
 ) => {
-
-
   const segmentDetails = t('episodes.segments.number', { id: episodeSegment.order })
   const msg = t('confirm.deletion', { title: segmentDetails })
-  if (!utils.confirmDeletion(msg))
-    return
+  if (!utils.confirmDeletion(msg)) return
 
   draftEpisode.complete = false
   await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
@@ -214,12 +211,9 @@ const pluginSelected = async (e: Event) => {
 }
 
 const deletePodcastEpisode = async (episode: PodcastEpisode) => {
-
-
   const podcastEpisodeDescription = t('episodes.episode.reference', { title: episode.title })
   const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
-  if (!utils.confirmDeletion(msg))
-    return
+  if (!utils.confirmDeletion(msg)) return
 
   await podcasts.deletePodcastEpisode(episode.id)
   await cancel(new Event(''))

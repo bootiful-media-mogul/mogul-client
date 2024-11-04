@@ -68,7 +68,7 @@ async function doLoad(mfid: any) {
   if (managedFile.visible) {
     url.value = managedFile.visibleUrl
   } else {
-    url.value = managedFile.url
+    url.value = '/api'+ managedFile.url
   }
   console.log('url for preview for managed file # ' + managedFile.id + 'is ' + url.value)
   // url.value = '/api/managedfiles/' + managedFile.id

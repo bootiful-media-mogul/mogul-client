@@ -367,7 +367,8 @@ export class ManagedFile {
   written: boolean
   visible: boolean
   contentType: string
-  publicUrl: string
+  visibleUrl: string
+  url : string
 
   constructor(
     id: number,
@@ -378,7 +379,8 @@ export class ManagedFile {
     written: boolean,
     contentType: string,
     visible: boolean,
-    publicUrl: string
+    publicUrl: string,
+    url : string,
   ) {
     this.id = id
     this.bucket = bucket
@@ -388,7 +390,8 @@ export class ManagedFile {
     this.size = size
     this.contentType = contentType
     this.visible = visible
-    this.publicUrl = publicUrl
+    this.visibleUrl = publicUrl
+    this.url = url
   }
 }
 
@@ -617,7 +620,7 @@ export class ManagedFiles {
     const q = `
         query ($id: ID) {
           managedFileById( id : $id )  { 
-            id, bucket, folder, filename, size, written ,contentType, visible ,publicUrl
+            id, bucket, folder, filename, size, written ,contentType, visible , url, visibleUrl
           }
         }
         `

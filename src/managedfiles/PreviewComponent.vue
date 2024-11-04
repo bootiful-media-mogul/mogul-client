@@ -21,12 +21,12 @@
         <div>
           <code>{{ size }}</code>
         </div>
-        <div v-if="publicUrl">
+        <div v-if="url">
           <a
-            :title="publicUrl"
+            :title="url"
             @click.prevent="launchPublicUrl"
             class="link-icon"
-            :href="publicUrl"
+            :href="url"
           ></a>
         </div>
       </div>
@@ -62,11 +62,16 @@ const url = ref('')
 const filename = ref('')
 const size = ref('')
 const contentType = ref('')
-const publicUrl = ref<string>()
 
 async function doLoad(mfid: any) {
   const managedFile = await managedFiles.getManagedFileById(parseInt(mfid))
-  url.value = '/api/managedfiles/' + managedFile.id
+  if (managedFile.visible) {
+    url.value = managedFile.visibleUrl
+  } else {
+    url.value = managedFile.url
+  }
+  console.log('url for preview for managed file # ' + managedFile.id + 'is ' + url.value)
+  // url.value = '/api/managedfiles/' + managedFile.id
   const ext = managedFile.contentType.toLowerCase()
   isImage.value =
     ext.endsWith('jpg') || ext.endsWith('jpeg') || ext.endsWith('png') || ext.endsWith('gif')
@@ -74,11 +79,11 @@ async function doLoad(mfid: any) {
   contentType.value = ext
   size.value = prettyPrintInBytes(managedFile.size)
   filename.value = managedFile.filename
-  publicUrl.value = '/api' + managedFile.publicUrl
+
 }
 
 const launchPublicUrl = () => {
-  window.open(publicUrl.value, 'managedFilePublicUrl')
+  window.open(url.value, 'managedFilePublicUrl')
 }
 
 interface Props {

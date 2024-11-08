@@ -1,10 +1,10 @@
 <template>
   <div class="menu">
-    <div :class="'unselectable arrow up ' + upArrowCss()" ref="up" @click="emit('up')">◀</div>
+    <div ref="up" :class="'unselectable arrow up ' + upArrowCss()" @click="emit('up')">◀</div>
     <div class="unselectable icons">
       <slot> the buttons should go here otherwise this will look like crap!</slot>
     </div>
-    <div :class="'unselectable arrow down ' + downArrowCss()" ref="down" @click="emit('down')">
+    <div ref="down" :class="'unselectable arrow down ' + downArrowCss()" @click="emit('down')">
       ▶
     </div>
   </div>
@@ -46,19 +46,21 @@
   pointer-events: none;
 }
 </style>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch } from 'vue'
+
 interface Props {
   readonly disabled: boolean
   readonly enableUpArrow: boolean
   readonly enableDownArrow: boolean
 }
+
 const emit = defineEmits<{
   (e: 'down'): void
   (e: 'up'): void
 }>()
 const props = defineProps<Props>()
-const downArrowCss = function () {
+const downArrowCss = function() {
   if (props.disabled) return 'disabled'
   if (!props.enableDownArrow) return 'disabled'
   return ''
@@ -68,7 +70,7 @@ const upArrowCss = () => {
   if (!props.enableUpArrow) return 'disabled'
   return ''
 }
-const disable = function (r: HTMLElement) {
+const disable = function(r: HTMLElement) {
   r.classList.add('disabled')
 }
 const up = ref<HTMLElement>()

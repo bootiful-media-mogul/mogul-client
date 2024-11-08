@@ -22,7 +22,7 @@ h6 {
 <template>
   <InputWrapperChild>
     <template v-slot:panel>
-      <div class="rendered-preview" v-if="props.modelValue.trim() !== ''" v-html="rendered"></div>
+      <div v-if="props.modelValue.trim() !== ''" class="rendered-preview" v-html="rendered"></div>
       <div v-if="props.modelValue.trim() === ''">(nothing to preview)</div>
     </template>
     <template v-slot:icon>
@@ -30,7 +30,7 @@ h6 {
     </template>
   </InputWrapperChild>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import asset from '@/assets/images/markdown/markdown-preview.png'
 import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.png'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'

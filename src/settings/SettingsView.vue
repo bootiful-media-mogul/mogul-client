@@ -59,9 +59,7 @@ export default {
       settings,
       loadedSettings
     }
-  },
-
-  async created() {}
+  }
 }
 </script>
 
@@ -85,11 +83,11 @@ export default {
             </label>
 
             <input
-              type="password"
               :id="textAreaElementId(settingsPage.category, setting.name)"
-              class="secret"
-              :required="!setting.valid"
               v-model="setting.value"
+              :required="!setting.valid"
+              class="secret"
+              type="password"
             />
 
             <span class="pure-form-message-inline">
@@ -100,9 +98,9 @@ export default {
 
         <div class="pure-controls">
           <button
-            @click.prevent="save(settingsPage.category)"
-            type="submit"
             class="pure-button pure-button-primary"
+            type="submit"
+            @click.prevent="save(settingsPage.category)"
           >
             {{ $t('settings.save-button', { plugin: $t(settingsPage.category) }) }}
           </button>

@@ -1,9 +1,9 @@
 <template>
   <input
-    class="managed-file-file-upload"
     ref="realFileUploadInputField"
-    type="file"
     :accept="accept ? accept : '*/*'"
+    class="managed-file-file-upload"
+    type="file"
     @change="uploadFile($event)"
   />
 
@@ -16,23 +16,23 @@
       <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
     </a>
     <a class="visible" href="#">
-      <input :title="$t('managedfiles.visible')" type="checkbox" v-model="visible" />
+      <input v-model="visible" :title="$t('managedfiles.visible')" type="checkbox" />
     </a>
 
     <span class="written">
       <span v-if="uploading">🕒</span>
       <span v-else>
         <span
-          :title="$t('managedfiles.uploaded')"
           :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"
+          :title="$t('managedfiles.uploaded')"
         ></span>
       </span>
     </span>
     <span class="preview">
       <a
+        :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
         :title="$t('managedfiles.preview')"
         href="#"
-        :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
         @click="preview"
       >
       </a>
@@ -45,10 +45,10 @@
     </span>
 
     <span class="filename">
-      <span class="form-prompt" :title="$t('managedfiles.file-name')" v-if="filename"
-        >{{ filename }}
+      <span v-if="filename" :title="$t('managedfiles.file-name')" class="form-prompt"
+      >{{ filename }}
       </span>
-      <span class="form-prompt" v-else>{{ $t('managedfiles.please-upload-a-file') }}</span>
+      <span v-else class="form-prompt">{{ $t('managedfiles.please-upload-a-file') }}</span>
     </span>
   </div>
 </template>
@@ -111,7 +111,7 @@
   left: -1000px;
 }
 </style>
-<script setup lang="ts">
+<script lang="ts" setup>
 import axios from 'axios'
 import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'

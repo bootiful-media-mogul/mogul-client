@@ -6,28 +6,28 @@
     <div class="icon-column">
       <InputWrapperMenu
         :disabled="panelVisible || childSlots.length <= 1"
+        :enableDownArrow="enableDownArrow()"
+        :enableUpArrow="enableUpArrow()"
         class="icon-column-menu"
         @down="down"
         @up="up"
-        :enableUpArrow="enableUpArrow()"
-        :enableDownArrow="enableDownArrow()"
       >
         <div
-          @click="togglePanel(slot)"
-          class="icon unselectable"
           v-for="(slot, index) in childSlots"
           :key="index"
+          class="icon unselectable"
+          @click="togglePanel(slot)"
         >
           <div v-if="panelVisible && slot.iconVisible">
             <div class="close-icon"></div>
           </div>
           <div v-else>
-            <component v-if="slot.iconVisible" :is="slot.icon"></component>
+            <component :is="slot.icon" v-if="slot.iconVisible"></component>
           </div>
         </div>
       </InputWrapperMenu>
     </div>
-    <div class="panel" v-if="panelVisible">
+    <div v-if="panelVisible" class="panel">
       <div v-for="(slot, index) in childSlots" :key="index">
         <div v-if="slot.panelVisible">
           <component :is="slot.panel"></component>
@@ -37,7 +37,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import type { PanelSlot } from './input'

@@ -6,15 +6,15 @@
       </div>
       <div class="controls">
         <SidebarPanelWindowButtonComponent v-if="!maximized" class="maximize">
-          <img @click="maximize" src="../assets/images/panel-maximize.png" alt="maximize" />
+          <img alt="maximize" src="../assets/images/panel-maximize.png" @click="maximize" />
         </SidebarPanelWindowButtonComponent>
 
-        <SidebarPanelWindowButtonComponent class="show-hide" v-if="!(expanded || maximized)">
-          <img @click="show" src="../assets/images/panel-minimize.png" alt="minimize" />
+        <SidebarPanelWindowButtonComponent v-if="!(expanded || maximized)" class="show-hide">
+          <img alt="minimize" src="../assets/images/panel-minimize.png" @click="show" />
         </SidebarPanelWindowButtonComponent>
 
         <SidebarPanelWindowButtonComponent v-if="expanded || maximized" class="show-hide">
-          <img @click="hide" src="../assets/images/panel-close.png" alt="close" />
+          <img alt="close" src="../assets/images/panel-close.png" @click="hide" />
         </SidebarPanelWindowButtonComponent>
       </div>
     </div>
@@ -115,10 +115,10 @@
 }
 </style>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { events } from '@/services'
 import SidebarPanelWindowButtonComponent from './SidebarPanelWindowButtonComponent.vue'
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 const bgPanelNode = ref<HTMLElement>()
 const expanded = ref<boolean>(false)
@@ -138,16 +138,16 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const hide = function () {
+const hide = function() {
   maximized.value = false
   expanded.value = false
   if (bgPanelNode.value) bgPanelNode.value.style.display = 'none'
 }
-const show = function () {
+const show = function() {
   expanded.value = true
   maximized.value = false
 }
-const maximize = function () {
+const maximize = function() {
   expanded.value = true
   maximized.value = true
   if (bgPanelNode.value) bgPanelNode.value.style.display = 'block'

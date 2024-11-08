@@ -43,7 +43,7 @@
   width: var(--writing-tools-panel-icon-size);
 }
 </style>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref } from 'vue'
 
 interface Props {

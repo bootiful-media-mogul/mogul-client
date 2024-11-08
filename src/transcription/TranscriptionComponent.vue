@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { events, type TranscriptEditEvent } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
@@ -70,16 +70,16 @@ const saveTranscript = () => {
         </label>
 
         <InputWrapper v-model="transcript">
-          <textarea id="transcript" required v-model="transcript" rows="10" />
+          <textarea id="transcript" v-model="transcript" required rows="10" />
           <InputTools v-model="transcript" />
         </InputWrapper>
       </div>
       <div>
         <span class="save">
           <button
-            @click.prevent="saveTranscript"
-            type="submit"
             :class="'pure-button pure-button-primary ' + (isDirty() ? '' : 'disabled')"
+            type="submit"
+            @click.prevent="saveTranscript"
           >
             {{ $t('transcripts.buttons.save') }}
           </button>
@@ -87,9 +87,9 @@ const saveTranscript = () => {
 
         <span class="cancel">
           <button
-            @click.prevent="cancel"
-            type="submit"
             :class="'pure-button ' + (isDirty() ? '' : 'disabled')"
+            type="submit"
+            @click.prevent="cancel"
           >
             {{ $t('transcripts.buttons.cancel') }}
           </button>

@@ -4,12 +4,12 @@
       <div>
         <img
           v-if="isImage"
-          class="managed-file-preview-image"
           :alt="'a preview for managed file ' + managedFileId"
           :src="url"
+          class="managed-file-preview-image"
         />
 
-        <audio :src="url" v-if="isAudio" class="managed-file-preview-audio" controls></audio>
+        <audio v-if="isAudio" :src="url" class="managed-file-preview-audio" controls></audio>
       </div>
       <div>
         <div>
@@ -22,12 +22,7 @@
           <code>{{ size }}</code>
         </div>
         <div v-if="url">
-          <a
-            :title="url"
-            @click.prevent="launchPublicUrl"
-            class="link-icon"
-            :href="url"
-          ></a>
+          <a :href="url" :title="url" class="link-icon" @click.prevent="launchPublicUrl"></a>
         </div>
       </div>
     </fieldset>
@@ -50,7 +45,7 @@
   background-size: var(--icon-width) var(--icon-width);
 }
 </style>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { events, managedFiles } from '@/services'
 import { prettyPrintInBytes } from '@/managedfiles/files'
 import { onMounted, ref, watch } from 'vue'
@@ -68,7 +63,7 @@ async function doLoad(mfid: any) {
   if (managedFile.visible) {
     url.value = managedFile.visibleUrl
   } else {
-    url.value = '/api'+ managedFile.url
+    url.value = '/api' + managedFile.url
   }
   console.log('url for preview for managed file # ' + managedFile.id + 'is ' + url.value)
   // url.value = '/api/managedfiles/' + managedFile.id
@@ -79,7 +74,6 @@ async function doLoad(mfid: any) {
   contentType.value = ext
   size.value = prettyPrintInBytes(managedFile.size)
   filename.value = managedFile.filename
-
 }
 
 const launchPublicUrl = () => {

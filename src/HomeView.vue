@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 // import InputWrapper from '@/ui/input/InputWrapper.vue'
 // import InputTools from '@/ui/InputTools.vue'
 // import { ref } from 'vue'

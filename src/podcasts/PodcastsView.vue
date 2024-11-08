@@ -9,17 +9,17 @@
         </label>
 
         <InputWrapper v-model="title">
-          <input type="text" required id="title" v-model="title" />
+          <input id="title" v-model="title" required type="text" />
           <InputTools v-model="title" />
         </InputWrapper>
       </div>
       <div class="pure-controls">
         <button
+          :disabled="title == null || title.trim().length == 0"
           class="pure-button pure-button-primary"
           type="submit"
-          :disabled="title == null || title.trim().length == 0"
-          @click="createPodcast"
           value="create"
+          @click="createPodcast"
         >
           {{ $t('podcasts.new-podcast.submit') }}
         </button>
@@ -30,7 +30,7 @@
     <fieldset>
       <legend>Podcasts</legend>
 
-      <div class="pure-g form-row podcast-rows" v-for="podcast in all" v-bind:key="podcast.id">
+      <div v-for="podcast in all" v-bind:key="podcast.id" class="pure-g form-row podcast-rows">
         <div class="id">
           #<b>{{ podcast.id }}</b>
         </div>
@@ -39,28 +39,28 @@
         </div>
         <div class="episodes">
           <a
+            class="podcasts-icon"
             href="#"
             @click="navigateToEpisodesPageForPodcast(podcast.id, $event)"
-            class="podcasts-icon"
           >
             {{ $t('podcasts.podcasts.episodes') }}
           </a>
         </div>
         <div class="rss">
           <a
-            class="rss-icon"
             :href="podcastRssFeedUrl(podcast)"
+            class="rss-icon"
             @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
           ></a>
         </div>
         <div class="delete">
           <a
             v-if="all.length > 1"
-            @click.prevent="deletePodcast(podcast)"
-            href="#"
             class="delete-icon"
+            href="#"
+            @click.prevent="deletePodcast(podcast)"
           ></a>
-          <a v-if="all.length == 1" href="#" class="unselectable delete-icon disabled"></a>
+          <a v-if="all.length == 1" class="unselectable delete-icon disabled" href="#"></a>
         </div>
         <div class="podcast-title">
           {{ podcast.title }}
@@ -123,7 +123,7 @@
     auto;
 }
 </style>
-<script setup lang="ts">
+<script lang="ts" setup>
 import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
@@ -131,7 +131,6 @@ import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import * as process from 'node:process'
 
 const { t } = useI18n()
 
@@ -140,10 +139,10 @@ const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
 const mogulId = ref<number>(0)
 
-const refresh = async function () {
+const refresh = async function() {
   return await podcasts.podcasts()
 }
-const dts = function (date: number) {
+const dts = function(date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (podcast: Podcast) => {
@@ -153,7 +152,7 @@ const deletePodcast = async (podcast: Podcast) => {
   const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
@@ -169,11 +168,11 @@ const podcastRssFeedUrl = (podcast: Podcast): string => {
   )
 }
 
-const openRssFeed = async function (podcastId: number, url: string) {
+const openRssFeed = async function(podcastId: number, url: string) {
   window.open(url, 'rssWindowForPodcastNo' + podcastId)
 }
 
-const createPodcast = async function (e: Event) {
+const createPodcast = async function(e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()

@@ -97,41 +97,41 @@
       <div class="writing-tools-panel">
         <div v-if="!proposalApprovalRequired">
           <div :class="toolsClasses">
-            <WritingAssistantButton label="Proofread" class="proofread-button" @click="proofread">
+            <WritingAssistantButton class="proofread-button" label="Proofread" @click="proofread">
               <img alt="proofread" src="../../assets/images/writing-tools/proofread.png" />
             </WritingAssistantButton>
 
             <WritingAssistantButton
-              label="Rewrite"
               :class="rewriteToolsClasses"
+              label="Rewrite"
               @click="toggleRewriteTools"
             >
               <img alt="rewrite" src="../../assets/images/writing-tools/rewrite.png" />
             </WritingAssistantButton>
           </div>
-          <div :class="rewriteStylesClasses" v-if="rewriteStylesVisible">
+          <div v-if="rewriteStylesVisible" :class="rewriteStylesClasses">
             <WritingAssistantButton
-              label="Friendly"
               class="friendly-button"
+              label="Friendly"
               @click="rewriteFriendly"
             >
               <img alt="friendly" src="../../assets/images/writing-tools/friendly.png" />
             </WritingAssistantButton>
 
-            <WritingAssistantButton label="Concise" class="concise-button" @click="rewriteConcise">
+            <WritingAssistantButton class="concise-button" label="Concise" @click="rewriteConcise">
               <img alt="concise" src="../../assets/images/writing-tools/concise.png" />
             </WritingAssistantButton>
 
             <WritingAssistantButton
-              label="Professional"
               class="professional-button"
+              label="Professional"
               @click="rewriteProfessional"
             >
               <img alt="professional" src="../../assets/images/writing-tools/professional.png" />
             </WritingAssistantButton>
           </div>
         </div>
-        <div class="proposal-approval" v-if="proposalApprovalRequired">
+        <div v-if="proposalApprovalRequired" class="proposal-approval">
           <a class="accept-link" href="#" @click.prevent="accept"> {{ $t('accept') }}</a> |
           <a class="revert-link" href="#" @click.prevent="revert"> {{ $t('revert') }}</a>
         </div>
@@ -142,7 +142,7 @@
     </template>
   </InputWrapperChild>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import asset from '@/assets/images/writing-tools/rewrite.png'
 import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
 

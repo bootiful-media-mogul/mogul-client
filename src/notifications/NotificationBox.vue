@@ -4,7 +4,7 @@
     <div class="modal-notification-panel">
       {{ latestNotification }}
       <div class="buttons">
-        <button @click.prevent="dismiss()" type="submit">
+        <button type="submit" @click.prevent="dismiss()">
           {{ $t('ok') }}
         </button>
       </div>
@@ -67,7 +67,7 @@
 </style>
 
 <script lang="ts">
-import { notifications, Notification } from '@/services'
+import { Notification, notifications } from '@/services'
 import { ref } from 'vue'
 
 export default {
@@ -110,6 +110,7 @@ export default {
       'toaster-notification-panel': true,
       'animated-element-hidden': true
     }
+
     function processor(notification: Notification) {
       //console.log('notification', notification)
       that.latestNotification = that.$t('notifications.' + notification.category, {
@@ -126,11 +127,12 @@ export default {
       if (that.showToasterNotification) {
         that.show()
         clearTimeout(that.nextTimeoutId)
-        that.nextTimeoutId = setTimeout(function (e: Event) {
+        that.nextTimeoutId = setTimeout(function(e: Event) {
           that.hide()
         }, displayForNMilliseconds)
       }
     }
+
     const processorRef: (notification: Notification) => void = processor
     notifications.listen(processorRef)
   }

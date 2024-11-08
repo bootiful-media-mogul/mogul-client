@@ -1,8 +1,6 @@
-<script setup lang="ts">
-import { inject, onMounted } from 'vue'
+<script lang="ts" setup>
+import { inject, onMounted, useSlots } from 'vue'
 import type { RegisterChildFunction } from '@/ui/input/input'
-
-import { useSlots } from 'vue'
 
 const slots = useSlots()
 const registerChild = inject<RegisterChildFunction>('registerChild')

@@ -1,25 +1,27 @@
-<script setup lang="ts">
-import { ref, reactive, onMounted, computed } from 'vue'
-import { events, type TranscriptEditedEvent, utils } from '@/services'
-
-import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
+<script lang="ts" setup>
+import { computed, onMounted, reactive, ref } from 'vue'
 import {
   editTranscript,
+  events,
   Notification,
   notifications,
   Podcast,
   PodcastEpisode,
   PodcastEpisodeSegment,
   podcasts,
-  Publication
+  Publication,
+  type TranscriptEditedEvent,
+  utils
 } from '@/services'
+
+import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
+import { useI18n } from 'vue-i18n'
 
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
+
+const { t } = useI18n()
 
 const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
 
@@ -300,7 +302,7 @@ onMounted(async () => {
             {{ $t('episodes.episode.title') }}
           </label>
           <InputWrapper v-model="title">
-            <input id="episodeTitle" required v-model="title" type="text" />
+            <input id="episodeTitle" v-model="title" required type="text" />
             <InputTools v-model="title" />
           </InputWrapper>
         </div>
@@ -309,27 +311,27 @@ onMounted(async () => {
             {{ $t('episodes.episode.description') }}
           </label>
           <InputWrapper v-model="description">
-            <textarea id="episodeDescription" rows="10" required v-model="description" />
+            <textarea id="episodeDescription" v-model="description" required rows="10" />
             <InputTools v-model="description" />
           </InputWrapper>
         </div>
         <div class="podcast-episode-controls-row">
           <span class="save">
             <button
-              @click="save"
               :disabled="buttonsDisabled"
-              type="submit"
               class="pure-button pure-button-primary"
+              type="submit"
+              @click="save"
             >
               {{ $t('episodes.buttons.save') }}
             </button>
           </span>
           <span class="cancel">
             <button
-              @click="cancel"
-              type="submit"
               :disabled="description == '' && title == ''"
               class="pure-button pure-button-primary"
+              type="submit"
+              @click="cancel"
             >
               {{ $t('episodes.buttons.cancel') }}
             </button>
@@ -347,15 +349,15 @@ onMounted(async () => {
             </div>
             <div class="pure-u-21-24">
               <ManagedFileComponent
-                accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
                 :managed-file-id="draftEpisode.graphic.id"
+                accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
               >
                 <div class="segment-controls"></div>
               </ManagedFileComponent>
             </div>
           </div>
 
-          <div v-bind:key="segment.id" v-for="segment in draftEpisodeSegments">
+          <div v-for="segment in draftEpisodeSegments" v-bind:key="segment.id">
             <div class="pure-g episode-managed-file-row">
               <div class="pure-u-3-24">
                 <label>
@@ -363,27 +365,27 @@ onMounted(async () => {
                 </label>
               </div>
               <div class="pure-u-21-24">
-                <ManagedFileComponent accept=".mp3,audio/mpeg" :managed-file-id="segment.audio.id">
+                <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
                   <div class="segment-controls">
                     <a
-                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
                       :class="upArrowClasses(draftEpisode, segment)"
                       href="#"
+                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
                     ></a>
                     <a
-                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
                       :class="downArrowClasses(draftEpisode, segment)"
                       href="#"
+                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
                     ></a>
                     <a
-                      @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
                       class="delete-icon"
                       href="#"
+                      @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
                     ></a>
                     <a
-                      @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
                       class="transcript-icon"
                       href="#"
+                      @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
                     ></a>
                   </div>
                 </ManagedFileComponent>
@@ -394,9 +396,9 @@ onMounted(async () => {
           <div class="podcast-episode-controls-row">
             <span class="save">
               <button
-                @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
-                type="submit"
                 class="pure-button pure-button-primary"
+                type="submit"
+                @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
               >
                 {{ $t('episodes.buttons.add-segment') }}
               </button>
@@ -410,8 +412,8 @@ onMounted(async () => {
             <div class="publish-menu">
               <select
                 v-model="selectedPlugin"
-                @change="pluginSelected"
                 :disabled="!draftEpisode.complete"
+                @change="pluginSelected"
               >
                 <option disabled value="">
                   {{ $t('episodes.plugins.please-select-a-plugin') }}
@@ -426,12 +428,12 @@ onMounted(async () => {
                 </option>
               </select>
               <button
-                @click="publish"
-                type="submit"
                 :key="draftEpisode.id"
                 ref="publishButton"
-                class="pure-button pure-button-primary publish-button"
                 :disabled="publishButtonDisabled"
+                class="pure-button pure-button-primary publish-button"
+                type="submit"
+                @click="publish"
               >
                 {{ $t('episodes.buttons.publish') }}
               </button>
@@ -440,9 +442,9 @@ onMounted(async () => {
 
           <div class="publications">
             <div
-              class="pure-g form-row publications-row"
-              v-bind:key="publication.id"
               v-for="publication in publications"
+              v-bind:key="publication.id"
+              class="pure-g form-row publications-row"
             >
               <div class="id-column">
                 #<b>{{ publication.id }}</b>
@@ -455,7 +457,7 @@ onMounted(async () => {
                 {{ dts(publication.published) }}
               </div>
               <div class="delete-column">
-                <a href="#" @click="unpublish(publication)" class="delete-icon"></a>
+                <a class="delete-icon" href="#" @click="unpublish(publication)"></a>
               </div>
 
               <div class="url-column preview">
@@ -482,16 +484,16 @@ onMounted(async () => {
         {{ $t('episodes.title') }}
       </legend>
 
-      <div class="pure-g episodes-row" v-bind:key="episode.id" v-for="episode in episodes">
+      <div v-for="episode in episodes" v-bind:key="episode.id" class="pure-g episodes-row">
         <div class="id id-column">
           #<b>{{ episode.id }}</b>
         </div>
         <div class="created">{{ dts(episode.created) }}</div>
         <div class="edit">
-          <a href="#" @click="refreshEpisode(episode.id)" class="edit-icon"> </a>
+          <a class="edit-icon" href="#" @click="refreshEpisode(episode.id)"> </a>
         </div>
         <div class="delete">
-          <a href="#" @click="deletePodcastEpisode(episode)" class="delete-icon"></a>
+          <a class="delete-icon" href="#" @click="deletePodcastEpisode(episode)"></a>
         </div>
         <div class="title">{{ episode.title }}</div>
       </div>

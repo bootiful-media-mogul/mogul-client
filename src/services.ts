@@ -368,7 +368,7 @@ export class ManagedFile {
   visible: boolean
   contentType: string
   visibleUrl: string
-  url : string
+  url: string
 
   constructor(
     id: number,
@@ -380,7 +380,7 @@ export class ManagedFile {
     contentType: string,
     visible: boolean,
     publicUrl: string,
-    url : string,
+    url: string
   ) {
     this.id = id
     this.bucket = bucket

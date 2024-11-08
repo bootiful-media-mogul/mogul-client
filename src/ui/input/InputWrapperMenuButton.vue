@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 const props = defineProps<Props>()
 const src = ref<string>()
 
-const swap = function () {
+const swap = function() {
   if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
 
@@ -26,8 +26,8 @@ onMounted(() => {
   <img
     :alt="'an image -' + src"
     :src="src"
-    @mouseover="swap"
-    @mouseout="swap"
     class="input-wrapper-menu-button"
+    @mouseout="swap"
+    @mouseover="swap"
   />
 </template>

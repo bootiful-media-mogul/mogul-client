@@ -17,41 +17,45 @@
   }
 }
 
-a.icon {
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
-  
-  .strong-icon {
-    background: url('../../../src/assets/images/formatting-icons/bold.png');
-  }
-
-  a.em-icon {
-    background: url('../../../src/assets/images/formatting-icons/italics.png');
-
-  }
-
-  a.link-icon {
-
-  }
-
-  a.list-icon {
-  }
-
+.formatting-menu {
+  display: grid;
+  grid-auto-flow: column;
+  gap: 0;
+  justify-self: center;
+  align-items: center;
 }
 
-
+.formatting-menu img {
+  max-width: calc(var(--icon-width) * 0.8);
+  padding: 0 calc(var(--icon-width) / 2);
+}
 </style>
 <template>
   <InputWrapperChild>
     <template v-slot:panel>
       <div>
         <div class="formatting-menu">
-          <a class="strong-icon" href="#" @click.prevent="formatText('strong')">bold</a> |
-          <a class="em-icon" href="#" @click.prevent="formatText('em')">italics</a> |
-          <a class="link-icon" href="#" @click.prevent="formatText('link')">link</a> |
-          <a class="list-icon" href="#" @click.prevent="formatText('list')">list</a>
+
+          <Icon
+            @click.prevent="formatText('strong')"
+            icon-hover="../src/assets/images/formatting-icons/bold.png"
+            icon="../src/assets/images/formatting-icons/bold.png"
+          />
+          <Icon
+            @click.prevent="formatText('em')"
+            icon-hover="../src/assets/images/formatting-icons/italics.png"
+            icon="../src/assets/images/formatting-icons/italics.png"
+          />
+          <Icon
+            @click.prevent="formatText('link')"
+            icon-hover="../src/assets/images/link.png"
+            icon="../src/assets/images/link-highlight.png"
+          />
+          <Icon
+            @click.prevent="formatText('list')"
+            icon-hover="../src/assets/images/formatting-icons/list.png"
+            icon="../src/assets/images/formatting-icons/list.png"
+          />
         </div>
         <div class="rendered-preview">
           <div v-if="props.modelValue.trim() !== ''" v-html="rendered"></div>

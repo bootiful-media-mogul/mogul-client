@@ -7,8 +7,6 @@ interface Props {
   readonly disabled?: boolean | string
 }
 
-
-
 const props = defineProps<Props>()
 const src = ref<string>()
 
@@ -28,13 +26,14 @@ onMounted(() => {
 </script>
 <style scoped>
  
-.icon {
+img.icon {
   cursor: pointer;
-  max-width: var(--icon-width);
+  width: var(--icon-width);
 }
-.icon-disabled {
+img.icon-disabled {
   cursor: unset;
   opacity:  0.2;
+  width: var(--icon-width);
 }
 </style>
 <template>
@@ -43,7 +42,6 @@ onMounted(() => {
        :alt="'an image - ' + src"
        :src="src"
        class="icon icon-disabled unselectable"
-       
   />
   <img
     v-else 

@@ -139,10 +139,10 @@ const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
 const mogulId = ref<number>(0)
 
-const refresh = async function() {
+const refresh = async function () {
   return await podcasts.podcasts()
 }
-const dts = function(date: number) {
+const dts = function (date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (podcast: Podcast) => {
@@ -152,7 +152,7 @@ const deletePodcast = async (podcast: Podcast) => {
   const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
@@ -168,11 +168,11 @@ const podcastRssFeedUrl = (podcast: Podcast): string => {
   )
 }
 
-const openRssFeed = async function(podcastId: number, url: string) {
+const openRssFeed = async function (podcastId: number, url: string) {
   window.open(url, 'rssWindowForPodcastNo' + podcastId)
 }
 
-const createPodcast = async function(e: Event) {
+const createPodcast = async function (e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()

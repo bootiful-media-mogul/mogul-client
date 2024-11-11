@@ -42,7 +42,12 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { mogul as mogulService, Setting, settings as settingsService, SettingsPage } from '@/services'
+import {
+  mogul as mogulService,
+  Setting,
+  settings as settingsService,
+  SettingsPage
+} from '@/services'
 import PrivatePasswordInputComponent from '@/privacy/PrivatePasswordInputComponent.vue'
 
 const mogul = ref('')
@@ -63,7 +68,6 @@ const reloadSettings = async () => {
 }
 
 const save = async (category: string) => {
-  
   function findSettingWithMatchingKey(haystack: Array<Setting>, k: string): Setting | null {
     const matches = haystack.filter((s) => s.name == k)
     if (matches && matches.length > 0) return matches[0]
@@ -74,7 +78,7 @@ const save = async (category: string) => {
   const settings = pageForCategory.settings
   const loadedPageForCategory = loadedSettingsRef.value.filter((sp) => sp.category == category)[0]
   const loadedSettings = loadedPageForCategory.settings
-  
+
   for (const setting of settings) {
     const matching = findSettingWithMatchingKey(loadedSettings, setting.name)
     if (matching != null && matching.value != setting.value) {

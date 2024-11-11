@@ -4,28 +4,54 @@
   padding: calc(var(--gutter-space) / 3);
 }
 
-
 .rendered-preview {
-
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     margin-top: 0;
     margin-bottom: 0;
     line-height: 1;
   }
 }
 
+a.icon {
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
+  
+  .strong-icon {
+    background: url('../../../src/assets/images/formatting-icons/bold.png');
+  }
+
+  a.em-icon {
+    background: url('../../../src/assets/images/formatting-icons/italics.png');
+
+  }
+
+  a.link-icon {
+
+  }
+
+  a.list-icon {
+  }
+
+}
+
+
 </style>
 <template>
   <InputWrapperChild>
     <template v-slot:panel>
-
       <div>
         <div class="formatting-menu">
-
-          <a href="#" @click.prevent=" formatText('strong') ">bold</a> |
-          <a href="#" @click.prevent=" formatText('em') ">italics</a> |
-          <a href="#" @click.prevent=" formatText('link') ">link</a> |
-          <a href="#" @click.prevent=" formatText('list') ">list</a>
+          <a class="strong-icon" href="#" @click.prevent="formatText('strong')">bold</a> |
+          <a class="em-icon" href="#" @click.prevent="formatText('em')">italics</a> |
+          <a class="link-icon" href="#" @click.prevent="formatText('link')">link</a> |
+          <a class="list-icon" href="#" @click.prevent="formatText('list')">list</a>
         </div>
         <div class="rendered-preview">
           <div v-if="props.modelValue.trim() !== ''" v-html="rendered"></div>
@@ -66,35 +92,38 @@ const render = async (md: string) => {
   rendered.value = await markdown.render(md)
 }
 
-
 /* new editor capabilities */
 
 const formatText = (format: string) => {
   const value: string = getInputElement()!!.value
   const selection = getSelection()
-  if (!selection)
-    return
+  if (!selection) return
 
   const { text, start, end } = selection
-
 
   const handleListificationOf = function(): string {
     // several scenarios:
     // 1. the text is all the text on a given line
-    // 2. the text is part of a body of text before and after it 
+    // 2. the text is part of a body of text before and after it
     // 3. there are several lines with newlines in the text selected
 
     // 1. simply add a bullet point before the line and call it good
-    if (start > 0 && value.charAt(start - 1) == '\n')
-      insertAtCursor(`* ${text}`)
+    if (start > 0 && value.charAt(start - 1) == '\n') insertAtCursor(`* ${text}`)
 
     // 2. add a newline before, a bullet, and a newline after
     if (text.indexOf('\n') == -1) {
       insertAtCursor(`\n * ${text}\n`)
-    } //  
+    } //
     else {
-      // 3. add bullets before each line 
-      insertAtCursor(text.split( '\n').map((line) => { return `* ${line}` }).join('\n'))
+      // 3. add bullets before each line
+      insertAtCursor(
+        text
+          .split('\n')
+          .map((line) => {
+            return `* ${line}`
+          })
+          .join('\n')
+      )
     }
   }
 
@@ -115,9 +144,7 @@ const formatText = (format: string) => {
     default:
       insertAtCursor(text)
   }
-
 }
-
 
 const getSelection = () => {
   const element = getInputElement()
@@ -129,13 +156,11 @@ const getSelection = () => {
     end: element.selectionEnd,
     isContentEditable: false
   }
-
 }
 
-const insertAtCursor =async (text, movePosition = 0) => {
+const insertAtCursor = async (text, movePosition = 0) => {
   const element = getInputElement()
-  if (!element)
-    return
+  if (!element) return
   const start = element.selectionStart
   const end = element.selectionEnd
   const before = element.value.substring(0, start)
@@ -151,9 +176,7 @@ const insertAtCursor =async (text, movePosition = 0) => {
   })
 }
 
-
 /* new editor capabilities */
-
 
 const debouncingRender = async () => {
   if (timer && timer > -1) {

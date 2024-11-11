@@ -139,7 +139,6 @@ onBeforeUnmount(() => {
   }
 })
 
-
 const getInputElement = () => {
   return inputElement.value!!
 }

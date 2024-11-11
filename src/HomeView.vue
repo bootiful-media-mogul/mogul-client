@@ -8,8 +8,6 @@ import InputWrapper from '@/ui/input/InputWrapper.vue'
 import Markdown from '@/ui/markdown/Markdown.vue'
 
 const blog = ref<string>('')
-
-
 </script>
 
 <template>

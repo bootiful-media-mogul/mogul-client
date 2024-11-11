@@ -1,4 +1,4 @@
-;(function() {
+;(function () {
   // Step 1: Collect all font sizes and associated elements
   const fontSizeMap = new Map()
   const elementsMap = new Map()

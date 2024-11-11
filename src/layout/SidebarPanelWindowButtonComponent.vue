@@ -1,6 +1,6 @@
 <style>
 :root {
-  --panel-window-button-diameter: 20px;
+  --panel-window-button-diameter:  var(--icon-width);
   --panel-window-button-inner-diameter: calc(var(--panel-window-button-diameter) * 0.7071);
   --panel-window-button-inner-ofset: calc(
     calc(var(--panel-window-button-diameter) - var(--panel-window-button-inner-diameter)) / 2

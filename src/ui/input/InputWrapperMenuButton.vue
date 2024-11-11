@@ -9,7 +9,7 @@ interface Props {
 const props = defineProps<Props>()
 const src = ref<string>()
 
-const swap = function() {
+const swap = function () {
   if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
 

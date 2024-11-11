@@ -20,6 +20,7 @@ import { useI18n } from 'vue-i18n'
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
+import Icon from '@/ui/Icon.vue'
 
 const { t } = useI18n()
 
@@ -226,15 +227,25 @@ const unpublish = async (publication: Publication) => {
 }
 
 // Arrow Classes
+const downArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
+  return draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
+}
+const upArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) =>{ 
+  return  draftEpisodeSegments.value?.[0]?.id === segment.id
+}
+/*
 const downArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
   'down-arrow-icon': true,
   disabled: draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
 })
+*/
 
+/*
 const upArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
   'up-arrow-icon': true,
   disabled: draftEpisodeSegments.value?.[0]?.id === segment.id
 })
+*/
 
 // Lifecycle Hooks
 onMounted(async () => {
@@ -367,26 +378,32 @@ onMounted(async () => {
               <div class="pure-u-21-24">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
                   <div class="segment-controls">
-                    <a
-                      :class="upArrowClasses(draftEpisode, segment)"
-                      href="#"
+
+ 
+                    <Icon
+                      :disabled="upArrowDisabled(draftEpisode, segment)"
                       @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                    ></a>
-                    <a
-                      :class="downArrowClasses(draftEpisode, segment)"
-                      href="#"
+                      icon-hover="../src/assets/images/up.png"
+                      icon="../src/assets/images/up-highlight.png"
+                    />
+                    <Icon
+                      :disabled="downArrowDisabled(draftEpisode, segment)"
                       @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                    ></a>
-                    <a
+                      icon-hover="../src/assets/images/down.png"
+                      icon="../src/assets/images/down-highlight.png"
+                    />
+                    <Icon
                       class="delete-icon"
-                      href="#"
                       @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
-                    ></a>
-                    <a
+                      icon-hover="../src/assets/images/delete.png"
+                      icon="../src/assets/images/delete-highlight.png"
+                    />
+                    <Icon
                       class="transcript-icon"
-                      href="#"
                       @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
-                    ></a>
+                      icon-hover="../src/assets/images/transcript.png"
+                      icon="../src/assets/images/transcript-highlight.png"
+                    />
                   </div>
                 </ManagedFileComponent>
               </div>
@@ -490,10 +507,18 @@ onMounted(async () => {
         </div>
         <div class="created">{{ dts(episode.created) }}</div>
         <div class="edit">
-          <a class="edit-icon" href="#" @click="refreshEpisode(episode.id)"> </a>
+          <Icon
+            @click.prevent="refreshEpisode(episode.id)"
+            icon-hover="../src/assets/images/edit.png"
+            icon="../src/assets/images/edit-highlight.png"
+          />
         </div>
         <div class="delete">
-          <a class="delete-icon" href="#" @click="deletePodcastEpisode(episode)"></a>
+          <Icon
+            @click.prevent="deletePodcastEpisode( episode)"
+            icon-hover="../src/assets/images/delete.png"
+            icon="../src/assets/images/delete-highlight.png"
+          />
         </div>
         <div class="title">{{ episode.title }}</div>
       </div>

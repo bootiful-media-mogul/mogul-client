@@ -3,8 +3,11 @@ import { onMounted, ref } from 'vue'
 
 interface Props {
   readonly iconHover: string
-  readonly icon: string
+  readonly icon: string 
+  readonly disabled?: boolean | string
 }
+
+
 
 const props = defineProps<Props>()
 const src = ref<string>()
@@ -13,21 +16,42 @@ const swap = function () {
   if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
 
+const emit = defineEmits<{ 
+  (e: 'click' ): void 
+}>()
+const clickDelegate= (e: MouseEvent): void => {
+  emit('click' , e)
+}
 onMounted(() => {
   src.value = props.icon
 })
 </script>
 <style scoped>
-.input-wrapper-menu-button {
+ 
+.icon {
+  cursor: pointer;
   max-width: var(--icon-width);
+}
+.icon-disabled {
+  cursor: unset;
+  opacity:  0.2;
 }
 </style>
 <template>
+
+  <img v-if="disabled"
+       :alt="'an image - ' + src"
+       :src="src"
+       class="icon icon-disabled unselectable"
+       
+  />
   <img
-    :alt="'an image -' + src"
+    v-else 
+    :alt="'an image - ' + src"
     :src="src"
-    class="input-wrapper-menu-button"
+    class="icon"
     @mouseout="swap"
+    @click="clickDelegate"
     @mouseover="swap"
   />
 </template>

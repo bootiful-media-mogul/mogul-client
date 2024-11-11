@@ -60,7 +60,7 @@ a.icon {
       </div>
     </template>
     <template v-slot:icon>
-      <InputWrapperMenuButton :icon="asset" :icon-hover="assetHighlight" />
+      <Icon :icon="asset" :icon-hover="assetHighlight" />
     </template>
   </InputWrapperChild>
 </template>
@@ -68,10 +68,10 @@ a.icon {
 import asset from '@/assets/images/markdown/markdown-preview.png'
 import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.png'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
-import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
 import { markdown } from '@/services'
 import { inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { GetInputElementFunction, ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
+import Icon from '@/ui/Icon.vue'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!

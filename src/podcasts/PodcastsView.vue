@@ -47,20 +47,18 @@
           </a>
         </div>
         <div class="rss">
-          <a
-            :href="podcastRssFeedUrl(podcast)"
-            class="rss-icon"
-            @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
-          ></a>
+          <Icon @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
+                icon-hover="../src/assets/images/rss.png"
+                icon="../src/assets/images/rss-highlight.png"
+          />
         </div>
         <div class="delete">
-          <a
-            v-if="all.length > 1"
-            class="delete-icon"
-            href="#"
+          <Icon
             @click.prevent="deletePodcast(podcast)"
-          ></a>
-          <a v-if="all.length == 1" class="unselectable delete-icon disabled" href="#"></a>
+            :disabled="all.length == 1 "
+            icon-hover="../src/assets/images/delete.png"
+            icon="../src/assets/images/delete-highlight.png"
+          />
         </div>
         <div class="podcast-title">
           {{ podcast.title }}
@@ -79,17 +77,6 @@
   grid-area: rss;
 }
 
-.rss-icon {
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
-  background: url('../assets/images/rss-highlight.png');
-}
-
-.rss-icon:hover {
-  background: url('../assets/images/rss.png');
-}
 
 .episodes {
   grid-area: episodes;
@@ -117,7 +104,7 @@
 
 .podcast-rows {
   display: grid;
-  grid-template-areas: 'id delete rss           episodes   created  podcast-title';
+  grid-template-areas: 'id delete rss episodes   created  podcast-title';
   grid-template-columns:
     var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%)
     auto;
@@ -131,6 +118,7 @@ import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import Icon from '@/ui/Icon.vue'
 
 const { t } = useI18n()
 
@@ -139,10 +127,10 @@ const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
 const mogulId = ref<number>(0)
 
-const refresh = async function () {
+const refresh = async function() {
   return await podcasts.podcasts()
 }
-const dts = function (date: number) {
+const dts = function(date: number) {
   return dateTimeToString(date)
 }
 const deletePodcast = async (podcast: Podcast) => {
@@ -152,7 +140,7 @@ const deletePodcast = async (podcast: Podcast) => {
   const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
-const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
+const navigateToEpisodesPageForPodcast = async function(podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
     name: 'podcast-episodes',
@@ -168,11 +156,11 @@ const podcastRssFeedUrl = (podcast: Podcast): string => {
   )
 }
 
-const openRssFeed = async function (podcastId: number, url: string) {
+const openRssFeed = async function(podcastId: number, url: string) {
   window.open(url, 'rssWindowForPodcastNo' + podcastId)
 }
 
-const createPodcast = async function (e: Event) {
+const createPodcast = async function(e: Event) {
   e.preventDefault()
   await podcasts.create(title.value)
   all.value = await refresh()

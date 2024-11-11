@@ -16,4 +16,5 @@ export interface PanelSlot extends Slot {
 
 export type UpdateValueFunction = (text: string) => void
 export type ReadValueFunction = () => string
+export type GetInputElementFunction = () => HTMLInputElement
 export type RegisterChildFunction = (child: ChildRegistration) => void

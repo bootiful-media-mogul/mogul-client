@@ -51,7 +51,7 @@ a {
     color: black;
     text-decoration: none;
     font-weight: bold;
-    text-transform: uppercase;
+    /*text-transform: uppercase;*/
 }
 
 .pure-button {

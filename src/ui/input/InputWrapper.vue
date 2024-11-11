@@ -131,7 +131,6 @@ onMounted(() => {
     events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
   }
   childSlots.value[0].iconVisible = true
-  // text.value = inputElement.value!!.value
 })
 
 onBeforeUnmount(() => {
@@ -140,9 +139,15 @@ onBeforeUnmount(() => {
   }
 })
 
+
+const getInputElement = () => {
+  return inputElement.value!!
+}
+
 provide('updateInputValue', updateInputValue)
 provide('registerChild', registerChild)
 provide('readInputValue', readInputValue)
+provide('getInputElement', getInputElement)
 </script>
 
 <style scoped>

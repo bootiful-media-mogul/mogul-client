@@ -5,7 +5,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import MarkdownPreview from '@/ui/markdown/MarkdownPreview.vue'
+import MarkdownPreview from '@/ui/markdown/Markdown.vue'
 import WritingAssistant from '@/ui/writing/WritingAssistant.vue'
 
 interface Props {

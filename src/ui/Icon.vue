@@ -5,19 +5,29 @@ interface Props {
   readonly iconHover: string
   readonly icon: string
   readonly disabled?: boolean | string
+  readonly sticky?: boolean | string
 }
 
 const props = defineProps<Props>()
 const src = ref<string>()
 
+
 const swap = function() {
-  if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
+  if (props.iconHover)  
+    src.value = props.icon == src.value ? props.iconHover : props.icon
+}
+const mouseSwap = function(){
+  if (props.sticky === true) return
+  swap()
 }
 
 const emit = defineEmits<{
   (e: 'click'): void
 }>()
 const clickDelegate = (e: MouseEvent): void => {
+  if ( props.sticky ) 
+    swap()
+  
   emit('click', e)
 }
 onMounted(() => {
@@ -49,8 +59,8 @@ img.icon-disabled {
     :alt="'an image - ' + src"
     :src="src"
     class="icon"
-    @mouseout="swap"
+    @mouseout="mouseSwap"
     @click="clickDelegate"
-    @mouseover="swap"
+    @mouseover="mouseSwap"
   />
 </template>

@@ -48,7 +48,7 @@ import {
   settings as settingsService,
   SettingsPage
 } from '@/services'
-import PrivatePasswordInputComponent from '@/privacy/PrivatePasswordInputComponent.vue'
+import PrivatePasswordInputComponent from '@/ui/input/PrivatePasswordInputComponent.vue'
 
 const mogul = ref('')
 const settingsRef = ref<Array<SettingsPage>>([])

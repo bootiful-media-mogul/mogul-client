@@ -22,6 +22,23 @@ import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import Icon from '@/ui/Icon.vue'
 
+import editHighlightAsset from '@/assets/images/edit-highlight.png'
+import editAsset from '@/assets/images/edit.png'
+
+import downHighlightAsset from '@/assets/images/down-highlight.png'
+import downAsset from '@/assets/images/down.png'
+
+import upHighlightAsset from '@/assets/images/up-highlight.png'
+import upAsset from '@/assets/images/up.png'
+
+import transcriptHighlightAsset from '@/assets/images/transcript-highlight.png'
+import transcriptAsset from '@/assets/images/transcript.png'
+
+
+
+import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
+import deleteAsset from '@/assets/images/delete.png'
+
 const { t } = useI18n()
 
 const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
@@ -233,19 +250,6 @@ const downArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) 
 const upArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
   return draftEpisodeSegments.value?.[0]?.id === segment.id
 }
-/*
-const downArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
-  'down-arrow-icon': true,
-  disabled: draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
-})
-*/
-
-/*
-const upArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
-  'up-arrow-icon': true,
-  disabled: draftEpisodeSegments.value?.[0]?.id === segment.id
-})
-*/
 
 // Lifecycle Hooks
 onMounted(async () => {
@@ -381,26 +385,26 @@ onMounted(async () => {
                     <Icon
                       :disabled="upArrowDisabled(draftEpisode, segment)"
                       @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                      icon-hover="../src/assets/images/up.png"
-                      icon="../src/assets/images/up-highlight.png"
+                      :icon-hover="upAsset"
+                      :icon="upHighlightAsset"
                     />
                     <Icon
                       :disabled="downArrowDisabled(draftEpisode, segment)"
                       @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                      icon-hover="../src/assets/images/down.png"
-                      icon="../src/assets/images/down-highlight.png"
+                      :icon-hover="downAsset"
+                      :icon="downHighlightAsset"
                     />
                     <Icon
                       class="delete-icon"
                       @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
-                      icon-hover="../src/assets/images/delete.png"
-                      icon="../src/assets/images/delete-highlight.png"
+                      :icon-hover="deleteAsset"
+                      :icon="deleteHighlightAsset"
                     />
                     <Icon
                       class="transcript-icon"
                       @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
-                      icon-hover="../src/assets/images/transcript.png"
-                      icon="../src/assets/images/transcript-highlight.png"
+                      :icon-hover="transcriptAsset"
+                      :icon="transcriptHighlightAsset"
                     />
                   </div>
                 </ManagedFileComponent>
@@ -507,15 +511,15 @@ onMounted(async () => {
         <div class="edit">
           <Icon
             @click.prevent="refreshEpisode(episode.id)"
-            icon-hover="../src/assets/images/edit.png"
-            icon="../src/assets/images/edit-highlight.png"
+            :icon-hover="editAsset"
+            :icon="editHighlightAsset"
           />
         </div>
         <div class="delete">
           <Icon
             @click.prevent="deletePodcastEpisode(episode)"
-            icon-hover="../src/assets/images/delete.png"
-            icon="../src/assets/images/delete-highlight.png"
+            :icon-hover="deleteAsset"
+            :icon="deleteHighlightAsset"
           />
         </div>
         <div class="title">{{ episode.title }}</div>
@@ -535,7 +539,7 @@ onMounted(async () => {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas: 'id   created   url delete plugin published  . ';
+  grid-template-areas: 'id created url delete plugin published  . ';
   grid-template-columns:
     var(--id-column) var(--date-column) var(--icon-column) var(--icon-column) var(--date-column)
     auto;

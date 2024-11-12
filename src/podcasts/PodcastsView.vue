@@ -126,7 +126,6 @@ import rssAsset from '@/assets/images/rss.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 
-
 const { t } = useI18n()
 
 const router = useRouter()

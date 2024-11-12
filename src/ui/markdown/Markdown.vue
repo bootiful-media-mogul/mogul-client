@@ -73,6 +73,21 @@
             icon-hover="../src/assets/images/formatting-icons/list-highlight.png"
             icon="../src/assets/images/formatting-icons/list.png"
           />
+          <Icon
+            @click.prevent="formatText('h1')"
+            icon-hover="../src/assets/images/formatting-icons/h1-highlight.png"
+            icon="../src/assets/images/formatting-icons/h1.png"
+          />
+          <Icon
+            @click.prevent="formatText('h2')"
+            icon-hover="../src/assets/images/formatting-icons/h2-highlight.png"
+            icon="../src/assets/images/formatting-icons/h2.png"
+          />
+          <Icon
+            @click.prevent="formatText('h3')"
+            icon-hover="../src/assets/images/formatting-icons/h3-highlight.png"
+            icon="../src/assets/images/formatting-icons/h3.png"
+          />
         </div>
       </div>
     </template>
@@ -154,6 +169,15 @@ const formatText = (format: string) => {
       break
     case 'list':
       handleListificationOf(text)
+      break
+    case 'h1':
+      insertAtCursor(`# ${text}`)
+      break
+    case 'h2':
+      insertAtCursor(`## ${text}`)
+      break
+    case 'h3':
+      insertAtCursor(`### ${text}`)
       break
     case 'strong':
       insertAtCursor(`**${text}**`)

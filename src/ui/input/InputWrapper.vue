@@ -1,5 +1,16 @@
 <template>
   <div class="writing-tools-container">
+    <!--
+    todo introduce an optional toolbar panel that sits *above* the text editor?
+    -->
+    <div v-if="panelVisible" class="toolbar">
+      <div v-for="(slot, index) in childSlots" :key="index">
+        <div v-if="slot.panelVisible">
+          <component :is="slot.toolbar"></component>
+        </div>
+      </div>
+    </div>
+
     <div ref="root" class="input-wrapper">
       <slot></slot>
     </div>
@@ -150,16 +161,20 @@ provide('getInputElement', getInputElement)
 </script>
 
 <style scoped>
+
+
 .writing-tools-container {
   display: grid;
   grid-template-areas:
+    ' toolbar toolbar toolbar '
     ' input input  input '
     ' . icons .  '
     ' panel panel panel  ';
   grid-template-columns: auto min-content auto;
-  grid-template-rows: auto calc(var(--icon-width) * 1.2) auto;
+  grid-template-rows: auto auto calc(var(--icon-width) * 1.2) auto;
   margin-bottom: var(--gutter-space);
 }
+
 
 .input-wrapper {
   grid-area: input;
@@ -180,8 +195,16 @@ provide('getInputElement', getInputElement)
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2.5 * var(--icon-width));
   background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+}
 
-  border-radius: 4px;
+.toolbar {
+  z-index: 8;
+  background-color: rgba(255, 255, 255, 0.5);
+  grid-area: toolbar;
+  margin-bottom: calc(-1 * var(--icon-width));
+  border-radius: 8px;
+  --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
 }
 
 .icon-column-menu {

@@ -2,7 +2,7 @@
   --gutter-space: 20px;
   --main-toolbar-gutter: calc(5 * var(--gutter-space));
   --sidebar-width: 250px;
-  --radius: var(--gutter-space);
+  --radius:8px;
   --button-radius: calc(var(--gutter-space) / 3);
   --small-gutter-space: calc(0.5 * var(--gutter-space));
   --form-buttons-gutter-space: calc(0.3 * var(--gutter-space));
@@ -36,7 +36,7 @@ a:hover {
 }
 
 .panel {
-  border-radius: var(--gutter-space) 0 0 var(--gutter-space);
+  border-radius: var(--radius) 0 0 var(--radius);
 }
 
 input[type='text'] {
@@ -47,6 +47,26 @@ textarea {
   width: 100%;
 }
 
+.pure-form input[type='text'],
+.pure-form input[type='password'],
+.pure-form input[type='email'],
+.pure-form input[type='url'],
+.pure-form input[type='date'],
+.pure-form input[type='month'],
+.pure-form input[type='time'],
+.pure-form input[type='datetime'],
+.pure-form input[type='datetime-local'],
+.pure-form input[type='week'],
+.pure-form input[type='number'],
+.pure-form input[type='search'],
+.pure-form input[type='tel'],
+.pure-form input[type='color'],
+.pure-form select,
+.pure-form textarea {
+ 
+  border-radius: var(--radius);
+ 
+}
 a {
   color: black;
   text-decoration: none;
@@ -106,13 +126,14 @@ html {
 }
 
 .delete-icon {
-  background: url('../assets/images/delete-highlight.png');
+/*  background: url('../assets/images/delete-highlight.png');
   height: var(--icon-width);
   display: inline-block;
   width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);*/
 }
 
+/*
 .delete-icon:hover {
   background: url('../assets/images/delete.png');
   height: var(--icon-width);
@@ -120,24 +141,15 @@ html {
   width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
 }
+*/
 
 .transcript-icon {
-  background: url('../assets/images/transcript-highlight.png');
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
+ 
 }
 
-.transcript-icon:hover {
-  background: url('../assets/images/transcript.png');
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
-}
+ 
 
-.down-arrow-icon {
+/*.down-arrow-icon {
   background: url('../assets/images/down-highlight.png');
   height: var(--icon-width);
   display: inline-block;
@@ -151,7 +163,7 @@ html {
   display: inline-block;
   width: var(--icon-width);
   background-size: var(--icon-width) var(--icon-width);
-}
+}*/
 
 .up-arrow-icon.disabled {
   background: url('../assets/images/up.png');
@@ -186,11 +198,11 @@ html {
 }
 
 .edit-icon {
-  background: url('../assets/images/edit-highlight.png');
+/*  background: url('../assets/images/edit-highlight.png');
   height: var(--icon-width);
   display: inline-block;
   width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);*/
 }
 
 .close-icon {

@@ -4,6 +4,7 @@ export interface ChildRegistration {
   iconVisible: boolean
   panelVisible: boolean
   panel: Slot
+  toolbar: Slot
   icon: Slot
 }
 
@@ -12,6 +13,7 @@ export interface PanelSlot extends Slot {
   iconVisible: boolean
   panel: HTMLElement
   icon: HTMLElement
+  toolbar?: HTMLElement
 }
 
 export type UpdateValueFunction = (text: string) => void

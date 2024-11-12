@@ -138,7 +138,7 @@
       </div>
     </template>
     <template v-slot:icon>
-      <InputWrapperMenuButton :icon="assetHighlight" :icon-hover="asset" />
+      <Icon :icon="assetHighlight" :icon-hover="asset" />
     </template>
   </InputWrapperChild>
 </template>
@@ -147,11 +147,12 @@ import asset from '@/assets/images/writing-tools/rewrite.png'
 import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
 
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
-import InputWrapperMenuButton from '@/ui/input/InputWrapperMenuButton.vue'
+
 import { ai } from '@/services'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 import { inject, ref } from 'vue'
 import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
+import Icon from '@/ui/Icon.vue'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const readValue = inject<ReadValueFunction>('readInputValue')!

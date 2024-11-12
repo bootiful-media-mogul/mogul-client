@@ -195,7 +195,7 @@ provide('getInputElement', getInputElement)
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2.5 * var(--icon-width));
   background-color: rgba(255, 255, 255, 0.5);
-  border-radius: 4px;
+  border-radius: 8px;
 }
 
 .toolbar {
@@ -203,9 +203,8 @@ provide('getInputElement', getInputElement)
   background-color: rgba(255, 255, 255, 0.5);
   grid-area: toolbar;
   margin-bottom: calc(-1 * var(--icon-width));
-  border-radius: 4px;
+  border-radius: 8px;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
-
 }
 
 .icon-column-menu {

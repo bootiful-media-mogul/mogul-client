@@ -36,7 +36,6 @@
   <InputWrapperChild>
     <template v-slot:panel>
       <div>
-
         <div class="rendered-preview">
           <div v-if="props.modelValue.trim() !== ''" v-html="rendered"></div>
           <div v-if="props.modelValue.trim() === ''">(nothing to preview)</div>

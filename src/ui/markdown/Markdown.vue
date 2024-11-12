@@ -54,28 +54,28 @@
       <div class="formatting-menu-toolbar">
         <div class="formatting-menu">
           <Icon
-            @click.prevent="formatText('strong')"
-            :icon-hover="boldHighlightAsset"
             :icon="boldAsset"
+            :icon-hover="boldHighlightAsset"
+            @click.prevent="formatText('strong')"
           />
           <Icon
-            @click.prevent="formatText('em')"
-            :icon-hover="italicHighlightAsset"
             :icon="italicAsset"
+            :icon-hover="italicHighlightAsset"
+            @click.prevent="formatText('em')"
           />
           <Icon
-            @click.prevent="formatText('link')"
-            :icon-hover="linkHighlightAsset"
             :icon="linkAsset"
+            :icon-hover="linkHighlightAsset"
+            @click.prevent="formatText('link')"
           />
           <Icon
-            @click.prevent="formatText('list')"
-            :icon-hover="listHighlightAsset"
             :icon="listAsset"
+            :icon-hover="listHighlightAsset"
+            @click.prevent="formatText('list')"
           />
-          <Icon @click.prevent="formatText('h1')" :icon-hover="h1HighlightAsset" :icon="h1Asset" />
-          <Icon @click.prevent="formatText('h2')" :icon-hover="h2HighlightAsset" :icon="h2Asset" />
-          <Icon @click.prevent="formatText('h3')" :icon-hover="h3HighlightAsset" :icon="h3Asset" />
+          <Icon :icon="h1Asset" :icon-hover="h1HighlightAsset" @click.prevent="formatText('h1')" />
+          <Icon :icon="h2Asset" :icon-hover="h2HighlightAsset" @click.prevent="formatText('h2')" />
+          <Icon :icon="h3Asset" :icon-hover="h3HighlightAsset" @click.prevent="formatText('h3')" />
         </div>
       </div>
     </template>
@@ -146,7 +146,7 @@ const formatText = (format: string) => {
 
   const { text, start, end } = selection
 
-  const handleListificationOf = function () {
+  const handleListificationOf = function() {
     // several scenarios:
     // 1. the text is all the text on a given line
     // 2. the text is part of a body of text before and after it

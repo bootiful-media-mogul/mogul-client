@@ -35,7 +35,6 @@ import transcriptHighlightAsset from '@/assets/images/transcript-highlight.png'
 import transcriptAsset from '@/assets/images/transcript.png'
 
 
-
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 
@@ -384,27 +383,27 @@ onMounted(async () => {
                   <div class="segment-controls">
                     <Icon
                       :disabled="upArrowDisabled(draftEpisode, segment)"
-                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                      :icon-hover="upAsset"
                       :icon="upHighlightAsset"
+                      :icon-hover="upAsset"
+                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
                     />
                     <Icon
                       :disabled="downArrowDisabled(draftEpisode, segment)"
-                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                      :icon-hover="downAsset"
                       :icon="downHighlightAsset"
+                      :icon-hover="downAsset"
+                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
                     />
                     <Icon
+                      :icon="deleteHighlightAsset"
+                      :icon-hover="deleteAsset"
                       class="delete-icon"
                       @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
-                      :icon-hover="deleteAsset"
-                      :icon="deleteHighlightAsset"
                     />
                     <Icon
+                      :icon="transcriptHighlightAsset"
+                      :icon-hover="transcriptAsset"
                       class="transcript-icon"
                       @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
-                      :icon-hover="transcriptAsset"
-                      :icon="transcriptHighlightAsset"
                     />
                   </div>
                 </ManagedFileComponent>
@@ -510,16 +509,16 @@ onMounted(async () => {
         <div class="created">{{ dts(episode.created) }}</div>
         <div class="edit">
           <Icon
-            @click.prevent="refreshEpisode(episode.id)"
-            :icon-hover="editAsset"
             :icon="editHighlightAsset"
+            :icon-hover="editAsset"
+            @click.prevent="refreshEpisode(episode.id)"
           />
         </div>
         <div class="delete">
           <Icon
-            @click.prevent="deletePodcastEpisode(episode)"
-            :icon-hover="deleteAsset"
             :icon="deleteHighlightAsset"
+            :icon-hover="deleteAsset"
+            @click.prevent="deletePodcastEpisode(episode)"
           />
         </div>
         <div class="title">{{ episode.title }}</div>

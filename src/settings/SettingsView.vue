@@ -40,14 +40,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import {
-  mogul as mogulService,
-  Setting,
-  settings as settingsService,
-  SettingsPage
-} from '@/services'
+import { mogul as mogulService, Setting, settings as settingsService, SettingsPage } from '@/services'
 import PrivatePasswordInputComponent from '@/ui/input/PrivatePasswordInputComponent.vue'
 
 const mogul = ref('')

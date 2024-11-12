@@ -23,6 +23,8 @@
   gap: 0;
   justify-self: center;
   align-items: center;
+  padding-top: var(--gutter-space);
+  padding-bottom : var(--gutter-space);
 }
 
 .formatting-menu img {
@@ -34,33 +36,35 @@
   <InputWrapperChild>
     <template v-slot:panel>
       <div>
-        <div class="formatting-menu">
 
-          <Icon
-            @click.prevent="formatText('strong')"
-            icon-hover="../src/assets/images/formatting-icons/bold.png"
-            icon="../src/assets/images/formatting-icons/bold.png"
-          />
-          <Icon
-            @click.prevent="formatText('em')"
-            icon-hover="../src/assets/images/formatting-icons/italics.png"
-            icon="../src/assets/images/formatting-icons/italics.png"
-          />
-          <Icon
-            @click.prevent="formatText('link')"
-            icon-hover="../src/assets/images/link.png"
-            icon="../src/assets/images/link-highlight.png"
-          />
-          <Icon
-            @click.prevent="formatText('list')"
-            icon-hover="../src/assets/images/formatting-icons/list.png"
-            icon="../src/assets/images/formatting-icons/list.png"
-          />
-        </div>
         <div class="rendered-preview">
           <div v-if="props.modelValue.trim() !== ''" v-html="rendered"></div>
           <div v-if="props.modelValue.trim() === ''">(nothing to preview)</div>
         </div>
+      </div>
+    </template>
+    <template v-slot:toolbar>
+      <div class="formatting-menu">
+        <Icon
+          @click.prevent="formatText('strong')"
+          icon-hover="../src/assets/images/formatting-icons/bold.png"
+          icon="../src/assets/images/formatting-icons/bold.png"
+        />
+        <Icon
+          @click.prevent="formatText('em')"
+          icon-hover="../src/assets/images/formatting-icons/italics.png"
+          icon="../src/assets/images/formatting-icons/italics.png"
+        />
+        <Icon
+          @click.prevent="formatText('link')"
+          icon-hover="../src/assets/images/link.png"
+          icon="../src/assets/images/link-highlight.png"
+        />
+        <Icon
+          @click.prevent="formatText('list')"
+          icon-hover="../src/assets/images/formatting-icons/list.png"
+          icon="../src/assets/images/formatting-icons/list.png"
+        />
       </div>
     </template>
     <template v-slot:icon>
@@ -74,12 +78,12 @@ import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import { markdown } from '@/services'
 import { inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
-import type { GetInputElementFunction, ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
+import type { GetInputElementFunction, UpdateValueFunction } from '@/ui/input/input'
 import Icon from '@/ui/Icon.vue'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
-const readValue = inject<ReadValueFunction>('readInputValue')!
+
 
 interface Props {
   readonly modelValue: string
@@ -188,7 +192,7 @@ const debouncingRender = async () => {
   }
   timer = window.setTimeout(async () => {
     await render(props.modelValue)
-  }, 1000)
+  }, 100)
 }
 
 onMounted(() => {

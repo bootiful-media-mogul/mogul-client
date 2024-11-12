@@ -49,16 +49,16 @@
         <div class="rss">
           <Icon
             @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
-            icon-hover="../src/assets/images/rss.png"
-            icon="../src/assets/images/rss-highlight.png"
+            :icon-hover="rssAsset"
+            :icon="rssHighlightAsset"
           />
         </div>
         <div class="delete">
           <Icon
             @click.prevent="deletePodcast(podcast)"
             :disabled="all.length == 1"
-            icon-hover="../src/assets/images/delete.png"
-            icon="../src/assets/images/delete-highlight.png"
+            :icon-hover="deleteAsset"
+            :icon="deleteHighlightAsset"
           />
         </div>
         <div class="podcast-title">
@@ -120,6 +120,13 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Icon from '@/ui/Icon.vue'
 
+import rssHighlightAsset from '@/assets/images/rss-highlight.png'
+import rssAsset from '@/assets/images/rss.png'
+
+import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
+import deleteAsset from '@/assets/images/delete.png'
+
+
 const { t } = useI18n()
 
 const router = useRouter()
@@ -130,9 +137,11 @@ const mogulId = ref<number>(0)
 const refresh = async function () {
   return await podcasts.podcasts()
 }
+
 const dts = function (date: number) {
   return dateTimeToString(date)
 }
+
 const deletePodcast = async (podcast: Podcast) => {
   const msg = t('confirm.deletion', { title: podcast.title })
   if (!utils.confirmDeletion(msg)) return

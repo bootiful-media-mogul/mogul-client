@@ -11,23 +11,20 @@ interface Props {
 const props = defineProps<Props>()
 const src = ref<string>()
 
-
-const swap = function() {
-  if (props.iconHover)  
-    src.value = props.icon == src.value ? props.iconHover : props.icon
+const swap = function () {
+  if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
-const mouseSwap = function(){
+const mouseSwap = function () {
   if (props.sticky === true) return
   swap()
 }
 
 const emit = defineEmits<{
-  (e: 'click'): void
+  (e: 'click', me: MouseEvent): void
 }>()
 const clickDelegate = (e: MouseEvent): void => {
-  if ( props.sticky ) 
-    swap()
-  
+  if (props.sticky) swap()
+
   emit('click', e)
 }
 onMounted(() => {

@@ -11,11 +11,9 @@ const blog = ref<string>('')
 
 <template>
   <h1>Home</h1>
-  <p>
-    Here is your activity feed...
-  </p>
+  <p>Here is your activity feed...</p>
 
-<!--  <form class="pure-form pure-form-stacked">
+  <!--  <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>a nice form</legend>
       <div class="pure-control-group">

@@ -4,8 +4,8 @@ export interface ChildRegistration {
   iconVisible: boolean
   panelVisible: boolean
   panel: Slot
-  toolbar: Slot
   icon: Slot
+  toolbar?: Slot
 }
 
 export interface PanelSlot extends Slot {

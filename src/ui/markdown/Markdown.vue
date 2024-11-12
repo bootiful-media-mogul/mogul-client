@@ -98,9 +98,6 @@
 </template>
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-
-const { t } = useI18n()
-
 import asset from '@/assets/images/markdown/markdown-preview.png'
 import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.png'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
@@ -108,6 +105,8 @@ import { markdown } from '@/services'
 import { inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import type { GetInputElementFunction, UpdateValueFunction } from '@/ui/input/input'
 import Icon from '@/ui/Icon.vue'
+
+const { t } = useI18n()
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
@@ -136,14 +135,14 @@ const formatText = (format: string) => {
 
   const { text, start, end } = selection
 
-  const handleListificationOf = function (): string {
+  const handleListificationOf = function () {
     // several scenarios:
     // 1. the text is all the text on a given line
     // 2. the text is part of a body of text before and after it
     // 3. there are several lines with newlines in the text selected
 
     // 1. simply add a bullet point before the line and call it good
-    if (start > 0 && value.charAt(start - 1) == '\n') insertAtCursor(`* ${text}`)
+    if (start!! > 0 && value.charAt(start!! - 1) == '\n') insertAtCursor(`* ${text}`)
 
     // 2. add a newline before, a bullet, and a newline after
     if (text.indexOf('\n') == -1) {
@@ -165,10 +164,10 @@ const formatText = (format: string) => {
   switch (format) {
     case 'link':
       //todo use vue i18n for this message
-      insertAtCursor(`[${text}](${window.prompt( t('markdown.add-link-prompt'))})`)
+      insertAtCursor(`[${text}](${window.prompt(t('markdown.add-link-prompt'))})`)
       break
     case 'list':
-      handleListificationOf(text)
+      handleListificationOf()
       break
     case 'h1':
       insertAtCursor(`# ${text}`)
@@ -194,7 +193,7 @@ const getSelection = () => {
   const element = getInputElement()
   if (!element) return null
   return {
-    text: element.value.substring(element.selectionStart, element.selectionEnd),
+    text: element.value.substring(element.selectionStart!!, element.selectionEnd!!),
     range: null,
     start: element.selectionStart,
     end: element.selectionEnd,
@@ -202,11 +201,11 @@ const getSelection = () => {
   }
 }
 
-const insertAtCursor = async (text, movePosition = 0) => {
+const insertAtCursor = async (text: string, movePosition: number = 0) => {
   const element = getInputElement()
   if (!element) return
-  const start = element.selectionStart
-  const end = element.selectionEnd
+  const start = element.selectionStart!!
+  const end = element.selectionEnd!!
   const before = element.value.substring(0, start)
   const after = element.value.substring(end)
 

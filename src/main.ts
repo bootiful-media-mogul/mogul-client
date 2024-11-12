@@ -49,9 +49,9 @@ const translations = {
     'managedfiles.uploaded': 'has this file been uploaded?',
     'managedfiles.content-type': "this file's content type",
     'managedfiles.file-name': "this file's name",
-    
-    // markdown 
-    'markdown.add-link-prompt' :'Where do you want the link to go to?',
+
+    // markdown
+    'markdown.add-link-prompt': 'Where do you want the link to go to?',
 
     // app
     'app.menu.home': 'home',
@@ -66,7 +66,7 @@ const translations = {
     'episodes.episode.graphic': 'graphic',
     'episodes.buttons.add-segment': 'add a new segment',
     'episodes.episode.reference': 'the episode titled: {title}',
-    
+
     'confirm.deletion': `Are you sure you want to delete {title}? 
     
 This is NOT reversible! `,
@@ -85,9 +85,8 @@ This is NOT reversible! `,
     buttons: {
       accept: 'accept',
       revert: 'revert',
-      cancel: 'cancel',
-
-    } ,
+      cancel: 'cancel'
+    },
     'about.title': 'About',
 
     'episodes.title': 'all episodes',

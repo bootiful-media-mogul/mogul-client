@@ -70,6 +70,7 @@
   text-transform: uppercase;
   text-decoration: none;
   font-weight: bold;
+  font-size: smaller;
 }
 
 .sidebar-panel .top .controls {
@@ -138,16 +139,16 @@ interface Props {
 }
 
 const props = defineProps<Props>()
-const hide = function () {
+const hide = function() {
   maximized.value = false
   expanded.value = false
   if (bgPanelNode.value) bgPanelNode.value.style.display = 'none'
 }
-const show = function () {
+const show = function() {
   expanded.value = true
   maximized.value = false
 }
-const maximize = function () {
+const maximize = function() {
   expanded.value = true
   maximized.value = true
   if (bgPanelNode.value) bgPanelNode.value.style.display = 'block'

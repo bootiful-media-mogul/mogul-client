@@ -93,7 +93,6 @@ import Icon from '@/ui/Icon.vue'
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
 
-
 interface Props {
   readonly modelValue: string
 }
@@ -118,7 +117,7 @@ const formatText = (format: string) => {
 
   const { text, start, end } = selection
 
-  const handleListificationOf = function(): string {
+  const handleListificationOf = function (): string {
     // several scenarios:
     // 1. the text is all the text on a given line
     // 2. the text is part of a body of text before and after it

@@ -11,7 +11,7 @@ onMounted(() => {
       iconVisible: false,
       panelVisible: false,
       panel: slots.panel,
-      icon: slots.icon ,
+      icon: slots.icon,
       toolbar: slots.toolbar
     })
   }

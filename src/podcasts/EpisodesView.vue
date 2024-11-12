@@ -230,8 +230,8 @@ const unpublish = async (publication: Publication) => {
 const downArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
   return draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
 }
-const upArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) =>{ 
-  return  draftEpisodeSegments.value?.[0]?.id === segment.id
+const upArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
+  return draftEpisodeSegments.value?.[0]?.id === segment.id
 }
 /*
 const downArrowClasses = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => ({
@@ -378,8 +378,6 @@ onMounted(async () => {
               <div class="pure-u-21-24">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
                   <div class="segment-controls">
-
- 
                     <Icon
                       :disabled="upArrowDisabled(draftEpisode, segment)"
                       @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
@@ -515,7 +513,7 @@ onMounted(async () => {
         </div>
         <div class="delete">
           <Icon
-            @click.prevent="deletePodcastEpisode( episode)"
+            @click.prevent="deletePodcastEpisode(episode)"
             icon-hover="../src/assets/images/delete.png"
             icon="../src/assets/images/delete-highlight.png"
           />

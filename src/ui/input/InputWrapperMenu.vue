@@ -76,7 +76,7 @@ watch(
   () => props.disabled,
   (_, newValue) => {
     if (!newValue) {
-      [up, down].forEach((el) => disable(el.value!!))
+      ;[up, down].forEach((el) => disable(el.value!!))
     }
   }
 )

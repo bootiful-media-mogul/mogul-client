@@ -161,8 +161,6 @@ provide('getInputElement', getInputElement)
 </script>
 
 <style scoped>
-
-
 .writing-tools-container {
   display: grid;
   grid-template-areas:
@@ -174,7 +172,6 @@ provide('getInputElement', getInputElement)
   grid-template-rows: auto auto calc(var(--icon-width) * 1.2) auto;
   margin-bottom: var(--gutter-space);
 }
-
 
 .input-wrapper {
   grid-area: input;

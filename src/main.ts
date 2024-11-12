@@ -49,6 +49,9 @@ const translations = {
     'managedfiles.uploaded': 'has this file been uploaded?',
     'managedfiles.content-type': "this file's content type",
     'managedfiles.file-name': "this file's name",
+    
+    // markdown 
+    'markdown.add-link-prompt' :'Where do you want the link to go to?',
 
     // app
     'app.menu.home': 'home',
@@ -63,7 +66,7 @@ const translations = {
     'episodes.episode.graphic': 'graphic',
     'episodes.buttons.add-segment': 'add a new segment',
     'episodes.episode.reference': 'the episode titled: {title}',
-
+    
     'confirm.deletion': `Are you sure you want to delete {title}? 
     
 This is NOT reversible! `,
@@ -73,16 +76,20 @@ This is NOT reversible! `,
       // 'podcasts.episodes.segments': 'Podcast Episode Segment' ,
       text: 'Transcript for {key} #{id}',
       buttons: {
-        accept: 'Accept',
-        revert: 'Revert',
-        cancel: 'Cancel',
-        save: 'Update Transcript'
+        accept: 'accept',
+        revert: 'revert',
+        cancel: 'cancel',
+        save: 'update transcript'
       }
     },
+    buttons: {
+      accept: 'accept',
+      revert: 'revert',
+      cancel: 'cancel',
 
+    } ,
     'about.title': 'About',
 
-    //[intlify] Not found 'notifications.podcast-episode-render-started-event' key in 'en' locale messages.
     'episodes.title': 'all episodes',
     'episodes.publications': 'Publications',
     'episodes.basics': 'Basics',

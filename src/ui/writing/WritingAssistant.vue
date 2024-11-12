@@ -132,8 +132,8 @@
           </div>
         </div>
         <div v-if="proposalApprovalRequired" class="proposal-approval">
-          <a class="accept-link" href="#" @click.prevent="accept"> {{ $t('accept') }}</a> |
-          <a class="revert-link" href="#" @click.prevent="revert"> {{ $t('revert') }}</a>
+          <a class="accept-link" href="#" @click.prevent="accept">{{ $t('buttons.accept') }}</a> |
+          <a class="revert-link" href="#" @click.prevent="revert">{{ $t('buttons.revert') }}</a>
         </div>
       </div>
     </template>

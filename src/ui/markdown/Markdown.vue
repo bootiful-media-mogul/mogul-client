@@ -82,6 +82,10 @@
   </InputWrapperChild>
 </template>
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 import asset from '@/assets/images/markdown/markdown-preview.png'
 import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.png'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
@@ -146,7 +150,7 @@ const formatText = (format: string) => {
   switch (format) {
     case 'link':
       //todo use vue i18n for this message
-      insertAtCursor(`[${text}](${window.prompt('where should the link go?')})`)
+      insertAtCursor(`[${text}](${window.prompt( t('markdown.add-link-prompt'))})`)
       break
     case 'list':
       handleListificationOf(text)

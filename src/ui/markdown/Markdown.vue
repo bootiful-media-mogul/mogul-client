@@ -17,14 +17,22 @@
   }
 }
 
+.formatting-menu-toolbar {
+  display: grid;
+  grid-template-areas: ' . toolbar . ';
+  grid-template-columns: auto auto auto;
+}
+
 .formatting-menu {
   display: grid;
   grid-auto-flow: column;
   gap: 0;
+  grid-area: toolbar;
   justify-self: center;
+  max-width: fit-content;
   align-items: center;
   padding-top: var(--gutter-space);
-  padding-bottom : var(--gutter-space);
+  padding-bottom: var(--gutter-space);
 }
 
 .formatting-menu img {
@@ -43,27 +51,29 @@
       </div>
     </template>
     <template v-slot:toolbar>
-      <div class="formatting-menu">
-        <Icon
-          @click.prevent="formatText('strong')"
-          icon-hover="../src/assets/images/formatting-icons/bold.png"
-          icon="../src/assets/images/formatting-icons/bold.png"
-        />
-        <Icon
-          @click.prevent="formatText('em')"
-          icon-hover="../src/assets/images/formatting-icons/italics.png"
-          icon="../src/assets/images/formatting-icons/italics.png"
-        />
-        <Icon
-          @click.prevent="formatText('link')"
-          icon-hover="../src/assets/images/link.png"
-          icon="../src/assets/images/link-highlight.png"
-        />
-        <Icon
-          @click.prevent="formatText('list')"
-          icon-hover="../src/assets/images/formatting-icons/list.png"
-          icon="../src/assets/images/formatting-icons/list.png"
-        />
+      <div class="formatting-menu-toolbar">
+        <div class="formatting-menu">
+          <Icon
+            @click.prevent="formatText('strong')"
+            icon-hover="../src/assets/images/formatting-icons/bold.png"
+            icon="../src/assets/images/formatting-icons/bold.png"
+          />
+          <Icon
+            @click.prevent="formatText('em')"
+            icon-hover="../src/assets/images/formatting-icons/italics.png"
+            icon="../src/assets/images/formatting-icons/italics.png"
+          />
+          <Icon
+            @click.prevent="formatText('link')"
+            icon-hover="../src/assets/images/link.png"
+            icon="../src/assets/images/link-highlight.png"
+          />
+          <Icon
+            @click.prevent="formatText('list')"
+            icon-hover="../src/assets/images/formatting-icons/list.png"
+            icon="../src/assets/images/formatting-icons/list.png"
+          />
+        </div>
       </div>
     </template>
     <template v-slot:icon>

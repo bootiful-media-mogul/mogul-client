@@ -3,9 +3,11 @@
         sticky
         class="icon"
         @click.prevent="togglePreview"
-        icon-hover="../../src/assets/images/privacy-preview.png"
-        icon="../../src/assets/images/privacy-preview-highlight.png"
+        icon-hover="/src/assets/images/privacy-preview.png"
+        icon="/src/assets/images/privacy-preview-highlight.png"
   />
+
+<!--  ../../assets/images/writing-tools/proofread.png-->
 </template>
 
 <style scoped>

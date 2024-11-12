@@ -1,5 +1,4 @@
 <template>
-
   <Icon ref="icon"
         sticky
         class="icon"
@@ -7,8 +6,6 @@
         icon-hover="../../src/assets/images/privacy-preview.png"
         icon="../../src/assets/images/privacy-preview-highlight.png"
   />
-
-
 </template>
 
 <style>
@@ -40,7 +37,7 @@ function positionIcon(parent: HTMLElement, icon: HTMLElement) {
     const formElementRect = formElement.getBoundingClientRect()
     const iconRect = icon.getBoundingClientRect()
     const h = iconRect.height == 0 ? 20 : iconRect.height
-    const y = formElementRect.top + ((formElementRect.height -  h ) / 2)
+    const y = formElementRect.top + ((formElementRect.height - h) / 2)
     icon.style.left = formElementRect.right + 5 + 'px'
     icon.style.top = y + 'px'
   }

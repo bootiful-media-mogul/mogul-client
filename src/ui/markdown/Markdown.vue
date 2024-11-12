@@ -55,38 +55,38 @@
         <div class="formatting-menu">
           <Icon
             @click.prevent="formatText('strong')"
-            icon-hover="../src/assets/images/formatting-icons/bold-highlight.png"
-            icon="../src/assets/images/formatting-icons/bold.png"
+            :icon-hover="boldHighlightAsset"
+            :icon="boldAsset"
           />
           <Icon
             @click.prevent="formatText('em')"
-            icon-hover="../src/assets/images/formatting-icons/italics-highlight.png"
-            icon="../src/assets/images/formatting-icons/italics.png"
+            :icon-hover="italicHighlightAsset"
+            :icon="italicAsset"
           />
           <Icon
             @click.prevent="formatText('link')"
-            icon-hover="../src/assets/images/link-highlight.png"
-            icon="../src/assets/images/link.png"
+            :icon-hover="linkHighlightAsset"
+            :icon="linkAsset"
           />
           <Icon
             @click.prevent="formatText('list')"
-            icon-hover="../src/assets/images/formatting-icons/list-highlight.png"
-            icon="../src/assets/images/formatting-icons/list.png"
+            :icon-hover="listHighlightAsset"
+            :icon="listAsset"
           />
           <Icon
             @click.prevent="formatText('h1')"
-            icon-hover="../src/assets/images/formatting-icons/h1-highlight.png"
-            icon="../src/assets/images/formatting-icons/h1.png"
+            :icon-hover="h1HighlightAsset"
+            :icon="h1Asset"
           />
           <Icon
             @click.prevent="formatText('h2')"
-            icon-hover="../src/assets/images/formatting-icons/h2-highlight.png"
-            icon="../src/assets/images/formatting-icons/h2.png"
+            :icon-hover="h2HighlightAsset"
+            :icon="h2Asset"
           />
           <Icon
             @click.prevent="formatText('h3')"
-            icon-hover="../src/assets/images/formatting-icons/h3-highlight.png"
-            icon="../src/assets/images/formatting-icons/h3.png"
+            :icon-hover="h3HighlightAsset"
+            :icon="h3Asset"
           />
         </div>
       </div>
@@ -98,8 +98,33 @@
 </template>
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
+
 import asset from '@/assets/images/markdown/markdown-preview.png'
 import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.png'
+
+import listAsset from '@/assets/images/formatting-icons/list.png'
+import listHighlightAsset from '@/assets/images/formatting-icons/list-highlight.png'
+
+import linkAsset from '@/assets/images/link.png'
+import linkHighlightAsset from '@/assets/images/link-highlight.png'
+
+import h1Asset from '@/assets/images/formatting-icons/h1.png'
+import h1HighlightAsset from '@/assets/images/formatting-icons/h1-highlight.png'
+
+
+import h2Asset from '@/assets/images/formatting-icons/h2.png'
+import h3Asset from '@/assets/images/formatting-icons/h2.png'
+import h2HighlightAsset from '@/assets/images/formatting-icons/h2-highlight.png'
+import h3HighlightAsset from '@/assets/images/formatting-icons/h2-highlight.png'
+
+
+import boldAsset from '@/assets/images/formatting-icons/bold.png'
+import boldHighlightAsset from '@/assets/images/formatting-icons/bold-highlight.png'
+
+import italicAsset from '@/assets/images/formatting-icons/italics.png'
+import italicHighlightAsset from '@/assets/images/formatting-icons/italics-highlight.png'
+
+
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import { markdown } from '@/services'
 import { inject, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -135,7 +160,7 @@ const formatText = (format: string) => {
 
   const { text, start, end } = selection
 
-  const handleListificationOf = function () {
+  const handleListificationOf = function() {
     // several scenarios:
     // 1. the text is all the text on a given line
     // 2. the text is part of a body of text before and after it

@@ -8,7 +8,7 @@
   />
 </template>
 
-<style>
+<style scoped>
 .icon {
   position: absolute;
 }

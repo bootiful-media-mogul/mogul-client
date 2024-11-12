@@ -1,19 +1,18 @@
+<style scoped>
+.icon {
+  position: absolute;
+}
+</style>
 <template>
   <Icon
     ref="icon"
     sticky
     class="icon"
     @click.prevent="togglePreview"
-    icon-hover="../src/assets/images/privacy-preview.png"
-    icon="../src/assets/images/privacy-preview-highlight.png"
+    :icon-hover="privacyHighlight"
+    :icon="privacy"
   />
 </template>
-
-<style scoped>
-.icon {
-  position: absolute;
-}
-</style>
 
 <script lang="ts" setup>
 import {
@@ -23,6 +22,9 @@ import {
   onMounted,
   ref
 } from 'vue'
+
+import privacyHighlight from '@/assets/images/privacy-preview.png'
+import privacy from '@/assets/images/privacy-preview-highlight.png'
 
 import Icon from '@/ui/Icon.vue'
 

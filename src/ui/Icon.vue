@@ -10,7 +10,7 @@ interface Props {
 const props = defineProps<Props>()
 const src = ref<string>()
 
-const swap = function () {
+const swap = function() {
   if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
 
@@ -29,10 +29,12 @@ img.icon {
   cursor: pointer;
   width: var(--icon-width);
 }
+
 img.icon-disabled {
   cursor: unset;
   opacity: 0.2;
-  width: var(--icon-width);
+  max-width: var(--icon-width);
+  height: var(--icon-width);
 }
 </style>
 <template>

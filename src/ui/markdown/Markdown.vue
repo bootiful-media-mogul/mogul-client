@@ -55,22 +55,22 @@
         <div class="formatting-menu">
           <Icon
             @click.prevent="formatText('strong')"
-            icon-hover="../src/assets/images/formatting-icons/bold.png"
+            icon-hover="../src/assets/images/formatting-icons/bold-highlight.png"
             icon="../src/assets/images/formatting-icons/bold.png"
           />
           <Icon
             @click.prevent="formatText('em')"
-            icon-hover="../src/assets/images/formatting-icons/italics.png"
+            icon-hover="../src/assets/images/formatting-icons/italics-highlight.png"
             icon="../src/assets/images/formatting-icons/italics.png"
           />
           <Icon
             @click.prevent="formatText('link')"
-            icon-hover="../src/assets/images/link.png"
-            icon="../src/assets/images/link-highlight.png"
+            icon-hover="../src/assets/images/link-highlight.png"
+            icon="../src/assets/images/link.png"
           />
           <Icon
             @click.prevent="formatText('list')"
-            icon-hover="../src/assets/images/formatting-icons/list.png"
+            icon-hover="../src/assets/images/formatting-icons/list-highlight.png"
             icon="../src/assets/images/formatting-icons/list.png"
           />
         </div>

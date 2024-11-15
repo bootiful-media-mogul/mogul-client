@@ -7,7 +7,7 @@
 //
 // const blog = ref<string>('')
 import { ref } from 'vue'
- 
+
 
 interface DraggableManagedFile {
   readonly id: number
@@ -20,12 +20,10 @@ const draggables = ref<DraggableManagedFile[]>([])
 for (let i = 0; i < 10; i++)
   draggables.value.push({ id: i, message: 'message #' + i })
 
-
 const textareaRef = ref<HTMLTextAreaElement>()
-
 const lastCursorPos = ref<number>(0)
 
-function setText(txt: string) {
+const setText = (txt: string) => {
   console.log('setting the text to be ' + txt)
   text.value = txt
 }
@@ -35,15 +33,16 @@ const handleTextareaFocus = () => {
 }
 
 // Update text state and maintain cursor position
-const handleTextChange = (e) => {
-  setText(e.target.value)
-  lastCursorPos.value = e.target.selectionStart
+const handleTextChange = (e: Event) => {
+  const t = (e.target as HTMLInputElement)!!
+  setText(t.value)
+  lastCursorPos.value = t.selectionStart || 0
 }
 
 // Handle the drop event
-const handleDrop = (e) => {
+const handleDrop = (e:DragEvent) => {
   e.preventDefault()
-  const droppedText = e.dataTransfer.getData('text')
+  const droppedText = e.dataTransfer!!.getData('text')
 
   // Get the cursor position where the drop occurred
   const dropPosition = textareaRef.value!!.selectionStart
@@ -55,21 +54,22 @@ const handleDrop = (e) => {
 
   // After setState, focus and set cursor position after inserted text
   setTimeout(() => {
-    textareaRef.value!!.focus()
+    const tav = textareaRef.value!!
+    tav.focus()
     const newPosition = dropPosition + droppedText.length
-    textareaRef.value!!.setSelectionRange(newPosition, newPosition)
+    tav.setSelectionRange(newPosition, newPosition)
   }, 0)
 }
 
 // Prevent default drag over behavior
-const handleDragOver = (e) => {
+const handleDragOver = (e: Event) => {
   e.preventDefault()
 }
 
 // Make the draggable div
-const handleDragStart = (event :DragEvent,  draggable:DraggableManagedFile) => {
+const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   console.log('drag start')
-  event.dataTransfer!!.setData('text', 'Dropped' +draggable.id +     ' text here!')
+  event.dataTransfer!!.setData('text', 'Dropped' + draggable.id + ' text here!')
 }
 
 </script>
@@ -84,7 +84,7 @@ const handleDragStart = (event :DragEvent,  draggable:DraggableManagedFile) => {
     @click="handleTextareaFocus"
     @drop="handleDrop"
     @dragover="handleDragOver"
-    rows="10" 
+    rows="10"
     ref="textareaRef"
     v-model="text"></textarea>
 
@@ -94,7 +94,7 @@ const handleDragStart = (event :DragEvent,  draggable:DraggableManagedFile) => {
   <div v-for="d in draggables" :key="d.id">
 
     <div
-      draggable="true" 
+      draggable="true"
       class="unselectable draggable"
       @dragstart="handleDragStart($event, d)"
     >

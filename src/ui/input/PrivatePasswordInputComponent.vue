@@ -15,7 +15,13 @@
 </template>
 
 <script lang="ts" setup>
-import { type ComponentInternalInstance, type ComponentPublicInstance, getCurrentInstance, onMounted, ref } from 'vue'
+import {
+  type ComponentInternalInstance,
+  type ComponentPublicInstance,
+  getCurrentInstance,
+  onMounted,
+  ref
+} from 'vue'
 
 import privacyHighlight from '@/assets/images/privacy-preview.png'
 import privacy from '@/assets/images/privacy-preview-highlight.png'
@@ -46,7 +52,7 @@ function positionIcon(parent: HTMLElement, icon: HTMLElement) {
   new ResizeObserver(resizeFunction).observe(formElement)
 }
 
-const togglePreview = function(e: Event) {
+const togglePreview = function (e: Event) {
   input.value!!.type = input.value!!.type.toLowerCase() === 'password' ? 'text' : 'password'
 }
 

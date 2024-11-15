@@ -34,7 +34,6 @@ import upAsset from '@/assets/images/up.png'
 import transcriptHighlightAsset from '@/assets/images/transcript-highlight.png'
 import transcriptAsset from '@/assets/images/transcript.png'
 
-
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 

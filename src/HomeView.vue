@@ -6,11 +6,102 @@
 // import InputWrapper from '@/ui/input/InputWrapper.vue'
 //
 // const blog = ref<string>('')
+import { ref } from 'vue'
+ 
+
+interface DraggableManagedFile {
+  readonly id: number
+  readonly message: string
+}
+
+const text = ref<string>('')
+const draggables = ref<DraggableManagedFile[]>([])
+
+for (let i = 0; i < 10; i++)
+  draggables.value.push({ id: i, message: 'message #' + i })
+
+
+const textareaRef = ref<HTMLTextAreaElement>()
+
+const lastCursorPos = ref<number>(0)
+
+function setText(txt: string) {
+  console.log('setting the text to be ' + txt)
+  text.value = txt
+}
+
+const handleTextareaFocus = () => {
+  lastCursorPos.value = textareaRef.value!!.selectionStart
+}
+
+// Update text state and maintain cursor position
+const handleTextChange = (e) => {
+  setText(e.target.value)
+  lastCursorPos.value = e.target.selectionStart
+}
+
+// Handle the drop event
+const handleDrop = (e) => {
+  e.preventDefault()
+  const droppedText = e.dataTransfer.getData('text')
+
+  // Get the cursor position where the drop occurred
+  const dropPosition = textareaRef.value!!.selectionStart
+
+  // Insert the dropped text at the cursor position
+  const newText = text.value!!.slice(0, dropPosition) + droppedText + text.value!!.slice(dropPosition)
+
+  setText(newText)
+
+  // After setState, focus and set cursor position after inserted text
+  setTimeout(() => {
+    textareaRef.value!!.focus()
+    const newPosition = dropPosition + droppedText.length
+    textareaRef.value!!.setSelectionRange(newPosition, newPosition)
+  }, 0)
+}
+
+// Prevent default drag over behavior
+const handleDragOver = (e) => {
+  e.preventDefault()
+}
+
+// Make the draggable div
+const handleDragStart = (event :DragEvent,  draggable:DraggableManagedFile) => {
+  console.log('drag start')
+  event.dataTransfer!!.setData('text', 'Dropped' +draggable.id +     ' text here!')
+}
+
 </script>
 
 <template>
   <h1>Home</h1>
   <p>Here is your activity feed...</p>
+
+  <textarea
+    @change="handleTextChange"
+    @focus="handleTextareaFocus"
+    @click="handleTextareaFocus"
+    @drop="handleDrop"
+    @dragover="handleDragOver"
+    rows="10" 
+    ref="textareaRef"
+    v-model="text"></textarea>
+
+  {{ text }}
+
+
+  <div v-for="d in draggables" :key="d.id">
+
+    <div
+      draggable="true" 
+      class="unselectable draggable"
+      @dragstart="handleDragStart($event, d)"
+    >
+      {{ d.message }}
+    </div>
+
+  </div>
 
   <!--  <form class="pure-form pure-form-stacked">
     <fieldset>
@@ -32,3 +123,11 @@
   <div>what did the user type? {{ blog }}</div>
   -->
 </template>
+<style scoped>
+.draggable {
+  cursor: grab;
+  position: relative;
+
+  border: 1px solid orange;
+}
+</style>

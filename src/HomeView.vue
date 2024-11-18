@@ -8,7 +8,6 @@
 // const blog = ref<string>('')
 import { ref } from 'vue'
 
-
 interface DraggableManagedFile {
   readonly id: number
   readonly message: string
@@ -17,8 +16,7 @@ interface DraggableManagedFile {
 const text = ref<string>('')
 const draggables = ref<DraggableManagedFile[]>([])
 
-for (let i = 0; i < 10; i++)
-  draggables.value.push({ id: i, message: 'message #' + i })
+for (let i = 0; i < 10; i++) draggables.value.push({ id: i, message: 'message #' + i })
 
 const textareaRef = ref<HTMLTextAreaElement>()
 const lastCursorPos = ref<number>(0)
@@ -40,7 +38,7 @@ const handleTextChange = (e: Event) => {
 }
 
 // Handle the drop event
-const handleDrop = (e:DragEvent) => {
+const handleDrop = (e: DragEvent) => {
   e.preventDefault()
   const droppedText = e.dataTransfer!!.getData('text')
 
@@ -48,7 +46,8 @@ const handleDrop = (e:DragEvent) => {
   const dropPosition = textareaRef.value!!.selectionStart
 
   // Insert the dropped text at the cursor position
-  const newText = text.value!!.slice(0, dropPosition) + droppedText + text.value!!.slice(dropPosition)
+  const newText =
+    text.value!!.slice(0, dropPosition) + droppedText + text.value!!.slice(dropPosition)
 
   setText(newText)
 
@@ -71,7 +70,6 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   console.log('drag start')
   event.dataTransfer!!.setData('text', 'Dropped' + draggable.id + ' text here!')
 }
-
 </script>
 
 <template>
@@ -86,21 +84,15 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
     @dragover="handleDragOver"
     rows="10"
     ref="textareaRef"
-    v-model="text"></textarea>
+    v-model="text"
+  ></textarea>
 
   {{ text }}
 
-
   <div v-for="d in draggables" :key="d.id">
-
-    <div
-      draggable="true"
-      class="unselectable draggable"
-      @dragstart="handleDragStart($event, d)"
-    >
+    <div draggable="true" class="unselectable draggable" @dragstart="handleDragStart($event, d)">
       {{ d.message }}
     </div>
-
   </div>
 
   <!--  <form class="pure-form pure-form-stacked">

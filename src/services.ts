@@ -43,6 +43,7 @@ export function editTranscript(key: string, id: number, text: string) {
     id: id
   } as TranscriptEditEvent)
 }
+ 
 
 export class Podcast {
   readonly title: string
@@ -57,6 +58,7 @@ export class Podcast {
 }
 
 export class Podcasts {
+  
   private readonly client: Client
 
   constructor(client: Client) {

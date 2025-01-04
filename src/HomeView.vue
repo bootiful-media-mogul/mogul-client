@@ -7,6 +7,7 @@
 //
 // const blog = ref<string>('')
 import { ref } from 'vue'
+import CompositionComponent from '@/compositions/CompositionComponent.vue'
 
 interface DraggableManagedFile {
   readonly id: number
@@ -74,6 +75,7 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
 
 <template>
   <h1>Home</h1>
+
   <p>Here is your activity feed...</p>
 
   <textarea
@@ -114,6 +116,8 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   </form>
   <div>what did the user type? {{ blog }}</div>
   -->
+
+  <CompositionComponent :composition-id="2" />
 </template>
 <style scoped>
 .draggable {

@@ -439,6 +439,10 @@ export class PodcastEpisode {
   created: number = 0
   segments: Array<PodcastEpisodeSegment>
   publications: Array<Publication>
+  descriptionComposition?: Composition
+  titleComposition?: Composition
+
+  // descriptionComposition: Composition
 
   constructor(
     id: number,
@@ -449,8 +453,14 @@ export class PodcastEpisode {
     created: number,
     availablePlugins: Array<string>,
     segments: Array<PodcastEpisodeSegment>,
-    publications: Array<Publication>
+    publications: Array<Publication>,
+    descriptionComposition?: Composition,
+    titleComposition?: Composition
   ) {
+    // compositions
+    this.descriptionComposition = descriptionComposition
+    this.titleComposition = titleComposition
+
     this.availablePlugins = availablePlugins
     this.id = id
     this.title = title
@@ -664,6 +674,59 @@ export class Ai {
   }
 }
 
+export class Compositions {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async getCompositionById(id: number): Promise<Composition> {
+    const q = `
+        query ($id: ID) {
+          compositionById( compositionId : $id )  { 
+            id, 
+            field, 
+            attachments { 
+              id,
+              caption, 
+              managedFile {
+                id 
+              } 
+            } 
+          }
+        }
+        `
+    const result = await this.client.query(q, { id: id })
+    return (await result.data['compositionById']) as Composition
+  }
+}
+
+export class Attachment {
+  readonly id: number
+  readonly caption: string
+  readonly managedFile: ManagedFile
+
+  constructor(id: number, caption: string, managedFile: ManagedFile) {
+    this.caption = caption
+    this.id = id
+    this.managedFile = managedFile
+  }
+
+}
+
+export class Composition {
+  readonly id: number
+  readonly field: string
+  readonly attachments: Array<Attachment>
+
+  constructor(id: number, field: string, attachments: Array<Attachment>) {
+    this.id = id
+    this.attachments = attachments
+    this.field = field
+  }
+}
+
 export class Markdown {
   private readonly client: Client
 
@@ -691,3 +754,4 @@ export const events = mitt()
 export const podcasts = new Podcasts(graphqlClient)
 export const managedFiles = new ManagedFiles(graphqlClient)
 export const settings = new Settings(graphqlClient)
+export const compositions = new Compositions(graphqlClient)

@@ -702,7 +702,11 @@ export class Compositions {
   }
 }
 
+//  
+// COMPOSITIONS 
+// 
 export class Attachment {
+  
   readonly id: number
   readonly caption: string
   readonly managedFile: ManagedFile
@@ -716,6 +720,7 @@ export class Attachment {
 }
 
 export class Composition {
+  
   readonly id: number
   readonly field: string
   readonly attachments: Array<Attachment>

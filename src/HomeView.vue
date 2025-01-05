@@ -78,24 +78,10 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
 
   <p>Here is your activity feed...</p>
 
-  <textarea
-    @change="handleTextChange"
-    @focus="handleTextareaFocus"
-    @click="handleTextareaFocus"
-    @drop="handleDrop"
-    @dragover="handleDragOver"
-    rows="10"
-    ref="textareaRef"
-    v-model="text"
-  ></textarea>
+
 
   {{ text }}
 
-  <div v-for="d in draggables" :key="d.id">
-    <div draggable="true" class="unselectable draggable" @dragstart="handleDragStart($event, d)">
-      {{ d.message }}
-    </div>
-  </div>
 
   <!--  <form class="pure-form pure-form-stacked">
     <fieldset>
@@ -117,8 +103,13 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   <div>what did the user type? {{ blog }}</div>
   -->
 
+
+
+
   <CompositionComponent :composition-id="2" />
 </template>
+
+
 <style scoped>
 .draggable {
   cursor: grab;

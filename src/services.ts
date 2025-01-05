@@ -675,6 +675,7 @@ export class Ai {
 }
 
 export class Compositions {
+  
   private readonly client: Client
 
   constructor(client: Client) {
@@ -724,7 +725,7 @@ export class Composition {
   readonly id: number
   readonly field: string
   readonly attachments: Array<Attachment>
-
+  
   constructor(id: number, field: string, attachments: Array<Attachment>) {
     this.id = id
     this.attachments = attachments
@@ -733,6 +734,7 @@ export class Composition {
 }
 
 export class Markdown {
+  
   private readonly client: Client
 
   constructor(client: Client) {

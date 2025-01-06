@@ -124,6 +124,7 @@ export class Podcasts {
               description, 
               complete,  
               graphic { id  },
+              
               segments { 
                 id, name, audio { id } , order , crossFadeDuration , transcript 
               }
@@ -134,6 +135,27 @@ export class Podcasts {
                 published ,
                 url
               }
+              descriptionComposition { 
+                id,
+                field ,
+                attachments {
+                  id,
+                  caption,
+                  managedFile { id }
+                }
+              }
+              
+              titleComposition { 
+                id,
+                field ,
+                attachments {
+                  id,
+                  caption,
+                  managedFile {  id }
+                }                
+              }
+              
+              
           }
         }
         `
@@ -675,7 +697,6 @@ export class Ai {
 }
 
 export class Compositions {
-  
   private readonly client: Client
 
   constructor(client: Client) {
@@ -691,6 +712,7 @@ export class Compositions {
             attachments { 
               id,
               caption, 
+              embedding,
               managedFile {
                 id 
               } 
@@ -703,29 +725,29 @@ export class Compositions {
   }
 }
 
-//  
-// COMPOSITIONS 
-// 
+//
+// COMPOSITIONS
+//
 export class Attachment {
-  
   readonly id: number
   readonly caption: string
   readonly managedFile: ManagedFile
+  readonly embedding:  string
 
-  constructor(id: number, caption: string, managedFile: ManagedFile) {
+  constructor(id: number, caption: string, managedFile: ManagedFile , embedding: string) {
     this.caption = caption
     this.id = id
     this.managedFile = managedFile
+    this.embedding = embedding 
+    console.debug(`got the embedding ${this.embedding} for attachment`)
   }
-
 }
 
 export class Composition {
-  
   readonly id: number
   readonly field: string
   readonly attachments: Array<Attachment>
-  
+
   constructor(id: number, field: string, attachments: Array<Attachment>) {
     this.id = id
     this.attachments = attachments
@@ -734,7 +756,6 @@ export class Composition {
 }
 
 export class Markdown {
-  
   private readonly client: Client
 
   constructor(client: Client) {

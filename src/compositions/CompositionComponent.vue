@@ -14,7 +14,7 @@ const props = defineProps<{
   compositionId: number
 }>()
 
-const text = ref<string>( 
+const text = ref<string>(
   `Oh, the Code You Can Type!
 
 In the land of the web where the brackets do dance,
@@ -34,7 +34,7 @@ With interfaces, enums, and strict by your side,
 Your functions and classes will beam with great pride.
 Yet for all its straight lines in this coder’s delight,
 JavaScript still whispers: “Come play in the night!”
-`   
+`
 )
 
 const textareaRef = ref<HTMLTextAreaElement>()
@@ -87,12 +87,13 @@ const handleDragOver = (e: Event) => {
 
 // Make the draggable div
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
-  event.dataTransfer!!.setData('text', 'Dropped' + attachment.id + ' text here!')
+  event.dataTransfer!!.setData('text',  attachment.embedding)
 }
 
 onMounted(async () => {
   const composition = await compositions.getCompositionById(props.compositionId)
   attachments.value = composition.attachments
+  console.log(attachments.value)
 })
 </script>
 <template>
@@ -110,15 +111,12 @@ onMounted(async () => {
       v-model="text"
     ></textarea>
 
-    <div v-for="attachment in attachments" :key="attachment.id">
-      <div>
-        <div
-          draggable="true"
-          class="unselectable draggable"
-          @dragstart="handleDragStart($event, attachment)"
-        >
-          {{ attachment.id }}
-        </div>
+    <div 
+      v-for="attachment in attachments" 
+      :key="attachment.id"
+    >
+      <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
+        <!-- {{ attachment.id }} -->  
         <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
       </div>
     </div>

@@ -336,8 +336,9 @@ onMounted(async () => {
             <InputTools v-model="description" />
           </InputWrapper>
 
-          <CompositionComponent 
-            :composition-id="draftEpisode.descriptionComposition?.id ?? -1"
+          <CompositionComponent
+            v-if="draftEpisode.descriptionComposition"
+            :composition-id="draftEpisode.descriptionComposition.id"
           />
         </div>
         <div class="podcast-episode-controls-row">

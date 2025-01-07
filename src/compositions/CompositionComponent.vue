@@ -12,11 +12,17 @@ import type {
   ReadValueFunction,
   UpdateValueFunction
 } from '@/ui/input/input'
+import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
+import asset from '@/assets/images/compositions/attachments.png'
+import assetHighlight from '@/assets/images/compositions/attachments.png'
+import Icon from '@/ui/Icon.vue'
 
 // some very important functions!
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
+
+
 
 onMounted(async () => {
   await reload()
@@ -24,7 +30,7 @@ onMounted(async () => {
   const ti = getInputElement()
   textareaRef.value = ti
 
-  console.log('textarea ref: ' + textareaRef.value)
+  // console.log('textarea ref: ' + textareaRef.value)
 
   ti.addEventListener('change', handleTextChange)
   ti.addEventListener('focus', handleTextareaFocus)
@@ -107,35 +113,31 @@ async function addCompositionAttachment(compositionId: number) {
 }
 </script>
 <template>
-  <div>
-    <!--    <textarea
-          @change="handleTextChange"
-          @focus="handleTextareaFocus"
-          @click="handleTextareaFocus"
-          @drop="handleDrop"
-          @dragover="handleDragOver"
-          rows="10"
-          ref="textareaRef"
-          v-model="text"
-        ></textarea>-->
-
-    <div v-for="attachment in attachments" :key="attachment.id">
-      <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
-        <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
+  <InputWrapperChild>
+    <template v-slot:icon>
+      <Icon :icon="asset" :icon-hover="assetHighlight" />
+    </template>
+    <template v-slot:panel>
+      <div>
+        <div v-for="attachment in attachments" :key="attachment.id">
+          <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
+            <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
+          </div>
+        </div>
+        <div>
+          <span class="save">
+            <button
+              class="pure-button pure-button-primary"
+              type="submit"
+              @click.prevent="addCompositionAttachment(compositionId)"
+            >
+              {{ $t('compositions.buttons.add-attachment') }}
+            </button>
+          </span>
+        </div>
       </div>
-    </div>
-    <div>
-      <span class="save">
-        <button
-          class="pure-button pure-button-primary"
-          type="submit"
-          @click.prevent="addCompositionAttachment(compositionId)"
-        >
-          {{ $t('compositions.buttons.add-attachment') }}
-        </button>
-      </span>
-    </div>
-  </div>
+    </template>
+  </InputWrapperChild>
 </template>
 <style>
 .draggable {

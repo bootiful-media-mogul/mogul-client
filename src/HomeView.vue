@@ -103,11 +103,6 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   <CompositionComponent :composition-id="2" />
 </template>
 
-<style scoped>
-.draggable {
-  cursor: grab;
-  position: relative;
+<style>
 
-  border: 1px solid orange;
-}
 </style>

@@ -27,7 +27,6 @@ onMounted(async () => {
   const ti = getInputElement()
   textareaRef.value = ti
 
-
   ti.addEventListener('change', handleTextChange)
   ti.addEventListener('focus', handleTextareaFocus)
   ti.addEventListener('click', handleTextareaFocus)
@@ -46,7 +45,6 @@ const textareaRef = ref<HTMLInputElement>()
 const lastCursorPos = ref<number>(0)
 
 const setText = (txt: string) => {
-  
   text.value = txt
 
   updateValue(txt)
@@ -95,11 +93,10 @@ const handleDragOver = (e: Event) => {
 // Make the draggable div
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
   event.dataTransfer!!.setData('text', attachment.embedding)
-  
-  
+
   // Create a clean clone of just this element
   const dragEl = event.target as HTMLElement
-  
+
   const clone = dragEl.cloneNode(true) as HTMLElement
   clone.style.width = `${dragEl.offsetWidth}px`
   clone.style.height = `${dragEl.offsetHeight}px`
@@ -124,7 +121,7 @@ async function reload() {
   attachments.value = composition.attachments
 }
 
-async function deleteCompositionAttachment (attachmentId: number) {
+async function deleteCompositionAttachment(attachmentId: number) {
   await compositions.deleteCompositionAttachment(attachmentId)
   await reload()
 }
@@ -145,7 +142,7 @@ async function addCompositionAttachment(compositionId: number) {
           <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
             <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
             |
-            <a href="#" @click.prevent="deleteCompositionAttachment(attachment.id) "> - </a>
+            <a href="#" @click.prevent="deleteCompositionAttachment(attachment.id)"> - </a>
           </div>
         </div>
         <div>
@@ -167,7 +164,7 @@ async function addCompositionAttachment(compositionId: number) {
 .draggable {
   cursor: grab;
   position: relative;
-  
+
   border: 1px solid orange;
 
   /* Prevent text selection during drag */

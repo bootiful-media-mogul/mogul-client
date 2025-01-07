@@ -37,7 +37,6 @@ const translations = {
       'podcast-deleted-event': `The podcast "{context}", with ID #{key}, has been deleted.`.trim()
     },
 
-
     // managed files
     'managedfiles.please-upload-a-file': '(please upload a file.)',
     'managedfiles.visible':
@@ -60,7 +59,6 @@ const translations = {
     'app.menu.about': 'About',
     'app.made-with-love': ` Mogul, made with love ❤️ by {josh} (and with Spring 🍃) `,
 
-    
     'confirm.deletion': `Are you sure you want to delete {title}? 
     
 This is NOT reversible! `,
@@ -83,10 +81,10 @@ This is NOT reversible! `,
     },
     'about.title': 'About',
 
-    // compositions 
-    
+    // compositions
+
     'compositions.buttons.add-attachment': 'Add Attachment',
-    
+
     // episodes
     'episodes.title': 'All episodes',
     'episodes.publications': 'Publications',

@@ -103,6 +103,4 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   <CompositionComponent :composition-id="2" />
 </template>
 
-<style>
-
-</style>
+<style></style>

@@ -335,13 +335,10 @@ onMounted(async () => {
             <textarea id="episodeDescription" v-model="description" required rows="10" />
             <CompositionComponent
               v-if="draftEpisode.descriptionComposition"
-              :composition-id="parseInt( draftEpisode.descriptionComposition.id +'')"
+              :composition-id="parseInt(draftEpisode.descriptionComposition.id + '')"
             />
             <InputTools v-model="description" />
-          
           </InputWrapper>
-
-       
         </div>
         <div class="podcast-episode-controls-row">
           <span class="save">

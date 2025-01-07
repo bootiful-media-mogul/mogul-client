@@ -704,19 +704,17 @@ export class Compositions {
   }
 
   async deleteCompositionAttachment(attachmentId: number) {
-    console.log(`the composition id is ${attachmentId}`)
+    // console.log(`the composition id is ${attachmentId}`)
     const mutation = `
          mutation DeleteCompositionAttachment($attachmentId: ID) { 
           deleteCompositionAttachment( attachmentId: $attachmentId ) 
          }
         `
-    
+
     const result = await this.client.mutation(mutation, {
       attachmentId: attachmentId
     })
-    console.log('result: ' + JSON.stringify(result))
     const idBag = (await result.data['deleteCompositionAttachment']) as Number
-    console.log('idBag: ' + idBag)
     return true
   }
 

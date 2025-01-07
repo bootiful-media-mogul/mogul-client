@@ -27,7 +27,6 @@ onMounted(async () => {
   const ti = getInputElement()
   textareaRef.value = ti
 
-  // console.log('textarea ref: ' + textareaRef.value)
 
   ti.addEventListener('change', handleTextChange)
   ti.addEventListener('focus', handleTextareaFocus)
@@ -47,7 +46,7 @@ const textareaRef = ref<HTMLInputElement>()
 const lastCursorPos = ref<number>(0)
 
 const setText = (txt: string) => {
-  console.log('setting the text to be ' + txt)
+  
   text.value = txt
 
   updateValue(txt)
@@ -95,14 +94,9 @@ const handleDragOver = (e: Event) => {
 
 // Make the draggable div
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
-  console.log('drag start: ' + attachment.embedding)
   event.dataTransfer!!.setData('text', attachment.embedding)
   
-  // ghost image weirdness
-
-  // Set the data transfer
-  event.dataTransfer!!.setData('text', attachment.embedding)
-
+  
   // Create a clean clone of just this element
   const dragEl = event.target as HTMLElement
   
@@ -123,9 +117,6 @@ const handleDragStart = (event: DragEvent, attachment: Attachment) => {
   requestAnimationFrame(() => {
     document.body.removeChild(clone)
   })
-  
-  
-  
 }
 
 async function reload() {

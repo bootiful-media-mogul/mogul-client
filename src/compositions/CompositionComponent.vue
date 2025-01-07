@@ -5,8 +5,9 @@
 // text blocks via drag and drop.
 //
 import { onMounted, ref } from 'vue'
-import { Attachment, compositions } from '@/services'
+import { Attachment, compositions, ManagedFile, podcasts } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
+import { at } from 'vitest/dist/reporters-5f784f42'
 
 const attachments = ref<Array<Attachment>>()
 
@@ -91,18 +92,24 @@ const handleDragStart = (event: DragEvent, attachment: Attachment) => {
 }
 
 onMounted(async () => {
+  await reload()
+})
+
+async function reload() {
   const composition = await compositions.getCompositionById(props.compositionId)
   attachments.value = composition.attachments
-  console.log(attachments.value)
-})
+}
+
+async function addCompositionAttachment(compositionId: number) {
+  console.log('adding attachment')
+  await compositions.createCompositionAttachment(compositionId)
+  console.log('added attachment')
+  await reload()
+  console.log('reloaded')
+}
 </script>
 <template>
   <div>
-    
-    <!--    
-    <p>Composition ID: {{ compositionId }}</p>
-    -->
-
     <textarea
       @change="handleTextChange"
       @focus="handleTextareaFocus"
@@ -118,12 +125,13 @@ onMounted(async () => {
       <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
         <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
       </div>
-
+    </div>
+    <div>
       <span class="save">
         <button
           class="pure-button pure-button-primary"
           type="submit"
-          @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
+          @click.prevent="addCompositionAttachment(compositionId)"
         >
           {{ $t('compositions.buttons.add-attachment') }}
         </button>

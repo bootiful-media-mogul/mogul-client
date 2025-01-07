@@ -338,7 +338,7 @@ onMounted(async () => {
 
           <CompositionComponent
             v-if="draftEpisode.descriptionComposition"
-            :composition-id="draftEpisode.descriptionComposition.id"
+            :composition-id="parseInt( draftEpisode.descriptionComposition.id +'')"
           />
         </div>
         <div class="podcast-episode-controls-row">

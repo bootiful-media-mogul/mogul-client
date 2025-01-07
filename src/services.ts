@@ -703,6 +703,24 @@ export class Compositions {
     this.client = client
   }
 
+  async createCompositionAttachment(compositionId: number) {
+
+
+    const mutation = `
+         mutation CreateCompositionAttachment ($compositionId: ID ){ 
+          createCompositionAttachment(  compositionId: $compositionId ) { 
+             id  
+          }
+         }
+        `
+    const result = await this.client.mutation(mutation, {
+      compositionId: compositionId
+    })
+    const idBag = (await result.data['createCompositionAttachment'])['id']
+    console.log('idBag: ' + idBag)
+    return true
+  }
+
   async getCompositionById(id: number): Promise<Composition> {
     const q = `
         query ($id: ID) {

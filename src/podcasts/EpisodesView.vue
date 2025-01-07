@@ -333,11 +333,12 @@ onMounted(async () => {
           </label>
           <InputWrapper v-model="description">
             <textarea id="episodeDescription" v-model="description" required rows="10" />
-            <InputTools v-model="description" />
             <CompositionComponent
               v-if="draftEpisode.descriptionComposition"
               :composition-id="parseInt( draftEpisode.descriptionComposition.id +'')"
             />
+            <InputTools v-model="description" />
+          
           </InputWrapper>
 
        

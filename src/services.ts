@@ -702,6 +702,22 @@ export class Compositions {
   constructor(client: Client) {
     this.client = client
   }
+  
+  async deleteCompositionAttachment(attachmentId: number) {
+    const mutation = `
+         mutation DeleteCompositionAttachment($attachmentId: ID) { 
+          deleteCompositionAttachment( attachmentId: $attachmentId ){ 
+             id  
+          }
+         }
+        `
+    const result = await this.client.mutation(mutation, {
+      attachmentId: attachmentId
+    })
+    const idBag = (await result.data['deleteCompositionAttachment'])['id']
+    console.log('idBag: ' + idBag)
+    return true
+  }
 
   async createCompositionAttachment(compositionId: number) {
 

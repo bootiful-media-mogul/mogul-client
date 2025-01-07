@@ -97,11 +97,45 @@ const handleDragOver = (e: Event) => {
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
   console.log('drag start: ' + attachment.embedding)
   event.dataTransfer!!.setData('text', attachment.embedding)
+  
+  // ghost image weirdness
+
+  // Set the data transfer
+  event.dataTransfer!!.setData('text', attachment.embedding)
+
+  // Create a clean clone of just this element
+  const dragEl = event.target as HTMLElement
+  
+  const clone = dragEl.cloneNode(true) as HTMLElement
+  clone.style.width = `${dragEl.offsetWidth}px`
+  clone.style.height = `${dragEl.offsetHeight}px`
+  clone.style.position = 'fixed'
+  clone.style.top = '-1000px' // Position off-screen
+  clone.style.opacity = '0.8'
+
+  // Add to DOM temporarily
+  document.body.appendChild(clone)
+
+  // Set as drag image
+  event.dataTransfer!!.setDragImage(clone, 0, 0)
+
+  // Clean up the clone after drag starts
+  requestAnimationFrame(() => {
+    document.body.removeChild(clone)
+  })
+  
+  
+  
 }
 
 async function reload() {
   const composition = await compositions.getCompositionById(props.compositionId)
   attachments.value = composition.attachments
+}
+
+async function deleteCompositionAttachment (attachmentId: number) {
+  await compositions.deleteCompositionAttachment(attachmentId)
+  await reload()
 }
 
 async function addCompositionAttachment(compositionId: number) {
@@ -119,6 +153,8 @@ async function addCompositionAttachment(compositionId: number) {
         <div v-for="attachment in attachments" :key="attachment.id">
           <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
             <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
+            |
+            <a href="#" @click.prevent="deleteCompositionAttachment(attachment.id) "> - </a>
           </div>
         </div>
         <div>
@@ -140,7 +176,17 @@ async function addCompositionAttachment(compositionId: number) {
 .draggable {
   cursor: grab;
   position: relative;
-
+  
   border: 1px solid orange;
+
+  /* Prevent text selection during drag */
+  user-select: none;
+  /* Prevent interference from children */
+  /*pointer-events: none;*/
+}
+.draggable a,
+.draggable button,
+.draggable input {
+  pointer-events: auto;
 }
 </style>

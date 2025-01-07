@@ -56,7 +56,7 @@ const emit = defineEmits<{
   (e: 'up'): void
 }>()
 const props = defineProps<Props>()
-const downArrowCss = function() {
+const downArrowCss = function () {
   if (props.disabled) return 'disabled'
   if (!props.enableDownArrow) return 'disabled'
   return ''
@@ -66,7 +66,7 @@ const upArrowCss = () => {
   if (!props.enableUpArrow) return 'disabled'
   return ''
 }
-const disable = function(r: HTMLElement) {
+const disable = function (r: HTMLElement) {
   r.classList.add('disabled')
 }
 const up = ref<HTMLElement>()

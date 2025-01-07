@@ -11,7 +11,7 @@ import router from './index'
 const translations = {
   en: {
     labels: {
-      'required-value': 'this is a required value!',
+      'required-value': 'This is a required value!',
       ok: 'OK',
       close: 'Close',
       cancel: 'Cancel',
@@ -19,7 +19,7 @@ const translations = {
       create: 'Create'
     },
 
-    hello: 'hello, {mogul}',
+    hello: 'Hello, {mogul}',
     podbean: 'Podbean',
     mock: 'Mock',
     github: 'GitHub',
@@ -37,35 +37,27 @@ const translations = {
       'podcast-deleted-event': `The podcast "{context}", with ID #{key}, has been deleted.`.trim()
     },
 
-    // previews
-
     // managed files
     'managedfiles.please-upload-a-file': '(please upload a file.)',
     'managedfiles.visible':
-      'is this file publicly visible and accessible? If so, its public URL will show up in the preview panel.',
-    'managedfiles.delete': 'delete this file',
-    'managedfiles.preview': 'preview this file',
-    'managedfiles.upload': 'upload a file',
-    'managedfiles.uploaded': 'has this file been uploaded?',
-    'managedfiles.content-type': "this file's content type",
-    'managedfiles.file-name': "this file's name",
+      'Is this file publicly visible and accessible? If so, its public URL will show up in the preview panel.',
+    'managedfiles.delete': 'Delete this file',
+    'managedfiles.preview': 'Preview this file',
+    'managedfiles.upload': 'Upload a file',
+    'managedfiles.uploaded': 'Has this file been uploaded?',
+    'managedfiles.content-type': "This file's content type",
+    'managedfiles.file-name': "This file's name",
 
     // markdown
     'markdown.add-link-prompt': 'Where do you want the link to go to?',
 
     // app
-    'app.menu.home': 'home',
-    'app.menu.settings': 'settings',
-    'app.menu.podcasts': 'podcasts',
-    'app.menu.blogs': 'blogs',
-    'app.menu.about': 'about',
+    'app.menu.home': 'Home',
+    'app.menu.settings': 'Settings',
+    'app.menu.podcasts': 'Podcasts',
+    'app.menu.blogs': 'Blogs',
+    'app.menu.about': 'About',
     'app.made-with-love': ` Mogul, made with love ❤️ by {josh} (and with Spring 🍃) `,
-
-    // episode segments
-    'episodes.episode.segments.number': 'segment {order} ',
-    'episodes.episode.graphic': 'graphic',
-    'episodes.buttons.add-segment': 'add a new segment',
-    'episodes.episode.reference': 'the episode titled: {title}',
 
     'confirm.deletion': `Are you sure you want to delete {title}? 
     
@@ -76,51 +68,60 @@ This is NOT reversible! `,
       // 'podcasts.episodes.segments': 'Podcast Episode Segment' ,
       text: 'Transcript for {key} #{id}',
       buttons: {
-        accept: 'accept',
-        revert: 'revert',
-        cancel: 'cancel',
-        save: 'update transcript'
+        accept: 'Accept',
+        revert: 'Revert',
+        cancel: 'Cancel',
+        save: 'Update Transcript'
       }
     },
     buttons: {
-      accept: 'accept',
-      revert: 'revert',
-      cancel: 'cancel'
+      accept: 'Accept',
+      revert: 'Revert',
+      cancel: 'Cancel'
     },
     'about.title': 'About',
 
-    'episodes.title': 'all episodes',
+    // compositions
+
+    'compositions.buttons.add-attachment': 'Add Attachment',
+
+    // episodes
+    'episodes.title': 'All episodes',
     'episodes.publications': 'Publications',
     'episodes.basics': 'Basics',
     'episodes.segments': 'Segments',
-    'episodes.segments.number': 'episode segment # {id}',
+    'episodes.segments.number': 'Episode segment # {id}',
     'episodes.publish': 'Publish',
-    'episodes.episodes': 'episodes for podcast #{id} - "{title}"',
-    'episodes.new-episode': 'new episode',
-    'episodes.buttons.publish': 'publish',
-    'episodes.buttons.cancel': 'cancel',
-    'episodes.editing-episode': 'editing episode #{id} - "{title}"',
-    'episodes.buttons.save': 'save',
+    'episodes.episodes': 'Episodes for Podcast #{id} - "{title}"',
+    'episodes.new-episode': 'New Episode',
+    'episodes.buttons.publish': 'Publish',
+    'episodes.buttons.cancel': 'Cancel',
+    'episodes.episode.segments.number': 'Segment {order} ',
+    'episodes.episode.graphic': 'Graphic',
+    'episodes.buttons.add-segment': 'Add a New Segment',
+    'episodes.episode.reference': 'the episode titled: {title}',
+    'episodes.editing-episode': 'Editing episode #{id} - "{title}"',
+    'episodes.buttons.save': 'Save',
     'episodes.episode.description.ai-prompt':
-      'please help me make this podcast episode description fun and pithy',
+      'Please help me make this podcast episode description fun and pithy.',
     'episodes.episode.title.ai-prompt':
-      'please help me make this podcast episode title fun and pithy',
-    'episodes.episode.description': 'description',
-    'episodes.episode.title': 'title',
-    'episodes.plugins.please-select-a-plugin': 'please select a plugin',
+      'Please help me make this podcast episode title fun and pithy.',
+    'episodes.episode.description': 'Description',
+    'episodes.episode.title': 'Title',
+    'episodes.plugins.please-select-a-plugin': 'Select a plugin',
 
     // podcasts
     'podcasts.title': 'Podcasts',
     'podcasts.new-podcast': 'New Podcast',
-    'podcasts.new-podcast.title': 'title',
-    'podcasts.title.ai.prompt': `please help me take the following podcast title and make it more pithy and exciting!`,
-    'podcasts.new-podcast.submit': 'create a new podcast',
-    'podcasts.podcasts.delete': 'delete',
-    'podcasts.podcasts.episodes': 'episodes',
+    'podcasts.new-podcast.title': 'Title',
+    'podcasts.title.ai.prompt': `Please help me take the following podcast title and make it more pithy and exciting!`,
+    'podcasts.new-podcast.submit': 'Create a new podcast',
+    'podcasts.podcasts.delete': 'Delete',
+    'podcasts.podcasts.episodes': 'Episodes',
 
     // settings
     'settings.title': 'Settings',
-    'settings.save-button': 'save configuration changes for {plugin}',
+    'settings.save-button': 'Save configuration changes for {plugin}',
     'settings.github': 'Github',
     'settings.github.clientId': 'Client ID',
     'settings.github.clientSecret': 'Client Secret',

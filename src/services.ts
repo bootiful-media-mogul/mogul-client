@@ -124,6 +124,7 @@ export class Podcasts {
               description, 
               complete,  
               graphic { id  },
+              
               segments { 
                 id, name, audio { id } , order , crossFadeDuration , transcript 
               }
@@ -134,6 +135,27 @@ export class Podcasts {
                 published ,
                 url
               }
+              descriptionComposition { 
+                id,
+                field ,
+                attachments {
+                  id,
+                  caption,
+                  managedFile { id }
+                }
+              }
+              
+              titleComposition { 
+                id,
+                field ,
+                attachments {
+                  id,
+                  caption,
+                  managedFile {  id }
+                }                
+              }
+              
+              
           }
         }
         `
@@ -439,6 +461,10 @@ export class PodcastEpisode {
   created: number = 0
   segments: Array<PodcastEpisodeSegment>
   publications: Array<Publication>
+  descriptionComposition?: Composition
+  titleComposition?: Composition
+
+  // descriptionComposition: Composition
 
   constructor(
     id: number,
@@ -449,8 +475,14 @@ export class PodcastEpisode {
     created: number,
     availablePlugins: Array<string>,
     segments: Array<PodcastEpisodeSegment>,
-    publications: Array<Publication>
+    publications: Array<Publication>,
+    descriptionComposition?: Composition,
+    titleComposition?: Composition
   ) {
+    // compositions
+    this.descriptionComposition = descriptionComposition
+    this.titleComposition = titleComposition
+
     this.availablePlugins = availablePlugins
     this.id = id
     this.title = title
@@ -664,6 +696,96 @@ export class Ai {
   }
 }
 
+export class Compositions {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async deleteCompositionAttachment(attachmentId: number) {
+    // console.log(`the composition id is ${attachmentId}`)
+    const mutation = `
+         mutation DeleteCompositionAttachment($attachmentId: ID) { 
+          deleteCompositionAttachment( attachmentId: $attachmentId ) 
+         }
+        `
+
+    const result = await this.client.mutation(mutation, {
+      attachmentId: attachmentId
+    })
+    const idBag = (await result.data['deleteCompositionAttachment']) as Number
+    return true
+  }
+
+  async createCompositionAttachment(compositionId: number) {
+    const mutation = `
+         mutation CreateCompositionAttachment ($compositionId: ID ){ 
+          createCompositionAttachment(  compositionId: $compositionId ) { 
+             id  
+          }
+         }
+        `
+    const result = await this.client.mutation(mutation, {
+      compositionId: compositionId
+    })
+    const idBag = (await result.data['createCompositionAttachment'])['id']
+    console.log('idBag: ' + idBag)
+    return true
+  }
+
+  async getCompositionById(id: number): Promise<Composition> {
+    const q = `
+        query ($id: ID) {
+          compositionById( compositionId : $id )  { 
+            id, 
+            field, 
+            attachments { 
+              id,
+              caption, 
+              embedding,
+              managedFile {
+                id 
+              } 
+            } 
+          }
+        }
+        `
+    const result = await this.client.query(q, { id: id })
+    return (await result.data['compositionById']) as Composition
+  }
+}
+
+//
+// COMPOSITIONS
+//
+export class Attachment {
+  readonly id: number
+  readonly caption: string
+  readonly managedFile: ManagedFile
+  readonly embedding: string
+
+  constructor(id: number, caption: string, managedFile: ManagedFile, embedding: string) {
+    this.caption = caption
+    this.id = id
+    this.managedFile = managedFile
+    this.embedding = embedding
+    console.debug(`got the embedding ${this.embedding} for attachment`)
+  }
+}
+
+export class Composition {
+  readonly id: number
+  readonly field: string
+  readonly attachments: Array<Attachment>
+
+  constructor(id: number, field: string, attachments: Array<Attachment>) {
+    this.id = id
+    this.attachments = attachments
+    this.field = field
+  }
+}
+
 export class Markdown {
   private readonly client: Client
 
@@ -691,3 +813,4 @@ export const events = mitt()
 export const podcasts = new Podcasts(graphqlClient)
 export const managedFiles = new ManagedFiles(graphqlClient)
 export const settings = new Settings(graphqlClient)
+export const compositions = new Compositions(graphqlClient)

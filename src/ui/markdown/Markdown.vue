@@ -146,7 +146,7 @@ const formatText = (format: string) => {
 
   const { text, start, end } = selection
 
-  const handleListificationOf = function() {
+  const handleListificationOf = function () {
     // several scenarios:
     // 1. the text is all the text on a given line
     // 2. the text is part of a body of text before and after it
@@ -164,9 +164,7 @@ const formatText = (format: string) => {
       insertAtCursor(
         text
           .split('\n')
-          .map((line) => {
-            return `* ${line}`
-          })
+          .map((line) => `* ${line}`)
           .join('\n')
       )
     }
@@ -174,7 +172,6 @@ const formatText = (format: string) => {
 
   switch (format) {
     case 'link':
-      //todo use vue i18n for this message
       insertAtCursor(`[${text}](${window.prompt(t('markdown.add-link-prompt'))})`)
       break
     case 'list':
@@ -229,8 +226,6 @@ const insertAtCursor = async (text: string, movePosition: number = 0) => {
     element.selectionEnd = newPosition
   })
 }
-
-/* new editor capabilities */
 
 const debouncingRender = async () => {
   if (timer && timer > -1) {

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import {
+  Composition,
   editTranscript,
   events,
   Notification,
@@ -34,9 +35,9 @@ import upAsset from '@/assets/images/up.png'
 import transcriptHighlightAsset from '@/assets/images/transcript-highlight.png'
 import transcriptAsset from '@/assets/images/transcript.png'
 
-
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
+import CompositionComponent from '@/compositions/CompositionComponent.vue'
 
 const { t } = useI18n()
 
@@ -60,8 +61,15 @@ const episodes = ref<PodcastEpisode[]>([])
 const publications = ref<Publication[]>([])
 const currentPodcast = ref<Podcast>()
 const selectedPodcastId = ref(props.id)
+
+// title
 const title = ref('')
+const titleComposition = ref<Composition>()
+
+// description
 const description = ref('')
+const descriptionComposition = ref<Composition>()
+
 const dirtyKey = ref('')
 
 // Computed
@@ -134,6 +142,8 @@ const loadEpisode = async (episode: PodcastEpisode) => {
   created.value = episode.created
   dirtyKey.value = computeDirtyKey()
   draftEpisodeSegments.value = episode.segments
+  descriptionComposition.value = episode.descriptionComposition
+  titleComposition.value = episode.titleComposition
   await refreshEpisodePublicationControls(episode.id, draftEpisode.complete)
 }
 
@@ -157,9 +167,7 @@ const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
   editTranscript(transcriptEventPrefix, seg.id, seg.transcript)
 }
 
-const save = async (e: Event) => {
-  e.preventDefault()
-
+const save = async () => {
   if (draftEpisode.id) {
     await podcasts.updatePodcastEpisode(draftEpisode.id, title.value, description.value)
     await loadEpisode(await podcasts.podcastEpisodeById(draftEpisode.id))
@@ -173,8 +181,7 @@ const save = async (e: Event) => {
   }
 }
 
-const cancel = async (e: Event) => {
-  e.preventDefault()
+const cancel = async () => {
   Object.assign(draftEpisode, {} as PodcastEpisode)
   title.value = ''
   description.value = ''
@@ -235,7 +242,7 @@ const deletePodcastEpisode = async (episode: PodcastEpisode) => {
   if (!utils.confirmDeletion(msg)) return
 
   await podcasts.deletePodcastEpisode(episode.id)
-  await cancel(new Event(''))
+  await cancel()
 }
 
 const unpublish = async (publication: Publication) => {
@@ -326,6 +333,10 @@ onMounted(async () => {
           </label>
           <InputWrapper v-model="description">
             <textarea id="episodeDescription" v-model="description" required rows="10" />
+            <CompositionComponent
+              v-if="draftEpisode.descriptionComposition"
+              :composition-id="parseInt(draftEpisode.descriptionComposition.id + '')"
+            />
             <InputTools v-model="description" />
           </InputWrapper>
         </div>
@@ -335,7 +346,7 @@ onMounted(async () => {
               :disabled="buttonsDisabled"
               class="pure-button pure-button-primary"
               type="submit"
-              @click="save"
+              @click.prevent="save"
             >
               {{ $t('episodes.buttons.save') }}
             </button>

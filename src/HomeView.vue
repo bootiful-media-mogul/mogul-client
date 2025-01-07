@@ -78,10 +78,7 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
 
   <p>Here is your activity feed...</p>
 
-
-
   {{ text }}
-
 
   <!--  <form class="pure-form pure-form-stacked">
     <fieldset>
@@ -103,12 +100,8 @@ const handleDragStart = (event: DragEvent, draggable: DraggableManagedFile) => {
   <div>what did the user type? {{ blog }}</div>
   -->
 
-
-
-
   <CompositionComponent :composition-id="2" />
 </template>
-
 
 <style scoped>
 .draggable {

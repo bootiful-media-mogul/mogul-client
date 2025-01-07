@@ -87,7 +87,7 @@ const handleDragOver = (e: Event) => {
 
 // Make the draggable div
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
-  event.dataTransfer!!.setData('text',  attachment.embedding)
+  event.dataTransfer!!.setData('text', attachment.embedding)
 }
 
 onMounted(async () => {
@@ -98,7 +98,10 @@ onMounted(async () => {
 </script>
 <template>
   <div>
+    
+    <!--    
     <p>Composition ID: {{ compositionId }}</p>
+    -->
 
     <textarea
       @change="handleTextChange"
@@ -111,14 +114,20 @@ onMounted(async () => {
       v-model="text"
     ></textarea>
 
-    <div 
-      v-for="attachment in attachments" 
-      :key="attachment.id"
-    >
+    <div v-for="attachment in attachments" :key="attachment.id">
       <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
-        <!-- {{ attachment.id }} -->  
         <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
       </div>
+
+      <span class="save">
+        <button
+          class="pure-button pure-button-primary"
+          type="submit"
+          @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
+        >
+          {{ $t('compositions.buttons.add-attachment') }}
+        </button>
+      </span>
     </div>
   </div>
 </template>

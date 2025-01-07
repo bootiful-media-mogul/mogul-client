@@ -17,12 +17,9 @@ import asset from '@/assets/images/compositions/attachments.png'
 import assetHighlight from '@/assets/images/compositions/attachments.png'
 import Icon from '@/ui/Icon.vue'
 
-// some very important functions!
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
-
-
 
 onMounted(async () => {
   await reload()

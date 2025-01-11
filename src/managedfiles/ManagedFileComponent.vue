@@ -54,6 +54,8 @@
 </template>
 <style>
 .managed-file-row {
+  /*border:1px solid yellow;*/
+  height: 2em  ;
   grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
     min-content
@@ -64,6 +66,7 @@
     13em
     auto;
   display: grid;
+  
 }
 
 .managed-file-row .visible {
@@ -81,9 +84,9 @@
 .managed-file-row .contentType {
   grid-area: contentType;
   font-size: small;
-  align-content: center;
+  
   text-align: center;
-  justify-self: center; 
+   
 
 }
 

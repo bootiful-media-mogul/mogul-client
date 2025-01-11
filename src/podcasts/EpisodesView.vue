@@ -600,12 +600,7 @@ onMounted(async () => {
 fieldset.episodes-table {
   padding-bottom: calc(var(--footer-height) * 1);
 }
-
-.episode-managed-file-row {
-  height: calc(var(--gutter-space) * 1);
-  margin-bottom: var(--gutter-space);
-  margin-top: var(--gutter-space);
-}
+ 
 
 .episode-managed-file-row label {
   text-align: right;

@@ -310,11 +310,12 @@ onMounted(async () => {
         create an icon for the podcast thing
         build out the podcast subsystem
         show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
-      -->
+      
       <div v-if="draftEpisode.id" class="episode-actions subject-actions">
         <a href="#">blog</a> |
         <a href="#">analyse</a>
       </div>
+      -->
 
       <div class="form-section">
         <div class="form-section-title">{{ $t('episodes.basics') }}</div>
@@ -340,27 +341,24 @@ onMounted(async () => {
             <InputTools v-model="description" />
           </InputWrapper>
         </div>
-        <div class="podcast-episode-controls-row">
-          <span class="save">
-            <button
-              :disabled="buttonsDisabled"
-              class="pure-button pure-button-primary"
-              type="submit"
-              @click.prevent="save"
-            >
-              {{ $t('episodes.buttons.save') }}
-            </button>
-          </span>
-          <span class="cancel">
-            <button
-              :disabled="description == '' && title == ''"
-              class="pure-button pure-button-primary"
-              type="submit"
-              @click="cancel"
-            >
-              {{ $t('episodes.buttons.cancel') }}
-            </button>
-          </span>
+        <div>
+          <button
+            :disabled="buttonsDisabled"
+            class="pure-button pure-button-primary"
+            type="submit"
+            @click.prevent="save"
+          >
+            {{ $t('episodes.buttons.save') }}
+          </button>
+
+          <button
+            :disabled="description == '' && title == ''"
+            class="pure-button pure-button-primary"
+            type="submit"
+            @click="cancel"
+          >
+            {{ $t('episodes.buttons.cancel') }}
+          </button>
         </div>
       </div>
 
@@ -435,71 +433,74 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="form-section">
-          <div class="form-section-title">{{ $t('episodes.publications') }}</div>
-          <div>
-            <div class="publish-menu">
-              <select
-                v-model="selectedPlugin"
-                :disabled="!draftEpisode.complete"
-                @change="pluginSelected"
-              >
-                <option disabled value="">
-                  {{ $t('episodes.plugins.please-select-a-plugin') }}
-                </option>
+        <div class="form-section-title">{{ $t('episodes.publications') }}</div>
 
-                <option
-                  v-for="(option, index) in draftEpisode.availablePlugins"
-                  :key="index"
-                  :value="option"
-                >
-                  {{ option }}
-                </option>
-              </select>
-              <button
-                :key="draftEpisode.id"
-                ref="publishButton"
-                :disabled="publishButtonDisabled"
-                class="pure-button pure-button-primary publish-button"
-                type="submit"
-                @click="publish"
-              >
-                {{ $t('episodes.buttons.publish') }}
-              </button>
-            </div>
-          </div>
+        <div class="publish-menu">
+          <select
+            v-model="selectedPlugin"
+            :disabled="!draftEpisode.complete"
+            @change="pluginSelected"
+          >
+            <option disabled value="">
+              {{ $t('episodes.plugins.please-select-a-plugin') }}
+            </option>
 
-          <div class="publications">
-            <div
-              v-for="publication in publications"
-              v-bind:key="publication.id"
-              class="pure-g form-row publications-row"
+            <option
+              v-for="(option, index) in draftEpisode.availablePlugins"
+              :key="index"
+              :value="option"
             >
-              <div class="id-column">
-                #<b>{{ publication.id }}</b>
-              </div>
-              <div class="plugin-column">
-                {{ publication.plugin }}
-              </div>
-              <div class="created-column">{{ dts(publication.created) }}</div>
-              <div class="published-column">
-                {{ dts(publication.published) }}
-              </div>
-              <div class="delete-column">
-                <a class="delete-icon" href="#" @click="unpublish(publication)"></a>
-              </div>
+              {{ option }}
+            </option>
+          </select>
+          <button
+            :key="draftEpisode.id"
+            ref="publishButton"
+            :disabled="publishButtonDisabled"
+            class="pure-button pure-button-primary publish-button"
+            type="submit"
+            @click="publish"
+          >
+            {{ $t('episodes.buttons.publish') }}
+          </button>
+        </div>
+        <div class="publications">
+          <div
+            v-for="publication in publications"
+            v-bind:key="publication.id"
+            class="pure-g form-row publications-row"
+          >
+            <div class="id-column">
+              #<b>{{ publication.id }}</b>
+            </div>
+            <div class="plugin-column">
+              {{ publication.plugin }}
+            </div>
+            <div class="created-column">{{ dts(publication.created) }}</div>
+            <div class="published-column">
+              {{ dts(publication.published) }}
+            </div>
+            <div class="delete-column">
+<!--              <a class="delete-icon" href="#" @click="unpublish(publication)"></a>-->
 
-              <div class="url-column preview">
-                <span v-if="publication.publishing"> publishing... </span>
-                <a
-                  :class="
-                    'mogul-icon preview-icon ' +
-                    (publication.url && publication.url !== '' ? '' : ' disabled')
-                  "
-                  :href="publication.url"
-                  target="_blank"
-                ></a>
-              </div>
+              <Icon
+                :icon="deleteHighlightAsset"
+                :icon-hover="deleteAsset"
+                class="delete-icon"
+                @click.prevent="unpublish( publication)"
+              />
+            </div>
+
+            <div class="url-column preview">
+              <span v-if="publication.publishing"> publishing... </span>
+              <a
+                :class="
+                  'mogul-icon preview-icon ' +
+                  (publication.url && publication.url !== '' ? '' : ' disabled')
+                "
+                :href="publication.url"
+                target="_blank"
+              ></a>
             </div>
           </div>
         </div>
@@ -513,11 +514,11 @@ onMounted(async () => {
         {{ $t('episodes.title') }}
       </legend>
 
-      <div v-for="episode in episodes" v-bind:key="episode.id" class="pure-g episodes-row">
-        <div class="id id-column">
+      <div v-for="episode in episodes" v-bind:key="episode.id" class="pure-g form-row episodes-row">
+        <div class=" id-column">
           #<b>{{ episode.id }}</b>
         </div>
-        <div class="created">{{ dts(episode.created) }}</div>
+        <div class="created-column">{{ dts(episode.created) }}</div>
         <div class="edit">
           <Icon
             :icon="editHighlightAsset"
@@ -549,13 +550,23 @@ onMounted(async () => {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas: 'id created url delete plugin published  . ';
+  grid-template-areas:  'id                url                delete               created             published          plugin ';
+  grid-template-columns: var(--id-column)  var(--icon-column) var(--icon-column)   var(--date-column)  var(--date-column) auto    ;
+}
+
+.episodes-row {
+  grid-template-areas: 'id edit delete created title';
   grid-template-columns:
-    var(--id-column) var(--date-column) var(--icon-column) var(--icon-column) var(--date-column)
+    var(--id-column)
+    var(--icon-column)
+    var(--icon-column)
+    var(--date-column)
     auto;
+  display: grid;
 }
 
 .publications .publications-row .delete-column {
+  /*border: 1px solid red; height: 10px; width: 10px;*/
   grid-area: delete;
 }
 
@@ -579,48 +590,12 @@ onMounted(async () => {
   grid-area: url;
 }
 
-.podcast-episode-controls-row {
-}
-
-.podcast-episode-controls-row .save {
-  grid-area: save;
-}
-
-.podcast-episode-controls-row .cancel {
-  grid-area: cancel;
-}
-
-.podcast-episode-controls-row .publish-button {
-  grid-area: publish-button;
-}
-
-.podcast-episode-controls-row .publish-menu {
-  display: grid;
-  grid-area: publish;
-  grid-template-columns: min-content var(--form-buttons-gutter-space) min-content;
-  grid-template-areas: '  publish-select  . publish-button';
-}
-
 .publish-menu button {
   grid-area: publish-button;
 }
 
 .publish-menu select {
   grid-area: publish-select;
-}
-
-.episodes-row {
-  /*grid-template-rows: 100px ;*/
-
-  grid-template-areas: 'id created edit delete  title';
-  grid-template-columns:
-    var(--id-column)
-    var(--date-column)
-    var(--icon-column)
-    var(--icon-column)
-    auto;
-  display: grid;
-  margin-bottom: calc(0.5 * 1em);
 }
 
 fieldset.episodes-table {

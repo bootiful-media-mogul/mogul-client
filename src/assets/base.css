@@ -11,7 +11,7 @@
   --icon-column: calc(var(--gutter-space) * 1.5);
   --id-column: calc(var(--gutter-space) * 3);
   --footer-height: calc(var(--gutter-space) * 1.5);
-  --date-column: calc(2 * 6em);
+  --date-column: calc(11em);
   --datetime-column: calc(2 * var(--date-column));
   --icon-size: 2.5em;
   --icon-column-width: calc(var(--gutter-space) + var(--icon-width) + var(--gutter-space));

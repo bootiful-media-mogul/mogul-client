@@ -34,7 +34,7 @@
         <div class="id">
           #<b>{{ podcast.id }}</b>
         </div>
-        <div class="created">
+        <div class="created-column">
           {{ dts(podcast.created) }}
         </div>
         <div class="episodes">
@@ -83,7 +83,7 @@
   padding-left: var(--gutter-space);
 }
 
-.created {
+.created-column {
   grid-area: created;
   padding-left: var(--gutter-space);
 }

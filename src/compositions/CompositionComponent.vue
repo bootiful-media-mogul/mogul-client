@@ -16,6 +16,8 @@ import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import asset from '@/assets/images/compositions/attachments.png'
 import assetHighlight from '@/assets/images/compositions/attachments.png'
 import Icon from '@/ui/Icon.vue'
+import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
+import deleteAsset from '@/assets/images/delete.png'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
@@ -139,39 +141,47 @@ async function addCompositionAttachment(compositionId: number) {
     <template v-slot:panel>
       <div>
         <div v-for="attachment in attachments" :key="attachment.id">
-          <div draggable="true" class="draggable" @dragstart="handleDragStart($event, attachment)">
+          <div
+            draggable="true"
+            class="draggable attachment-row row "
+            @dragstart="handleDragStart($event, attachment)"
+          >
+            <Icon
+              :icon="deleteHighlightAsset"
+              :icon-hover="deleteAsset"
+              class="delete-icon"
+              @click.prevent="deleteCompositionAttachment(attachment.id)"
+            />
+
             <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
-            |
-            <a href="#" @click.prevent="deleteCompositionAttachment(attachment.id)"> - </a>
           </div>
         </div>
         <div>
-          <span class="save">
-            <button
-              class="pure-button pure-button-primary"
-              type="submit"
-              @click.prevent="addCompositionAttachment(compositionId)"
-            >
-              {{ $t('compositions.buttons.add-attachment') }}
-            </button>
-          </span>
+          <button
+            class="pure-button pure-button-primary"
+            type="submit"
+            @click.prevent="addCompositionAttachment(compositionId)"
+          >
+            {{ $t('compositions.buttons.add-attachment') }}
+          </button>
         </div>
       </div>
     </template>
   </InputWrapperChild>
 </template>
 <style>
+.attachment-row {
+  display: grid;
+  grid-template-areas: 'delete managed-file';
+  grid-template-columns: var(--icon-column) auto;
+}
+
 .draggable {
   cursor: grab;
   position: relative;
-
-  border: 1px solid orange;
-
-  /* Prevent text selection during drag */
   user-select: none;
-  /* Prevent interference from children */
-  /*pointer-events: none;*/
 }
+
 .draggable a,
 .draggable button,
 .draggable input {

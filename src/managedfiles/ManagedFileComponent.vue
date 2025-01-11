@@ -7,7 +7,7 @@
     @change="uploadFile($event)"
   />
 
-  <div class="managed-file-row">
+  <div class="managed-file-row row">
     <span class="controls">
       <slot></slot>
     </span>
@@ -61,7 +61,7 @@
     var(--icon-column)
     var(--icon-column)
     var(--icon-column)
-    8em
+    13em
     auto;
   display: grid;
 }
@@ -80,6 +80,11 @@
 
 .managed-file-row .contentType {
   grid-area: contentType;
+  font-size: small;
+  align-content: center;
+  text-align: center;
+  justify-self: center; 
+
 }
 
 .managed-file-row .written {

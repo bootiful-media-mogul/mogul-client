@@ -566,7 +566,6 @@ onMounted(async () => {
 }
 
 .publications .publications-row .delete-column {
-  /*border: 1px solid red; height: 10px; width: 10px;*/
   grid-area: delete;
 }
 

@@ -481,13 +481,11 @@ onMounted(async () => {
               {{ dts(publication.published) }}
             </div>
             <div class="delete-column">
-<!--              <a class="delete-icon" href="#" @click="unpublish(publication)"></a>-->
-
               <Icon
                 :icon="deleteHighlightAsset"
                 :icon-hover="deleteAsset"
                 class="delete-icon"
-                @click.prevent="unpublish( publication)"
+                @click.prevent="unpublish(publication)"
               />
             </div>
 
@@ -515,7 +513,7 @@ onMounted(async () => {
       </legend>
 
       <div v-for="episode in episodes" v-bind:key="episode.id" class="pure-g form-row episodes-row">
-        <div class=" id-column">
+        <div class="id-column">
           #<b>{{ episode.id }}</b>
         </div>
         <div class="created-column">{{ dts(episode.created) }}</div>
@@ -550,8 +548,10 @@ onMounted(async () => {
 
 .publications .publications-row {
   display: grid;
-  grid-template-areas:  'id                url                delete               created             published          plugin ';
-  grid-template-columns: var(--id-column)  var(--icon-column) var(--icon-column)   var(--date-column)  var(--date-column) auto    ;
+  grid-template-areas: 'id                url                delete               created             published          plugin ';
+  grid-template-columns:
+    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
+    auto;
 }
 
 .episodes-row {

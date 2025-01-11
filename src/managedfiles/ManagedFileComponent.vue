@@ -120,6 +120,7 @@
 }
 </style>
 <script lang="ts" setup>
+
 import axios from 'axios'
 import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'

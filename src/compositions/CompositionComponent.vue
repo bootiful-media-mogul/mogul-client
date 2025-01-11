@@ -4,6 +4,8 @@
 // to a composition, nominally so we can then include references to them in
 // text blocks via drag and drop.
 //
+import draggableAsset from '@/assets/images/draggable-handle.png'
+
 import { inject, onMounted, ref } from 'vue'
 import { Attachment, compositions } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
@@ -140,12 +142,22 @@ async function addCompositionAttachment(compositionId: number) {
     </template>
     <template v-slot:panel>
       <div>
+        <div class="compositions-attachments-prompt">
+          {{ $t('compositions.attachments.drag-and-drop-attachments') }}
+        </div>
         <div v-for="attachment in attachments" :key="attachment.id">
           <div
             draggable="true"
-            class="draggable attachment-row row "
+            class="draggable attachment-row"
             @dragstart="handleDragStart($event, attachment)"
           >
+            <Icon
+              :icon="draggableAsset"
+              disabled="true"
+              :icon-hover="draggableAsset"
+              class="draggable-handle"
+            />
+
             <Icon
               :icon="deleteHighlightAsset"
               :icon-hover="deleteAsset"
@@ -170,10 +182,15 @@ async function addCompositionAttachment(compositionId: number) {
   </InputWrapperChild>
 </template>
 <style>
+.compositions-attachments-prompt {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
 .attachment-row {
   display: grid;
-  grid-template-areas: 'delete managed-file';
-  grid-template-columns: var(--icon-column) auto;
+  grid-template-areas: 'draggable-handle  delete managed-file';
+  grid-template-columns: var(--icon-column) var(--icon-column) auto;
 }
 
 .draggable {
@@ -184,7 +201,16 @@ async function addCompositionAttachment(compositionId: number) {
 
 .draggable a,
 .draggable button,
-.draggable input {
+.draggable input,
+.draggable .draggable-handle {
   pointer-events: auto;
+}
+
+.draggable-handle {
+  width: 30px;
+  height: 56px;
+
+  grid-area: draggable-handle;
+  background-size: auto 100%;
 }
 </style>

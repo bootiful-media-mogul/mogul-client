@@ -84,7 +84,7 @@ This is NOT reversible! `,
     // compositions
 
     'compositions.buttons.add-attachment': 'Add Attachment',
-
+    'compositions.attachments.drag-and-drop-attachments': 'Drag one of the following attachments onto the text editor to include it.',
     // episodes
     'episodes.title': 'All episodes',
     'episodes.publications': 'Publications',

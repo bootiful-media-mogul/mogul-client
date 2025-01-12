@@ -17,6 +17,11 @@
   }
 }
 
+/* fixes #40 */ 
+.rendered-preview   img {
+  width: 100%;
+}
+
 .formatting-menu-toolbar {
   display: grid;
   grid-template-areas: ' . toolbar . ';

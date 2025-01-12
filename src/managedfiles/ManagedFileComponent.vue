@@ -55,7 +55,7 @@
 <style>
 .managed-file-row {
   /*border:1px solid yellow;*/
-  height: 2em  ;
+  height: 2em;
   grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
     min-content
@@ -66,7 +66,6 @@
     13em
     auto;
   display: grid;
-  
 }
 
 .managed-file-row .visible {
@@ -84,10 +83,8 @@
 .managed-file-row .contentType {
   grid-area: contentType;
   font-size: small;
-  
-  text-align: center;
-   
 
+  text-align: center;
 }
 
 .managed-file-row .written {
@@ -120,7 +117,6 @@
 }
 </style>
 <script lang="ts" setup>
-
 import axios from 'axios'
 import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'

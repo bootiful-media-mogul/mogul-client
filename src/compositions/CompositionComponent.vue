@@ -94,12 +94,43 @@ const handleDragOver = (e: Event) => {
   e.preventDefault()
 }
 
+// todo
+// not sure if this is the right play.
+// all this just to have the draggable handle visible on mouseover,
+// which only works on a computer with a mouse in the first place.
+// how else could this be achieved?
+const activeAttachment = ref<Attachment | null>()
+
+const handleMouseLeave = (e: Event, attachment: Attachment) => {
+  activeAttachment.value = null
+}
+
+const handleMouseEnter = (e: Event, attachment: Attachment) => {
+  activeAttachment.value = attachment
+}
+//
+
 // Make the draggable div
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
   event.dataTransfer!!.setData('text', attachment.embedding)
 
   // Create a clean clone of just this element
-  const dragEl = event.target as HTMLElement
+  let dragEl = event.target as HTMLElement
+
+  // we want to have ghost image of the attachment row, no matter which node gets picked up for dragging. so if were on an inner element, lets keep looking up
+
+  const attachmentRowClassName = 'attachment-row'
+  if (dragEl.className.indexOf(attachmentRowClassName) < 0) {
+    let parent = dragEl.parentElement
+    while (parent && parent.className.indexOf(attachmentRowClassName) < 0) {
+      parent = parent.parentElement
+    }
+    if (parent) {
+      dragEl = parent
+    }
+  }
+
+  // console.log('dragEl', dragEl.innerHTML, 'className', dragEl.className)
 
   const clone = dragEl.cloneNode(true) as HTMLElement
   clone.style.width = `${dragEl.offsetWidth}px`
@@ -130,6 +161,13 @@ async function deleteCompositionAttachment(attachmentId: number) {
   await reload()
 }
 
+function attachmentClasses(attachment: Attachment) {
+  return (
+    'draggable attachment-row ' +
+    (activeAttachment.value == attachment ? 'attachment-row-active' : '')
+  )
+}
+
 async function addCompositionAttachment(compositionId: number) {
   await compositions.createCompositionAttachment(compositionId)
   await reload()
@@ -142,22 +180,27 @@ async function addCompositionAttachment(compositionId: number) {
     </template>
     <template v-slot:panel>
       <div>
-        <div class="compositions-attachments-prompt">
+        <div v-if="attachments?.length ?? 0 > 0" class="compositions-attachments-prompt">
           {{ $t('compositions.attachments.drag-and-drop-attachments') }}
         </div>
         <div v-for="attachment in attachments" :key="attachment.id">
           <div
             draggable="true"
-            class="draggable attachment-row"
+            :class="attachmentClasses(attachment)"
             @dragstart="handleDragStart($event, attachment)"
+            @mouseenter="handleMouseEnter($event, attachment)"
+            @mouseleave="handleMouseLeave($event, attachment)"
           >
-            <Icon
-              :icon="draggableAsset"
-              disabled="true"
-              :icon-hover="draggableAsset"
-              class="draggable-handle"
-            />
-
+           
+            
+            <div class=" draggable-handle dot-grid">
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+              <div class="dot"></div>
+            </div>
             <Icon
               :icon="deleteHighlightAsset"
               :icon-hover="deleteAsset"
@@ -189,8 +232,8 @@ async function addCompositionAttachment(compositionId: number) {
 
 .attachment-row {
   display: grid;
-  grid-template-areas: 'draggable-handle  delete managed-file';
-  grid-template-columns: var(--icon-column) var(--icon-column) auto;
+  grid-template-areas: 'draggable-handle delete managed-file';
+  grid-template-columns: var(--gutter-space) var(--icon-column) auto;
 }
 
 .draggable {
@@ -208,9 +251,33 @@ async function addCompositionAttachment(compositionId: number) {
 
 .draggable-handle {
   width: 30px;
-  height: 56px;
 
   grid-area: draggable-handle;
-  background-size: auto 100%;
+  visibility: hidden;
+  background-size: 30px auto;
+}
+
+.attachment-row-active > .draggable-handle {
+  visibility: visible;
+}
+
+/* */
+.dot-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 5px); /* 2 columns, each 5px wide */
+  grid-template-rows: repeat(3, 5px); /* 3 rows, each  5px tall */
+  gap: 2px; /* Space between dots */
+  width: 12px; /* Total width: 2 columns x 15px */
+  height: 19px; /* Total height: 3 rows x 15px + gaps */
+  /*background-color: white;
+  border: 2px solid white ;*/
+}
+
+.dot {
+  width: 3px;
+  height: 3px;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0.8;
 }
 </style>

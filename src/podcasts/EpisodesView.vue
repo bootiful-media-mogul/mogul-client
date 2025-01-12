@@ -304,6 +304,7 @@ onMounted(async () => {
         <span v-else>
           {{ $t('episodes.new-episode') }}
         </span>
+        <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
       </legend>
       <!--
       todo: 
@@ -424,7 +425,8 @@ onMounted(async () => {
             <span class="save">
               <button
                 class="pure-button pure-button-primary"
-                type="submit"
+                type="submit" 
+                :disabled="draftEpisode.id === undefined"
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
               >
                 {{ $t('episodes.buttons.add-segment') }}

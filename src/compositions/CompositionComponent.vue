@@ -191,8 +191,7 @@ async function addCompositionAttachment(compositionId: number) {
             @mouseenter="handleMouseEnter($event, attachment)"
             @mouseleave="handleMouseLeave($event, attachment)"
           >
-            
-            <div class=" draggable-handle dot-grid">
+            <div class="draggable-handle dot-grid">
               <div class="dot"></div>
               <div class="dot"></div>
               <div class="dot"></div>

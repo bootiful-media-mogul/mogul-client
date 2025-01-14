@@ -17,8 +17,8 @@
   }
 }
 
-/* fixes #40 */ 
-.rendered-preview   img {
+/* fixes #40 */
+.rendered-preview img {
   width: 100%;
 }
 

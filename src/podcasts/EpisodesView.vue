@@ -425,7 +425,7 @@ onMounted(async () => {
             <span class="save">
               <button
                 class="pure-button pure-button-primary"
-                type="submit" 
+                type="submit"
                 :disabled="draftEpisode.id === undefined"
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
               >

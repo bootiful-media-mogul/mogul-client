@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { events, type TranscriptEditEvent } from '@/services'
+import { onMounted, ref, watch } from 'vue'
+import { events, Notification, notifications, type TranscriptEditEvent } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
@@ -10,6 +10,25 @@ const dirty = ref<boolean>()
 const key = ref<string>('')
 const id = ref<number>(0)
 const fresh = ref<boolean>(true)
+const busy = ref<boolean>(false)
+
+onMounted(async () => {
+  // Event Listeners
+  notifications.listenForCategory(
+    'transcript-processed-event',
+    async (notification: Notification) => {
+      const idOfThingWithTranscript = parseInt(notification.key)
+      const incoming = parseInt(idOfThingWithTranscript + '')
+      const existing = parseInt(id.value + '')
+      if (incoming === existing) {
+        transcript.value = '' + notification.context
+      }
+      busy.value = false
+      dirty.value = false
+      fresh.value = true
+    }
+  )
+})
 
 events.on('edit-transcript-event', async (event) => {
   const editEvent: TranscriptEditEvent = event as TranscriptEditEvent
@@ -36,12 +55,12 @@ const cancel = () => {
 }
 
 const refresh = () => {
-
   events.emit('transcript-refreshed-event', {
     key: key.value,
     transcript: transcript.value,
     id: id.value
   })
+  busy.value = true
   dirty.value = false
 }
 
@@ -85,21 +104,21 @@ const saveTranscript = () => {
         </InputWrapper>
       </div>
       <div>
-         <span class="refresh">
+        <span class="refresh">
           <button class="pure-button" type="submit" @click.prevent="refresh">
             {{ $t('transcripts.buttons.refresh') }}
           </button>
         </span>
         <span class="save">
           <button
-            :class="'pure-button pure-button-primary ' + ( isDirty() ? '' : 'disabled' )"
+            :class="'pure-button pure-button-primary ' + (isDirty() ? '' : 'disabled')"
             type="submit"
             @click.prevent="saveTranscript"
           >
             {{ $t('transcripts.buttons.save') }}
           </button>
         </span>
-     
+
         <span class="cancel">
           <button
             :class="'pure-button ' + (isDirty() ? '' : 'disabled')"

@@ -26,6 +26,7 @@ const translations = {
 
     // notifications
     notifications: {
+      'transcript-processed-event': 'Transcript for #{key} has been processed.',
       'podcast-episode-render-finished-event':
         'Finished producing an episode of the podcast episode #{key} ',
       'podcast-episode-render-started-event': 'Producing an episode of the podcast episode #{key}',

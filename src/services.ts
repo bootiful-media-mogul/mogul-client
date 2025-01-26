@@ -211,12 +211,23 @@ export class Podcasts {
   }
 
   // transcript
+  async refreshPodcastEpisodeSegmentTranscript (episodeSegmentId : number) : Promise <boolean> {
+    const mutation = ` 
+          mutation RefreshPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID ){ 
+            refreshPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId   )  
+          }
+    `
+    const publication = await this.client.mutation(mutation, {
+      episodeSegmentId: episodeSegmentId 
+    })
+    return (await publication.data['refreshPodcastEpisodesSegmentTranscript']) as boolean
+  }
+  
   async setPodcastEpisodesSegmentTranscript(
     episodeSegmentId: number,
     transcribable: boolean,
     transcript: string
   ): Promise<boolean> {
-    // episodeSegmentId: ID, transcribable: Boolean, transcript: String)
     const mutation = ` 
           mutation SetPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID, $transcribable: Boolean , $transcript:String ){ 
             setPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId,  transcribable: $transcribable, transcript: $transcript )  
@@ -227,7 +238,7 @@ export class Podcasts {
       transcribable: transcribable,
       transcript: transcript
     })
-    return (await publication.data['publishPodcastEpisode']) as boolean
+    return (await publication.data['setPodcastEpisodesSegmentTranscript']) as boolean
   }
 
   // transcript

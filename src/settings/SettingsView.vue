@@ -22,18 +22,23 @@
               type="password"
             />
             <span class="pure-form-message-inline">
-              <span v-if="!setting.valid"> {{ $t('labels.required-value') }}</span>
+              <span v-if="!setting.valid">{{ $t('labels.required-value') }}</span>
             </span>
           </div>
         </div>
         <div class="pure-controls">
           <button
+            v-if="settingsPage.settings.length > 0"
             class="pure-button pure-button-primary"
             type="submit"
             @click.prevent="save(settingsPage.category)"
           >
             {{ $t('settings.save-button', { plugin: $t(settingsPage.category) }) }}
           </button>
+          <div
+            v-if="settingsPage.settings.length == 0"
+            v-html="$t('settings.no-configuration-for-plugin', { plugin: $t(settingsPage.category) })">
+          </div>
         </div>
       </fieldset>
     </form>

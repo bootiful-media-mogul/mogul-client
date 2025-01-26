@@ -128,7 +128,8 @@ This is NOT reversible! `,
     'settings.github.clientSecret': 'Client Secret',
     'settings.podbean': 'Podbean',
     'settings.podbean.clientId': 'Client ID',
-    'settings.podbean.clientSecret': 'Client Secret'
+    'settings.podbean.clientSecret': 'Client Secret',
+    'settings.no-configuration-for-plugin': 'No configuration settings for <em> {plugin}</em>',
   }
 }
 

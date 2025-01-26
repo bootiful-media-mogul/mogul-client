@@ -65,13 +65,13 @@ This is NOT reversible! `,
     ok: 'OK',
     'transcripts.podcasts.episodes.segments': 'Podcast Episode Segment',
     transcripts: {
-      // 'podcasts.episodes.segments': 'Podcast Episode Segment' ,
       text: 'Transcript for {key} #{id}',
       buttons: {
         accept: 'Accept',
         revert: 'Revert',
+        refresh: 'Re-transcribe',
         cancel: 'Cancel',
-        save: 'Update Transcript'
+        save: 'Save'
       }
     },
     buttons: {

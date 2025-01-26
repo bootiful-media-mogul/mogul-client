@@ -35,6 +35,16 @@ const cancel = () => {
   dirty.value = false
 }
 
+const refresh = () => {
+
+  events.emit('transcript-refreshed-event', {
+    key: key.value,
+    transcript: transcript.value,
+    id: id.value
+  })
+  dirty.value = false
+}
+
 watch(
   () => transcript.value,
   (o: string, n: string) => {
@@ -75,16 +85,21 @@ const saveTranscript = () => {
         </InputWrapper>
       </div>
       <div>
+         <span class="refresh">
+          <button class="pure-button" type="submit" @click.prevent="refresh">
+            {{ $t('transcripts.buttons.refresh') }}
+          </button>
+        </span>
         <span class="save">
           <button
-            :class="'pure-button pure-button-primary ' + (isDirty() ? '' : 'disabled')"
+            :class="'pure-button pure-button-primary ' + ( isDirty() ? '' : 'disabled' )"
             type="submit"
             @click.prevent="saveTranscript"
           >
             {{ $t('transcripts.buttons.save') }}
           </button>
         </span>
-
+     
         <span class="cancel">
           <button
             :class="'pure-button ' + (isDirty() ? '' : 'disabled')"

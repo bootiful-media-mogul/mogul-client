@@ -129,7 +129,7 @@ This is NOT reversible! `,
     'settings.podbean': 'Podbean',
     'settings.podbean.clientId': 'Client ID',
     'settings.podbean.clientSecret': 'Client Secret',
-    'settings.no-configuration-for-plugin': 'No configuration settings for <em> {plugin}</em>',
+    'settings.no-configuration-for-plugin': 'No configuration settings for the <em>{plugin}</em> plugin',
   }
 }
 

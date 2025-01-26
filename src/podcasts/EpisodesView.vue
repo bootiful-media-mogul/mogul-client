@@ -149,12 +149,16 @@ const loadEpisode = async (episode: PodcastEpisode) => {
 
 const refreshEpisodePublicationControls = async (id: number, completed: boolean) => {
   draftEpisode.complete = completed
+  
   if (!id) {
     console.error('no episode provided in refreshEpisodePublicationControls, returning')
     return
   }
 
   const episode = await podcasts.podcastEpisodeById(id)
+  draftEpisode.availablePlugins = episode.availablePlugins  
+  
+
   if (episode) {
     await refreshPublications(episode)
     if (episode.availablePlugins?.length === 1) {

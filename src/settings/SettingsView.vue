@@ -37,8 +37,10 @@
           </button>
           <div
             v-if="settingsPage.settings.length == 0"
-            v-html="$t('settings.no-configuration-for-plugin', { plugin: $t(settingsPage.category) })">
-          </div>
+            v-html="
+              $t('settings.no-configuration-for-plugin', { plugin: $t(settingsPage.category) })
+            "
+          ></div>
         </div>
       </fieldset>
     </form>

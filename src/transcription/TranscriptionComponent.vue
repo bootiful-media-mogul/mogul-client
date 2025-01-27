@@ -30,15 +30,12 @@ onMounted(async () => {
   )
 })
 
-events.on('edit-transcript-event', async (event) => {
+events.on('transcript-edit-event', async (event) => {
   const editEvent: TranscriptEditEvent = event as TranscriptEditEvent
-
-  transcript.value = '' + editEvent.transcript
+  transcript.value = '' + (editEvent.transcript == null ? '' : editEvent.transcript)
   key.value = editEvent.key
   id.value = editEvent.id
-
   dirty.value = false
-
   events.emit('sidebar-panel-opened', el.value)
 })
 

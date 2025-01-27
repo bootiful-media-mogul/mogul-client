@@ -90,6 +90,7 @@ This is NOT reversible! `,
     // episodes
     'episodes.title': 'All episodes',
     'episodes.publications': 'Publications',
+    'episodes.publications.publishing': 'Publishing...',
     'episodes.basics': 'Basics',
     'episodes.segments': 'Segments',
     'episodes.segments.number': 'Episode segment # {id}',

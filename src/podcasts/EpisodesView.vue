@@ -47,7 +47,9 @@ events.on('transcript-refreshed-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent
   if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
   await podcasts.refreshPodcastEpisodeSegmentTranscript(updatedEvent.id)
+  await refreshEpisode(draftEpisode.id)
 })
+
 events.on('transcript-edited-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent
   if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
@@ -171,15 +173,20 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
   }
 }
 
-const editPodcastEpisodeSegmentTranscript = (seg: PodcastEpisodeSegment) => {
-  editTranscript(transcriptEventPrefix, seg.id, seg.transcript)
+async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
+  //todo make sure we have the updated, latest transcript
+  const episode = await podcasts.podcastEpisodeById(draftEpisode.id)
+  const match = episode.segments.filter((pes) => pes.id == seg.id)[0]
+  // console.debug('match is ' + JSON.stringify(match))
+  editTranscript(transcriptEventPrefix, seg.id, match.transcript)
 }
 
 const save = async () => {
   if (draftEpisode.id) {
     await podcasts.updatePodcastEpisode(draftEpisode.id, title.value, description.value)
     await loadEpisode(await podcasts.podcastEpisodeById(draftEpisode.id))
-  } else {
+  } //
+  else {
     const episode = await podcasts.createPodcastEpisodeDraft(
       parseInt(selectedPodcastId.value + ''),
       title.value,
@@ -500,7 +507,9 @@ onMounted(async () => {
             </div>
 
             <div class="url-column preview">
-              <span v-if="publication.publishing"> publishing... </span>
+              <span v-if="publication.publishing">
+                {{ $t('episodes.publications.publishing') }}
+              </span>
               <a
                 :class="
                   'mogul-icon preview-icon ' +

@@ -36,8 +36,8 @@ export interface TranscriptEditedEvent {
   readonly transcript: string
 }
 
-export function editTranscript(key: string, id: number, text: string) {
-  events.emit('edit-transcript-event', {
+export function editTranscript(key: string, id: number, text: string   ) {
+  events.emit('transcript-edit-event', {
     key: key,
     transcript: text,
     id: id

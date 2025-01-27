@@ -211,18 +211,18 @@ export class Podcasts {
   }
 
   // transcript
-  async refreshPodcastEpisodeSegmentTranscript (episodeSegmentId : number) : Promise <boolean> {
+  async refreshPodcastEpisodeSegmentTranscript(episodeSegmentId: number): Promise<boolean> {
     const mutation = ` 
           mutation RefreshPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID ){ 
             refreshPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId   )  
           }
     `
     const publication = await this.client.mutation(mutation, {
-      episodeSegmentId: episodeSegmentId 
+      episodeSegmentId: episodeSegmentId
     })
     return (await publication.data['refreshPodcastEpisodesSegmentTranscript']) as boolean
   }
-  
+
   async setPodcastEpisodesSegmentTranscript(
     episodeSegmentId: number,
     transcribable: boolean,

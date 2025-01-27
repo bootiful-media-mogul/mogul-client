@@ -46,7 +46,7 @@ const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
 events.on('transcript-refreshed-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent
   if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
-  await podcasts.refreshPodcastEpisodeSegmentTranscript(updatedEvent.id )
+  await podcasts.refreshPodcastEpisodeSegmentTranscript(updatedEvent.id)
 })
 events.on('transcript-edited-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent

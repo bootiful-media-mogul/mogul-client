@@ -99,9 +99,7 @@ const saveTranscript = () => {
         </label>
 
         <InputWrapper v-model="transcript">
-          <textarea id="transcript" v-model="transcript"  
-                    :disabled ="busy"
-                    required rows="10" />
+          <textarea id="transcript" v-model="transcript" :disabled="busy" required rows="10" />
           <InputTools v-model="transcript" />
         </InputWrapper>
       </div>

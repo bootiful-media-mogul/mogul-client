@@ -63,7 +63,7 @@ const loadEpisode = async (e: PodcastEpisode) => {
   console.log('going to load', e)
   episode.value = e
   editorVisible.value = true
-  title.value = t('podcasts.episodes.editing', {
+  title.value = t('podcasts.episodes.episode.editing', {
     id: e.id,
     title: e.title
   })

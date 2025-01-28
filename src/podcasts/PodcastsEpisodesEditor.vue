@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import {
   Composition,
   editTranscript,
@@ -47,7 +47,7 @@ events.on('transcript-refreshed-event', async (event) => {
   const updatedEvent = event as TranscriptEditedEvent
   if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
   await podcasts.refreshPodcastEpisodeSegmentTranscript(updatedEvent.id)
-  await refreshEpisode(draftEpisode.id)
+  await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
 })
 
 events.on('transcript-edited-event', async (event) => {
@@ -63,19 +63,28 @@ const props = defineProps<{
 }>()
 
 // State
-const draftEpisodeSegments = ref<PodcastEpisodeSegment[]>([])
+const segments = ref<PodcastEpisodeSegment[]>([])
 const selectedPlugin = ref('')
 const created = ref(-1)
-const draftEpisode = reactive<PodcastEpisode>({} as PodcastEpisode)
+const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
 const episodes = ref<PodcastEpisode[]>([])
-const currentPodcast = ref<Podcast>()
 const publications = ref<Publication[]>([])
-const selectedPodcastId = ref<number>(props.podcastId)
 
-onMounted( async () => {
+const podcast = ref<Podcast>()
+const podcastId = ref<number>(props.podcastId)
 
-  currentPodcast.value = await podcasts.podcastById(selectedPodcastId.value)
-  
+onMounted(async () => {
+  podcast.value = await podcasts.podcastById(podcastId.value)
+  // now we decide whether we're editing a draft episode, or if we're being asked to edit a record in the DB.
+  if (props.episode) {
+    if (props.episode.id) {
+      // draftEpisode.value = await podcasts.podcastEpisodeById(podcastId.value) // then we're being asked to edit something in the db
+      await loadEpisodeFromDbIntoEditor(props.episode.id)
+    } //
+    else {
+      draftEpisode.value = props.episode // we're being asked to edit a draft.
+    }
+  }
 })
 
 // title
@@ -90,12 +99,12 @@ const dirtyKey = ref('')
 
 // Computed
 const publishButtonDisabled = computed(() => {
-  return !draftEpisode.complete || !selectedPlugin.value || selectedPlugin.value === ''
+  return !draftEpisode.value.complete || !selectedPlugin.value || selectedPlugin.value === ''
 })
 
 const buttonsDisabled = computed(() => {
   let changed = false
-  if (!draftEpisode.id) {
+  if (!draftEpisode.value.id) {
     const hasData = description.value.trim() !== '' && title.value.trim() !== ''
     if (hasData) {
       changed = true
@@ -106,28 +115,26 @@ const buttonsDisabled = computed(() => {
   return !changed
 })
 
-const refreshEpisode = async (episodeId: number) => {
-  if (!episodeId) {
-    console.error('the episode you gave to refresh is not valid ' + episodeId + '!')
-    return
-  }
+const loadEpisodeFromDbIntoEditor = async (episodeId: number): Promise<PodcastEpisode> => {
+  console.log('going to load podcast episode ', episodeId, 'from the db.')
   const ep = await podcasts.podcastEpisodeById(episodeId)
-  await loadEpisode(ep)
-}
 
+  await loadEpisodeIntoEditor(ep)
+  return ep
+}
 // Methods
 const dts = (date: number): string | null => {
   return dateTimeToString(date)
 }
 
 const computeDirtyKey = (): string => {
-  return `${draftEpisode.id ? draftEpisode.id : ''}${description.value}:${title.value}`
+  return `${draftEpisode.value.id ? draftEpisode.value.id : ''}${description.value}:${title.value}`
 }
 
 const loadEpisodeSegments = async (episode: PodcastEpisode) => {
   const ep = await podcasts.podcastEpisodeById(episode.id)
   if (ep?.segments?.length > 0) {
-    draftEpisodeSegments.value = ep.segments
+    segments.value = ep.segments
   }
 }
 
@@ -141,20 +148,20 @@ const refreshPublications = async (episode: PodcastEpisode) => {
   }
 }
 
-const loadEpisode = async (episode: PodcastEpisode) => {
+const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   Object.assign(draftEpisode, episode)
+  dirtyKey.value = computeDirtyKey()
   description.value = episode.description
   title.value = episode.title
   created.value = episode.created
-  dirtyKey.value = computeDirtyKey()
-  draftEpisodeSegments.value = episode.segments
+  segments.value = episode.segments
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
-  await refreshEpisodePublicationControls(episode.id, draftEpisode.complete)
+  await refreshEpisodePublicationControls(episode.id, draftEpisode.value.complete)
 }
 
 const refreshEpisodePublicationControls = async (id: number, completed: boolean) => {
-  draftEpisode.complete = completed
+  draftEpisode.value.complete = completed
 
   if (!id) {
     console.error('no episode provided in refreshEpisodePublicationControls, returning')
@@ -162,7 +169,7 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
   }
 
   const episode = await podcasts.podcastEpisodeById(id)
-  draftEpisode.availablePlugins = episode.availablePlugins
+  draftEpisode.value.availablePlugins = episode.availablePlugins
 
   if (episode) {
     await refreshPublications(episode)
@@ -175,23 +182,23 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
 
 async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
   //todo make sure we have the updated, latest transcript
-  const episode = await podcasts.podcastEpisodeById(draftEpisode.id)
+  const episode = await podcasts.podcastEpisodeById(draftEpisode.value.id)
   const match = episode.segments.filter((pes) => pes.id == seg.id)[0]
   editTranscript(transcriptEventPrefix, seg.id, match.transcript)
 }
 
 const save = async () => {
-  if (draftEpisode.id) {
-    await podcasts.updatePodcastEpisode(draftEpisode.id, title.value, description.value)
-    await loadEpisode(await podcasts.podcastEpisodeById(draftEpisode.id))
+  if (draftEpisode.value.id) {
+    await podcasts.updatePodcastEpisode(draftEpisode.value.id, title.value, description.value)
+    await loadEpisodeIntoEditor(await podcasts.podcastEpisodeById(draftEpisode.value.id))
   } //
   else {
     const episode = await podcasts.createPodcastEpisodeDraft(
-      parseInt(selectedPodcastId.value + ''),
+      parseInt(podcastId.value + ''),
       title.value,
       description.value
     )
-    await loadEpisode(await podcasts.podcastEpisodeById(episode.id))
+    await loadEpisodeIntoEditor(await podcasts.podcastEpisodeById(episode.id))
   }
 }
 
@@ -199,7 +206,7 @@ const cancel = async () => {
   Object.assign(draftEpisode, {} as PodcastEpisode)
   title.value = ''
   description.value = ''
-  draftEpisodeSegments.value = []
+  segments.value = []
   publications.value = []
 }
 
@@ -228,13 +235,13 @@ const deletePodcastEpisodeSegment = async (
   const msg = t('confirm.deletion', { title: segmentDetails })
   if (!utils.confirmDeletion(msg)) return
 
-  draftEpisode.complete = false
+  draftEpisode.value.complete = false
   await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
   await loadEpisodeSegments(episode)
 }
 
 const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
-  draftEpisode.complete = false
+  draftEpisode.value.complete = false
   await podcasts.addPodcastEpisodeSegment(episode.id)
   await loadEpisodeSegments(episode)
 }
@@ -242,7 +249,7 @@ const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
 // Publication Methods
 const publish = async (e: Event) => {
   e.preventDefault()
-  await podcasts.publishPodcastEpisode(draftEpisode.id, selectedPlugin.value)
+  await podcasts.publishPodcastEpisode(draftEpisode.value.id, selectedPlugin.value)
 }
 
 const pluginSelected = async (e: Event) => {
@@ -265,12 +272,12 @@ const unpublish = async (publication: Publication) => {
 }
 
 // Arrow Classes
-const downArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
-  return draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
+const downArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
+  return segments.value[segments.value.length - 1].id === segment.id
 }
 
-const upArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
-  return draftEpisodeSegments.value?.[0]?.id === segment.id
+const upArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
+  return segments.value?.[0]?.id === segment.id
 }
 
 // Lifecycle Hooks
@@ -288,14 +295,14 @@ onMounted(async () => {
     }
   )
 
-  notifications.listenForCategory('publication-completed-event', async (_: Notification) => {
-    await refreshEpisode(draftEpisode.id)
+  notifications.listenForCategory('publication-completed-event', async () => {
+    await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
   })
 
   notifications.listenForCategory(
     'publication-started-event',
     async (notification: Notification) => {
-      await refreshEpisode(draftEpisode.id)
+      await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
       publications.value
         .filter((pub) => pub.id === parseInt(notification.key))
         .forEach((p) => {
@@ -306,21 +313,19 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <h1 v-if="currentPodcast">
-    {{ $t('podcasts.episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
-  </h1>
+ 
 
   <form class="pure-form pure-form-stacked">
-    <fieldset>
-      <legend>
+    <fieldset>  
+<!--      <legend>
         <span v-if="title">
-          {{ $t('podcasts.episodes.editing-episode', { id: draftEpisode.id, title: title }) }}
+          {{ $t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
         </span>
         <span v-else>
           {{ $t('podcasts.episodes.new-episode') }}
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
-      </legend>
+      </legend>-->
       <!--
       todo: 
         create an icon for the podcast thing
@@ -366,7 +371,6 @@ onMounted(async () => {
           >
             {{ $t('podcasts.episodes.buttons.save') }}
           </button>
-
           <button
             :disabled="description == '' && title == ''"
             class="pure-button pure-button-primary"
@@ -396,11 +400,12 @@ onMounted(async () => {
             </div>
           </div>
 
-          <div v-for="segment in draftEpisodeSegments" v-bind:key="segment.id">
+          <div v-for="segment in segments" v-bind:key="segment.id">
             <div class="pure-g episode-managed-file-row">
               <div class="pure-u-3-24">
                 <label>
-                  {{ $t('episodes.episode.segments.number', { order: segment.order }) }}
+                  
+                  {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
                 </label>
               </div>
               <div class="pure-u-21-24">
@@ -540,7 +545,7 @@ onMounted(async () => {
           <Icon
             :icon="editHighlightAsset"
             :icon-hover="editAsset"
-            @click.prevent="refreshEpisode(episode.id)"
+            @click.prevent="loadEpisodeFromDbIntoEditor(episode.id)"
           />
         </div>
         <div class="delete">
@@ -557,9 +562,6 @@ onMounted(async () => {
 </template>
 
 <style>
-.episode-actions {
-}
-
 /* publications */
 .publications {
   margin-top: var(--gutter-space);

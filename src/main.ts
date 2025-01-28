@@ -105,7 +105,7 @@ This is NOT reversible! `,
     'podcasts.episodes.buttons.add-segment': 'Add a New Segment',
     'podcasts.episodes.episode.reference': 'the episode titled: {title}',
     'podcasts.episodes.all': "{title}'s episodes",
-    'podcasts.episodes.editing': 'Editing episode #{id} - "{title}"',
+    'podcasts.episodes.episode.editing': 'Editing episode #{id} - "{title}"',
     'podcasts.episodes.buttons.save': 'Save',
     'podcasts.episodes.episode.description.ai-prompt':
       'Please help me make this podcast episode description fun and pithy.',

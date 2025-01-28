@@ -68,9 +68,15 @@ const selectedPlugin = ref('')
 const created = ref(-1)
 const draftEpisode = reactive<PodcastEpisode>({} as PodcastEpisode)
 const episodes = ref<PodcastEpisode[]>([])
-const publications = ref<Publication[]>([])
 const currentPodcast = ref<Podcast>()
-const selectedPodcastId = ref<number>()
+const publications = ref<Publication[]>([])
+const selectedPodcastId = ref<number>(props.podcastId)
+
+onMounted( async () => {
+
+  currentPodcast.value = await podcasts.podcastById(selectedPodcastId.value)
+  
+})
 
 // title
 const title = ref('')
@@ -244,7 +250,9 @@ const pluginSelected = async (e: Event) => {
 }
 
 const deletePodcastEpisode = async (episode: PodcastEpisode) => {
-  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', { title: episode.title })
+  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', {
+    title: episode.title
+  })
   const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
   if (!utils.confirmDeletion(msg)) return
 
@@ -299,7 +307,7 @@ onMounted(async () => {
 </script>
 <template>
   <h1 v-if="currentPodcast">
-    {{ $t('episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
+    {{ $t('podcasts.episodes.episodes', { id: currentPodcast.id, title: currentPodcast.title }) }}
   </h1>
 
   <form class="pure-form pure-form-stacked">

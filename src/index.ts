@@ -5,6 +5,7 @@ import PodcastsSearchView from '@/podcasts/PodcastsSearchView.vue'
 import SettingsView from '@/settings/SettingsView.vue'
 import About from '@/About.vue'
 import PodcastsEpisodesSearchView from '@/podcasts/PodcastsEpisodesSearchView.vue'
+import BlogsSearchView from '@/blogs/BlogsSearchView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +19,11 @@ const router = createRouter({
       path: '/podcasts',
       name: 'podcasts',
       component: PodcastsSearchView
+    },
+    {
+      path: '/blogs',
+      name: 'blogs',
+      component: BlogsSearchView
     },
 
     {

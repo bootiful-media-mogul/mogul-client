@@ -43,7 +43,7 @@
             href="#"
             @click="navigateToEpisodesPageForPodcast(podcast.id, $event)"
           >
-            {{ $t('podcasts.podcasts.episodes') }}
+            {{ $t('podcasts.episodes') }}
           </a>
         </div>
         <div class="rss">
@@ -62,7 +62,7 @@
           />
         </div>
         <div class="podcast-title">
-          {{ podcast.title }}
+            {{ podcast.title }} 
         </div>
       </div>
     </fieldset>
@@ -153,7 +153,7 @@ const deletePodcast = async (podcast: Podcast) => {
 const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
-    name: 'podcast-episodes',
+    name: 'podcasts/episodes',
     params: { id: podcastId }
   })
 }

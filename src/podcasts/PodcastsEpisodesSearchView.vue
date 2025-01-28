@@ -48,15 +48,13 @@ onMounted(async () => {
 const title = ref<string>('')
 
 const loadPodcast = async () => {
-  
   const newPodcastId = parseInt(selectedPodcastId.value + '')
   currentPodcast.value = await podcasts.podcastById(newPodcastId)
-  
+
   const podcastEpisodes = await podcasts.podcastEpisodes(newPodcastId)
-  
-  if (podcastEpisodes)
-    podcastEpisodes.sort((a, b) => b.created - a.created)
-  
+
+  if (podcastEpisodes) podcastEpisodes.sort((a, b) => b.created - a.created)
+
   episodes.value = podcastEpisodes
   title.value = t('podcasts.episodes.all', {
     id: currentPodcast.value.id,
@@ -65,24 +63,21 @@ const loadPodcast = async () => {
 }
 
 const loadEpisode = async (e: PodcastEpisode) => {
-  console.log('going to load', e)
   episode.value = e
   editorVisible.value = true
-  title.value = t('podcasts.episodes.episode.editing', {
-    id: e.id,
-    title: e.title
-  })
+  title.value = t('podcasts.episodes')
 }
+
 </script>
 <template>
-  <h1 v-if="currentPodcast">
-    {{ title }}
+  <h1>
+ {{ t('podcasts.episodes') }}
   </h1>
   <div v-if="!editorVisible">
     <form class="pure-form">
       <fieldset class="episodes-table">
         <legend>
-          {{ $t('podcasts.episodes.title') }}
+          {{ $t('podcasts.episodes.title' , { title:  currentPodcast?.title }) }}
         </legend>
 
         <div

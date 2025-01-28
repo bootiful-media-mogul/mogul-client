@@ -32,8 +32,8 @@ const router = createRouter({
     },
 
     {
-      path: '/podcast-episodes/:id',
-      name: 'podcast-episodes',
+      path: '/podcasts/:id/episodes',
+      name: 'podcasts/episodes',
       component: PodcastsEpisodesSearchView,
       props: true
     },

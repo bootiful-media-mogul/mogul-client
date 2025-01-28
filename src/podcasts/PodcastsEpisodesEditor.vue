@@ -317,7 +317,7 @@ onMounted(async () => {
 
   <form class="pure-form pure-form-stacked">
     <fieldset>  
-<!--      <legend>
+  <legend>
         <span v-if="title">
           {{ $t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
         </span>
@@ -325,7 +325,7 @@ onMounted(async () => {
           {{ $t('podcasts.episodes.new-episode') }}
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
-      </legend>-->
+      </legend> 
       <!--
       todo: 
         create an icon for the podcast thing
@@ -530,35 +530,7 @@ onMounted(async () => {
     </fieldset>
   </form>
 
-  <form class="pure-form">
-    <fieldset class="episodes-table">
-      <legend>
-        {{ $t('podcasts.episodes.title') }}
-      </legend>
 
-      <div v-for="episode in episodes" v-bind:key="episode.id" class="pure-g form-row episodes-row">
-        <div class="id-column">
-          #<b>{{ episode.id }}</b>
-        </div>
-        <div class="created-column">{{ dts(episode.created) }}</div>
-        <div class="edit">
-          <Icon
-            :icon="editHighlightAsset"
-            :icon-hover="editAsset"
-            @click.prevent="loadEpisodeFromDbIntoEditor(episode.id)"
-          />
-        </div>
-        <div class="delete">
-          <Icon
-            :icon="deleteHighlightAsset"
-            :icon-hover="deleteAsset"
-            @click.prevent="deletePodcastEpisode(episode)"
-          />
-        </div>
-        <div class="title">{{ episode.title }}</div>
-      </div>
-    </fieldset>
-  </form>
 </template>
 
 <style>

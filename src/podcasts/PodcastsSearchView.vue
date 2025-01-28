@@ -158,7 +158,6 @@ const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: E
 
 const podcastRssFeedUrl = (podcast: Podcast): string => {
   const api = import.meta.env.VITE_API_URL
-
   return (
     api + '/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
   )

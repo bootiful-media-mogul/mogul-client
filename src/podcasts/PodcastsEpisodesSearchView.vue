@@ -67,18 +67,24 @@ const loadEpisode = async (e: PodcastEpisode) => {
   editorVisible.value = true
   title.value = t('podcasts.episodes')
 }
-
 </script>
 <template>
   <h1>
- {{ t('podcasts.episodes') }}
+    {{ t('podcasts.episodes') }}
   </h1>
+
+
   <div v-if="!editorVisible">
     <form class="pure-form">
       <fieldset class="episodes-table">
+        
+     
         <legend>
-          {{ $t('podcasts.episodes.title' , { title:  currentPodcast?.title }) }}
+          {{ $t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
+        
         </legend>
+        <div class="toolbar"><a href="">new episode</a> | <a href="#">search</a> | <a href="#">analytics</a> </div>
+
 
         <div
           v-for="episode in episodes"

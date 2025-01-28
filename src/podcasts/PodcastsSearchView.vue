@@ -46,6 +46,13 @@
             {{ $t('podcasts.episodes') }}
           </a>
         </div>
+        <div class="edit">
+          <Icon
+            :icon="editHighlightAsset"
+            :icon-hover="editAsset"
+            @click.prevent="editPodcast(podcast)"
+          />
+        </div>
         <div class="rss">
           <Icon
             :icon="rssHighlightAsset"
@@ -62,7 +69,7 @@
           />
         </div>
         <div class="podcast-title">
-            {{ podcast.title }} 
+          {{ podcast.title }}
         </div>
       </div>
     </fieldset>
@@ -104,13 +111,16 @@
 
 .podcast-rows {
   display: grid;
-  grid-template-areas: 'id delete rss episodes   created  podcast-title';
+  grid-template-areas: 'id  edit delete rss episodes   created  podcast-title';
   grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%)
+    var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%)
     auto;
 }
 </style>
 <script lang="ts" setup>
+import editHighlightAsset from '@/assets/images/edit-highlight.png'
+import editAsset from '@/assets/images/edit.png'
+
 import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
@@ -175,7 +185,9 @@ const createPodcast = async function (e: Event) {
   all.value = await refresh()
   title.value = ''
 }
-
+const editPodcast = async (podcast: Podcast) => {
+  console.log('going to edit the podcast ', podcast.title, '/', podcast.id)
+}
 onMounted(async () => {
   mogulId.value = (await mogul.user()).id
   all.value = await refresh()

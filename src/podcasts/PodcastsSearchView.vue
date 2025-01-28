@@ -143,11 +143,13 @@ const dts = function (date: number) {
 
 const deletePodcast = async (podcast: Podcast) => {
   const msg = t('confirm.deletion', { title: podcast.title })
+
   if (!utils.confirmDeletion(msg)) return
 
   const deleted = await podcasts.deletePodcast(podcast.id)
   all.value = all.value.filter((p) => p.id != deleted)
 }
+
 const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
   e.preventDefault()
   await router.push({
@@ -173,6 +175,7 @@ const createPodcast = async function (e: Event) {
   all.value = await refresh()
   title.value = ''
 }
+
 onMounted(async () => {
   mogulId.value = (await mogul.user()).id
   all.value = await refresh()

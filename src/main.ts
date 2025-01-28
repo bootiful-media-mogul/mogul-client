@@ -88,7 +88,7 @@ This is NOT reversible! `,
     'compositions.attachments.drag-and-drop-attachments':
       'Drag one of the attachments onto the text editor to include it inline.',
     // episodes
-    
+
     'podcasts.episodes.title': 'All episodes',
     'podcasts.episodes.publications': 'Publications',
     'podcasts.episodes.publications.publishing': 'Publishing...',
@@ -104,7 +104,7 @@ This is NOT reversible! `,
     'podcasts.episodes.episode.graphic': 'Graphic',
     'podcasts.episodes.buttons.add-segment': 'Add a New Segment',
     'podcasts.episodes.episode.reference': 'the episode titled: {title}',
-    'podcasts.episodes.all': '{title}\'s episodes',
+    'podcasts.episodes.all': "{title}'s episodes",
     'podcasts.episodes.editing': 'Editing episode #{id} - "{title}"',
     'podcasts.episodes.buttons.save': 'Save',
     'podcasts.episodes.episode.description.ai-prompt':

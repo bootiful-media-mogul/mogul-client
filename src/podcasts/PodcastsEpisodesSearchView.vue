@@ -14,6 +14,7 @@ import editAsset from '@/assets/images/edit.png'
 
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
+import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
 
 const { t } = useI18n()
 
@@ -22,7 +23,7 @@ const props = defineProps<{ id: number | string }>()
 const episodes = ref<PodcastEpisode[]>([])
 const currentPodcast = ref<Podcast>()
 const editorVisible = ref(false)
-const selectedPodcastId = ref(props.id)
+const selectedPodcastId = ref(parseInt(props.id + ''))
 const episode = ref<PodcastEpisode | null>()
 
 function dts(date: number): string | null {
@@ -107,7 +108,9 @@ const loadEpisode = async (e: PodcastEpisode) => {
       </fieldset>
     </form>
   </div>
-  <div v-else>loading the episode {{ episode?.id }}</div>
+  <div v-else>
+    <PodcastsEpisodesEditor :podcast-id="selectedPodcastId" :episode="episode!!" />
+  </div>
 </template>
 
 <style>

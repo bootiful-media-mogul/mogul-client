@@ -57,7 +57,10 @@ events.on('transcript-edited-event', async (event) => {
 })
 
 // Props
-const props = defineProps<{ id: number | string }>()
+const props = defineProps<{
+  podcastId: number
+  episode: PodcastEpisode
+}>()
 
 // State
 const draftEpisodeSegments = ref<PodcastEpisodeSegment[]>([])
@@ -67,7 +70,7 @@ const draftEpisode = reactive<PodcastEpisode>({} as PodcastEpisode)
 const episodes = ref<PodcastEpisode[]>([])
 const publications = ref<Publication[]>([])
 const currentPodcast = ref<Podcast>()
-const selectedPodcastId = ref(props.id)
+const selectedPodcastId = ref<number>()
 
 // title
 const title = ref('')
@@ -115,16 +118,6 @@ const computeDirtyKey = (): string => {
   return `${draftEpisode.id ? draftEpisode.id : ''}${description.value}:${title.value}`
 }
 
-const loadPodcast = async () => {
-  const newPodcastId = parseInt(selectedPodcastId.value + '')
-  currentPodcast.value = await podcasts.podcastById(newPodcastId)
-  const podcastEpisodes = await podcasts.podcastEpisodes(newPodcastId)
-  if (podcastEpisodes) {
-    podcastEpisodes.sort((a, b) => b.created - a.created)
-  }
-  episodes.value = podcastEpisodes
-}
-
 const loadEpisodeSegments = async (episode: PodcastEpisode) => {
   const ep = await podcasts.podcastEpisodeById(episode.id)
   if (ep?.segments?.length > 0) {
@@ -169,6 +162,7 @@ const refreshEpisodePublicationControls = async (id: number, completed: boolean)
     await refreshPublications(episode)
     if (episode.availablePlugins?.length === 1) {
       selectedPlugin.value = episode.availablePlugins[0]
+      selectedPlugin.value = episode.availablePlugins[0]
     }
   }
 }
@@ -177,7 +171,6 @@ async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
   //todo make sure we have the updated, latest transcript
   const episode = await podcasts.podcastEpisodeById(draftEpisode.id)
   const match = episode.segments.filter((pes) => pes.id == seg.id)[0]
-  // console.debug('match is ' + JSON.stringify(match))
   editTranscript(transcriptEventPrefix, seg.id, match.transcript)
 }
 
@@ -202,7 +195,6 @@ const cancel = async () => {
   description.value = ''
   draftEpisodeSegments.value = []
   publications.value = []
-  await loadPodcast()
 }
 
 // Segment Methods
@@ -252,7 +244,7 @@ const pluginSelected = async (e: Event) => {
 }
 
 const deletePodcastEpisode = async (episode: PodcastEpisode) => {
-  const podcastEpisodeDescription = t('episodes.episode.reference', { title: episode.title })
+  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', { title: episode.title })
   const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
   if (!utils.confirmDeletion(msg)) return
 
@@ -268,13 +260,13 @@ const unpublish = async (publication: Publication) => {
 const downArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
   return draftEpisodeSegments.value[draftEpisodeSegments.value.length - 1].id === segment.id
 }
+
 const upArrowDisabled = (pid: PodcastEpisode, segment: PodcastEpisodeSegment) => {
   return draftEpisodeSegments.value?.[0]?.id === segment.id
 }
 
 // Lifecycle Hooks
 onMounted(async () => {
-  await loadPodcast()
   dirtyKey.value = computeDirtyKey()
 
   // Event Listeners
@@ -314,10 +306,10 @@ onMounted(async () => {
     <fieldset>
       <legend>
         <span v-if="title">
-          {{ $t('episodes.editing-episode', { id: draftEpisode.id, title: title }) }}
+          {{ $t('podcasts.episodes.editing-episode', { id: draftEpisode.id, title: title }) }}
         </span>
         <span v-else>
-          {{ $t('episodes.new-episode') }}
+          {{ $t('podcasts.episodes.new-episode') }}
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
       </legend>
@@ -334,10 +326,10 @@ onMounted(async () => {
       -->
 
       <div class="form-section">
-        <div class="form-section-title">{{ $t('episodes.basics') }}</div>
+        <div class="form-section-title">{{ $t('podcasts.episodes.basics') }}</div>
         <div class="form-row">
           <label for="episodeTitle">
-            {{ $t('episodes.episode.title') }}
+            {{ $t('podcasts.episodes.episode.title') }}
           </label>
           <InputWrapper v-model="title">
             <input id="episodeTitle" v-model="title" required type="text" />
@@ -346,7 +338,7 @@ onMounted(async () => {
         </div>
         <div class="form-row">
           <label for="episodeDescription">
-            {{ $t('episodes.episode.description') }}
+            {{ $t('podcasts.episodes.episode.description') }}
           </label>
           <InputWrapper v-model="description">
             <textarea id="episodeDescription" v-model="description" required rows="10" />
@@ -364,7 +356,7 @@ onMounted(async () => {
             type="submit"
             @click.prevent="save"
           >
-            {{ $t('episodes.buttons.save') }}
+            {{ $t('podcasts.episodes.buttons.save') }}
           </button>
 
           <button
@@ -373,18 +365,18 @@ onMounted(async () => {
             type="submit"
             @click="cancel"
           >
-            {{ $t('episodes.buttons.cancel') }}
+            {{ $t('podcasts.episodes.buttons.cancel') }}
           </button>
         </div>
       </div>
 
       <div class="form-section">
-        <div class="form-section-title">{{ $t('episodes.segments') }}</div>
+        <div class="form-section-title">{{ $t('podcasts.episodes.segments') }}</div>
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
             <div class="pure-u-3-24">
-              <label>{{ $t('episodes.episode.graphic') }}</label>
+              <label>{{ $t('podcasts.episodes.episode.graphic') }}</label>
             </div>
             <div class="pure-u-21-24">
               <ManagedFileComponent
@@ -444,13 +436,13 @@ onMounted(async () => {
                 :disabled="draftEpisode.id === undefined"
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
               >
-                {{ $t('episodes.buttons.add-segment') }}
+                {{ $t('podcasts.episodes.buttons.add-segment') }}
               </button>
             </span>
           </div>
         </div>
 
-        <div class="form-section-title">{{ $t('episodes.publications') }}</div>
+        <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
 
         <div class="publish-menu">
           <select
@@ -459,7 +451,7 @@ onMounted(async () => {
             @change="pluginSelected"
           >
             <option disabled value="">
-              {{ $t('episodes.plugins.please-select-a-plugin') }}
+              {{ $t('podcasts.episodes.plugins.please-select-a-plugin') }}
             </option>
 
             <option
@@ -478,7 +470,7 @@ onMounted(async () => {
             type="submit"
             @click="publish"
           >
-            {{ $t('episodes.buttons.publish') }}
+            {{ $t('podcasts.episodes.buttons.publish') }}
           </button>
         </div>
         <div class="publications">
@@ -508,7 +500,7 @@ onMounted(async () => {
 
             <div class="url-column preview">
               <span v-if="publication.publishing">
-                {{ $t('episodes.publications.publishing') }}
+                {{ $t('podcasts.episodes.publications.publishing') }}
               </span>
               <a
                 :class="
@@ -528,7 +520,7 @@ onMounted(async () => {
   <form class="pure-form">
     <fieldset class="episodes-table">
       <legend>
-        {{ $t('episodes.title') }}
+        {{ $t('podcasts.episodes.title') }}
       </legend>
 
       <div v-for="episode in episodes" v-bind:key="episode.id" class="pure-g form-row episodes-row">

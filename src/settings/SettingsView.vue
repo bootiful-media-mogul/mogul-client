@@ -11,7 +11,7 @@
             <label :for="textAreaElementId(settingsPage.category, setting.name)">
               {{ $t('settings.' + settingsPage.category + '.' + setting.name) }}
               <PrivatePasswordInputComponent
-                :prompt="$t('episodes.episode.description.ai-prompt')"
+                :prompt="$t('podcasts.episodes.episode.description.ai-prompt')"
               />
             </label>
             <input

@@ -112,7 +112,7 @@ import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 
 import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
-import { onMounted, ref } from 'vue'
+import { onActivated, onBeforeUnmount, onMounted, onRenderTriggered, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Icon from '@/ui/Icon.vue'
 
@@ -185,11 +185,6 @@ async function editPodcast(podcast: Podcast) {
   editorVisible.value = true
 }
 
-onBeforeRouteUpdate((to, from) => {
-  // Called when the route that renders this component has changed
-  editorVisible.value = false
-})
-
 onMounted(async () => {
   const user = await mogul.user()
   mogulName.value = user.givenName + ' ' + user.familyName
@@ -197,4 +192,6 @@ onMounted(async () => {
   editorVisible.value = false
   await refresh()
 })
+
+
 </script>

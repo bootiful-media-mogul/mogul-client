@@ -33,7 +33,7 @@ onMounted(async () => {
       </div>
 
       <div class="view">
-        <router-view></router-view>
+        <router-view :key="$route.fullPath"></router-view>
       </div>
 
       <div class="toolbar navigable-section">
@@ -41,7 +41,15 @@ onMounted(async () => {
         |
         <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
         |
-        <router-link to="/podcasts">{{ $t('app.menu.podcasts') }}</router-link>
+        <router-link
+          :to="{
+            path: '/podcasts',
+            query: {
+              when: Date.now()
+            }
+          }"
+          >{{ $t('app.menu.podcasts') }}
+        </router-link>
         |
         <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>
         |

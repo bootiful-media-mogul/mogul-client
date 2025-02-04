@@ -223,7 +223,7 @@ const deletePodcastEpisodeSegment = async (
   episode: PodcastEpisode,
   episodeSegment: PodcastEpisodeSegment
 ) => {
-  const segmentDetails = t('episodes.segments.number', { id: episodeSegment.order })
+  const segmentDetails = t('podcasts.episodes.segments.number', { id: episodeSegment.order })
   const msg = t('confirm.deletion', { title: segmentDetails })
   if (!utils.confirmDeletion(msg)) return
 

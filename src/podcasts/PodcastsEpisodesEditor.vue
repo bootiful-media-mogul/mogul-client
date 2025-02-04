@@ -142,7 +142,7 @@ const refreshPublications = async (episode: PodcastEpisode) => {
 }
 
 const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
-  Object.assign(draftEpisode, episode)
+  Object.assign(draftEpisode.value, episode)
   dirtyKey.value = computeDirtyKey()
   description.value = episode.description
   title.value = episode.title
@@ -150,8 +150,6 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   segments.value = episode.segments
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
-  draftEpisode.value.complete = episode.complete 
-  if (episode.id) draftEpisode.value.id = episode.id
   await refreshEpisodePublicationControls(episode.id, draftEpisode.value.complete)
 }
 

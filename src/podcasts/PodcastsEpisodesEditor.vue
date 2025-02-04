@@ -307,7 +307,7 @@ onMounted(async () => {
       </legend>
 
       <div class="toolbar">
-         <a href="#">export as audio</a> | 
+        <a href="#">export as audio</a> |
         <a href="#">export as blog</a>
       </div>
 

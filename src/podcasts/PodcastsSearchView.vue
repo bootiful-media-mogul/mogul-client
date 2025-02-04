@@ -175,7 +175,7 @@ function openRssFeed(podcastId: number, url: string) {
 }
 
 async function createPodcast() {
-  const p = await podcasts.create (  title.value)
+  const p = await podcasts.create(title.value)
   await editPodcast(p)
 }
 

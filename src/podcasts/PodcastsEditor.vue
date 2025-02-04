@@ -1,7 +1,9 @@
 <template>
   <form class="pure-form pure-form-stacked">
     <fieldset>
-      <legend>{{ $t('podcasts.new-podcast') }}</legend>
+      <legend>
+        {{ $t('podcasts.editing', { podcast: title }) }}
+      </legend>
       <div class="pure-control-group">
         <label for="title">
           {{ $t('podcasts.new-podcast.title') }}
@@ -14,7 +16,7 @@
       </div>
       <div class="pure-controls">
         <button
-          :disabled="title == null || title.trim().length == 0"
+          :disabled="updateDisabled()"
           class="pure-button pure-button-primary"
           type="submit"
           value="create"
@@ -42,6 +44,12 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
+function computeDirtyKey() {
+  return title.value + ''
+}
+
+const dirtyKey = ref<string>('')
+
 const title = ref<string>('')
 
 const mogulId = ref<number>(0)
@@ -51,14 +59,19 @@ const props = defineProps<{
 }>()
 
 const updatePodcast = async function (e: Event) {
-  console.log('update podcast', props.podcast.id,  title.value)
+  console.log('update podcast', props.podcast.id, title.value)
   const podcast = await podcasts.update(props.podcast.id, title.value)
   title.value = podcast.title
+}
+
+function updateDisabled() {
+  return computeDirtyKey() === dirtyKey.value || (title.value + '').trim() === ''
 }
 
 onMounted(async () => {
   mogulId.value = (await mogul.user()).id
   const podcast = await podcasts.podcastById(props.podcast.id)
   title.value = podcast.title
+  dirtyKey.value = computeDirtyKey()
 })
 </script>

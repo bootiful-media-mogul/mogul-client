@@ -124,6 +124,7 @@ This is NOT reversible! `,
     'podcasts.new-podcast.title': 'Title',
     'podcasts.title.ai.prompt': `Please help me take the following podcast title and make it more pithy and exciting!`,
     'podcasts.save': 'Save',
+    'podcasts.editing': 'Editing {podcast}',
     'podcasts.podcasts.delete': 'Delete',
 
     // settings

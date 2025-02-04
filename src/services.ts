@@ -152,15 +152,13 @@ export class Podcasts {
                   managedFile {  id }
                 }                
               }
-              
-              
           }
         }
         `
     const res = await this.client.query(q, { id: id })
     return (await res.data['podcastEpisodeById']) as PodcastEpisode
   }
-  
+
   async update(podcastId: number, title: string): Promise<Podcast> {
     const mutation = `
          mutation UpdatePodcast( $podcastId:  ID, $title: String){ 

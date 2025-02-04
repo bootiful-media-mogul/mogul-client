@@ -425,7 +425,6 @@ onMounted(async () => {
         <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
 
         <div class="publish-menu">
-          
           <select
             v-model="selectedPlugin"
             :disabled="!draftEpisode.complete"

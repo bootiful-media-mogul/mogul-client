@@ -67,6 +67,15 @@ const loadEpisode = async (e: PodcastEpisode) => {
   editorVisible.value = true
   title.value = t('podcasts.episodes')
 }
+
+async function newEpisode() {
+  // todo call create draft episode
+  episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
+  editorVisible .value = true
+  title.value = t('podcasts.episodes')
+  console.log('new episode created ', episode.value)
+
+}
 </script>
 <template>
   <h1>
@@ -80,7 +89,8 @@ const loadEpisode = async (e: PodcastEpisode) => {
           {{ $t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
         </legend>
         <div class="toolbar">
-          <a href="">new episode</a> | <a href="#">search</a> | <a href="#">analytics</a>
+          <a @click.prevent="newEpisode()">new episode</a> | <a href="#">search</a> |
+          <a href="#">analytics</a>
         </div>
 
         <div

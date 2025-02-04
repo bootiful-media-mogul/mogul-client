@@ -208,7 +208,6 @@ const cancel = async () => {
   await loadPodcast()
 }
 
-
 // Segment Methods
 const movePodcastEpisodeSegmentDown = async (
   episode: PodcastEpisode,

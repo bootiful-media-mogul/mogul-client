@@ -89,7 +89,7 @@ This is NOT reversible! `,
       'Drag one of the attachments onto the text editor to include it inline.',
     // episodes
 
-    'podcasts.episodes': 'Podcast Episodes',
+    'podcasts.episodes': 'Episodes',
     'podcasts.episodes.title': 'Searching in "{title}"',
     'podcasts.episodes.publications': 'Publications',
     'podcasts.episodes.publications.publishing': 'Publishing...',

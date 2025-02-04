@@ -133,7 +133,6 @@ const loadEpisodeSegments = async (episode: PodcastEpisode) => {
 
 const refreshPublications = async (episode: PodcastEpisode) => {
   if (episode.publications?.length > 0) {
-    console.debug('there are ' + episode.publications.length + ' publications.')
     publications.value = episode.publications.sort((a, b) => b.created - a.created)
     episode.publications = publications.value
   } else {
@@ -143,13 +142,13 @@ const refreshPublications = async (episode: PodcastEpisode) => {
 
 const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   Object.assign(draftEpisode.value, episode)
-  dirtyKey.value = computeDirtyKey()
   description.value = episode.description
   title.value = episode.title
   created.value = episode.created
   segments.value = episode.segments
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
+  dirtyKey.value = computeDirtyKey()
   await refreshEpisodePublicationControls(episode.id, draftEpisode.value.complete)
 }
 

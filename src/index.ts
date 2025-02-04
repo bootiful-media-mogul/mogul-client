@@ -17,7 +17,7 @@ const router = createRouter({
     {
       path: '/podcasts',
       name: 'podcasts',
-      component: PodcastsSearchView 
+      component: PodcastsSearchView
     },
     {
       path: '/blogs',

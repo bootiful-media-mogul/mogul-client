@@ -192,6 +192,4 @@ onMounted(async () => {
   editorVisible.value = false
   await refresh()
 })
-
-
 </script>

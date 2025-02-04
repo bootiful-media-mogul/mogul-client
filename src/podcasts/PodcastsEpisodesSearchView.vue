@@ -73,7 +73,6 @@ async function newEpisode() {
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
   editorVisible .value = true
   title.value = t('podcasts.episodes')
-  console.log('new episode created ', episode.value)
 
 }
 </script>

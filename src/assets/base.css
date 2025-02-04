@@ -128,10 +128,10 @@ html {
 
 .delete-icon {
   /*  background: url('../assets/images/delete-highlight.png');
-      height: var(--icon-width);
-      display: inline-block;
-      width: var(--icon-width);
-      background-size: var(--icon-width) var(--icon-width);*/
+        height: var(--icon-width);
+        display: inline-block;
+        width: var(--icon-width);
+        background-size: var(--icon-width) var(--icon-width);*/
 }
 
 /*
@@ -197,10 +197,10 @@ html {
 
 .edit-icon {
   /*  background: url('../assets/images/edit-highlight.png');
-      height: var(--icon-width);
-      display: inline-block;
-      width: var(--icon-width);
-      background-size: var(--icon-width) var(--icon-width);*/
+        height: var(--icon-width);
+        display: inline-block;
+        width: var(--icon-width);
+        background-size: var(--icon-width) var(--icon-width);*/
 }
 
 .close-icon {
@@ -311,7 +311,8 @@ textarea {
 
 .toolbar {
   grid-area: toolbar;
-  padding-bottom: var(--gutter-space);
+  padding-top: calc(var(--gutter-space) / 2);
+  padding-bottom: calc(var(--gutter-space) / 2);
 }
 
 .view {

@@ -90,7 +90,7 @@ This is NOT reversible! `,
     // episodes
 
     'podcasts.episodes': 'Episodes',
-    'podcasts.episodes.title': 'Searching in "{title}"',
+    'podcasts.episodes.title': 'Episodes in "{title}"',
     'podcasts.episodes.publications': 'Publications',
     'podcasts.episodes.publications.publishing': 'Publishing...',
     'podcasts.episodes.basics': 'Basics',

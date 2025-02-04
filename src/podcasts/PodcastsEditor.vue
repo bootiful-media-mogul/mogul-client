@@ -1,9 +1,35 @@
 <template>
-  <h1>
-    {{ $t('podcasts.title') }}
-  </h1>
+  <h1>{{ $t('podcasts.title') }}</h1>
+  <form class="pure-form pure-form-stacked">
+    <fieldset>
+      <legend>{{ $t('podcasts.new-podcast') }}</legend>
+      <div class="pure-control-group">
+        <label for="title">
+          {{ $t('podcasts.new-podcast.title') }}
+        </label>
+
+        <InputWrapper v-model="title">
+          <input id="title" v-model="title" required type="text" />
+          <InputTools v-model="title" />
+        </InputWrapper>
+      </div>
+      <div class="pure-controls">
+        <button
+          :disabled="title == null || title.trim().length == 0"
+          class="pure-button pure-button-primary"
+          type="submit"
+          value="create"
+          @click="createPodcast"
+        >
+          {{ $t('podcasts.new-podcast.submit') }}
+        </button>
+      </div>
+    </fieldset>
+  </form>
   <form class="pure-form">
     <fieldset>
+      <legend>Podcasts</legend>
+
       <div v-for="podcast in all" v-bind:key="podcast.id" class="pure-g form-row podcast-rows">
         <div class="id">
           #<b>{{ podcast.id }}</b>

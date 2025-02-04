@@ -23,9 +23,6 @@ import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import Icon from '@/ui/Icon.vue'
 
-import editHighlightAsset from '@/assets/images/edit-highlight.png'
-import editAsset from '@/assets/images/edit.png'
-
 import downHighlightAsset from '@/assets/images/down-highlight.png'
 import downAsset from '@/assets/images/down.png'
 
@@ -67,7 +64,6 @@ const segments = ref<PodcastEpisodeSegment[]>([])
 const selectedPlugin = ref('')
 const created = ref(-1)
 const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
-const episodes = ref<PodcastEpisode[]>([])
 const publications = ref<Publication[]>([])
 
 const podcast = ref<Podcast>()
@@ -78,7 +74,6 @@ onMounted(async () => {
   // now we decide whether we're editing a draft episode, or if we're being asked to edit a record in the DB.
   if (props.episode) {
     if (props.episode.id) {
-      // draftEpisode.value = await podcasts.podcastEpisodeById(podcastId.value) // then we're being asked to edit something in the db
       await loadEpisodeFromDbIntoEditor(props.episode.id)
     } //
     else {
@@ -116,9 +111,7 @@ const buttonsDisabled = computed(() => {
 })
 
 const loadEpisodeFromDbIntoEditor = async (episodeId: number): Promise<PodcastEpisode> => {
-  console.log('going to load podcast episode ', episodeId, 'from the db.')
   const ep = await podcasts.podcastEpisodeById(episodeId)
-
   await loadEpisodeIntoEditor(ep)
   return ep
 }
@@ -157,6 +150,8 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   segments.value = episode.segments
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
+  draftEpisode.value.complete = episode.complete 
+  if (episode.id) draftEpisode.value.id = episode.id
   await refreshEpisodePublicationControls(episode.id, draftEpisode.value.complete)
 }
 
@@ -256,17 +251,6 @@ const pluginSelected = async (e: Event) => {
   e.preventDefault()
 }
 
-const deletePodcastEpisode = async (episode: PodcastEpisode) => {
-  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', {
-    title: episode.title
-  })
-  const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
-  if (!utils.confirmDeletion(msg)) return
-
-  await podcasts.deletePodcastEpisode(episode.id)
-  await cancel()
-}
-
 const unpublish = async (publication: Publication) => {
   await podcasts.unpublish(publication)
 }
@@ -313,11 +297,9 @@ onMounted(async () => {
 })
 </script>
 <template>
- 
-
   <form class="pure-form pure-form-stacked">
-    <fieldset>  
-  <legend>
+    <fieldset>
+      <legend>
         <span v-if="title">
           {{ $t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
         </span>
@@ -325,18 +307,7 @@ onMounted(async () => {
           {{ $t('podcasts.episodes.new-episode') }}
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
-      </legend> 
-      <!--
-      todo: 
-        create an icon for the podcast thing
-        build out the podcast subsystem
-        show the icon as disabled (instead of hiding it outright) if its not possible to publish a podcast
-      
-      <div v-if="draftEpisode.id" class="episode-actions subject-actions">
-        <a href="#">blog</a> |
-        <a href="#">analyse</a>
-      </div>
-      -->
+      </legend>
 
       <div class="form-section">
         <div class="form-section-title">{{ $t('podcasts.episodes.basics') }}</div>
@@ -356,8 +327,8 @@ onMounted(async () => {
           <InputWrapper v-model="description">
             <textarea id="episodeDescription" v-model="description" required rows="10" />
             <CompositionComponent
-              v-if="draftEpisode.descriptionComposition"
-              :composition-id="parseInt(draftEpisode.descriptionComposition.id + '')"
+              v-if="descriptionComposition"
+              :composition-id="parseInt(descriptionComposition.id + '')"
             />
             <InputTools v-model="description" />
           </InputWrapper>
@@ -404,7 +375,6 @@ onMounted(async () => {
             <div class="pure-g episode-managed-file-row">
               <div class="pure-u-3-24">
                 <label>
-                  
                   {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
                 </label>
               </div>
@@ -458,6 +428,7 @@ onMounted(async () => {
         <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
 
         <div class="publish-menu">
+          
           <select
             v-model="selectedPlugin"
             :disabled="!draftEpisode.complete"
@@ -529,8 +500,6 @@ onMounted(async () => {
       </div>
     </fieldset>
   </form>
-
-
 </template>
 
 <style>

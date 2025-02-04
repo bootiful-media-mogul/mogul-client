@@ -113,7 +113,9 @@
   display: grid;
   grid-template-areas: 'id  edit delete rss episodes   created  podcast-title';
   grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(100%)
+    var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(
+      100%
+    )
     auto;
 }
 </style>

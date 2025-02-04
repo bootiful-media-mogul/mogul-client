@@ -31,7 +31,9 @@ function dts(date: number): string | null {
 }
 
 const deletePodcastEpisode = async (episode: PodcastEpisode) => {
-  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', { title: episode.title })
+  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', {
+    title: episode.title
+  })
   const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
 
   if (!utils.confirmDeletion(msg)) return
@@ -71,9 +73,8 @@ const loadEpisode = async (e: PodcastEpisode) => {
 async function newEpisode() {
   // todo call create draft episode
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
-  editorVisible .value = true
+  editorVisible.value = true
   title.value = t('podcasts.episodes')
-
 }
 </script>
 <template>
@@ -83,11 +84,7 @@ async function newEpisode() {
 
   <div v-if="!editorVisible">
     <form class="pure-form">
-  
       <fieldset class="episodes-table">
-
-  
-
         <legend>
           {{ $t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
         </legend>

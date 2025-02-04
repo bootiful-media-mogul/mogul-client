@@ -101,7 +101,6 @@ export class Podcasts {
           }
          }
         `
-    //console.debug(episodeId + ':' + title + ':' + description)
     const result = await this.client.mutation(mutation, {
       episode: episodeId,
       title: title,
@@ -109,7 +108,6 @@ export class Podcasts {
     })
 
     const res = await result.data['updatePodcastEpisode']
-    // console.debug('updated results: ', res)
     return await this.podcastEpisodeById(res['id'])
   }
 
@@ -161,6 +159,21 @@ export class Podcasts {
         `
     const res = await this.client.query(q, { id: id })
     return (await res.data['podcastEpisodeById']) as PodcastEpisode
+  }
+  
+  async update(podcastId: number, title: string): Promise<Podcast> {
+    const mutation = `
+         mutation UpdatePodcast( $podcastId:  ID, $title: String){ 
+          updatePodcast(podcastId: $podcastId , title: $title) { 
+           id, title
+          }
+         }
+    `
+    const result = await this.client.mutation(mutation, {
+      podcastId: podcastId,
+      title: title
+    })
+    return (await result.data['updatePodcast']) as Podcast
   }
 
   async create(title: string): Promise<Podcast> {

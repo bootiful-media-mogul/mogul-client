@@ -1,5 +1,4 @@
 <template>
-  <h1>{{ $t('podcasts.title') }}</h1>
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>{{ $t('podcasts.new-podcast') }}</legend>
@@ -19,179 +18,47 @@
           class="pure-button pure-button-primary"
           type="submit"
           value="create"
-          @click="createPodcast"
+          @click.prevent="updatePodcast"
         >
-          {{ $t('podcasts.new-podcast.submit') }}
+          {{ $t('podcasts.save') }}
         </button>
-      </div>
-    </fieldset>
-  </form>
-  <form class="pure-form">
-    <fieldset>
-      <legend>Podcasts</legend>
-
-      <div v-for="podcast in all" v-bind:key="podcast.id" class="pure-g form-row podcast-rows">
-        <div class="id">
-          #<b>{{ podcast.id }}</b>
-        </div>
-        <div class="created-column">
-          {{ dts(podcast.created) }}
-        </div>
-        <div class="episodes">
-          <a
-            class="podcasts-icon"
-            href="#"
-            @click="navigateToEpisodesPageForPodcast(podcast.id, $event)"
-          >
-            {{ $t('podcasts.episodes') }}
-          </a>
-        </div>
-        <div class="edit">
-          <Icon
-            :icon="editHighlightAsset"
-            :icon-hover="editAsset"
-            @click.prevent="editPodcast(podcast)"
-          />
-        </div>
-        <div class="rss">
-          <Icon
-            :icon="rssHighlightAsset"
-            :icon-hover="rssAsset"
-            @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
-          />
-        </div>
-        <div class="delete">
-          <Icon
-            :disabled="all.length == 1"
-            :icon="deleteHighlightAsset"
-            :icon-hover="deleteAsset"
-            @click.prevent="deletePodcast(podcast)"
-          />
-        </div>
-        <div class="podcast-title">
-          {{ podcast.title }}
-        </div>
       </div>
     </fieldset>
   </form>
 </template>
 
 <style>
-.id {
-  font-weight: normal;
-}
-
-.rss {
-  grid-area: rss;
-}
-
-.episodes {
-  grid-area: episodes;
-  padding-left: var(--gutter-space);
-}
-
-.created-column {
-  grid-area: created;
-  padding-left: var(--gutter-space);
-}
-
 .id b {
   font-weight: bold;
   font-size: medium;
 }
-
-.delete {
-  grid-area: delete;
-}
-
-.podcast-title {
-  grid-area: podcast-title;
-  padding-left: var(--gutter-space);
-}
-
-.podcast-rows {
-  display: grid;
-  grid-template-areas: 'id  edit delete rss episodes   created  podcast-title';
-  grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(
-      100%
-    )
-    auto;
-}
 </style>
 <script lang="ts" setup>
-import editHighlightAsset from '@/assets/images/edit-highlight.png'
-import editAsset from '@/assets/images/edit.png'
-
-import { mogul, Podcast, podcasts, utils } from '@/services'
-import { dateTimeToString } from '@/dates'
+import { mogul, Podcast, podcasts } from '@/services'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import Icon from '@/ui/Icon.vue'
-
-import rssHighlightAsset from '@/assets/images/rss-highlight.png'
-import rssAsset from '@/assets/images/rss.png'
-
-import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
-import deleteAsset from '@/assets/images/delete.png'
 
 const { t } = useI18n()
 
-const router = useRouter()
 const title = ref<string>('')
-const all = ref<Array<Podcast>>([])
+
 const mogulId = ref<number>(0)
 
-const refresh = async function () {
-  return await podcasts.podcasts()
+const props = defineProps<{
+  podcast: Podcast
+}>()
+
+const updatePodcast = async function (e: Event) {
+  console.log('update podcast', props.podcast.id,  title.value)
+  const podcast = await podcasts.update(props.podcast.id, title.value)
+  title.value = podcast.title
 }
 
-const dts = function (date: number) {
-  return dateTimeToString(date)
-}
-
-const deletePodcast = async (podcast: Podcast) => {
-  const msg = t('confirm.deletion', { title: podcast.title })
-
-  if (!utils.confirmDeletion(msg)) return
-
-  const deleted = await podcasts.deletePodcast(podcast.id)
-  all.value = all.value.filter((p) => p.id != deleted)
-}
-
-const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
-  e.preventDefault()
-  await router.push({
-    name: 'podcasts/episodes',
-    params: { id: podcastId }
-  })
-}
-
-const podcastRssFeedUrl = (podcast: Podcast): string => {
-  const api = import.meta.env.VITE_API_URL
-  return (
-    api + '/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
-  )
-}
-
-const openRssFeed = async function (podcastId: number, url: string) {
-  window.open(url, 'rssWindowForPodcastNo' + podcastId)
-}
-
-const createPodcast = async function (e: Event) {
-  e.preventDefault()
-  await podcasts.create(title.value)
-  all.value = await refresh()
-  title.value = ''
-}
-const editPodcast = async (podcast: Podcast) => {
-  console.log('going to edit the podcast ', podcast.title, '/', podcast.id)
-}
 onMounted(async () => {
   mogulId.value = (await mogul.user()).id
-  all.value = await refresh()
+  const podcast = await podcasts.podcastById(props.podcast.id)
+  title.value = podcast.title
 })
 </script>

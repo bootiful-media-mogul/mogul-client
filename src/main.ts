@@ -119,12 +119,12 @@ This is NOT reversible! `,
 
     // podcasts
     'podcasts.title': 'Podcasts',
+    'podcasts.all': "{user}'s podcasts",
     'podcasts.new-podcast': 'New Podcast',
     'podcasts.new-podcast.title': 'Title',
     'podcasts.title.ai.prompt': `Please help me take the following podcast title and make it more pithy and exciting!`,
-    'podcasts.new-podcast.submit': 'Create a new podcast',
+    'podcasts.save': 'Save',
     'podcasts.podcasts.delete': 'Delete',
-    'podcasts.podcasts.episodes': 'Episodes',
 
     // settings
     'settings.title': 'Settings',

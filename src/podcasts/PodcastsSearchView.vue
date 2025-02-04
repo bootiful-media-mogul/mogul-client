@@ -2,52 +2,64 @@
   <h1>
     {{ $t('podcasts.title') }}
   </h1>
-  <form class="pure-form">
-    <fieldset>
-      <div v-for="podcast in all" v-bind:key="podcast.id" class="pure-g form-row podcast-rows">
-        <div class="id">
-          #<b>{{ podcast.id }}</b>
+
+  <div v-if="!editorVisible">
+    <form class="pure-form">
+      <fieldset>
+        <div class="toolbar">
+          <a @click.prevent="createPodcast">new podcast</a>
         </div>
-        <div class="created-column">
-          {{ dts(podcast.created) }}
+
+        <legend>{{ $t('podcasts.all', { user: mogulName }) }}</legend>
+
+        <div v-for="podcast in all" v-bind:key="podcast.id" class="pure-g form-row podcast-rows">
+          <div class="id">
+            #<b>{{ podcast.id }}</b>
+          </div>
+          <div class="created-column">
+            {{ dts(podcast.created) }}
+          </div>
+          <div class="episodes">
+            <a
+              class="podcasts-icon"
+              href="#"
+              @click.prevent="navigateToEpisodesPageForPodcast(podcast.id, $event)"
+            >
+              {{ $t('podcasts.episodes') }}
+            </a>
+          </div>
+          <div class="edit">
+            <Icon
+              :icon="editHighlightAsset"
+              :icon-hover="editAsset"
+              @click.prevent="editPodcast(podcast)"
+            />
+          </div>
+          <div class="rss">
+            <Icon
+              :icon="rssHighlightAsset"
+              :icon-hover="rssAsset"
+              @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
+            />
+          </div>
+          <div class="delete">
+            <Icon
+              :disabled="all.length == 1"
+              :icon="deleteHighlightAsset"
+              :icon-hover="deleteAsset"
+              @click.prevent="deletePodcast(podcast)"
+            />
+          </div>
+          <div class="podcast-title">
+            {{ podcast.title }}
+          </div>
         </div>
-        <div class="episodes">
-          <a
-            class="podcasts-icon"
-            href="#"
-            @click="navigateToEpisodesPageForPodcast(podcast.id, $event)"
-          >
-            {{ $t('podcasts.episodes') }}
-          </a>
-        </div>
-        <div class="edit">
-          <Icon
-            :icon="editHighlightAsset"
-            :icon-hover="editAsset"
-            @click.prevent="editPodcast(podcast)"
-          />
-        </div>
-        <div class="rss">
-          <Icon
-            :icon="rssHighlightAsset"
-            :icon-hover="rssAsset"
-            @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
-          />
-        </div>
-        <div class="delete">
-          <Icon
-            :disabled="all.length == 1"
-            :icon="deleteHighlightAsset"
-            :icon-hover="deleteAsset"
-            @click.prevent="deletePodcast(podcast)"
-          />
-        </div>
-        <div class="podcast-title">
-          {{ podcast.title }}
-        </div>
-      </div>
-    </fieldset>
-  </form>
+      </fieldset>
+    </form>
+  </div>
+  <div v-else>
+    <PodcastsEditor :podcast-id="draftPodcast!.id" :podcast="draftPodcast!" />
+  </div>
 </template>
 
 <style>
@@ -96,13 +108,11 @@
 <script lang="ts" setup>
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import editAsset from '@/assets/images/edit.png'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
 
 import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
-import InputWrapper from '@/ui/input/InputWrapper.vue'
-import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import Icon from '@/ui/Icon.vue'
 
@@ -111,61 +121,80 @@ import rssAsset from '@/assets/images/rss.png'
 
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
+import PodcastsEditor from '@/podcasts/PodcastsEditor.vue'
 
 const { t } = useI18n()
 
 const router = useRouter()
 const title = ref<string>('')
 const all = ref<Array<Podcast>>([])
-const mogulId = ref<number>(0)
 
-const refresh = async function () {
-  return await podcasts.podcasts()
+const draftPodcast = ref<Podcast>()
+
+const editorVisible = ref(false)
+
+//
+const mogulId = ref<number>(0)
+const mogulName = ref<string>('')
+
+async function refresh() {
+  all.value = await podcasts.podcasts()
 }
 
-const dts = function (date: number) {
+function dts(date: number) {
   return dateTimeToString(date)
 }
 
-const deletePodcast = async (podcast: Podcast) => {
+async function deletePodcast(podcast: Podcast) {
   const msg = t('confirm.deletion', { title: podcast.title })
 
-  if (!utils.confirmDeletion(msg)) return
+  if (!utils.confirmDeletion(msg)) {
+    return
+  }
 
-  const deleted = await podcasts.deletePodcast(podcast.id)
-  all.value = all.value.filter((p) => p.id != deleted)
+  await podcasts.deletePodcast(podcast.id)
+  await refresh()
 }
 
-const navigateToEpisodesPageForPodcast = async function (podcastId: number, e: Event) {
-  e.preventDefault()
+async function navigateToEpisodesPageForPodcast(podcastId: number, e: Event) {
   await router.push({
     name: 'podcasts/episodes',
     params: { id: podcastId }
   })
 }
 
-const podcastRssFeedUrl = (podcast: Podcast): string => {
+function podcastRssFeedUrl(podcast: Podcast) {
   const api = import.meta.env.VITE_API_URL
   return (
     api + '/public/feeds/moguls/' + mogulId.value + '/podcasts/' + podcast.id + '/episodes.atom'
   )
 }
 
-const openRssFeed = async function (podcastId: number, url: string) {
+function openRssFeed(podcastId: number, url: string) {
   window.open(url, 'rssWindowForPodcastNo' + podcastId)
 }
 
-const createPodcast = async function (e: Event) {
-  e.preventDefault()
-  await podcasts.create(title.value)
-  all.value = await refresh()
-  title.value = ''
+async function createPodcast() {
+  const p = await podcasts.create (  title.value)
+  await editPodcast(p)
 }
-const editPodcast = async (podcast: Podcast) => {
-  console.log('going to edit the podcast ', podcast.title, '/', podcast.id)
+
+async function editPodcast(podcast: Podcast) {
+  draftPodcast.value = podcast
+  title.value = podcast.title
+  editorVisible.value = true
 }
+
+onBeforeRouteUpdate((to, from) => {
+  // Called when the route that renders this component has changed
+  editorVisible.value = false
+})
+
 onMounted(async () => {
-  mogulId.value = (await mogul.user()).id
-  all.value = await refresh()
+  const user = await mogul.user()
+  mogulName.value = user.givenName + ' ' + user.familyName
+  mogulId.value = user.id
+  editorVisible.value = false
+  await refresh()
 })
 </script>

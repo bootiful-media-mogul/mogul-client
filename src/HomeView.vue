@@ -1,8 +1,10 @@
 <template>
   <h1>Home</h1>
   <p>Here is your activity feed...</p> 
-  <PublicationsView/>
+  
+  <Publications :plugins=" [ 'podbean', 'mock', 'podcast-episode-blog-post', 'podcast-episode-audio-file' ] " />
+  
 </template>
 <script setup lang="ts">
-import PublicationsView from '@/podcasts/publications/PublicationsView.vue'
+import Publications from '@/podcasts/publications/Publications.vue'
 </script>

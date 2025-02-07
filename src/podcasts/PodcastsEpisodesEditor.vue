@@ -583,6 +583,5 @@ div.segment-controls {
   grid-template-areas: 'up down delete transcript ';
   grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
-
  
 </style>

@@ -100,6 +100,7 @@ events.on('preview-managed-file-event', async (event) => {
 })
 
 onMounted(async () => {
+
   await load()
 })
 

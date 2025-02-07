@@ -360,10 +360,9 @@ onMounted(async () => {
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
-            <div class="pure-u-3-24">
-              <label>{{ $t('podcasts.episodes.episode.graphic') }}</label>
-            </div>
-            <div class="pure-u-21-24">
+            <div class="segment-controls-type">{{ $t('podcasts.episodes.episode.graphic') }}</div>
+
+            <div class="segment-controls-row">
               <ManagedFileComponent
                 :managed-file-id="draftEpisode.graphic.id"
                 accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
@@ -375,12 +374,10 @@ onMounted(async () => {
 
           <div v-for="segment in segments" v-bind:key="segment.id">
             <div class="pure-g episode-managed-file-row">
-              <div class="pure-u-3-24">
-                <label>
-                  {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
-                </label>
+              <div class="segment-controls-type">
+                {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
               </div>
-              <div class="pure-u-21-24">
+              <div class="segment-controls-row">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
                   <div class="segment-controls">
                     <Icon
@@ -564,9 +561,21 @@ fieldset.episodes-table {
   padding-bottom: calc(var(--footer-height) * 1);
 }
 
-.episode-managed-file-row label {
+.episode-managed-file-row {
+  display: grid;
+  grid-template-areas: 'type controls';
+  grid-template-columns: 100px auto;
+}
+
+.episode-managed-file-row .segment-controls-type {
+  grid-area: type;
+  font-size: smaller;
+  margin-right: var(--gutter-space);
   text-align: right;
-  padding-right: var(--gutter-space);
+}
+
+.episode-managed-file-row .segment-controls-row {
+  grid-area: controls;
 }
 
 div.segment-controls {
@@ -574,4 +583,6 @@ div.segment-controls {
   grid-template-areas: 'up down delete transcript ';
   grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
+
+ 
 </style>

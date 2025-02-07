@@ -63,6 +63,7 @@
   padding: var(--gutter-space);
   margin: 0;
 }
+
 .publication-panel-selected {
   border-top-left-radius: 0;
 }

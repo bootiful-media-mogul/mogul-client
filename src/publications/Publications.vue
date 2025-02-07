@@ -7,16 +7,17 @@
 
   <div class="toolbar">
     <div v-for="(slot, index) in childSlots" :key="index">
-      <component :is="slot.icon" />
+      <Icon :width="200" :icon="slot.icon.icon" :icon-hover="slot.icon.iconHover" />
+      {{ slot.icon.iconHover }}
       <component :is="slot.panel" />
     </div>
   </div>
 </template>
 <style scoped>
-.toolbar {
-}
 </style>
 <script lang="ts" setup>
+import Icon from '@/ui/Icon.vue'
+
 const childSlots = ref<Array<PanelSlot>>([])
 
 import { onMounted, provide, ref } from 'vue'
@@ -30,5 +31,8 @@ const registerChild = (slotPair: PanelSlot) => {
 // provide for nested components
 provide('registerPublicationPanel', registerChild)
 
-onMounted(() => {})
+onMounted(() => {
+  
+  
+})
 </script>

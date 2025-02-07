@@ -6,9 +6,11 @@ interface Props {
   readonly icon: string
   readonly disabled?: boolean | string
   readonly sticky?: boolean | string
+  readonly width?: number 
 }
 
 const props = defineProps<Props>()
+const element  = ref<HTMLImageElement>()
 const src = ref<string>()
 
 const swap = function () {
@@ -22,6 +24,7 @@ const mouseSwap = function () {
 const emit = defineEmits<{
   (e: 'click', me: MouseEvent): void
 }>()
+
 const clickDelegate = (e: MouseEvent): void => {
   if (props.sticky) swap()
 
@@ -29,6 +32,7 @@ const clickDelegate = (e: MouseEvent): void => {
 }
 onMounted(() => {
   src.value = props.icon
+  element.value!!.style.width = props.width + 'px'
 })
 </script>
 <style scoped>
@@ -46,6 +50,7 @@ img.icon-disabled {
 </style>
 <template>
   <img
+    ref="element"
     v-if="disabled"
     :alt="'an image - ' + src"
     :src="src"
@@ -53,6 +58,7 @@ img.icon-disabled {
   />
   <img
     v-else
+    ref="element"
     :alt="'an image - ' + src"
     :src="src"
     class="icon"

@@ -4,20 +4,20 @@
 // things like contributing an icon, a control panel, and handling the all-important 'publish' button.
 
 import { inject, onMounted, useSlots } from 'vue'
-import type {   RegisterChildFunction } from '@/publications/input'
+import type { RegisterChildFunction } from '@/publications/input'
 
 const slots = useSlots()
 
-const props = defineProps <{ plugin: string }>()
+const props = defineProps<{ plugin: string; icon?: string; iconHover?: string }>()
 
 const registerChild = inject<RegisterChildFunction>('registerPublicationPanel')!
-onMounted( ()=>{
 
-  if (slots.icon && slots.panel) {
+onMounted(() => {
+  if (  slots.panel ) {
     registerChild({
-      icon: slots.icon,
+      icon: { icon: props.icon!, iconHover: props.iconHover! },
       panel: slots.panel,
-      selected: false ,
+      selected: false,
       plugin: props.plugin
     })
   }

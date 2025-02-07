@@ -4,7 +4,8 @@
     <template v-slot:icon>
        [transcript] 
     </template>
-  </PublicationPanel></template>
+  </PublicationPanel>
+</template>
 <script setup lang="ts">
 import PublicationPanel from '@/publications/PublicationPanel.vue'
 </script>

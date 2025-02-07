@@ -50,7 +50,7 @@
   top: 10% ;
   left: 10% ;
   right: 10%;
-  
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   z-index: 100;
   border-radius: var(--radius);
 

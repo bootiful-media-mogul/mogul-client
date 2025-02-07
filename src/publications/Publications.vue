@@ -7,14 +7,26 @@
 
   <div class="toolbar">
     <div v-for="(slot, index) in childSlots" :key="index">
-      <Icon :width="200" :icon="slot.icon.icon" :icon-hover="slot.icon.iconHover" />
-      {{ slot.icon.iconHover }}
-      <component :is="slot.panel" />
+      <div class="toolbar-icon">
+        <Icon :width="50" :icon="slot.icon.icon" :icon-hover="slot.icon.iconHover" />
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
+.toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50px);
+  gap: calc(var(--gutter-space) / 3);
+  align-items: center;
+}
+
+.toolbar-icon {
+  border-radius: calc(var(--gutter-space) / 3);
+  border: 1px solid black;
+}
 </style>
+
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
 
@@ -31,8 +43,5 @@ const registerChild = (slotPair: PanelSlot) => {
 // provide for nested components
 provide('registerPublicationPanel', registerChild)
 
-onMounted(() => {
-  
-  
-})
+onMounted(() => {})
 </script>

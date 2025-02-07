@@ -5,17 +5,17 @@
         {{ title }}
       </div>
       <div class="controls">
-        <SidebarPanelWindowButtonComponent v-if="!maximized" class="maximize">
+        <SidebarPanelButtonComponent v-if="!maximized" class="maximize">
           <img alt="maximize" src="../assets/images/panel-maximize.png" @click="maximize" />
-        </SidebarPanelWindowButtonComponent>
+        </SidebarPanelButtonComponent>
 
-        <SidebarPanelWindowButtonComponent v-if="!(expanded || maximized)" class="show-hide">
+        <SidebarPanelButtonComponent v-if="!(expanded || maximized)" class="show-hide">
           <img alt="minimize" src="../assets/images/panel-minimize.png" @click="show" />
-        </SidebarPanelWindowButtonComponent>
+        </SidebarPanelButtonComponent>
 
-        <SidebarPanelWindowButtonComponent v-if="expanded || maximized" class="show-hide">
+        <SidebarPanelButtonComponent v-if="expanded || maximized" class="show-hide">
           <img alt="close" src="../assets/images/panel-close.png" @click="hide" />
-        </SidebarPanelWindowButtonComponent>
+        </SidebarPanelButtonComponent>
       </div>
     </div>
     <div class="content">
@@ -33,6 +33,7 @@
   top: 0;
   left: 0;
   display: none;
+  
 }
 
 .sidebar-panel {
@@ -42,6 +43,7 @@
   padding: var(--gutter-space);
   background-color: #e6e6e6;
   margin-bottom: var(--gutter-space);
+  z-index: 10000;
 }
 
 .sidebar-panel .content {
@@ -104,7 +106,8 @@
   height: 80%;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   z-index: 100;
-  border-radius: 10px;
+   
+  border-radius: var(--radius); 
 }
 
 .closed {
@@ -118,7 +121,7 @@
 
 <script lang="ts" setup>
 import { events } from '@/services'
-import SidebarPanelWindowButtonComponent from './SidebarPanelWindowButtonComponent.vue'
+import SidebarPanelButtonComponent from './SidebarPanelButtonComponent.vue'
 import { computed, onMounted, ref } from 'vue'
 
 const bgPanelNode = ref<HTMLElement>()
@@ -139,19 +142,25 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
 const hide = function () {
   maximized.value = false
   expanded.value = false
-  if (bgPanelNode.value) bgPanelNode.value.style.display = 'none'
+  if (bgPanelNode.value)
+    bgPanelNode.value.style.display = 'none'
 }
 const show = function () {
   expanded.value = true
   maximized.value = false
 }
 const maximize = function () {
+  
   expanded.value = true
   maximized.value = true
-  if (bgPanelNode.value) bgPanelNode.value.style.display = 'block'
+  
+  if (bgPanelNode.value) 
+    bgPanelNode.value.style.display = 'block' 
+  
 }
 onMounted(() => {
   const bpn = document.createElement('div')

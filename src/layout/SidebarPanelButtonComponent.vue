@@ -9,7 +9,6 @@
 
 .panel-window-button {
   position: relative;
-
   width: var(--panel-window-button-diameter);
   height: var(--panel-window-button-diameter);
 }
@@ -35,13 +34,12 @@
 
 .panel-window-button-color-square {
   position: absolute;
-
   left: var(--panel-window-button-inner-ofset);
   top: var(--panel-window-button-inner-ofset);
-  z-index: 7;
   width: var(--panel-window-button-inner-diameter);
   height: var(--panel-window-button-inner-diameter);
 }
+
 </style>
 
 <template>

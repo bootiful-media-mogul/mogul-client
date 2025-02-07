@@ -5,6 +5,7 @@ import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
 import { onMounted, ref } from 'vue'
 import Transcription from '@/transcription/Transcription.vue'
+import Panel from '@/layout/Panel.vue'
 
 const mogulUsername = ref<string>()
 
@@ -57,6 +58,9 @@ onMounted(async () => {
       </div>
 
       <div class="sidebar">
+    
+ 
+        
         <SidebarPanelComponent title="Media Preview">
           <PreviewComponent />
         </SidebarPanelComponent>
@@ -66,6 +70,17 @@ onMounted(async () => {
         </SidebarPanelComponent>
 
         <SidebarPanelComponent title="Notes" />
+ 
+
+
+        <Panel>
+          this is a panel <br/>
+          this is a panel
+        </Panel>
+        <Panel>
+          this is a panel <br/>
+          this is a panel
+        </Panel>
       </div>
     </div>
   </div>

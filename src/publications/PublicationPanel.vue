@@ -13,7 +13,7 @@ const props = defineProps<{ plugin: string; icon?: string; iconHover?: string }>
 const registerChild = inject<RegisterChildFunction>('registerPublicationPanel')!
 
 onMounted(() => {
-  if (  slots.panel ) {
+  if (slots.panel) {
     registerChild({
       icon: { icon: props.icon!, iconHover: props.iconHover! },
       panel: slots.panel,

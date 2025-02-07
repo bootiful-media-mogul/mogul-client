@@ -2,7 +2,6 @@
 .panel-menu {
   background-color: black;
   padding: calc(var(--gutter-space) / 2);
-
   display: grid;
   grid-template-columns: auto min-content min-content;
 }
@@ -10,15 +9,11 @@
 .panel {
   background-color: white;
   border-radius: var(--radius);
-
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   overflow: hidden;
-
-  
   margin-bottom: var(--gutter-space);
-
-  width: 100%;
+  
 }
 
 .panel-menu-buttons {
@@ -33,6 +28,7 @@
   padding: var(--gutter-space);
   display: none;
 }
+
 .panel-content-visible {
   display: block;
 }
@@ -48,23 +44,41 @@
   text-transform: uppercase;
   color: white;
 }
+
+.panel-maximized {
+  position: absolute;
+  top: 10% ;
+  left: 10% ;
+  right: 10%;
+  
+  z-index: 100;
+  border-radius: var(--radius);
+
+}
 </style>
 
 <template>
-  <div ref="element" class="panel">
+  <div ref="element" class="panel" :class="{  'panel-maximized': maximized }">
     <div class="panel-menu">
       <div class="panel-menu-title navigable-section">
         {{ props.title }}
       </div>
       <div class="panel-menu-buttons">
-        <div v-if="!visible" class="open" @click.prevent="toggleVisible">
-          <img alt="open" :src="open" class="panel-menu-buttons-img" />
-        </div>
-        <div v-else class="close" @click.prevent="toggleVisible">
-          <img alt="minimize" :src="minimize" class="panel-menu-buttons-img" />
+        <div v-if="!maximized">
+          <div v-if="!visible" class="open" @click.prevent="toggleVisible">
+            <img alt="open" :src="open" class="panel-menu-buttons-img" />
+          </div>
+          <div v-else class="close" @click.prevent="toggleVisible">
+            <img alt="minimize" :src="minimize" class="panel-menu-buttons-img" />
+          </div>
         </div>
         <div>
-          <img alt="maximize" :src="max" class="panel-menu-buttons-img" />
+          <img
+            alt="maximize"
+            :src="max"
+            class="panel-menu-buttons-img"
+            @click.prevent="toggleMaximize"
+          />
         </div>
       </div>
     </div>
@@ -84,8 +98,15 @@ import { events } from '@/services'
 const element = ref<HTMLElement>()
 
 const visible = ref<boolean>(false)
+const maximized = ref<boolean>(false)
 
 const props = defineProps<{ title: string }>()
+
+function toggleMaximize() {
+  maximized.value = !maximized.value
+  visible.value = maximized.value   
+  console.log('maximized', maximized.value)
+}
 
 function toggleVisible() {
   visible.value = !visible.value

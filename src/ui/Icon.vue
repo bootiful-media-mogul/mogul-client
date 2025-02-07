@@ -1,16 +1,18 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
+import { al } from 'vitest/dist/reporters-5f784f42'
 
 interface Props {
+  readonly alt?: string
   readonly iconHover: string
   readonly icon: string
   readonly disabled?: boolean | string
   readonly sticky?: boolean | string
-  readonly width?: number 
+  readonly width?: number
 }
 
 const props = defineProps<Props>()
-const element  = ref<HTMLImageElement>()
+const element = ref<HTMLImageElement>()
 const src = ref<string>()
 
 const swap = function () {
@@ -30,10 +32,23 @@ const clickDelegate = (e: MouseEvent): void => {
 
   emit('click', e)
 }
+
+const altText = ref<string>()
+
 onMounted(() => {
   src.value = props.icon
   element.value!!.style.width = props.width + 'px'
+  
+  if (props.alt) {
+    altText.value = props.alt
+  } 
+  else {
+    altText.value = 'an image - ' + src.value 
+  }
 })
+
+
+
 </script>
 <style scoped>
 img.icon {
@@ -52,14 +67,14 @@ img.icon-disabled {
   <img
     ref="element"
     v-if="disabled"
-    :alt="'an image - ' + src"
+    :alt="altText"
     :src="src"
     class="icon icon-disabled unselectable"
   />
   <img
     v-else
     ref="element"
-    :alt="'an image - ' + src"
+    :alt="altText"
     :src="src"
     class="icon"
     @click="clickDelegate"

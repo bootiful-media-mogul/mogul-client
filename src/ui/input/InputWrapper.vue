@@ -1,8 +1,5 @@
 <template>
   <div class="writing-tools-container">
-    <!--
-    todo introduce an optional toolbar panel that sits *above* the text editor?
-    -->
     <div v-if="panelVisible" class="toolbar">
       <div v-for="(slot, index) in childSlots" :key="index">
         <div v-if="slot.panelVisible">

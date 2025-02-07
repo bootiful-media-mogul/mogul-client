@@ -1,0 +1,28 @@
+<script setup lang="ts">
+// this panel is used inside of all other specific Publication controls (podbean, blog, etc.)
+// to lay things out and handle common functionality in a consistent way.
+// things like contributing an icon, a control panel, and handling the all-important 'publish' button.
+
+import { inject, onMounted, useSlots } from 'vue'
+import type {   RegisterChildFunction } from '@/publications/input'
+
+const slots = useSlots()
+
+const props = defineProps <{ plugin: string }>()
+
+const registerChild = inject<RegisterChildFunction>('registerPublicationPanel')!
+onMounted( ()=>{
+
+  if (slots.icon && slots.panel) {
+    registerChild({
+      icon: slots.icon,
+      panel: slots.panel,
+      selected: false ,
+      plugin: props.plugin
+    })
+  }
+})
+</script>
+<template>
+  <div></div>
+</template>

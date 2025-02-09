@@ -97,9 +97,9 @@ const descriptionComposition = ref<Composition>()
 const dirtyKey = ref('')
 
 // Computed
-const publishButtonDisabled = computed(() => {
-  return !draftEpisode.value.complete || !selectedPlugin.value || selectedPlugin.value === ''
-})
+// const publishButtonDisabled = computed(() => {
+//   return !draftEpisode.value.complete || !selectedPlugin.value || selectedPlugin.value === ''
+// })
 
 const buttonsDisabled = computed(() => {
   let changed = false
@@ -241,16 +241,7 @@ const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
   await podcasts.addPodcastEpisodeSegment(episode.id)
   await loadEpisodeSegments(episode)
 }
-
-// Publication Methods
-const publish = async (e: Event) => {
-  e.preventDefault()
-  await podcasts.publishPodcastEpisode(draftEpisode.value.id, selectedPlugin.value)
-}
-
-const pluginSelected = async (e: Event) => {
-  e.preventDefault()
-}
+ 
 
 const unpublish = async (publication: Publication) => {
   await podcasts.unpublish(publication)
@@ -432,12 +423,12 @@ onMounted(async () => {
         <div class="publish-menu">
           <Publications
             v-if="draftEpisode.id"
-            :publishable="draftEpisode.id"
+            :publishable="draftEpisode.id + ''"
             :disabled="!draftEpisode.complete"
             :type="'episode'"
           >
-            <PodcastEpisodeBlogPost />
             <Podbean />
+            <PodcastEpisodeBlogPost />
             <PodcastEpisodeAudioFile />
           </Publications>
 

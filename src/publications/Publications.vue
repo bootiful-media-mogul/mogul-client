@@ -83,9 +83,8 @@ async function isPluginReady(type: string, id: number, context: Map<string, any>
   )
 }
 
-function publish(plugin: string, context: Map<string, any>) {
-  console.log('publish', plugin, context)
-  // todo have these call the backend api machinery for publication and add new capability to validate
+async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
+  await publications.publish(type, id, JSON.stringify(context), plugin)
 }
 
 provide('getPublicationContext', getPublicationContext)

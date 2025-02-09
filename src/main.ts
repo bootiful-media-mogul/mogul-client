@@ -9,6 +9,8 @@ import router from './index'
 
 // i18n
 const translations = {
+  
+  
   en: {
     labels: {
       'required-value': 'This is a required value!',
@@ -23,6 +25,17 @@ const translations = {
     podbean: 'Podbean',
     mock: 'Mock',
     github: 'GitHub',
+    publications:{
+     
+      plugins: {
+        publish : 'Publish',
+        podbean: {
+          description: 'publish this episode to your Podbean account  for syndication and ad integration.'
+        }
+      }
+    },
+    
+    // 'publications.plugins.podbean.description': 'publish this episode to your Podbean account  for syndication and ad integration.',
 
     // notifications
     notifications: {
@@ -96,7 +109,7 @@ This is NOT reversible! `,
     'podcasts.episodes.basics': 'Basics',
     'podcasts.episodes.segments': 'Segments',
     'podcasts.episodes.segments.number': 'Episode segment # {id}',
-    'podcasts.episodes.publish': 'Publish',
+    // 'podcasts.episodes.publish': 'Publish',
     'podcasts.episodes.episodes': 'Episodes for Podcast #{id} - "{title}"',
     'podcasts.episodes.new-episode': 'New Episode',
     'podcasts.episodes.buttons.publish': 'Publish',

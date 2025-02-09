@@ -1,9 +1,14 @@
 <template>
   <PublicationPanel plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
     <template v-slot:panel>
-      Podbean is ready? {{ ready }} <br />
-
-      <button @click="isReady()" type="button" class="btn btn-primary">check</button>
+      <div>
+        {{ $t('publications.plugins.podbean.description') }}
+      </div>
+      <div>
+        <button :disabled="!isReady()" @click="publish()" type="button" class="btn btn-primary">
+          {{ $t('publications.plugins.publish') }}
+        </button>
+      </div>
     </template>
   </PublicationPanel>
 </template>
@@ -11,18 +16,29 @@
 import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
 import PublicationPanel from '@/publications/PublicationPanel.vue'
 import { inject, onMounted, ref } from 'vue'
-import type { GetPublicationContextFunction, IsPluginReadyFunction } from '@/publications/input'
+import type { GetPublicationContextFunction, IsPluginReadyFunction, PublishFunction } from '@/publications/input'
 
 const ready = ref<boolean>(false)
 
-const isPluginReady = inject<IsPluginReadyFunction>('isPluginReady')!
+const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
+const publishFunction = inject<PublishFunction>('publish')!
+const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
 
-const getPublicationContext = inject<GetPublicationContextFunction>('getPublicationContext')!
+async function publish(): Promise<boolean> {
+  const clientContext = {}
+  const publicationContext = getPublicationContextFunction()
+  return await publishFunction(
+    publicationContext.type,
+    publicationContext.publishableId,
+    clientContext,
+    'podbean'
+  )
+}
 
 async function isReady(): Promise<boolean> {
   const clientContext = {}
-  const publicationContext = getPublicationContext()
-  ready.value = await isPluginReady(
+  const publicationContext = getPublicationContextFunction()
+  ready.value = await isPluginReadyFunction(
     publicationContext.type,
     publicationContext.publishableId,
     clientContext,

@@ -26,6 +26,14 @@ export class PublicationContext {
   }
 }
 
+
+export type PublishFunction = (
+  publishableType: string,
+  id: number,
+  context: any,
+  plugin: string
+) => Promise<boolean>
+
 export type IsPluginReadyFunction = (
   publishableType: string,
   id: number,

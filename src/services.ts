@@ -833,6 +833,37 @@ export class Publications {
     this.client = client
   }
 
+
+  async publish (
+    publishableType: string,
+    id: number,
+    contextJson: string,
+    plugin: string
+  ): Promise<boolean> {
+    const q = `
+        mutation ( 
+             $id: Int ,
+             $publishableType: String, 
+             $contextJson: String,
+             $plugin: String
+          ) {
+           publish (
+             publishableType: $publishableType,
+             id : $id  , 
+             contextJson : $contextJson, 
+             plugin : $plugin 
+             )   
+        }
+        `
+    const result = await this.client.mutation(q, {
+      publishableType: publishableType,
+      id: id,
+      contextJson: contextJson,
+      plugin: plugin
+    })
+    return (await result.data['publish']) as boolean
+  }
+
   async canPublish(
     publishableType: string,
     id: number,

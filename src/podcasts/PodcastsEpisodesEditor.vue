@@ -430,14 +430,18 @@ onMounted(async () => {
 
         <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
         <div class="publish-menu">
-
-          <Publications :disabled = "!draftEpisode.complete">
+          <Publications
+            v-if="draftEpisode.id"
+            :publishable="draftEpisode.id"
+            :disabled="!draftEpisode.complete"
+            :type="'episode'"
+          >
             <PodcastEpisodeBlogPost />
             <Podbean />
             <PodcastEpisodeAudioFile />
           </Publications>
-          
-<!--       
+
+          <!--       
           <select
             v-model="selectedPlugin"
             :disabled="!draftEpisode.complete"
@@ -467,7 +471,6 @@ onMounted(async () => {
           </button>
           
           -->
-   
         </div>
         <div class="publications">
           <div

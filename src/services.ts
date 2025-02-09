@@ -826,13 +826,6 @@ export class Utils {
   }
 }
 
-export type IsPluginReadyFunction = (
-  publishableType: string,
-  id: number,
-  context : any,
-  plugin: string
-) => Promise<boolean>
-
 export class Publications {
   private readonly client: Client
 

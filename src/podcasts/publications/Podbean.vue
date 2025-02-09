@@ -11,19 +11,27 @@
 import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
 import PublicationPanel from '@/publications/PublicationPanel.vue'
 import { inject, onMounted, ref } from 'vue'
-import type { IsPluginReadyFunction } from '@/services'
+import type { GetPublicationContextFunction, IsPluginReadyFunction } from '@/publications/input'
 
 const ready = ref<boolean>(false)
 
 const isPluginReady = inject<IsPluginReadyFunction>('isPluginReady')!
 
+const getPublicationContext = inject<GetPublicationContextFunction>('getPublicationContext')!
+
 async function isReady(): Promise<boolean> {
-  const context = {}
-  ready.value = await isPluginReady('episode', 1, context, 'podbean')
+  const clientContext = {}
+  const publicationContext = getPublicationContext()
+  ready.value = await isPluginReady(
+    publicationContext.type,
+    publicationContext.publishableId,
+    clientContext,
+    'podbean'
+  )
   return ready.value
 }
 
 onMounted(async () => {
-  ready.value = await isReady()
+  await isReady()
 })
 </script>

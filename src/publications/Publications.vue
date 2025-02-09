@@ -34,17 +34,17 @@
 
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
-import { onMounted, provide, ref, watch } from 'vue'
-import type { PanelSlot } from '@/publications/input'
+import { provide, ref, watch } from 'vue'
+import { type PanelSlot, PublicationContext } from '@/publications/input'
 import { publications } from '@/services'
 
-const props = defineProps<{ disabled: boolean }>()
+const props = defineProps<{
+  disabled: boolean
+  publishable: string
+  type: string
+}>()
+
 const pluginIsDisabled = ref<boolean>(true)
-
-onMounted(() => {
-  pluginIsDisabled.value = props.disabled
-})
-
 const childSlots = ref<Array<PanelSlot>>([])
 const isAnyPanelSelected = ref<boolean>(false)
 
@@ -73,12 +73,14 @@ function registerPublicationPanel(slotPair: PanelSlot) {
     childSlots.value.push(slotPair)
 }
 
+function getPublicationContext(): PublicationContext {
+  return new PublicationContext(parseInt(props.publishable), props.type)
+}
+
 async function isPluginReady(type: string, id: number, context: Map<string, any>, plugin: string) {
-  const ready =
-    !pluginIsDisabled.value &&
-    (await publications.canPublish(type, id, JSON.stringify(context), plugin))
-  console.log('the plugin is ready?', ready)
-  return ready
+  return (
+    !props.disabled && (await publications.canPublish(type, id, JSON.stringify(context), plugin))
+  )
 }
 
 function publish(plugin: string, context: Map<string, any>) {
@@ -86,6 +88,7 @@ function publish(plugin: string, context: Map<string, any>) {
   // todo have these call the backend api machinery for publication and add new capability to validate
 }
 
+provide('getPublicationContext', getPublicationContext)
 provide('isPluginReady', isPluginReady)
 provide('publish', publish)
 provide('registerPublicationPanel', registerPublicationPanel)

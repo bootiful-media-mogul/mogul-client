@@ -103,7 +103,6 @@ const props = defineProps<{ title: string }>()
 function toggleMaximize() {
   maximized.value = !maximized.value
   visible.value = maximized.value
-  console.log('maximized', maximized.value)
 }
 
 function toggleVisible() {
@@ -113,16 +112,13 @@ function toggleVisible() {
 events.on('sidebar-panel-closed', (event: any) => {
   if (element.value!!.contains(event)) {
     visible.value = false
-    console.log('closed')
   }
 })
 
 events.on('sidebar-panel-opened', (event: any) => {
   const contains = element.value!!.contains(event)
-  console.log('does the sidebar panel container the event?', contains)
   if (contains) {
     visible.value = true
-    console.log('opened')
   }
 })
 </script>

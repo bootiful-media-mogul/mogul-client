@@ -18,7 +18,7 @@ onMounted(async () => {
       break
     }
     i += 1
-    console.debug('it did not work the first time, trying to authenticate again...')
+    // console.debug('it did not work the first time, trying to authenticate again...')
   }
 })
 </script>
@@ -57,7 +57,6 @@ onMounted(async () => {
       </div>
 
       <div class="sidebar">
-        
         <PanelComponent title="Media Preview">
           <PreviewComponent />
         </PanelComponent>
@@ -65,7 +64,7 @@ onMounted(async () => {
         <PanelComponent title="Transcription">
           <Transcription />
         </PanelComponent>
-        
+
         <PanelComponent title="Notes"></PanelComponent>
       </div>
     </div>

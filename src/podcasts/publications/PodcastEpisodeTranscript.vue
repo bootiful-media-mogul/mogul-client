@@ -1,9 +1,7 @@
 <template>
   <PublicationPanel plugin="transcript">
     <template v-slot:panel>download transcript </template>
-    <template v-slot:icon>
-       [transcript] 
-    </template>
+    <template v-slot:icon> [transcript] </template>
   </PublicationPanel>
 </template>
 <script setup lang="ts">

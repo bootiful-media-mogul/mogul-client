@@ -13,7 +13,6 @@
   border-top-right-radius: 0;
   overflow: hidden;
   margin-bottom: var(--gutter-space);
-  
 }
 
 .panel-menu-buttons {
@@ -47,18 +46,17 @@
 
 .panel-maximized {
   position: absolute;
-  top: 10% ;
-  left: 10% ;
+  top: 10%;
+  left: 10%;
   right: 10%;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   z-index: 100;
   border-radius: var(--radius);
-
 }
 </style>
 
 <template>
-  <div ref="element" class="panel" :class="{  'panel-maximized': maximized }">
+  <div ref="element" class="panel" :class="{ 'panel-maximized': maximized }">
     <div class="panel-menu">
       <div class="panel-menu-title navigable-section">
         {{ props.title }}
@@ -104,7 +102,7 @@ const props = defineProps<{ title: string }>()
 
 function toggleMaximize() {
   maximized.value = !maximized.value
-  visible.value = maximized.value   
+  visible.value = maximized.value
   console.log('maximized', maximized.value)
 }
 

@@ -38,17 +38,13 @@ const altText = ref<string>()
 onMounted(() => {
   src.value = props.icon
   element.value!!.style.width = props.width + 'px'
-  
+
   if (props.alt) {
     altText.value = props.alt
-  } 
-  else {
-    altText.value = 'an image - ' + src.value 
+  } else {
+    altText.value = 'an image - ' + src.value
   }
 })
-
-
-
 </script>
 <style scoped>
 img.icon {

@@ -178,8 +178,8 @@ const loadManagedFileIntoEditor = async () => {
   const managedFile = await managedFiles.getManagedFileById(mfId())
   filename.value = managedFile.filename
   written.value = managedFile.written
-  if (managedFile.contentType &&  managedFile.contentType.indexOf('/')!=-1) {
-    contentType.value = managedFile.contentType.split('/')[1]  
+  if (managedFile.contentType && managedFile.contentType.indexOf('/') != -1) {
+    contentType.value = managedFile.contentType.split('/')[1]
   }
   size.value = managedFile.size
   visible.value = managedFile.visible

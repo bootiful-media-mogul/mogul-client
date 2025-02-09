@@ -35,6 +35,10 @@ import transcriptAsset from '@/assets/images/transcript.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
+import Publications from '@/publications/Publications.vue'
+import PodcastEpisodeBlogPost from '@/podcasts/publications/PodcastEpisodeBlogPost.vue'
+import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudioFile.vue'
+import Podbean from '@/podcasts/publications/Podbean.vue'
 
 const { t } = useI18n()
 
@@ -425,8 +429,15 @@ onMounted(async () => {
         </div>
 
         <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
-
         <div class="publish-menu">
+
+          <Publications :disabled = "!draftEpisode.complete">
+            <PodcastEpisodeBlogPost />
+            <Podbean />
+            <PodcastEpisodeAudioFile />
+          </Publications>
+          
+<!--       
           <select
             v-model="selectedPlugin"
             :disabled="!draftEpisode.complete"
@@ -444,7 +455,7 @@ onMounted(async () => {
               {{ option }}
             </option>
           </select>
-          <button
+                 <button
             :key="draftEpisode.id"
             ref="publishButton"
             :disabled="publishButtonDisabled"
@@ -454,6 +465,9 @@ onMounted(async () => {
           >
             {{ $t('podcasts.episodes.buttons.publish') }}
           </button>
+          
+          -->
+   
         </div>
         <div class="publications">
           <div
@@ -583,5 +597,4 @@ div.segment-controls {
   grid-template-areas: 'up down delete transcript ';
   grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
- 
 </style>

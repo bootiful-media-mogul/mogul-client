@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from './HomeView.vue'
 import PodcastsSearchView from '@/podcasts/PodcastsSearchView.vue'
 import SettingsView from '@/settings/SettingsView.vue'
-import About from '@/About.vue'
+import AboutView from '@/AboutView.vue'
 import PodcastsEpisodesSearchView from '@/podcasts/PodcastsEpisodesSearchView.vue'
 import BlogsSearchView from '@/blogs/BlogsSearchView.vue'
 
@@ -40,7 +40,7 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      component: About,
+      component: AboutView,
       props: true
     }
   ]

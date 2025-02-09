@@ -108,11 +108,11 @@
 <script lang="ts" setup>
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import editAsset from '@/assets/images/edit.png'
-import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
 import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
-import { onActivated, onBeforeUnmount, onMounted, onRenderTriggered, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import Icon from '@/ui/Icon.vue'
 

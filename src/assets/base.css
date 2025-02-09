@@ -1,9 +1,9 @@
 :root {
   --gutter-space: 20px;
-  --main-toolbar-gutter: calc(5 * var(--gutter-space));
+  --main-toolbar-gutter: calc(1 * var(--gutter-space));
   --sidebar-width: 250px;
   --radius: 8px;
-  --button-radius: calc(var(--gutter-space) / 3);
+  --button-radius: var(--radius);
   --small-gutter-space: calc(0.5 * var(--gutter-space));
   --form-buttons-gutter-space: calc(0.3 * var(--gutter-space));
   --icon-width: 20px;
@@ -127,41 +127,10 @@ html {
 }
 
 .delete-icon {
-  /*  background: url('../assets/images/delete-highlight.png');
-        height: var(--icon-width);
-        display: inline-block;
-        width: var(--icon-width);
-        background-size: var(--icon-width) var(--icon-width);*/
 }
-
-/*
-.delete-icon:hover {
-  background: url('../assets/images/delete.png');
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
-}
-*/
 
 .transcript-icon {
 }
-
-/*.down-arrow-icon {
-  background: url('../assets/images/down-highlight.png');
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
-}
-
-.down-arrow-icon:hover {
-  background: url('../assets/images/down.png');
-  height: var(--icon-width);
-  display: inline-block;
-  width: var(--icon-width);
-  background-size: var(--icon-width) var(--icon-width);
-}*/
 
 .up-arrow-icon.disabled {
   background: url('../assets/images/up.png');
@@ -196,11 +165,6 @@ html {
 }
 
 .edit-icon {
-  /*  background: url('../assets/images/edit-highlight.png');
-        height: var(--icon-width);
-        display: inline-block;
-        width: var(--icon-width);
-        background-size: var(--icon-width) var(--icon-width);*/
 }
 
 .close-icon {

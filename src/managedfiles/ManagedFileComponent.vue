@@ -54,7 +54,6 @@
 </template>
 <style>
 .managed-file-row {
-  /*border:1px solid yellow;*/
   height: 2em;
   grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
@@ -63,7 +62,7 @@
     var(--icon-column)
     var(--icon-column)
     var(--icon-column)
-    13em
+    5em
     auto;
   display: grid;
 }
@@ -118,7 +117,7 @@
 </style>
 <script lang="ts" setup>
 import axios from 'axios'
-import { managedFiles, previewManagedFile } from '@/services'
+import { ManagedFile, managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'
 
 interface Props {
@@ -166,7 +165,9 @@ function mfId(): number {
 }
 
 const preview = async () => {
-  if (written.value) previewManagedFile(mfId())
+  if (written.value) {
+    previewManagedFile(mfId())
+  }
 }
 
 const launchFileUpload = async () => {
@@ -177,7 +178,9 @@ const loadManagedFileIntoEditor = async () => {
   const managedFile = await managedFiles.getManagedFileById(mfId())
   filename.value = managedFile.filename
   written.value = managedFile.written
-  contentType.value = managedFile.contentType
+  if (managedFile.contentType && managedFile.contentType.indexOf('/') != -1) {
+    contentType.value = managedFile.contentType.split('/')[1]
+  }
   size.value = managedFile.size
   visible.value = managedFile.visible
 }

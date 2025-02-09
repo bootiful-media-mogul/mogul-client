@@ -228,10 +228,10 @@ export class Podcasts {
             refreshPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId   )  
           }
     `
-    const publication = await this.client.mutation(mutation, {
+    const refresh = await this.client.mutation(mutation, {
       episodeSegmentId: episodeSegmentId
     })
-    return (await publication.data['refreshPodcastEpisodesSegmentTranscript']) as boolean
+    return (await refresh.data['refreshPodcastEpisodesSegmentTranscript']) as boolean
   }
 
   async setPodcastEpisodesSegmentTranscript(
@@ -244,12 +244,12 @@ export class Podcasts {
             setPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId,  transcribable: $transcribable, transcript: $transcript )  
           }
     `
-    const publication = await this.client.mutation(mutation, {
+    const segmentTranscript = await this.client.mutation(mutation, {
       episodeSegmentId: episodeSegmentId,
       transcribable: transcribable,
       transcript: transcript
     })
-    return (await publication.data['setPodcastEpisodesSegmentTranscript']) as boolean
+    return (await segmentTranscript.data['setPodcastEpisodesSegmentTranscript']) as boolean
   }
 
   // transcript
@@ -826,6 +826,76 @@ export class Utils {
   }
 }
 
+export class Publications {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+
+  async publish (
+    publishableType: string,
+    id: number,
+    contextJson: string,
+    plugin: string
+  ): Promise<boolean> {
+    const q = `
+        mutation ( 
+             $id: Int ,
+             $publishableType: String, 
+             $contextJson: String,
+             $plugin: String
+          ) {
+           publish (
+             publishableType: $publishableType,
+             id : $id  , 
+             contextJson : $contextJson, 
+             plugin : $plugin 
+             )   
+        }
+        `
+    const result = await this.client.mutation(q, {
+      publishableType: publishableType,
+      id: id,
+      contextJson: contextJson,
+      plugin: plugin
+    })
+    return (await result.data['publish']) as boolean
+  }
+
+  async canPublish(
+    publishableType: string,
+    id: number,
+    contextJson: string,
+    plugin: string
+  ): Promise<boolean> {
+    const q = `
+        query ( 
+             $id: Int ,
+             $publishableType: String, 
+             $contextJson: String,
+             $plugin: String
+          ) {
+           canPublish(
+             publishableType: $publishableType,
+             id : $id  , 
+             contextJson : $contextJson, 
+             plugin : $plugin 
+             )   
+        }
+        `
+    const result = await this.client.query(q, {
+      publishableType: publishableType,
+      id: id,
+      contextJson: contextJson,
+      plugin: plugin
+    })
+    return (await result.data['canPublish']) as boolean
+  }
+}
+
+export const publications = new Publications(graphqlClient)
 export const utils = new Utils()
 export const markdown = new Markdown(graphqlClient)
 export const ai = new Ai(graphqlClient)

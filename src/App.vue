@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { mogul } from '@/services'
-import SidebarPanelComponent from '@/layout/SidebarPanelComponent.vue'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBox from '@/notifications/NotificationBox.vue'
 import { onMounted, ref } from 'vue'
 import Transcription from '@/transcription/Transcription.vue'
+import PanelComponent from '@/layout/PanelComponent.vue'
 
 const mogulUsername = ref<string>()
 
@@ -18,7 +18,7 @@ onMounted(async () => {
       break
     }
     i += 1
-    console.debug('it did not work the first time, trying to authenticate again...')
+    // console.debug('it did not work the first time, trying to authenticate again...')
   }
 })
 </script>
@@ -57,15 +57,15 @@ onMounted(async () => {
       </div>
 
       <div class="sidebar">
-        <SidebarPanelComponent title="Media Preview">
+        <PanelComponent title="Media Preview">
           <PreviewComponent />
-        </SidebarPanelComponent>
+        </PanelComponent>
 
-        <SidebarPanelComponent title="Transcription">
+        <PanelComponent title="Transcription">
           <Transcription />
-        </SidebarPanelComponent>
+        </PanelComponent>
 
-        <SidebarPanelComponent title="Notes" />
+        <PanelComponent title="Notes"></PanelComponent>
       </div>
     </div>
   </div>

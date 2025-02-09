@@ -35,6 +35,10 @@ import transcriptAsset from '@/assets/images/transcript.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
+import Publications from '@/publications/Publications.vue'
+import PodcastEpisodeBlogPost from '@/podcasts/publications/PodcastEpisodeBlogPost.vue'
+import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudioFile.vue'
+import Podbean from '@/podcasts/publications/Podbean.vue'
 
 const { t } = useI18n()
 
@@ -93,9 +97,9 @@ const descriptionComposition = ref<Composition>()
 const dirtyKey = ref('')
 
 // Computed
-const publishButtonDisabled = computed(() => {
-  return !draftEpisode.value.complete || !selectedPlugin.value || selectedPlugin.value === ''
-})
+// const publishButtonDisabled = computed(() => {
+//   return !draftEpisode.value.complete || !selectedPlugin.value || selectedPlugin.value === ''
+// })
 
 const buttonsDisabled = computed(() => {
   let changed = false
@@ -237,16 +241,7 @@ const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
   await podcasts.addPodcastEpisodeSegment(episode.id)
   await loadEpisodeSegments(episode)
 }
-
-// Publication Methods
-const publish = async (e: Event) => {
-  e.preventDefault()
-  await podcasts.publishPodcastEpisode(draftEpisode.value.id, selectedPlugin.value)
-}
-
-const pluginSelected = async (e: Event) => {
-  e.preventDefault()
-}
+ 
 
 const unpublish = async (publication: Publication) => {
   await podcasts.unpublish(publication)
@@ -360,10 +355,9 @@ onMounted(async () => {
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
-            <div class="pure-u-3-24">
-              <label>{{ $t('podcasts.episodes.episode.graphic') }}</label>
-            </div>
-            <div class="pure-u-21-24">
+            <div class="segment-controls-type">{{ $t('podcasts.episodes.episode.graphic') }}</div>
+
+            <div class="segment-controls-row">
               <ManagedFileComponent
                 :managed-file-id="draftEpisode.graphic.id"
                 accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
@@ -375,12 +369,10 @@ onMounted(async () => {
 
           <div v-for="segment in segments" v-bind:key="segment.id">
             <div class="pure-g episode-managed-file-row">
-              <div class="pure-u-3-24">
-                <label>
-                  {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
-                </label>
+              <div class="segment-controls-type">
+                {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
               </div>
-              <div class="pure-u-21-24">
+              <div class="segment-controls-row">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
                   <div class="segment-controls">
                     <Icon
@@ -428,8 +420,19 @@ onMounted(async () => {
         </div>
 
         <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
-
         <div class="publish-menu">
+          <Publications
+            v-if="draftEpisode.id"
+            :publishable="draftEpisode.id + ''"
+            :disabled="!draftEpisode.complete"
+            :type="'episode'"
+          >
+            <Podbean />
+            <PodcastEpisodeBlogPost />
+            <PodcastEpisodeAudioFile />
+          </Publications>
+
+          <!--       
           <select
             v-model="selectedPlugin"
             :disabled="!draftEpisode.complete"
@@ -447,7 +450,7 @@ onMounted(async () => {
               {{ option }}
             </option>
           </select>
-          <button
+                 <button
             :key="draftEpisode.id"
             ref="publishButton"
             :disabled="publishButtonDisabled"
@@ -457,6 +460,8 @@ onMounted(async () => {
           >
             {{ $t('podcasts.episodes.buttons.publish') }}
           </button>
+          
+          -->
         </div>
         <div class="publications">
           <div
@@ -564,9 +569,21 @@ fieldset.episodes-table {
   padding-bottom: calc(var(--footer-height) * 1);
 }
 
-.episode-managed-file-row label {
+.episode-managed-file-row {
+  display: grid;
+  grid-template-areas: 'type controls';
+  grid-template-columns: 100px auto;
+}
+
+.episode-managed-file-row .segment-controls-type {
+  grid-area: type;
+  font-size: smaller;
+  margin-right: var(--gutter-space);
   text-align: right;
-  padding-right: var(--gutter-space);
+}
+
+.episode-managed-file-row .segment-controls-row {
+  grid-area: controls;
 }
 
 div.segment-controls {

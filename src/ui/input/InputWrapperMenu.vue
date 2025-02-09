@@ -55,7 +55,9 @@ const emit = defineEmits<{
   (e: 'down'): void
   (e: 'up'): void
 }>()
+
 const props = defineProps<Props>()
+
 const downArrowCss = function () {
   if (props.disabled) return 'disabled'
   if (!props.enableDownArrow) return 'disabled'

@@ -1,5 +1,6 @@
 <template>
   <slot />
+
   <div class="publications">
     <div class="publications-toolbar">
       <div v-for="(slot, index) in childSlots" :key="index">
@@ -30,13 +31,57 @@
       </div>
     </div>
   </div>
+
+  <!--   
+   list all the publications related to this publishable
+  -->
+
+  <div class="publications">
+    <div
+      v-for="publication in existingPublications"
+      v-bind:key="publication.id"
+      class="pure-g form-row publications-row"
+    >
+      <div class="id-column">
+        #<b>{{ publication.id }}</b>
+      </div>
+      <div class="plugin-column">
+        {{ publication.plugin }}
+      </div>
+      <div class="created-column">{{ dts(publication.created) }}</div>
+      <div class="published-column">
+        {{ dts(publication.published) }}
+      </div>
+      <div class="delete-column">
+        <Icon :icon="deleteHighlightAsset" :icon-hover="deleteAsset" class="delete-icon" :disabled ="true" />
+        <!--        @click.prevent="unpublish(publication)"-->
+      </div>
+
+      <div class="url-column preview">
+        <span v-if="publication.publishing">
+          {{ $t('podcasts.episodes.publications.publishing') }}
+        </span>
+        <a
+          :class="
+            'mogul-icon preview-icon ' +
+            (publication.url && publication.url !== '' ? '' : ' disabled')
+          "
+          :href="publication.url"
+          target="_blank"
+        ></a>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
-import { provide, ref, watch } from 'vue'
+import { onMounted, provide, ref, watch } from 'vue'
 import { type PanelSlot, PublicationContext } from '@/publications/input'
-import { publications } from '@/services'
+import { Notification, notifications, Publication, publications } from '@/services'
+import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
+import deleteAsset from '@/assets/images/delete.png'
+import { dateTimeToString } from '@/dates'
 
 const props = defineProps<{
   disabled: boolean
@@ -44,6 +89,40 @@ const props = defineProps<{
   type: string
 }>()
 
+// Methods
+const dts = (date: number): string | null => {
+  return dateTimeToString(date)
+}
+
+async function refresh() {
+  const ctx = getPublicationContext()
+  await refreshPublications(ctx.publishableId, ctx.type)
+}
+
+onMounted(async () => {
+  await refresh()
+})
+
+notifications.listenForCategory('publication-started-event', async (notification: Notification) => {
+  await refresh()
+  existingPublications.value
+    .filter((pub) => pub.id === parseInt(notification.key))
+    .forEach((p) => {
+      p.publishing = true
+    })
+})
+
+notifications.listenForCategory('publication-completed-event', async () => {
+  await refresh()
+})
+
+/** there's got to be somewhere to get all the publications for a given Publishable.  */
+async function refreshPublications(publishableId: number, type: string) {
+  existingPublications.value = await publications.publications(publishableId, type)
+}
+
+// enumerate all the existing ones
+const existingPublications = ref<Array<Publication>>([])
 const pluginIsDisabled = ref<boolean>(true)
 const childSlots = ref<Array<PanelSlot>>([])
 const isAnyPanelSelected = ref<boolean>(false)
@@ -54,6 +133,10 @@ watch(
     pluginIsDisabled.value = n
   }
 )
+
+async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
+  await publications.publish(type, id, JSON.stringify(context), plugin)
+}
 
 function showPanelForSlot(slot: PanelSlot) {
   const selected = childSlots.value.filter((s) => s.plugin === slot.plugin && s.selected)
@@ -81,10 +164,6 @@ async function isPluginReady(type: string, id: number, context: Map<string, any>
   return (
     !props.disabled && (await publications.canPublish(type, id, JSON.stringify(context), plugin))
   )
-}
-
-async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
-  await publications.publish(type, id, JSON.stringify(context), plugin)
 }
 
 provide('getPublicationContext', getPublicationContext)
@@ -118,7 +197,7 @@ provide('registerPublicationPanel', registerPublicationPanel)
 .publication-panel {
   border-radius: var(--radius);
   background-color: white;
-  padding: var(--gutter-space);
+  padding: calc(var(--gutter-space) / 2);
   margin: 0;
 }
 
@@ -129,5 +208,42 @@ provide('registerPublicationPanel', registerPublicationPanel)
 .toolbar-icon-disabled {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+/* publications */
+.publications {
+  margin-top: var(--gutter-space);
+}
+
+.publications .publications-row {
+  display: grid;
+  grid-template-areas: 'id url delete created published plugin ';
+  grid-template-columns:
+    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
+    auto;
+}
+
+.publications .publications-row .delete-column {
+  grid-area: delete;
+}
+
+.publications .publications-row .id-column {
+  grid-area: id;
+}
+
+.publications .publications-row .plugin-column {
+  grid-area: plugin;
+}
+
+.publications .publications-row .created-column {
+  grid-area: created;
+}
+
+.publications .publications-row .published-column {
+  grid-area: published;
+}
+
+.publications .publications-row .url-column {
+  grid-area: url;
 }
 </style>

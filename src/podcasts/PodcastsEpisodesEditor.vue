@@ -10,7 +10,6 @@ import {
   PodcastEpisode,
   PodcastEpisodeSegment,
   podcasts,
-  Publication,
   type TranscriptEditedEvent,
   utils
 } from '@/services'
@@ -65,11 +64,8 @@ const props = defineProps<{
 
 // State
 const segments = ref<PodcastEpisodeSegment[]>([])
-const selectedPlugin = ref('')
 const created = ref(-1)
 const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
-const publications = ref<Publication[]>([])
-
 const podcast = ref<Podcast>()
 const podcastId = ref<number>(props.podcastId)
 
@@ -93,13 +89,7 @@ const titleComposition = ref<Composition>()
 // description
 const description = ref('')
 const descriptionComposition = ref<Composition>()
-
 const dirtyKey = ref('')
-
-// Computed
-// const publishButtonDisabled = computed(() => {
-//   return !draftEpisode.value.complete || !selectedPlugin.value || selectedPlugin.value === ''
-// })
 
 const buttonsDisabled = computed(() => {
   let changed = false
@@ -119,6 +109,7 @@ const loadEpisodeFromDbIntoEditor = async (episodeId: number): Promise<PodcastEp
   await loadEpisodeIntoEditor(ep)
   return ep
 }
+
 // Methods
 const dts = (date: number): string | null => {
   return dateTimeToString(date)
@@ -135,15 +126,6 @@ const loadEpisodeSegments = async (episode: PodcastEpisode) => {
   }
 }
 
-const refreshPublications = async (episode: PodcastEpisode) => {
-  if (episode.publications?.length > 0) {
-    publications.value = episode.publications.sort((a, b) => b.created - a.created)
-    episode.publications = publications.value
-  } else {
-    publications.value = []
-  }
-}
-
 const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   Object.assign(draftEpisode.value, episode)
   description.value = episode.description
@@ -153,27 +135,6 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
   dirtyKey.value = computeDirtyKey()
-  await refreshEpisodePublicationControls(episode.id, draftEpisode.value.complete)
-}
-
-const refreshEpisodePublicationControls = async (id: number, completed: boolean) => {
-  draftEpisode.value.complete = completed
-
-  if (!id) {
-    console.error('no episode provided in refreshEpisodePublicationControls, returning')
-    return
-  }
-
-  const episode = await podcasts.podcastEpisodeById(id)
-  draftEpisode.value.availablePlugins = episode.availablePlugins
-
-  if (episode) {
-    await refreshPublications(episode)
-    if (episode.availablePlugins?.length === 1) {
-      selectedPlugin.value = episode.availablePlugins[0]
-      selectedPlugin.value = episode.availablePlugins[0]
-    }
-  }
 }
 
 async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
@@ -203,7 +164,6 @@ const cancel = async () => {
   title.value = ''
   description.value = ''
   segments.value = []
-  publications.value = []
 }
 
 // Segment Methods
@@ -241,11 +201,6 @@ const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
   await podcasts.addPodcastEpisodeSegment(episode.id)
   await loadEpisodeSegments(episode)
 }
- 
-
-const unpublish = async (publication: Publication) => {
-  await podcasts.unpublish(publication)
-}
 
 // Arrow Classes
 const downArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
@@ -260,32 +215,13 @@ const upArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
 onMounted(async () => {
   dirtyKey.value = computeDirtyKey()
 
-  // Event Listeners
-  notifications.listenForCategory(
-    'podcast-episode-completion-event',
-    async (notification: Notification) => {
-      const jsonMap = JSON.parse(notification.context) as any
-      const complete = jsonMap['complete'] as boolean
-      const episodeId = parseInt(notification.key)
-      await refreshEpisodePublicationControls(episodeId, complete)
-    }
-  )
-
   notifications.listenForCategory('publication-completed-event', async () => {
     await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
   })
 
-  notifications.listenForCategory(
-    'publication-started-event',
-    async (notification: Notification) => {
-      await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
-      publications.value
-        .filter((pub) => pub.id === parseInt(notification.key))
-        .forEach((p) => {
-          p.publishing = true
-        })
-    }
-  )
+  notifications.listenForCategory('publication-started-event', async (_: Notification) => {
+    await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
+  })
 })
 </script>
 <template>
@@ -431,77 +367,6 @@ onMounted(async () => {
             <PodcastEpisodeBlogPost />
             <PodcastEpisodeAudioFile />
           </Publications>
-
-          <!--       
-          <select
-            v-model="selectedPlugin"
-            :disabled="!draftEpisode.complete"
-            @change="pluginSelected"
-          >
-            <option disabled value="">
-              {{ $t('podcasts.episodes.plugins.please-select-a-plugin') }}
-            </option>
-
-            <option
-              v-for="(option, index) in draftEpisode.availablePlugins"
-              :key="index"
-              :value="option"
-            >
-              {{ option }}
-            </option>
-          </select>
-                 <button
-            :key="draftEpisode.id"
-            ref="publishButton"
-            :disabled="publishButtonDisabled"
-            class="pure-button pure-button-primary publish-button"
-            type="submit"
-            @click="publish"
-          >
-            {{ $t('podcasts.episodes.buttons.publish') }}
-          </button>
-          
-          -->
-        </div>
-        <div class="publications">
-          <div
-            v-for="publication in publications"
-            v-bind:key="publication.id"
-            class="pure-g form-row publications-row"
-          >
-            <div class="id-column">
-              #<b>{{ publication.id }}</b>
-            </div>
-            <div class="plugin-column">
-              {{ publication.plugin }}
-            </div>
-            <div class="created-column">{{ dts(publication.created) }}</div>
-            <div class="published-column">
-              {{ dts(publication.published) }}
-            </div>
-            <div class="delete-column">
-              <Icon
-                :icon="deleteHighlightAsset"
-                :icon-hover="deleteAsset"
-                class="delete-icon"
-                @click.prevent="unpublish(publication)"
-              />
-            </div>
-
-            <div class="url-column preview">
-              <span v-if="publication.publishing">
-                {{ $t('podcasts.episodes.publications.publishing') }}
-              </span>
-              <a
-                :class="
-                  'mogul-icon preview-icon ' +
-                  (publication.url && publication.url !== '' ? '' : ' disabled')
-                "
-                :href="publication.url"
-                target="_blank"
-              ></a>
-            </div>
-          </div>
         </div>
       </div>
     </fieldset>
@@ -509,19 +374,6 @@ onMounted(async () => {
 </template>
 
 <style>
-/* publications */
-.publications {
-  margin-top: var(--gutter-space);
-}
-
-.publications .publications-row {
-  display: grid;
-  grid-template-areas: 'id                url                delete               created             published          plugin ';
-  grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
-    auto;
-}
-
 .episodes-row {
   grid-template-areas: 'id edit delete created title';
   grid-template-columns:
@@ -531,30 +383,6 @@ onMounted(async () => {
     var(--date-column)
     auto;
   display: grid;
-}
-
-.publications .publications-row .delete-column {
-  grid-area: delete;
-}
-
-.publications .publications-row .id-column {
-  grid-area: id;
-}
-
-.publications .publications-row .plugin-column {
-  grid-area: plugin;
-}
-
-.publications .publications-row .created-column {
-  grid-area: created;
-}
-
-.publications .publications-row .published-column {
-  grid-area: published;
-}
-
-.publications .publications-row .url-column {
-  grid-area: url;
 }
 
 .publish-menu button {

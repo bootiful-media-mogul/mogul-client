@@ -5,7 +5,12 @@
         {{ $t('publications.plugins.podbean.description') }}
       </div>
       <div>
-        <button :disabled="!isReady()" @click="publish()" type="button" class="btn btn-primary">
+        <button
+          :disabled="!isReady()"
+          @click="publish()"
+          type="button"
+          class="pure-button pure-button-primary publish-button"
+        >
           {{ $t('publications.plugins.publish') }}
         </button>
       </div>
@@ -16,13 +21,18 @@
 import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
 import PublicationPanel from '@/publications/PublicationPanel.vue'
 import { inject, onMounted, ref } from 'vue'
-import type { GetPublicationContextFunction, IsPluginReadyFunction, PublishFunction } from '@/publications/input'
+import type {
+  GetPublicationContextFunction,
+  IsPluginReadyFunction,
+  PublishFunction
+} from '@/publications/input'
 
 const ready = ref<boolean>(false)
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
-const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
+const getPublicationContextFunction =
+  inject<GetPublicationContextFunction>('getPublicationContext')!
 
 async function publish(): Promise<boolean> {
   const clientContext = {}

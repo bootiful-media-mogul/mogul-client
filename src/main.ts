@@ -9,8 +9,6 @@ import router from './index'
 
 // i18n
 const translations = {
-  
-  
   en: {
     labels: {
       'required-value': 'This is a required value!',
@@ -25,16 +23,16 @@ const translations = {
     podbean: 'Podbean',
     mock: 'Mock',
     github: 'GitHub',
-    publications:{
-     
+    publications: {
       plugins: {
-        publish : 'Publish',
+        publish: 'Publish',
         podbean: {
-          description: 'publish this episode to your Podbean account  for syndication and ad integration.'
+          description:
+            'publish this episode to your Podbean account  for syndication and ad integration.'
         }
       }
     },
-    
+
     // 'publications.plugins.podbean.description': 'publish this episode to your Podbean account  for syndication and ad integration.',
 
     // notifications

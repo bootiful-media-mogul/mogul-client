@@ -26,7 +26,6 @@ export class PublicationContext {
   }
 }
 
-
 export type PublishFunction = (
   publishableType: string,
   id: number,

@@ -236,12 +236,7 @@ onMounted(async () => {
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
       </legend>
-
-      <div class="toolbar">
-        <a href="#">export as audio</a> |
-        <a href="#">export as blog</a>
-      </div>
-
+      
       <div class="form-section">
         <div class="form-section-title">{{ $t('podcasts.episodes.basics') }}</div>
         <div class="form-row">

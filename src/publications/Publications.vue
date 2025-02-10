@@ -57,7 +57,8 @@
           :icon="deleteHighlightAsset"
           :icon-hover="deleteAsset"
           class="delete-icon"
-          @click.prevent="unpublish(publication.id)"/>
+          @click.prevent="unpublish(publication.id)"
+        />
       </div>
 
       <div class="url-column preview">

@@ -851,7 +851,7 @@ export class Publications {
          }
         `
     const result = await this.client.mutation(mutation, {
-      publicationId: parseInt(publicationId +'')
+      publicationId: parseInt(publicationId + '')
     })
     console.log('unpublish result: ', result)
     return (await result.data['unpublish']) as boolean

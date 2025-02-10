@@ -813,14 +813,13 @@ export class Utils {
 }
 
 export class Publications {
-  
   private readonly client: Client
 
   constructor(client: Client) {
     this.client = client
   }
-   
-  async publications( id: number, type: string): Promise<Array<Publication>> {
+
+  async publications(id: number, type: string): Promise<Array<Publication>> {
     const q = `
         query ( 
           $type: String,   
@@ -842,19 +841,20 @@ export class Publications {
       id: id,
       type: type
     })
-    return (await result.data['publicationsForPublishable']) as Array<Publication> 
+    return (await result.data['publicationsForPublishable']) as Array<Publication>
   }
 
-  // todo
-  async unpublish(publication: Publication) {
+  async unpublish(publicationId: number): Promise<boolean> {
     const mutation = `
-         mutation UnpublishPodcastEpisodePublication ($publicationId: ID   ){ 
-            unpublishPodcastEpisodePublication( publicationId: $publicationId )  
+         mutation ( $publicationId: Int ){ 
+            unpublish( publicationId: $publicationId )  
          }
         `
-    await this.client.mutation(mutation, {
-      publicationId: publication.id
+    const result = await this.client.mutation(mutation, {
+      publicationId: parseInt(publicationId +'')
     })
+    console.log('unpublish result: ', result)
+    return (await result.data['unpublish']) as boolean
   }
 
   async publish(
@@ -863,7 +863,6 @@ export class Publications {
     contextJson: string,
     plugin: string
   ): Promise<boolean> {
-    
     const q = `
         mutation ( 
              $id: Int ,

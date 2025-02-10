@@ -53,8 +53,11 @@
         {{ dts(publication.published) }}
       </div>
       <div class="delete-column">
-        <Icon :icon="deleteHighlightAsset" :icon-hover="deleteAsset" class="delete-icon" :disabled ="true" />
-        <!--        @click.prevent="unpublish(publication)"-->
+        <Icon
+          :icon="deleteHighlightAsset"
+          :icon-hover="deleteAsset"
+          class="delete-icon"
+          @click.prevent="unpublish(publication.id)"/>
       </div>
 
       <div class="url-column preview">
@@ -116,12 +119,10 @@ notifications.listenForCategory('publication-completed-event', async () => {
   await refresh()
 })
 
-/** there's got to be somewhere to get all the publications for a given Publishable.  */
 async function refreshPublications(publishableId: number, type: string) {
   existingPublications.value = await publications.publications(publishableId, type)
 }
 
-// enumerate all the existing ones
 const existingPublications = ref<Array<Publication>>([])
 const pluginIsDisabled = ref<boolean>(true)
 const childSlots = ref<Array<PanelSlot>>([])
@@ -133,6 +134,11 @@ watch(
     pluginIsDisabled.value = n
   }
 )
+
+async function unpublish(id: number) {
+  await publications.unpublish(id)
+  console.log('called unpublish', id)
+}
 
 async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
   await publications.publish(type, id, JSON.stringify(context), plugin)
@@ -205,12 +211,15 @@ provide('registerPublicationPanel', registerPublicationPanel)
   border-top-left-radius: 0;
 }
 
+.toolbar-icons {
+  padding-left: var(--gutter-space);
+}
+
 .toolbar-icon-disabled {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-/* publications */
 .publications {
   margin-top: var(--gutter-space);
 }

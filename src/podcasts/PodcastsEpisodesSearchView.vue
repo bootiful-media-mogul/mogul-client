@@ -52,13 +52,11 @@ const title = ref<string>('')
 const loadPodcast = async () => {
   const newPodcastId = selectedPodcastId.value
   currentPodcast.value = await podcasts.podcastById(newPodcastId)
-  
+
   const podcastEpisodes = await podcasts.podcastEpisodes(newPodcastId)
-  if (podcastEpisodes) 
-    podcastEpisodes.sort((a, b) => b.created - a.created)
+  if (podcastEpisodes) podcastEpisodes.sort((a, b) => b.created - a.created)
   episodes.value = podcastEpisodes
 
-  
   title.value = t('podcasts.episodes.all', {
     id: currentPodcast.value.id,
     title: currentPodcast.value.title
@@ -91,14 +89,9 @@ async function newEpisode() {
         </legend>
 
         <div class="toolbar">
-          <a @click.prevent="newEpisode()"> 
-            {{ $t('podcasts.episodes.new-episode')}}</a> 
+          <a @click.prevent="newEpisode()"> {{ $t('podcasts.episodes.new-episode') }}</a>
         </div>
-        <div
-          v-for="episode in episodes"
-          v-bind:key="episode.id"
-          class="row episodes-row"
-        >
+        <div v-for="episode in episodes" v-bind:key="episode.id" class="row episodes-row">
           <div class="id-column">
             #<b>{{ episode.id }}</b>
           </div>

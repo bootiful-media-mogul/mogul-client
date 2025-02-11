@@ -130,7 +130,6 @@ const handleDragStart = (event: DragEvent, attachment: Attachment) => {
     }
   }
 
-
   const clone = dragEl.cloneNode(true) as HTMLElement
   clone.style.width = `${dragEl.offsetWidth}px`
   clone.style.height = `${dragEl.offsetHeight}px`

@@ -829,17 +829,16 @@ export class Publications {
   }
 
   async unpublish(publicationId: number): Promise<boolean> {
-    
     const mutation = `
          mutation ( $publicationId: Int ){ 
             unpublish( publicationId: $publicationId )  
          }
         `
-    
+
     const result = await this.client.mutation(mutation, {
       publicationId: publicationId
     })
-    
+
     return (await result.data['unpublish']) as boolean
   }
 

@@ -7,8 +7,8 @@
     <form class="pure-form">
       <fieldset>
         <div class="toolbar">
-          <a @click.prevent="createPodcast"> 
-           {{ $t('podcasts.new-podcast') }}
+          <a @click.prevent="createPodcast">
+            {{ $t('podcasts.new-podcast') }}
           </a>
         </div>
 

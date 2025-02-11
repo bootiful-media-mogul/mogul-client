@@ -138,7 +138,6 @@ This is NOT reversible! `,
     'podcasts.save': 'Save',
     'podcasts.editing': 'Editing {podcast}',
     'podcasts.podcasts.delete': 'Delete',
-    
 
     // settings
     'settings.title': 'Settings',
@@ -146,7 +145,7 @@ This is NOT reversible! `,
     'settings.github': 'Github',
     'settings.github.clientId': 'Client ID',
     'settings.github.clientSecret': 'Client Secret',
-    'settings.podcast-blog.blogId':'Blog ID',
+    'settings.podcast-blog.blogId': 'Blog ID',
     'settings.podbean': 'Podbean',
     'settings.podbean.clientId': 'Client ID',
     'settings.podbean.clientSecret': 'Client Secret',

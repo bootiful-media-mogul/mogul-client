@@ -236,7 +236,7 @@ onMounted(async () => {
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
       </legend>
-      
+
       <div class="form-section">
         <div class="form-section-title">{{ $t('podcasts.episodes.basics') }}</div>
         <div class="form-row">
@@ -285,7 +285,7 @@ onMounted(async () => {
         <div class="form-section-title">{{ $t('podcasts.episodes.segments') }}</div>
 
         <div v-if="draftEpisode">
-          <div v-if="draftEpisode.graphic" class="  row  episode-managed-file-row">
+          <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">
             <div class="segment-controls-type">
               <b>{{ $t('podcasts.episodes.episode.graphic') }}</b>
             </div>
@@ -301,9 +301,11 @@ onMounted(async () => {
           </div>
 
           <div v-for="segment in segments" v-bind:key="segment.id">
-            <div class=" row  episode-managed-file-row">
+            <div class="row episode-managed-file-row">
               <div class="segment-controls-type">
-                <b>{{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}</b>
+                <b>{{
+                  $t('podcasts.episodes.episode.segments.number', { order: segment.order })
+                }}</b>
               </div>
               <div class="segment-controls-row">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
@@ -381,7 +383,6 @@ onMounted(async () => {
     auto;
   display: grid;
   grid-template-rows: minmax(var(--row-height), auto);
-
 }
 
 .publish-menu button {
@@ -400,8 +401,6 @@ fieldset.episodes-table {
   display: grid;
   grid-template-areas: 'type controls';
   grid-template-columns: 100px auto;
-  
-  
 }
 
 .episode-managed-file-row .segment-controls-type {

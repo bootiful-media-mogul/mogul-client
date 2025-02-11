@@ -95,12 +95,9 @@ const props = defineProps<{
   type: string
 }>()
 
-
 function withdrawn(publication: Publication) {
   return (
-     publication.url === ''  ||
-    publication.state == 'draft' ||
-    publication.state == 'unpublished'
+    publication.url === '' || publication.state == 'draft' || publication.state == 'unpublished'
   )
 }
 
@@ -153,7 +150,6 @@ watch(
     pluginIsDisabled.value = n
   }
 )
-
 
 async function unpublish(id: number) {
   await publications.unpublish(id)

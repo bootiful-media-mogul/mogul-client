@@ -1,56 +1,56 @@
 :root {
-    --gutter-space: 1.2em;
-    --main-toolbar-gutter: calc(1 * var(--gutter-space));
-    --sidebar-width: 20em;
-    --radius: .5em;
-    --button-radius: var(--radius);
-    --small-gutter-space: calc(0.5 * var(--gutter-space));
-    --form-buttons-gutter-space: calc(0.3 * var(--gutter-space));
-    --icon-width: 20px;
-    --bg-color: cadetblue;
-    --icon-column: calc(var(--gutter-space) * 1.5);
-    --id-column: calc(var(--gutter-space) * 3);
-    --footer-height: calc(var(--gutter-space) * 1.5);
-    --date-column: calc(11em);
-    --datetime-column: calc(2 * var(--date-column));
-    --icon-size: 2.5em;
-    --icon-column-width: calc(var(--gutter-space) + var(--icon-width) + var(--gutter-space));
-    --row-height: 3em;
+  --gutter-space: 1.2em;
+  --main-toolbar-gutter: calc(1 * var(--gutter-space));
+  --sidebar-width: 20em;
+  --radius: 0.5em;
+  --button-radius: var(--radius);
+  --small-gutter-space: calc(0.5 * var(--gutter-space));
+  --form-buttons-gutter-space: calc(0.3 * var(--gutter-space));
+  --icon-width: 20px;
+  --bg-color: cadetblue;
+  --icon-column: calc(var(--gutter-space) * 1.5);
+  --id-column: calc(var(--gutter-space) * 3);
+  --footer-height: calc(var(--gutter-space) * 1.5);
+  --date-column: calc(11em);
+  --datetime-column: calc(2 * var(--date-column));
+  --icon-size: 2.5em;
+  --icon-column-width: calc(var(--gutter-space) + var(--icon-width) + var(--gutter-space));
+  --row-height: 3em;
 }
 
 .row {
-    grid-template-rows: minmax(var(--row-height), auto);
-    align-items: center;
+  grid-template-rows: minmax(var(--row-height), auto);
+  align-items: center;
 }
 
 .managed-file-preview-image {
-    max-width: 100%;
+  max-width: 100%;
 }
 
 .subject-actions {
-    font-size: smaller;
+  font-size: smaller;
 }
 
 .disabled {
-    filter: grayscale(100%);
-    opacity: 30%;
-    cursor: text;
+  filter: grayscale(100%);
+  opacity: 30%;
+  cursor: text;
 }
 
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .panel {
-    border-radius: var(--radius) 0 0 var(--radius);
+  border-radius: var(--radius) 0 0 var(--radius);
 }
 
 input[type='text'] {
-    width: 100%;
+  width: 100%;
 }
 
 textarea {
-    width: 100%;
+  width: 100%;
 }
 
 .pure-form input[type='text'],
@@ -69,65 +69,64 @@ textarea {
 .pure-form input[type='color'],
 .pure-form select,
 .pure-form textarea {
-    border-radius: var(--radius);
+  border-radius: var(--radius);
 }
 
-
 a {
-    color: black;
-    text-decoration: none;
-    font-weight: bold;
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .pure-button {
-    border-color: var(--bg-color);
-    border-radius: var(--button-radius);
+  border-color: var(--bg-color);
+  border-radius: var(--button-radius);
 }
 
 .pure-form-stacked .pure-button {
-    box-sizing: content-box;
-    background-color: black;
+  box-sizing: content-box;
+  background-color: black;
 
-    color: white;
+  color: white;
 }
 
 .pure-form-stacked select {
 }
 
 .form-row {
-    vertical-align: bottom;
-    margin-top: calc(var(--form-buttons-gutter-space) * 2);
+  vertical-align: bottom;
+  margin-top: calc(var(--form-buttons-gutter-space) * 2);
 }
 
 .pure-form label {
-    text-transform: capitalize;
+  text-transform: capitalize;
 }
 
 .form-row .pure-button {
-    margin-left: calc(0.5 * var(--gutter-space));
-    right: 0;
+  margin-left: calc(0.5 * var(--gutter-space));
+  right: 0;
 }
 
 a.disabled {
-    color: lightgrey;
-    text-decoration: none;
+  color: lightgrey;
+  text-decoration: none;
 }
 
 html {
-    background-color: var(--bg-color);
-    margin-left: calc(2 * var(--gutter-space));
-    margin-top: var(--gutter-space);
+  background-color: var(--bg-color);
+  margin-left: calc(2 * var(--gutter-space));
+  margin-top: var(--gutter-space);
 }
 
 .form-prompt {
-    opacity: 70%;
+  opacity: 70%;
 }
 
 .panel-window-button-icon {
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .delete-icon {
@@ -137,224 +136,223 @@ html {
 }
 
 .up-arrow-icon.disabled {
-    background: url('../assets/images/up.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/up.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .down-arrow-icon.disabled {
-    background: url('../assets/images/down.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/down.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .up-arrow-icon {
-    background: url('../assets/images/up-highlight.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/up-highlight.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .up-arrow-icon:hover {
-    background: url('../assets/images/up.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/up.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .edit-icon {
 }
 
 .close-icon {
-    background: url('../assets/images/panel-close-highlight.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/panel-close-highlight.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 input,
 textarea {
-    z-index: 20;
-    position: relative;
+  z-index: 20;
+  position: relative;
 }
 
 .unselectable {
-    user-select: none; /* For modern browsers */
-    -webkit-user-select: none; /* For Safari */
-    -moz-user-select: none; /* For older Firefox versions */
-    -ms-user-select: none; /* For older IE/Edge versions */
+  user-select: none; /* For modern browsers */
+  -webkit-user-select: none; /* For Safari */
+  -moz-user-select: none; /* For older Firefox versions */
+  -ms-user-select: none; /* For older IE/Edge versions */
 }
 
 .close-icon:hover {
-    background: url('../assets/images/panel-close.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/panel-close.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .edit-icon:hover {
-    background: url('../assets/images/edit.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/edit.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .preview-icon {
-    background: url('../assets/images/preview-highlight.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/preview-highlight.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .preview-icon:hover:not(.disabled) {
-    background: url('../assets/images/preview.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/preview.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .checkbox-icon {
-    background: url('../assets/images/checkbox.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/checkbox.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .folder-icon {
-    background: url('../assets/images/folder-highlight.png');
+  background: url('../assets/images/folder-highlight.png');
 
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .folder-icon:hover {
-    background: url('../assets/images/folder.png');
-    height: var(--icon-width);
-    display: inline-block;
-    width: var(--icon-width);
-    background-size: var(--icon-width) var(--icon-width);
+  background: url('../assets/images/folder.png');
+  height: var(--icon-width);
+  display: inline-block;
+  width: var(--icon-width);
+  background-size: var(--icon-width) var(--icon-width);
 }
 
 .page {
-    display: grid;
-    grid-template-areas:
+  display: grid;
+  grid-template-areas:
     'welcome welcome welcome'
     'toolbar toolbar toolbar'
     'main . sidebar';
-    /* todo fix this extra row so it's a fixed */
-    grid-template-rows: auto auto auto;
-    grid-template-columns: auto var(--main-toolbar-gutter) minmax(min-content, var(--sidebar-width));
+  /* todo fix this extra row so it's a fixed */
+  grid-template-rows: auto auto auto;
+  grid-template-columns: auto var(--main-toolbar-gutter) minmax(min-content, var(--sidebar-width));
 }
 
 .notifications {
-    grid-area: notifications;
-    padding-top: var(--gutter-space);
-    padding-bottom: var(--gutter-space);
+  grid-area: notifications;
+  padding-top: var(--gutter-space);
+  padding-bottom: var(--gutter-space);
 }
 
 .welcome {
-    grid-area: welcome;
-    padding-bottom: var(--gutter-space);
+  grid-area: welcome;
+  padding-bottom: var(--gutter-space);
 }
 
 .navigable-section {
-    font-family: Arial Black,
+  font-family:
+    Arial Black,
     sans-serif;
 }
 
 .toolbar {
-    grid-area: toolbar;
-    padding-top: calc(var(--gutter-space) / 2);
-    padding-bottom: calc(var(--gutter-space) / 2);
+  grid-area: toolbar;
+  padding-top: calc(var(--gutter-space) / 2);
+  padding-bottom: calc(var(--gutter-space) / 2);
 }
 
 .view {
-    grid-area: main;
+  grid-area: main;
 }
 
 .sidebar {
-    grid-area: sidebar;
+  grid-area: sidebar;
 }
 
 .sidebar textarea {
 }
 
 .sidebar .pure-form legend {
-    color: black;
-    background-color: white;
+  color: black;
+  background-color: white;
 }
 
 .pure-form legend {
-    box-sizing: unset;
-    display: inline-block;
-    border-radius: var(--radius) var(--radius) var(--radius) var(--radius);
-    font-weight: bold;
-    background-color: black;
-    color: white;
-    border-width: 0;
-    left: calc(-4 * var(--gutter-space));
-    padding-left: calc(4 * var(--gutter-space));
-    position: relative;
-    right: 0;
+  box-sizing: unset;
+  display: inline-block;
+  border-radius: var(--radius) var(--radius) var(--radius) var(--radius);
+  font-weight: bold;
+  background-color: black;
+  color: white;
+  border-width: 0;
+  left: calc(-4 * var(--gutter-space));
+  padding-left: calc(4 * var(--gutter-space));
+  position: relative;
+  right: 0;
 }
 
 .footer {
-    bottom: 0;
-    position: fixed;
-    width: 100%;
-    background-color: black;
-    color: white;
-    text-align: center;
-    height: var(--footer-height);
-    margin-left: calc(-2 * var(--gutter-space));
-    padding-left: calc(2 * var(--gutter-space));
-    padding-top: calc(var(--gutter-space) / 2);
+  bottom: 0;
+  position: fixed;
+  width: 100%;
+  background-color: black;
+  color: white;
+  text-align: center;
+  height: var(--footer-height);
+  margin-left: calc(-2 * var(--gutter-space));
+  padding-left: calc(2 * var(--gutter-space));
+  padding-top: calc(var(--gutter-space) / 2);
 }
 
 .footer a {
-    color: white;
+  color: white;
 }
 
 .pure-form label {
-    margin-top: 0;
+  margin-top: 0;
 }
 
 .form-section {
-    border: 0;
-    padding-top: calc(var(--gutter-space) / 2);
+  border: 0;
+  padding-top: calc(var(--gutter-space) / 2);
 }
 
 .form-section .form-section-title {
-    font-size: large;
-    border-top : 1px solid black;
-    margin-bottom: var(--gutter-space);
-    margin-top: var(--gutter-space);
-    padding-bottom: calc(var(--gutter-space) / 3);
-    padding-top: 1em;
-    font-weight: bold;
+  font-size: large;
+  border-top: 1px solid black;
+  margin-bottom: var(--gutter-space);
+  margin-top: var(--gutter-space);
+  padding-bottom: calc(var(--gutter-space) / 3);
+  padding-top: 1em;
+  font-weight: bold;
 }
 
 button {
-    margin-right: var(--form-buttons-gutter-space);
-    margin-top: var(--form-buttons-gutter-space);
+  margin-right: var(--form-buttons-gutter-space);
+  margin-top: var(--form-buttons-gutter-space);
 }
 
 .form-row .pure-button:first-of-type {
-    margin-left: 0;
+  margin-left: 0;
 }
-
-

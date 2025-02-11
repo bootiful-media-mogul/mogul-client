@@ -86,14 +86,22 @@ const current = (): PanelSlot | null => {
 }
 
 const enableUpArrow = (): boolean => {
+  
   const c = current()
-  if (c == null) return false
+  
+  if (c == null) 
+    return false
+  
   return c !== childSlots.value[0]
 }
 
 const enableDownArrow = (): boolean => {
+  
   const c = current()
-  if (c == null) return true
+  
+  if (c == null) 
+    return true
+  
   return c !== childSlots.value[childSlots.value.length - 1]
 }
 

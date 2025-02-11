@@ -91,13 +91,13 @@ async function newEpisode() {
         </legend>
 
         <div class="toolbar">
-          <a @click.prevent="newEpisode()">new episode</a> | <a href="#">search</a> |
-          <a href="#">analytics</a>
+          <a @click.prevent="newEpisode()"> 
+            {{ $t('podcasts.episodes.new-episode')}}</a> 
         </div>
         <div
           v-for="episode in episodes"
           v-bind:key="episode.id"
-          class="pure-g form-row episodes-row"
+          class="row episodes-row"
         >
           <div class="id-column">
             #<b>{{ episode.id }}</b>

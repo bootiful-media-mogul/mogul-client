@@ -36,7 +36,7 @@
     <div
       v-for="publication in existingPublications"
       v-bind:key="publication.id"
-      class="pure-g form-row publications-row"
+      class="   publications-row row "
     >
       <div class="id-column">
         #<b>{{ publication.id }}</b>
@@ -189,9 +189,6 @@ provide('registerPublicationPanel', registerPublicationPanel)
 </script>
 
 <style scoped>
-:root {
-  --publication-row : 40px; 
-}
 .publications-toolbar {
   display: grid;
   grid-template-columns: repeat(auto-fill, 50px);
@@ -241,9 +238,11 @@ provide('registerPublicationPanel', registerPublicationPanel)
   display: grid;
 
   grid-template-areas: 'id url delete created published plugin ';
-  grid-template-rows: var(--publication-row);
-  align-items: center;
-  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column) auto 
+ 
+ 
+  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(
+      --date-column
+    ) auto;
 }
 
 .publications .publications-row .plugin-icon-container {

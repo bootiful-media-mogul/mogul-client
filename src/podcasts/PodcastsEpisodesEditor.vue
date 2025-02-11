@@ -285,8 +285,10 @@ onMounted(async () => {
         <div class="form-section-title">{{ $t('podcasts.episodes.segments') }}</div>
 
         <div v-if="draftEpisode">
-          <div v-if="draftEpisode.graphic" class="pure-g episode-managed-file-row">
-            <div class="segment-controls-type">{{ $t('podcasts.episodes.episode.graphic') }}</div>
+          <div v-if="draftEpisode.graphic" class="  row  episode-managed-file-row">
+            <div class="segment-controls-type">
+              <b>{{ $t('podcasts.episodes.episode.graphic') }}</b>
+            </div>
 
             <div class="segment-controls-row">
               <ManagedFileComponent
@@ -299,9 +301,9 @@ onMounted(async () => {
           </div>
 
           <div v-for="segment in segments" v-bind:key="segment.id">
-            <div class="pure-g episode-managed-file-row">
+            <div class=" row  episode-managed-file-row">
               <div class="segment-controls-type">
-                {{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}
+                <b>{{ $t('podcasts.episodes.episode.segments.number', { order: segment.order }) }}</b>
               </div>
               <div class="segment-controls-row">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
@@ -378,6 +380,8 @@ onMounted(async () => {
     var(--date-column)
     auto;
   display: grid;
+  grid-template-rows: minmax(var(--row-height), auto);
+
 }
 
 .publish-menu button {
@@ -396,6 +400,8 @@ fieldset.episodes-table {
   display: grid;
   grid-template-areas: 'type controls';
   grid-template-columns: 100px auto;
+  
+  
 }
 
 .episode-managed-file-row .segment-controls-type {

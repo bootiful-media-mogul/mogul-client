@@ -54,7 +54,8 @@
 </template>
 <style>
 .managed-file-row {
-  height: 2em;
+  /*align-items: center; 
+  grid-template-rows: minmax( var(--row-height) ,auto);*/
   grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
     min-content

@@ -7,12 +7,14 @@
     <form class="pure-form">
       <fieldset>
         <div class="toolbar">
-          <a @click.prevent="createPodcast">new podcast</a>
+          <a @click.prevent="createPodcast"> 
+           {{ $t('podcasts.new-podcast') }}
+          </a>
         </div>
 
         <legend>{{ $t('podcasts.all', { user: mogulName }) }}</legend>
 
-        <div v-for="podcast in all" v-bind:key="podcast.id" class="pure-g form-row podcast-rows">
+        <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcast-rows">
           <div class="id">
             #<b>{{ podcast.id }}</b>
           </div>

@@ -568,7 +568,6 @@ export class Notifications {
   listen(callback: (notification: Notification) => void) {
     if (this.callbacks.indexOf(callback) === -1) {
       this.callbacks.push(callback)
-      // console.log('registering a callback for Notifications')
     }
   }
 }

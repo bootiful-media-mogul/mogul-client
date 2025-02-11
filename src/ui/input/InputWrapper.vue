@@ -74,8 +74,6 @@ const registerChild = (slotPair: PanelSlot) => {
 }
 
 const readInputValue = () => {
-  // console.log('readInputValue ' + inputElement.value!!.value + ' text.value=' + text.value)
-  // return text.value || ''
   return inputElement.value!!.value
 }
 

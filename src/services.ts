@@ -132,8 +132,7 @@ export class Podcasts {
           }
         }
         `
-    const res = await this.client.query(q, 
-      { podcastEpisodeId: podcastEpisodeId })
+    const res = await this.client.query(q, { podcastEpisodeId: podcastEpisodeId })
     return (await res.data['podcastEpisodeById']) as PodcastEpisode
   }
 
@@ -431,13 +430,22 @@ export class Publication {
   url: string
   // this is meant to be set by the UI if and only if we're in the middle of publishing an episode
   publishing: boolean = false
+  state: string
 
-  constructor(id: number, plugin: string, created: number, published: number, url: string) {
+  constructor(
+    id: number,
+    plugin: string,
+    created: number,
+    published: number,
+    url: string,
+    state: string
+  ) {
     this.id = id
     this.url = url
     this.plugin = plugin
     this.created = created
     this.published = published
+    this.state = state
   }
 }
 
@@ -644,7 +652,7 @@ export class ManagedFiles {
           }
         }
         `
-    const result = await this.client.query(q, {  managedFileId: managedFileId })
+    const result = await this.client.query(q, { managedFileId: managedFileId })
     const managedFileIdRes = await result.data['managedFileById']
     return managedFileIdRes as ManagedFile
   }
@@ -808,7 +816,8 @@ export class Publications {
               plugin,
               created,
               published,
-              url
+              url,
+              state
            }
        }
      `
@@ -820,14 +829,17 @@ export class Publications {
   }
 
   async unpublish(publicationId: number): Promise<boolean> {
+    
     const mutation = `
          mutation ( $publicationId: Int ){ 
             unpublish( publicationId: $publicationId )  
          }
         `
+    
     const result = await this.client.mutation(mutation, {
-      publicationId: parseInt(publicationId + '')
+      publicationId: publicationId
     })
+    
     return (await result.data['unpublish']) as boolean
   }
 

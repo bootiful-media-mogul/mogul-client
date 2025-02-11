@@ -36,7 +36,7 @@
     <div
       v-for="publication in existingPublications"
       v-bind:key="publication.id"
-      class="   publications-row row "
+      class="publications-row row"
     >
       <div class="id-column">
         #<b>{{ publication.id }}</b>
@@ -60,6 +60,7 @@
           :icon="deleteHighlightAsset"
           :icon-hover="deleteAsset"
           class="delete-icon"
+          :disabled="withdrawn(publication)"
           @click.prevent="unpublish(publication.id)"
         />
       </div>
@@ -69,10 +70,8 @@
           {{ $t('podcasts.episodes.publications.publishing') }}
         </span>
         <a
-          :class="
-            'mogul-icon preview-icon ' +
-            (publication.url && publication.url !== '' ? '' : ' disabled')
-          "
+          class="mogul-icon preview-icon"
+          :class="{ disabled: withdrawn(publication) }"
           :href="publication.url"
           target="_blank"
         ></a>
@@ -95,6 +94,15 @@ const props = defineProps<{
   publishable: string
   type: string
 }>()
+
+
+function withdrawn(publication: Publication) {
+  return (
+     publication.url === ''  ||
+    publication.state == 'draft' ||
+    publication.state == 'unpublished'
+  )
+}
 
 const existingPublications = ref<Array<Publication>>([])
 const pluginIsDisabled = ref<boolean>(true)
@@ -146,10 +154,11 @@ watch(
   }
 )
 
+
 async function unpublish(id: number) {
   await publications.unpublish(id)
+  await refresh()
 }
-
 async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
   await publications.publish(type, id, JSON.stringify(context), plugin)
 }
@@ -238,11 +247,10 @@ provide('registerPublicationPanel', registerPublicationPanel)
   display: grid;
 
   grid-template-areas: 'id url delete created published plugin ';
- 
- 
-  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(
-      --date-column
-    ) auto;
+
+  grid-template-columns:
+    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
+    auto;
 }
 
 .publications .publications-row .plugin-icon-container {

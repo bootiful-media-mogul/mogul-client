@@ -66,10 +66,9 @@
       </div>
 
       <div class="url-column preview">
-        <span v-if="publication.publishing">
-          {{ $t('podcasts.episodes.publications.publishing') }}
-        </span>
+        <span v-if="publication.publishing"> 🕒 </span>
         <a
+          v-else
           class="mogul-icon preview-icon"
           :class="{ disabled: withdrawn(publication) }"
           :href="publication.url"
@@ -155,6 +154,7 @@ async function unpublish(id: number) {
   await publications.unpublish(id)
   await refresh()
 }
+
 async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
   await publications.publish(type, id, JSON.stringify(context), plugin)
 }

@@ -27,7 +27,10 @@ const translations = {
     publications: {
       plugins: {
         publish: 'Publish',
+        blogpost:{ 'title' : 'Publish as a Blog Post'},
+        audiofile:{ 'title' : 'Download the finalized (produced) .mp3 file for the episode'},
         podbean: {
+          title: 'Publish to Podbean.com',
           description:
             'publish this episode to your Podbean account  for syndication and ad integration.'
         }

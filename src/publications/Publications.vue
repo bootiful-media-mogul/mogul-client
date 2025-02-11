@@ -27,6 +27,10 @@
         :class="{ 'publication-panel-selected': isAnyPanelSelected }"
         v-if="slot.selected"
       >
+        <div class="plugin">
+          {{ $t('publications.plugins.' + slot.plugin.toLowerCase() +'.title') }}
+        </div>
+
         <component :is="slot.panel" />
       </div>
     </div>
@@ -57,9 +61,9 @@
       </div>
       <div class="delete-column">
         <Icon
+          class="delete-icon"
           :icon="deleteHighlightAsset"
           :icon-hover="deleteAsset"
-          class="delete-icon"
           :disabled="withdrawn(publication)"
           @click.prevent="unpublish(publication.id)"
         />
@@ -220,6 +224,19 @@ provide('registerPublicationPanel', registerPublicationPanel)
   background-color: white;
   padding: calc(var(--gutter-space) / 2);
   margin: 0;
+  overflow: hidden;
+}
+
+.publication-panel .plugin {
+  background-color: lightgray;
+  padding: var(--gutter-space-half);
+  /*width: fit-content;*/
+  border-bottom-right-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  margin-left: calc(var(--gutter-space-half) * -1);
+  margin-bottom: var(--gutter-space-half);
+  font-weight: bold;
+  font-size: smaller;
 }
 
 .publication-panel-selected {

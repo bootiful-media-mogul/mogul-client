@@ -65,8 +65,6 @@ async function doLoad(mfid: any) {
   } else {
     url.value = '/api' + managedFile.url
   }
-  console.log('url for preview for managed file # ' + managedFile.id + 'is ' + url.value)
-  // url.value = '/api/managedfiles/' + managedFile.id
   const ext = managedFile.contentType.toLowerCase()
   isImage.value =
     ext.endsWith('jpg') || ext.endsWith('jpeg') || ext.endsWith('png') || ext.endsWith('gif')
@@ -94,7 +92,6 @@ async function load() {
 const callback = async (id: any) => await doLoad(id)
 
 events.on('preview-managed-file-event', async (event) => {
-  console.log('received an event for a preview for managed file ' + event)
   await callback(event)
   events.emit('sidebar-panel-opened', el.value)
 })

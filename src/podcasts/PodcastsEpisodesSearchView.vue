@@ -50,14 +50,15 @@ onMounted(async () => {
 const title = ref<string>('')
 
 const loadPodcast = async () => {
-  const newPodcastId = parseInt(selectedPodcastId.value + '')
+  const newPodcastId = selectedPodcastId.value
   currentPodcast.value = await podcasts.podcastById(newPodcastId)
-
+  
   const podcastEpisodes = await podcasts.podcastEpisodes(newPodcastId)
-
-  if (podcastEpisodes) podcastEpisodes.sort((a, b) => b.created - a.created)
-
+  if (podcastEpisodes) 
+    podcastEpisodes.sort((a, b) => b.created - a.created)
   episodes.value = podcastEpisodes
+
+  
   title.value = t('podcasts.episodes.all', {
     id: currentPodcast.value.id,
     title: currentPodcast.value.title

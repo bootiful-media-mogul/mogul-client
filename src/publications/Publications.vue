@@ -138,7 +138,6 @@ watch(
 
 async function unpublish(id: number) {
   await publications.unpublish(id)
-  console.log('called unpublish', id)
 }
 
 async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
@@ -169,7 +168,7 @@ function getPublicationContext(): PublicationContext {
 
 async function isPluginReady(type: string, id: number, context: Map<string, any>, plugin: string) {
   return (
-    !props.disabled && (await publications.canPublish(type, id, JSON.stringify(context), plugin))
+    !props.disabled && (await publications.canPublish(   id, type, JSON.stringify(context), plugin))
   )
 }
 

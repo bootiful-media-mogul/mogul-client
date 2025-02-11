@@ -63,61 +63,42 @@ export class Podcasts {
     this.client = client
   }
 
-  async addPodcastEpisodeSegment(episodeId: number) {
-    // console.log('add a new podcast episode segment #' + episodeId)
+  async createPodcastEpisodeSegment(podcastEpisodeId: number) {
     const mutation = ` 
-          mutation AddPodcastEpisodeSegment($episodeId: ID  ){ 
-            addPodcastEpisodeSegment(episodeId:$episodeId  ) 
-          }
-        `
+      mutation ($podcastEpisodeId:  Int   ){ 
+        createPodcastEpisodeSegment(podcastEpisodeId : $podcastEpisodeId  ) 
+      }
+    `
     await this.client.mutation(mutation, {
-      episodeId: episodeId
+      podcastEpisodeId: podcastEpisodeId
     })
     return true
   }
 
-  /*
-    async publishPodcastEpisode(episodeId: number, pluginName: string): Promise<boolean> {
-      const mutation = ` 
-            mutation PublishPodcastEpisode  ($episode: ID, $pluginName: String ){ 
-              publishPodcastEpisode ( episodeId: $episode,  pluginName: $pluginName ) 
-            }
-      `
-      const publication = await this.client.mutation(mutation, {
-        episode: episodeId,
-        pluginName: pluginName
-      })
-      return (await publication.data['publishPodcastEpisode']) as boolean
-    }
-  */
-
   async updatePodcastEpisode(
-    episodeId: number,
+    podcastEpisodeId: number,
     title: string,
     description: string
   ): Promise<PodcastEpisode> {
     const mutation = `
-         mutation UpdatePodcastEpisode  ($episode: ID, $title: String, $description: String ){ 
-          updatePodcastEpisode ( episodeId: $episode, title: $title, description: $description) { 
-             id 
-          }
+         mutation ($podcastEpisodeId:  Int , $title: String, $description: String ){ 
+          updatePodcastEpisode (  podcastEpisodeId: $podcastEpisodeId, title: $title, description: $description) 
          }
         `
     const result = await this.client.mutation(mutation, {
-      episode: episodeId,
+      podcastEpisodeId: podcastEpisodeId,
       title: title,
       description: description
     })
 
     const res = await result.data['updatePodcastEpisode']
-    return await this.podcastEpisodeById(res['id'])
+    return await this.podcastEpisodeById(podcastEpisodeId)
   }
 
-  async podcastEpisodeById(id: number): Promise<PodcastEpisode> {
+  async podcastEpisodeById(podcastEpisodeId: number): Promise<PodcastEpisode> {
     const q = `
-        query GetPodcastEpisodeById ( $id: ID){
-            podcastEpisodeById ( id : $id) {
-              availablePlugins, 
+        query ( $podcastEpisodeId:  Int ){
+            podcastEpisodeById ( podcastEpisodeId : $podcastEpisodeId) {
               created, 
               id, 
               title, 
@@ -151,28 +132,28 @@ export class Podcasts {
           }
         }
         `
-    const res = await this.client.query(q, { id: id })
+    const res = await this.client.query(q, 
+      { podcastEpisodeId: podcastEpisodeId })
     return (await res.data['podcastEpisodeById']) as PodcastEpisode
   }
 
   async update(podcastId: number, title: string): Promise<Podcast> {
     const mutation = `
-         mutation UpdatePodcast( $podcastId:  ID, $title: String){ 
-          updatePodcast(podcastId: $podcastId , title: $title) { 
-           id, title
-          }
-         }
+       mutation( $podcastId: Int , $title: String){ 
+        updatePodcast(podcastId: $podcastId , title: $title) 
+       }
     `
     const result = await this.client.mutation(mutation, {
       podcastId: podcastId,
       title: title
     })
-    return (await result.data['updatePodcast']) as Podcast
+    const res = (await result.data['updatePodcast']) as boolean
+    return await this.podcastById(podcastId)
   }
 
   async create(title: string): Promise<Podcast> {
     const mutation = `
-         mutation CreatePodcast ($title: String){ 
+         mutation   ($title: String){ 
           createPodcast(title: $title) { 
            id, title
           }
@@ -185,19 +166,9 @@ export class Podcasts {
   }
 
   async podcastEpisodes(podcastId: number): Promise<Array<PodcastEpisode>> {
-    /*
-      publications { 
-                  id,
-                  plugin ,
-                  created, 
-                  published ,
-                  url
-                },
-    * */
     const q = `
-        query GetPodcastEpisodesByPodcast( $podcastId: ID){
+        query GetPodcastEpisodesByPodcast( $podcastId:  Int ){
             podcastEpisodesByPodcast ( podcastId : $podcastId) {
-                availablePlugins,  
                 created, 
                 id , 
                 title, 
@@ -221,70 +192,70 @@ export class Podcasts {
   }
 
   // transcript
-  async refreshPodcastEpisodeSegmentTranscript(episodeSegmentId: number): Promise<boolean> {
+  async transcribePodcastEpisodeSegment(podcastEpisodeSegmentId: number): Promise<boolean> {
     const mutation = ` 
-          mutation RefreshPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID ){ 
-            refreshPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId   )  
+          mutation ($podcastEpisodeSegmentId :  Int  ){ 
+            transcribePodcastEpisodeSegment ( podcastEpisodeSegmentId: $podcastEpisodeSegmentId   )  
           }
     `
     const refresh = await this.client.mutation(mutation, {
-      episodeSegmentId: episodeSegmentId
+      podcastEpisodeSegmentId: podcastEpisodeSegmentId
     })
-    return (await refresh.data['refreshPodcastEpisodesSegmentTranscript']) as boolean
+    return (await refresh.data['transcribePodcastEpisodeSegment']) as boolean
   }
 
-  async setPodcastEpisodesSegmentTranscript(
-    episodeSegmentId: number,
+  async setPodcastEpisodeSegmentTranscript(
+    podcastEpisodeSegmentId: number,
     transcribable: boolean,
     transcript: string
   ): Promise<boolean> {
     const mutation = ` 
-          mutation SetPodcastEpisodesSegmentTranscript  ($episodeSegmentId: ID, $transcribable: Boolean , $transcript:String ){ 
-            setPodcastEpisodesSegmentTranscript ( episodeSegmentId: $episodeSegmentId,  transcribable: $transcribable, transcript: $transcript )  
+          mutation ($podcastEpisodeSegmentId: Int, $transcribable: Boolean , $transcript:String ){ 
+            setPodcastEpisodeSegmentTranscript(podcastEpisodeSegmentId: $podcastEpisodeSegmentId,  transcribable: $transcribable, transcript: $transcript )  
           }
     `
     const segmentTranscript = await this.client.mutation(mutation, {
-      episodeSegmentId: episodeSegmentId,
+      podcastEpisodeSegmentId: podcastEpisodeSegmentId,
       transcribable: transcribable,
       transcript: transcript
     })
-    return (await segmentTranscript.data['setPodcastEpisodesSegmentTranscript']) as boolean
+    return (await segmentTranscript.data['setPodcastEpisodeSegmentTranscript']) as boolean
   }
 
   // transcript
 
-  async deletePodcastEpisodeSegment(id: number) {
+  async deletePodcastEpisodeSegment(podcastEpisodeSegmentId: number) {
     const mutation = `
-         mutation DeletePodcastEpisodeSegment ($id: ID ){ 
-          deletePodcastEpisodeSegment(id: $id)  
+         mutation   ($podcastEpisodeSegmentId:  Int  ){ 
+          deletePodcastEpisodeSegment(podcastEpisodeSegmentId: $podcastEpisodeSegmentId)  
          }
         `
     const result = await this.client.mutation(mutation, {
-      id: id
+      podcastEpisodeSegmentId: podcastEpisodeSegmentId
     })
     return (await result.data['deletePodcastEpisodeSegment']) as Number
   }
 
-  async deletePodcastEpisode(id: number) {
+  async deletePodcastEpisode(podcastEpisodeId: number) {
     const mutation = `
-         mutation DeletePodcastEpisode ($id: ID ){ 
-          deletePodcastEpisode(id: $id)  
+         mutation ($podcastEpisodeId:  Int  ){ 
+          deletePodcastEpisode( podcastEpisodeId: $podcastEpisodeId)  
          }
         `
     const result = await this.client.mutation(mutation, {
-      id: id
+      podcastEpisodeId: podcastEpisodeId
     })
     return (await result.data['deletePodcastEpisode']) as Number
   }
 
-  async deletePodcast(id: number) {
+  async deletePodcast(podcastId: number) {
     const mutation = `
-         mutation DeletePodcast ($id: ID ){ 
-          deletePodcast(id: $id)  
-         }
-        `
+       mutation ($podcastId:  Int  ){ 
+        deletePodcast(podcastId: $podcastId)  
+       }
+    `
     const result = await this.client.mutation(mutation, {
-      id: id
+      podcastId: podcastId
     })
     return (await result.data['deletePodcast']) as Number
   }
@@ -307,15 +278,14 @@ export class Podcasts {
     description: string
   ): Promise<PodcastEpisode> {
     const mutation = `
-         mutation CreatePodcastEpisodeDraft ($podcast: ID, $title: String, $description: String ){ 
-          createPodcastEpisodeDraft( podcastId: $podcast, title: $title, description: $description) { 
+         mutation   ($podcastId:  Int , $title: String, $description: String ){ 
+          createPodcastEpisodeDraft( podcastId: $podcastId, title: $title, description: $description) { 
                id  
           }
          }
         `
-    //console.log(podcastId + ':' + title + ':' + description)
     const result = await this.client.mutation(mutation, {
-      podcast: podcastId,
+      podcastId: podcastId,
       title: title,
       description: description
     })
@@ -326,42 +296,52 @@ export class Podcasts {
 
   async podcastById(podcastId: number): Promise<Podcast> {
     const q = `
-       
-            query GetPodcastById( $id: ID){
-                podcastById ( id : $id) { 
-                    id,
-                    title 
-                }
-            }
+      query( $podcastId: Int ){
+          podcastById(podcastId: $podcastId) {
+           id,
+           title 
+          }
+      }
         `
-    const result = await this.client.query(q, { id: podcastId })
+    const result = await this.client.query(q, { podcastId: podcastId })
     return (await result.data['podcastById']) as Podcast
   }
 
   async movePodcastEpisodeSegmentDown(episodeId: number, episodeSegmentId: number) {
     const mutation = `
-         mutation MovePodcastEpisodeSegmentDown ($episodeId: ID, $episodeSegmentId: ID   ){ 
-          movePodcastEpisodeSegmentDown(  episodeId: $episodeId,  episodeSegmentId: $episodeSegmentId  ) 
+         mutation (
+           $podcastEpisodeId: Int, 
+           $podcastEpisodeSegmentId: Int    
+         ){ 
+            movePodcastEpisodeSegmentDown(
+                podcastEpisodeId: $podcastEpisodeId, 
+                podcastEpisodeSegmentId : $podcastEpisodeSegmentId  
+            ) 
          }
         `
     // todo for some reason these are showing up as `strings` and causing issues when i send them to the server-side.
     //
     const result = await this.client.mutation(mutation, {
-      episodeId: episodeId,
-      episodeSegmentId: episodeSegmentId
+      podcastEpisodeId: episodeId,
+      podcastEpisodeSegmentId: episodeSegmentId
     })
-    // console.debug('movePodcastEpisodeSegmentDown #' + JSON.stringify(result))
   }
 
   async movePodcastEpisodeSegmentUp(episodeId: number, episodeSegmentId: number) {
     const mutation = `
-         mutation MovePodcastEpisodeSegmentUp ($episodeId: ID  , $episodeSegmentId: ID    ){ 
-          movePodcastEpisodeSegmentUp(  episodeId: $episodeId,  episodeSegmentId: $episodeSegmentId )  
+         mutation (
+              $podcastEpisodeId: Int, 
+              $podcastEpisodeSegmentId:Int
+          ){ 
+          movePodcastEpisodeSegmentUp(
+             podcastEpisodeId: $podcastEpisodeId,
+             podcastEpisodeSegmentId: $podcastEpisodeSegmentId 
+           )  
          }
         `
     const result = await this.client.mutation(mutation, {
-      episodeId: episodeId,
-      episodeSegmentId: episodeSegmentId
+      podcastEpisodeId: episodeId,
+      podcastEpisodeSegmentId: episodeSegmentId
     })
   }
 }
@@ -470,7 +450,7 @@ export class PodcastEpisode {
   complete: boolean = false
   created: number = 0
   segments: Array<PodcastEpisodeSegment>
-  publications: Array<Publication>
+  publications: Array<Publication> //todo remove this i dont think its necessary any more.
   descriptionComposition?: Composition
   titleComposition?: Composition
 
@@ -571,7 +551,6 @@ export class Notifications {
         that.callbacks.forEach((callback) => callback(notificationObj))
         that.callbacksByCategory.forEach((array, key) => {
           if (key === notificationObj.category) {
-            // console.log('dispatching event with key [' + key + '] to function...')
             array.forEach((cb) => cb(notificationObj))
           }
         })
@@ -647,7 +626,7 @@ export class ManagedFiles {
 
   async setManagedFileVisibility(managedFileId: number, visible: boolean) {
     const mutation = `
-      mutation SetManagedFileVisibility( $managedFileId : ID , $visible:Boolean ){ 
+      mutation SetManagedFileVisibility( $managedFileId :  Int  , $visible:Boolean ){ 
        setManagedFileVisibility (  managedFileId: $managedFileId, visible: $visible )
       }
     `
@@ -658,17 +637,17 @@ export class ManagedFiles {
     return (await result.data['setManagedFileVisibility']) as boolean
   }
 
-  async getManagedFileById(id: number): Promise<ManagedFile> {
+  async getManagedFileById(managedFileId: number): Promise<ManagedFile> {
     const q = `
-        query ($id: ID) {
-          managedFileById( id : $id )  { 
+        query ($managedFileId:  Int ) {
+          managedFileById( managedFileId : $managedFileId )  { 
             id, bucket, folder, filename, size, written ,contentType, visible , url, visibleUrl
           }
         }
         `
-    const result = await this.client.query(q, { id: id })
-    const managedFileId = await result.data['managedFileById']
-    return managedFileId as ManagedFile
+    const result = await this.client.query(q, {  managedFileId: managedFileId })
+    const managedFileIdRes = await result.data['managedFileById']
+    return managedFileIdRes as ManagedFile
   }
 }
 
@@ -714,13 +693,11 @@ export class Compositions {
   }
 
   async deleteCompositionAttachment(attachmentId: number) {
-    // console.log(`the composition id is ${attachmentId}`)
     const mutation = `
-         mutation DeleteCompositionAttachment($attachmentId: ID) { 
-          deleteCompositionAttachment( attachmentId: $attachmentId ) 
+         mutation ($compositionAttachmentId:  Int ) { 
+          deleteCompositionAttachment( compositionAttachmentId: $attachmentId ) 
          }
         `
-
     const result = await this.client.mutation(mutation, {
       attachmentId: attachmentId
     })
@@ -730,7 +707,7 @@ export class Compositions {
 
   async createCompositionAttachment(compositionId: number) {
     const mutation = `
-         mutation CreateCompositionAttachment ($compositionId: ID ){ 
+         mutation ($compositionId:  Int ){ 
           createCompositionAttachment(  compositionId: $compositionId ) { 
              id  
           }
@@ -739,14 +716,13 @@ export class Compositions {
     const result = await this.client.mutation(mutation, {
       compositionId: compositionId
     })
-    const idBag = (await result.data['createCompositionAttachment'])['id']
-    console.log('idBag: ' + idBag)
+    const res = (await result.data['createCompositionAttachment'])['id']
     return true
   }
 
   async getCompositionById(id: number): Promise<Composition> {
     const q = `
-        query ($id: ID) {
+        query ($id: Int ) {
           compositionById( compositionId : $id )  { 
             id, 
             field, 
@@ -853,7 +829,6 @@ export class Publications {
     const result = await this.client.mutation(mutation, {
       publicationId: parseInt(publicationId + '')
     })
-    console.log('unpublish result: ', result)
     return (await result.data['unpublish']) as boolean
   }
 
@@ -865,14 +840,14 @@ export class Publications {
   ): Promise<boolean> {
     const q = `
         mutation ( 
-             $id: Int ,
+             $publishableId: Int ,
              $publishableType: String, 
              $contextJson: String,
              $plugin: String
           ) {
-           publish (
+           publish (  
+             publishableId: $publishableId, 
              publishableType: $publishableType,
-             id: $id, 
              contextJson: $contextJson, 
              plugin: $plugin 
            )   
@@ -880,7 +855,7 @@ export class Publications {
         `
     const result = await this.client.mutation(q, {
       publishableType: publishableType,
-      id: id,
+      publishableId: id,
       contextJson: contextJson,
       plugin: plugin
     })
@@ -888,29 +863,29 @@ export class Publications {
   }
 
   async canPublish(
+    publishableId: number,
     publishableType: string,
-    id: number,
     contextJson: string,
     plugin: string
   ): Promise<boolean> {
     const q = `
         query ( 
-             $id: Int ,
+             $publishableId: Int ,
              $publishableType: String, 
              $contextJson: String,
              $plugin: String
           ) {
            canPublish(
+             publishableId : $publishableId  ,
              publishableType: $publishableType,
-             id : $id  , 
              contextJson : $contextJson, 
              plugin : $plugin 
-             )   
+           )   
         }
         `
     const result = await this.client.query(q, {
       publishableType: publishableType,
-      id: id,
+      publishableId: publishableId,
       contextJson: contextJson,
       plugin: plugin
     })

@@ -117,13 +117,13 @@
 </style>
 <script lang="ts" setup>
 import axios from 'axios'
-import { ManagedFile, managedFiles, previewManagedFile } from '@/services'
+import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'
 
 interface Props {
   readonly disabled?: boolean
   readonly accept: string
-  readonly managedFileId: number | string
+  readonly managedFileId: number
 }
 
 const props = defineProps<Props>()
@@ -142,7 +142,7 @@ onMounted(async () => {
 watch(
   () => visible.value,
   async (n: boolean, o: boolean) => {
-    await managedFiles.setManagedFileVisibility(props.managedFileId as number, n)
+    await managedFiles.setManagedFileVisibility(props.managedFileId, n)
   }
 )
 
@@ -161,7 +161,7 @@ function mfId(): number {
 
   const m: any = props.managedFileId
   if (isNumber(m)) return m as number
-  else return parseInt(props.managedFileId as string)
+  else return props.managedFileId
 }
 
 const preview = async () => {

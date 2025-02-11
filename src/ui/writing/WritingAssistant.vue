@@ -188,13 +188,11 @@ function proposeUpdatedText(updatedText: string) {
   previousModelValue.value = readValue()
   emit('update:modelValue', updatedText)
   proposalApprovalRequired.value = true
-  console.log('proposed ' + updatedText)
   updateValue(updatedText)
 }
 
 async function proofread() {
   const contents = readValue().trim()
-  console.log('proofread [' + contents + ']')
 
   if (contents === '') return
 
@@ -221,7 +219,6 @@ async function rewriteProfessional() {
 }
 
 async function rewriteConcise() {
-  console.log('you want to rewrite: ' + readValue().substring(0, 10) + '...')
   if (readValue().trim() === '') return
   const updated = await ai.chat(
     `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.

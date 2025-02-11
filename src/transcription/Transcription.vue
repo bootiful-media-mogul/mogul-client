@@ -66,8 +66,8 @@ watch(
   (o: string, n: string) => {
     if (fresh.value) {
       fresh.value = false
-    } else {
-      console.log('you changed something')
+    }//
+    else {
       dirty.value = true
     }
   }

@@ -65,7 +65,6 @@ async function downloadAudio() {
   const episode = await podcasts.podcastEpisodeById(publicationContext.publishableId)
   const mf = await managedFiles.managedFileById(episode.producedAudio.id)
   const url = mf.downloadableUrl
-  console.log('redirecting to ', url)
   window.open(url, '_blank')
 }
 </script>

@@ -2,9 +2,6 @@
   <PublicationPanel plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
     <template v-slot:panel>
       <div>
-        {{ $t('publications.plugins.podbean.description') }}
-      </div>
-      <div>
         <button
           :disabled="!isReady()"
           @click="publish()"

@@ -27,10 +27,9 @@
         :class="{ 'publication-panel-selected': isAnyPanelSelected }"
         v-if="slot.selected"
       >
-        <div class="plugin">
-          {{ $t('publications.plugins.' + slot.plugin.toLowerCase() +'.title') }}
+        <div>
+          {{ $t('publications.plugins.' + slot.plugin.toLowerCase() + '.description') }}
         </div>
-
         <component :is="slot.panel" />
       </div>
     </div>
@@ -230,7 +229,6 @@ provide('registerPublicationPanel', registerPublicationPanel)
 .publication-panel .plugin {
   background-color: lightgray;
   padding: var(--gutter-space-half);
-  /*width: fit-content;*/
   border-bottom-right-radius: var(--radius);
   border-top-right-radius: var(--radius);
   margin-left: calc(var(--gutter-space-half) * -1);

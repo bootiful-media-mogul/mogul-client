@@ -81,8 +81,8 @@ export class Podcasts {
     description: string
   ): Promise<PodcastEpisode> {
     const mutation = `
-         mutation ($podcastEpisodeId:  Int , $title: String, $description: String ){ 
-          updatePodcastEpisode (  podcastEpisodeId: $podcastEpisodeId, title: $title, description: $description) 
+         mutation ($podcastEpisodeId: Int, $title: String, $description: String ){ 
+          updatePodcastEpisode( podcastEpisodeId: $podcastEpisodeId, title: $title, description: $description) 
          }
         `
     const result = await this.client.mutation(mutation, {
@@ -97,19 +97,18 @@ export class Podcasts {
 
   async podcastEpisodeById(podcastEpisodeId: number): Promise<PodcastEpisode> {
     const q = `
-        query ( $podcastEpisodeId:  Int ){
-            podcastEpisodeById ( podcastEpisodeId : $podcastEpisodeId) {
+        query($podcastEpisodeId: Int ){
+            podcastEpisodeById (podcastEpisodeId: $podcastEpisodeId) {
               created, 
               id, 
               title, 
               description, 
               complete,  
+              producedAudio { id  },
               graphic { id  },
-              
               segments { 
                 id, name, audio { id } , order , crossFadeDuration , transcript 
               }
-            
               descriptionComposition { 
                 id,
                 field ,
@@ -379,6 +378,7 @@ export class ManagedFile {
   visible: boolean
   contentType: string
   visibleUrl: string
+  downloadableUrl: string
   url: string
 
   constructor(
@@ -391,9 +391,11 @@ export class ManagedFile {
     contentType: string,
     visible: boolean,
     publicUrl: string,
-    url: string
+    url: string,
+    downloadableVisibleUrl: string
   ) {
     this.id = id
+    this.downloadableUrl = downloadableVisibleUrl
     this.bucket = bucket
     this.folder = folder
     this.filename = filename
@@ -455,14 +457,13 @@ export class PodcastEpisode {
   title: string
   description: string
   graphic: ManagedFile
+  producedAudio: ManagedFile
   complete: boolean = false
   created: number = 0
   segments: Array<PodcastEpisodeSegment>
   publications: Array<Publication> //todo remove this i dont think its necessary any more.
   descriptionComposition?: Composition
   titleComposition?: Composition
-
-  // descriptionComposition: Composition
 
   constructor(
     id: number,
@@ -474,13 +475,12 @@ export class PodcastEpisode {
     availablePlugins: Array<string>,
     segments: Array<PodcastEpisodeSegment>,
     publications: Array<Publication>,
+    producedAudio: ManagedFile,
     descriptionComposition?: Composition,
     titleComposition?: Composition
   ) {
-    // compositions
     this.descriptionComposition = descriptionComposition
     this.titleComposition = titleComposition
-
     this.availablePlugins = availablePlugins
     this.id = id
     this.title = title
@@ -488,6 +488,7 @@ export class PodcastEpisode {
     this.graphic = graphic
     this.complete = complete
     this.created = created
+    this.producedAudio = producedAudio
     this.segments = segments
     this.publications = publications
   }
@@ -644,11 +645,11 @@ export class ManagedFiles {
     return (await result.data['setManagedFileVisibility']) as boolean
   }
 
-  async getManagedFileById(managedFileId: number): Promise<ManagedFile> {
+  async managedFileById(managedFileId: number): Promise<ManagedFile> {
     const q = `
         query ($managedFileId:  Int ) {
           managedFileById( managedFileId : $managedFileId )  { 
-            id, bucket, folder, filename, size, written ,contentType, visible , url, visibleUrl
+            id, bucket, folder, filename, size, written ,contentType, visible , url, visibleUrl , downloadableUrl
           }
         }
         `

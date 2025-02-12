@@ -176,7 +176,7 @@ const launchFileUpload = async () => {
 }
 
 const loadManagedFileIntoEditor = async () => {
-  const managedFile = await managedFiles.getManagedFileById(mfId())
+  const managedFile = await managedFiles.managedFileById(mfId())
   filename.value = managedFile.filename
   written.value = managedFile.written
   if (managedFile.contentType && managedFile.contentType.indexOf('/') != -1) {

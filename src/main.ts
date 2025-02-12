@@ -20,24 +20,21 @@ const translations = {
     },
 
     hello: 'Hello, {mogul}',
-    podbean: 'Podbean',
-    mock: 'Mock',
-    'podcast-blog': 'Blog Post from Podcast Episode',
-    github: 'GitHub',
+
     publications: {
       plugins: {
         publish: 'Publish',
-        blogpost:{ 'title' : 'Publish as a Blog Post'},
-        audiofile:{ 'title' : 'Download the finalized (produced) .mp3 file for the episode'},
+        blogpost: { description: 'Publish as a Blog Post' },
+        audiofile: {
+          description: 'Download the finalized (produced) .mp3 file for the episode',
+          download: 'Download'
+        },
         podbean: {
-          title: 'Publish to Podbean.com',
           description:
-            'publish this episode to your Podbean account  for syndication and ad integration.'
+            'publish this episode to your Podbean.com account for syndication and ad integration.'
         }
       }
     },
-
-    // 'publications.plugins.podbean.description': 'publish this episode to your Podbean account  for syndication and ad integration.',
 
     // notifications
     notifications: {

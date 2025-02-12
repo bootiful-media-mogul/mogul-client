@@ -59,7 +59,7 @@ const size = ref('')
 const contentType = ref('')
 
 async function doLoad(mfid: any) {
-  const managedFile = await managedFiles.getManagedFileById(parseInt(mfid))
+  const managedFile = await managedFiles.managedFileById(parseInt(mfid))
   if (managedFile.visible) {
     url.value = managedFile.visibleUrl
   } else {

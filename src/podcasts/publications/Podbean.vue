@@ -2,12 +2,7 @@
   <PublicationPanel plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
     <template v-slot:panel>
       <div>
-        <button
-          :disabled="!isReady()"
-          @click="publish()"
-          type="button"
-          class="pure-button pure-button-primary publish-button"
-        >
+        <button :disabled="disabled" @click="publish()" type="button">
           {{ $t('publications.plugins.publish') }}
         </button>
       </div>
@@ -23,8 +18,9 @@ import type {
   IsPluginReadyFunction,
   PublishFunction
 } from '@/publications/input'
+import { notifications } from '@/services'
 
-const ready = ref<boolean>(false)
+const pluginName = 'podbean'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
@@ -38,23 +34,30 @@ async function publish(): Promise<boolean> {
     publicationContext.type,
     publicationContext.publishableId,
     clientContext,
-    'podbean'
+    pluginName
   )
 }
 
-async function isReady(): Promise<boolean> {
+const disabled = ref<boolean>(false)
+
+notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+  console.debug('podcast-episode-completed-event', evt)
+  disabled.value = await isPluginDisabled()
+})
+
+onMounted(async () => {
+  disabled.value = await isPluginDisabled()
+})
+
+async function isPluginDisabled() {
   const clientContext = {}
   const publicationContext = getPublicationContextFunction()
-  ready.value = await isPluginReadyFunction(
+  const ready = await isPluginReadyFunction(
     publicationContext.type,
     publicationContext.publishableId,
     clientContext,
-    'podbean'
+    pluginName
   )
-  return ready.value
+  return !ready!
 }
-
-onMounted(async () => {
-  await isReady()
-})
 </script>

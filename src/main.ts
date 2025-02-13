@@ -23,13 +23,30 @@ const translations = {
 
     publications: {
       plugins: {
+        
         publish: 'Publish',
-        blogpost: { description: 'Publish as a Blog Post' },
-        audiofile: {
+        github: {
+          title: 'GitHub',
+          clientId: 'Client ID',
+          clientSecret: 'Client Secret',
+        },
+        mock: {
+          title: 'Mock'
+        },
+        podcastEpisodeToBlogPost: {
+          blogId: 'Blog ID',
+          description: 'Publish as a Blog Post',
+          title: 'Publish as a Blog Post'
+        },
+        audioFile: {
+          title: 'Download Audio File',
           description: 'Download the finalized (produced) .mp3 file for the episode',
           download: 'Download'
         },
         podbean: {
+          title: 'Podbean',
+          clientId: 'Client ID',
+          clientSecret: 'Client Secret',
           description:
             'publish this episode to your Podbean.com account for syndication and ad integration.'
         }
@@ -44,7 +61,7 @@ const translations = {
       'podcast-episode-render-started-event': 'Producing an episode of the podcast episode #{key}',
       'publication-started-event': 'Publishing podcast episode with ID #{key} has started.',
       'publication-completed-event': 'Publishing podcast episode with ID #{key} has finished.',
-      'podcast-episode-completion-event':
+      'podcast-episode-completed-event':
         'The podcast with ID #{key} is completed and ready for production',
       'podcast-created-event': `The podcast "{context}", with ID #{key}, has been created.`.trim(),
       'podcast-deleted-event': `The podcast "{context}", with ID #{key}, has been deleted.`.trim()
@@ -142,13 +159,13 @@ This is NOT reversible! `,
     // settings
     'settings.title': 'Settings',
     'settings.save-button': 'Save configuration changes for {plugin}',
-    'settings.github': 'Github',
-    'settings.github.clientId': 'Client ID',
-    'settings.github.clientSecret': 'Client Secret',
-    'settings.podcast-blog.blogId': 'Blog ID',
-    'settings.podbean': 'Podbean',
-    'settings.podbean.clientId': 'Client ID',
-    'settings.podbean.clientSecret': 'Client Secret',
+    // 'settings.github': 'Github',
+    // 'settings.github.clientId': 'Client ID',
+    // 'settings.github.clientSecret': 'Client Secret',
+    // 'settings.podcast-blog.blogId': 'Blog ID',
+    // 'settings.podbean': 'Podbean',
+    // 'settings.podbean.clientId': 'Client ID',
+    // 'settings.podbean.clientSecret': 'Client Secret',
     'settings.no-configuration-for-plugin': 'No configuration settings for the {plugin} plugin'
   }
 }

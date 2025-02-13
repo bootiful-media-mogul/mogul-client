@@ -4,7 +4,6 @@
 // to a composition, nominally so we can then include references to them in
 // text blocks via drag and drop.
 //
-import draggableAsset from '@/assets/images/draggable-handle.png'
 
 import { inject, onMounted, ref } from 'vue'
 import { Attachment, compositions } from '@/services'

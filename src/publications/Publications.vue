@@ -84,7 +84,7 @@
 
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
-import { onMounted, provide, ref, watch } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import { type PanelSlot, PanelSlotIcon, PublicationContext } from '@/publications/input'
 import { Notification, notifications, Publication, publications } from '@/services'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
@@ -104,7 +104,6 @@ function withdrawn(publication: Publication) {
 }
 
 const existingPublications = ref<Array<Publication>>([])
-const pluginIsDisabled = ref<boolean>(true)
 const childSlots = ref<Array<PanelSlot>>([])
 const isAnyPanelSelected = ref<boolean>(false)
 const iconsAvailable = ref<boolean>(false)
@@ -127,6 +126,7 @@ onMounted(async () => {
   })
 
   iconsAvailable.value = childSlots.value.length == icons.value.size
+  // pluginIsDisabled.value = props.disabled
 })
 
 notifications.listenForCategory('publication-started-event', async (notification: Notification) => {
@@ -146,12 +146,13 @@ async function refreshPublications(publishableId: number, type: string) {
   existingPublications.value = await publications.publications(publishableId, type)
 }
 
-watch(
-  () => props.disabled,
-  async (n: any, o: any) => {
-    pluginIsDisabled.value = n
-  }
-)
+// watch(
+//   () => props.disabled,
+//   async (n: any, o: any) => {
+//     pluginIsDisabled.value = n
+//     console.log('in Publications: plugin is disabled:', n)
+//   }
+// )
 
 async function unpublish(id: number) {
   await publications.unpublish(id)
@@ -185,9 +186,7 @@ function getPublicationContext(): PublicationContext {
 }
 
 async function isPluginReady(type: string, id: number, context: Map<string, any>, plugin: string) {
-  return (
-    !props.disabled && (await publications.canPublish(id, type, JSON.stringify(context), plugin))
-  )
+  return await publications.canPublish(id, type, JSON.stringify(context), plugin)
 }
 
 provide('getPublicationContext', getPublicationContext)

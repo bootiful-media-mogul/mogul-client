@@ -68,6 +68,7 @@ const created = ref(-1)
 const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
 const podcast = ref<Podcast>()
 const podcastId = ref<number>(props.podcastId)
+const publicationsDisabled = ref<boolean>(false)
 
 onMounted(async () => {
   podcast.value = await podcasts.podcastById(podcastId.value)
@@ -128,6 +129,7 @@ const loadEpisodeSegments = async (episode: PodcastEpisode) => {
 
 const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   Object.assign(draftEpisode.value, episode)
+  publicationsDisabled.value = !episode.complete
   description.value = episode.description
   title.value = episode.title
   created.value = episode.created
@@ -138,7 +140,6 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
 }
 
 async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
-  //todo make sure we have the updated, latest transcript
   const episode = await podcasts.podcastEpisodeById(draftEpisode.value.id)
   const match = episode.segments.filter((pes) => pes.id == seg.id)[0]
   editTranscript(transcriptEventPrefix, seg.id, match.transcript)
@@ -164,6 +165,7 @@ const cancel = async () => {
   title.value = ''
   description.value = ''
   segments.value = []
+  publicationsDisabled.value = true
 }
 
 // Segment Methods
@@ -191,13 +193,13 @@ const deletePodcastEpisodeSegment = async (
   const msg = t('confirm.deletion', { title: segmentDetails })
   if (!utils.confirmDeletion(msg)) return
 
-  draftEpisode.value.complete = false
+  publicationsDisabled.value = true
   await podcasts.deletePodcastEpisodeSegment(episodeSegment.id)
   await loadEpisodeSegments(episode)
 }
 
 const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
-  draftEpisode.value.complete = false
+  publicationsDisabled.value = true
   await podcasts.createPodcastEpisodeSegment(episode.id)
   await loadEpisodeSegments(episode)
 }
@@ -214,6 +216,16 @@ const upArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
 // Lifecycle Hooks
 onMounted(async () => {
   dirtyKey.value = computeDirtyKey()
+
+  notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+    const ctx = JSON.parse(evt.context)
+    const matches = '' + ctx['key'] === draftEpisode.value.id + ''
+    if (!matches) {
+      return
+    }
+    publicationsDisabled.value = ctx['complete'] === false
+    console.log('complete?', ctx['complete'])
+  })
 
   notifications.listenForCategory('publication-completed-event', async () => {
     await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
@@ -289,7 +301,6 @@ onMounted(async () => {
             <div class="segment-controls-type">
               <b>{{ $t('podcasts.episodes.episode.graphic') }}</b>
             </div>
-
             <div class="segment-controls-row">
               <ManagedFileComponent
                 :managed-file-id="draftEpisode.graphic.id"
@@ -359,7 +370,7 @@ onMounted(async () => {
           <Publications
             v-if="draftEpisode.id"
             :publishable="draftEpisode.id + ''"
-            :disabled="!draftEpisode.complete"
+            :disabled="publicationsDisabled"
             :type="'episode'"
           >
             <Podbean />
@@ -371,7 +382,6 @@ onMounted(async () => {
     </fieldset>
   </form>
 </template>
-
 <style>
 .episodes-row {
   grid-template-areas: 'id edit delete created title';

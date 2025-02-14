@@ -28,7 +28,7 @@
         v-if="slot.selected"
       >
         <div>
-          {{ $t('publications.plugins.' + slot.plugin.toLowerCase() + '.description') }}
+          {{ $t('publications.plugins.' + slot.plugin + '.description') }}
         </div>
         <component :is="slot.panel" />
       </div>
@@ -126,7 +126,7 @@ onMounted(async () => {
   })
 
   iconsAvailable.value = childSlots.value.length == icons.value.size
-  // pluginIsDisabled.value = props.disabled
+
 })
 
 notifications.listenForCategory('publication-started-event', async (notification: Notification) => {
@@ -146,13 +146,6 @@ async function refreshPublications(publishableId: number, type: string) {
   existingPublications.value = await publications.publications(publishableId, type)
 }
 
-// watch(
-//   () => props.disabled,
-//   async (n: any, o: any) => {
-//     pluginIsDisabled.value = n
-//     console.log('in Publications: plugin is disabled:', n)
-//   }
-// )
 
 async function unpublish(id: number) {
   await publications.unpublish(id)
@@ -161,6 +154,8 @@ async function unpublish(id: number) {
 
 async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
   await publications.publish(type, id, JSON.stringify(context), plugin)
+  await refresh()
+
 }
 
 function showPanelForSlot(slot: PanelSlot) {

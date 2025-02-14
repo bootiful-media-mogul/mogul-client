@@ -23,7 +23,9 @@ const translations = {
 
     publications: {
       plugins: {
-        
+        blogPost : {
+          description: 'Publish the episode as a blog post'
+        },
         publish: 'Publish',
         github: {
           title: 'GitHub',
@@ -48,7 +50,7 @@ const translations = {
           clientId: 'Client ID',
           clientSecret: 'Client Secret',
           description:
-            'publish this episode to your Podbean.com account for syndication and ad integration.'
+            'Publish this episode to your Podbean.com account for syndication and ad integration.'
         }
       }
     },

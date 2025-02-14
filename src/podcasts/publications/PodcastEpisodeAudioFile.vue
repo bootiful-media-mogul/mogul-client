@@ -8,7 +8,7 @@
           type="button"
           class="pure-button pure-button-primary publish-button"
         >
-          {{ $t('publications.plugins.audiofile.download') }}
+          {{ $t('publications.plugins.audioFile.download') }}
         </button>
       </div>
     </template>

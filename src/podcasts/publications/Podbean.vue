@@ -4,7 +4,7 @@
       <div>
         <button
           :disabled="disabled"
-          @click="publish()"
+          @click.prevent="publish()"
           type="button"
           class="pure-button pure-button-primary publish-button"
         >
@@ -29,8 +29,7 @@ const pluginName = 'podbean'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
-const getPublicationContextFunction =
-  inject<GetPublicationContextFunction>('getPublicationContext')!
+const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
 
 async function publish(): Promise<boolean> {
   const clientContext = {}
@@ -46,11 +45,12 @@ async function publish(): Promise<boolean> {
 const disabled = ref<boolean>(false)
 
 notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
-  console.debug('podcast-episode-completed-event', evt)
+  console.debug('podbean: podcast-episode-completed-event', evt)
   disabled.value = await isPluginDisabled()
 })
 
 onMounted(async () => {
+  console.log('podbean: calling isPluginDisabled()')
   disabled.value = await isPluginDisabled()
 })
 

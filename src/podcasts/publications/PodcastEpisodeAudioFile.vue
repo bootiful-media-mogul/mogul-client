@@ -3,7 +3,7 @@
     <template v-slot:panel>
       <div>
         <button
-          :disabled="!isReady()"
+          :disabled="disabled"
           @click.prevent="downloadAudio()"
           type="button"
           class="pure-button pure-button-primary publish-button"
@@ -16,42 +16,40 @@
 </template>
 <script setup lang="ts">
 import downloadAudioIcon from '@/assets/images/publications/podcasts/publish-download-produced-audio.png'
-
 import PublicationPanel from '@/publications/PublicationPanel.vue'
-
 import { inject, onMounted, ref } from 'vue'
-
 import type {
   GetPublicationContextFunction,
   IsPluginReadyFunction,
   PublishFunction
 } from '@/publications/input'
-import { managedFiles, podcasts } from '@/services'
+import { managedFiles, notifications, podcasts } from '@/services'
 
-const ready = ref<boolean>(false)
+const pluginName = 'audioFile'
+
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
-const getPublicationContextFunction =
-  inject<GetPublicationContextFunction>('getPublicationContext')!
-
 const publishFunction = inject<PublishFunction>('publish')!
+const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
 
-const plugin = 'audioFile'
+const disabled = ref<boolean>(false)
 
-async function isReady(): Promise<boolean> {
+notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+  console.debug('audioFile: podcast-episode-completed-event', evt)
+  disabled.value = await isPluginDisabled()
+})
+
+
+async function isPluginDisabled() {
   const clientContext = {}
   const publicationContext = getPublicationContextFunction()
-  ready.value = await isPluginReadyFunction(
+  const ready = await isPluginReadyFunction(
     publicationContext.type,
     publicationContext.publishableId,
     clientContext,
-    plugin
+    pluginName
   )
-  return ready.value
+  return !ready!
 }
-
-onMounted(async () => {
-  await isReady()
-})
 
 async function downloadAudio() {
   const publicationContext = getPublicationContextFunction()
@@ -60,11 +58,17 @@ async function downloadAudio() {
     publicationContext.type,
     publicationContext.publishableId,
     clientContext,
-    plugin
+    pluginName
   )
   const episode = await podcasts.podcastEpisodeById(publicationContext.publishableId)
   const mf = await managedFiles.managedFileById(episode.producedAudio.id)
   const url = mf.downloadableUrl
   window.open(url, '_blank')
 }
+
+onMounted(async () => {
+  console.log('audioFile: calling isPluginDisabled()')
+  disabled.value = await isPluginDisabled()
+})
+
 </script>

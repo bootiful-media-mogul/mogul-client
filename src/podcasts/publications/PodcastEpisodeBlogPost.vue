@@ -1,8 +1,6 @@
 <template>
   <PublicationPanel plugin="blogPost" :icon-hover="blogIcon" :icon="blogIcon">
-    <template v-slot:panel> 
-    
-    </template>
+    <template v-slot:panel> </template>
   </PublicationPanel>
 </template>
 <script setup lang="ts">

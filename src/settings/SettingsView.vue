@@ -4,14 +4,12 @@
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>
- 
-          {{   $t(  'publications.plugins.'+ settingsPage.category+ '.title'   ) }}
+          {{ $t('publications.plugins.' + settingsPage.category + '.title') }}
         </legend>
         <div v-for="setting in settingsPage.settings" v-bind:key="setting.name">
           <div class="pure-control-group">
             <label :for="textAreaElementId(settingsPage.category, setting.name)">
-              {{ $t('publications.plugins.' + settingsPage.category
-                  + '.' + setting.name) }}
+              {{ $t('publications.plugins.' + settingsPage.category + '.' + setting.name) }}
               <PrivatePasswordInputComponent
                 :prompt="$t('podcasts.episodes.episode.description.ai-prompt')"
               />
@@ -35,13 +33,18 @@
             type="submit"
             @click.prevent="save(settingsPage.category)"
           >
-            {{ $t('settings.save-button',
-                { plugin: $t('publications.plugins.' + settingsPage.category + '.title') }) }}
+            {{
+              $t('settings.save-button', {
+                plugin: $t('publications.plugins.' + settingsPage.category + '.title')
+              })
+            }}
           </button>
           <div
             v-if="settingsPage.settings.length == 0"
             v-html="
-              $t('settings.no-configuration-for-plugin', { plugin: $t( 'publications.plugins.'+ settingsPage.category +'.title') })
+              $t('settings.no-configuration-for-plugin', {
+                plugin: $t('publications.plugins.' + settingsPage.category + '.title')
+              })
             "
           ></div>
         </div>

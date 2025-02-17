@@ -23,14 +23,14 @@ const translations = {
 
     publications: {
       plugins: {
-        blogPost : {
+        blogPost: {
           description: 'Publish the episode as a blog post'
         },
         publish: 'Publish',
         github: {
           title: 'GitHub',
           clientId: 'Client ID',
-          clientSecret: 'Client Secret',
+          clientSecret: 'Client Secret'
         },
         mock: {
           title: 'Mock'

@@ -126,7 +126,6 @@ onMounted(async () => {
   })
 
   iconsAvailable.value = childSlots.value.length == icons.value.size
-
 })
 
 notifications.listenForCategory('publication-started-event', async (notification: Notification) => {
@@ -146,7 +145,6 @@ async function refreshPublications(publishableId: number, type: string) {
   existingPublications.value = await publications.publications(publishableId, type)
 }
 
-
 async function unpublish(id: number) {
   await publications.unpublish(id)
   await refresh()
@@ -155,7 +153,6 @@ async function unpublish(id: number) {
 async function publish(type: string, id: number, context: Map<string, any>, plugin: string) {
   await publications.publish(type, id, JSON.stringify(context), plugin)
   await refresh()
-
 }
 
 function showPanelForSlot(slot: PanelSlot) {

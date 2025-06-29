@@ -8,7 +8,7 @@ cd "$ROOT_DIR/build"
 
 pack build  $IMAGE_NAME \
   --builder paketobuildpacks/builder:base \
- --buildpack gcr.io/paketo-buildpacks/nginx:latest \
+ --buildpack docker.io/paketobuildpacks/nginx:latest \
  --env PORT=8080
 
 #pack build $IMAGE_NAME --builder paketobuildpacks/builder:full \

@@ -120,15 +120,43 @@ async function newEpisode() {
   </div>
 </template>
 
-<style>
+<style scoped>
+
+
+
+.title {
+  grid-area: title;
+}
+
 .episodes-row {
-  grid-template-areas: 'id edit delete created title';
+  padding-top: calc(var(--gutter-space)/2);
+  border-top: 1px solid black;
+  grid-template-areas:
+    'id  edit delete created created'
+    'title   title   title title title';
   grid-template-columns:
     var(--id-column)
     var(--icon-column)
     var(--icon-column)
     var(--date-column)
     auto;
+  grid-template-rows: auto minmax(var(--row-height), auto);
+
   display: grid;
 }
+
+/*@media (min-width: 1024px) {
+
+  .episodes-row {
+    border: 1px solid palegoldenrod;
+    grid-template-areas: 'id edit delete created title';
+    grid-template-columns:
+      var(--id-column)
+      var(--icon-column)
+      var(--icon-column)
+      var(--date-column)
+      auto;
+    display: grid;
+  }
+}*/
 </style>

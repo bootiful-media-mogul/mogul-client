@@ -163,6 +163,21 @@ export class Podcasts {
     return (await result.data['createPodcast']) as Podcast
   }
 
+  async podcastEpisodesPreviews(podcastId:number) :Promise <Array<PodcastEpisode>> {
+    const q = `
+        query GetPodcastEpisodesByPodcast( $podcastId:  Int ){
+            podcastEpisodesByPodcast ( podcastId : $podcastId) {
+                created, 
+                id , 
+                title, 
+                description, 
+                complete 
+            }
+        } 
+    `
+    const res = await this.client.query(q, { podcastId: podcastId })
+    return (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
+  }
   async podcastEpisodes(podcastId: number): Promise<Array<PodcastEpisode>> {
     const q = `
         query GetPodcastEpisodesByPodcast( $podcastId:  Int ){

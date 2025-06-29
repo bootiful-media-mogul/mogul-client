@@ -29,7 +29,8 @@ const pluginName = 'podbean'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
-const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
+const getPublicationContextFunction =
+  inject<GetPublicationContextFunction>('getPublicationContext')!
 
 async function publish(): Promise<boolean> {
   const clientContext = {}

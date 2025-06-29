@@ -29,7 +29,8 @@ const pluginName = 'audioFile'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
-const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
+const getPublicationContextFunction =
+  inject<GetPublicationContextFunction>('getPublicationContext')!
 
 const disabled = ref<boolean>(false)
 
@@ -37,7 +38,6 @@ notifications.listenForCategory('podcast-episode-completed-event', async (evt) =
   console.debug('audioFile: podcast-episode-completed-event', evt)
   disabled.value = await isPluginDisabled()
 })
-
 
 async function isPluginDisabled() {
   const clientContext = {}
@@ -70,5 +70,4 @@ onMounted(async () => {
   console.log('audioFile: calling isPluginDisabled()')
   disabled.value = await isPluginDisabled()
 })
-
 </script>

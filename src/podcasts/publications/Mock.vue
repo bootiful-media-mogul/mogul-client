@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import PublicationPanel from '@/publications/PublicationPanel.vue'
+import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 </script>
 
 <template>
-  <PublicationPanel plugin="mock">
+  <PublicationPanelComponent plugin="mock">
     <template v-slot:panel>Mock</template>
     <template v-slot:icon> [mock]</template>
-  </PublicationPanel>
+  </PublicationPanelComponent>
 </template>

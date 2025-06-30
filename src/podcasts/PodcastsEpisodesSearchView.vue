@@ -121,15 +121,12 @@ async function newEpisode() {
 </template>
 
 <style scoped>
-
-
-
 .title {
   grid-area: title;
 }
 
 .episodes-row {
-  padding-top: calc(var(--gutter-space)/2);
+  padding-top: calc(var(--gutter-space) / 2);
   border-top: 1px solid black;
   grid-template-areas:
     'id  edit delete created created'
@@ -144,19 +141,4 @@ async function newEpisode() {
 
   display: grid;
 }
-
-/*@media (min-width: 1024px) {
-
-  .episodes-row {
-    border: 1px solid palegoldenrod;
-    grid-template-areas: 'id edit delete created title';
-    grid-template-columns:
-      var(--id-column)
-      var(--icon-column)
-      var(--icon-column)
-      var(--date-column)
-      auto;
-    display: grid;
-  }
-}*/
 </style>

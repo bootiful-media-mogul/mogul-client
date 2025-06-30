@@ -1,5 +1,5 @@
 <template>
-  <PublicationPanel plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
+  <PublicationPanelComponent plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
     <template v-slot:panel>
       <div>
         <button
@@ -12,11 +12,11 @@
         </button>
       </div>
     </template>
-  </PublicationPanel>
+  </PublicationPanelComponent>
 </template>
 <script setup lang="ts">
 import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
-import PublicationPanel from '@/publications/PublicationPanel.vue'
+import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
 import type {
   GetPublicationContextFunction,

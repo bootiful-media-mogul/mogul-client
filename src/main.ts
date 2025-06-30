@@ -86,6 +86,7 @@ const translations = {
     // app
     'app.menu.home': 'Home',
     'app.menu.settings': 'Settings',
+    'app.menu.test': 'Test',
     'app.menu.podcasts': 'Podcasts',
     'app.menu.blogs': 'Blogs',
     'app.menu.about': 'About',

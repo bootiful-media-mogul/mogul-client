@@ -34,7 +34,7 @@ import transcriptAsset from '@/assets/images/transcript.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
-import Publications from '@/publications/Publications.vue'
+import PublicationsSectionComponent from '@/publications/PublicationsSectionComponent.vue'
 import PodcastEpisodeBlogPost from '@/podcasts/publications/PodcastEpisodeBlogPost.vue'
 import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudioFile.vue'
 import Podbean from '@/podcasts/publications/Podbean.vue'
@@ -367,7 +367,7 @@ onMounted(async () => {
 
         <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
         <div class="publish-menu">
-          <Publications
+          <PublicationsSectionComponent
             v-if="draftEpisode.id"
             :publishable="draftEpisode.id + ''"
             :disabled="publicationsDisabled"
@@ -376,7 +376,7 @@ onMounted(async () => {
             <Podbean />
             <PodcastEpisodeBlogPost />
             <PodcastEpisodeAudioFile />
-          </Publications>
+          </PublicationsSectionComponent>
         </div>
       </div>
     </fieldset>

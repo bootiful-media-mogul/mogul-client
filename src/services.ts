@@ -163,7 +163,7 @@ export class Podcasts {
     return (await result.data['createPodcast']) as Podcast
   }
 
-  async podcastEpisodesPreviews(podcastId:number) :Promise <Array<PodcastEpisode>> {
+  async podcastEpisodesPreviews(podcastId: number): Promise<Array<PodcastEpisode>> {
     const q = `
         query GetPodcastEpisodesByPodcast( $podcastId:  Int ){
             podcastEpisodesByPodcast ( podcastId : $podcastId) {
@@ -547,6 +547,8 @@ export class Notifications {
   constructor(client: Client) {
     this.client = client
     const that = this
+
+
     setInterval(async () => {
       // don't run a network call if there are no callbacks to benefit from it
       if (that.callbacks.length == 0) {
@@ -580,6 +582,19 @@ export class Notifications {
         })
       }
     }, 5000)
+  }
+
+  async notify (visible:boolean , modal:boolean) {
+    const mutation = `
+      mutation Notify($visible:Boolean, $modal:Boolean){ 
+        notify(visible: $visible, modal: $modal)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      visible: visible,
+      modal: modal
+    })
+    return (await result.data['notify']) as boolean
   }
 
   listenForCategory(category: string, callback: (notification: Notification) => void) {

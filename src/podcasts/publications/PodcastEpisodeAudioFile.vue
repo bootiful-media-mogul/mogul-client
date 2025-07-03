@@ -1,5 +1,9 @@
 <template>
-  <PublicationPanelComponent plugin="audioFile" :icon-hover="downloadAudioIcon" :icon="downloadAudioIcon">
+  <PublicationPanelComponent
+    plugin="audioFile"
+    :icon-hover="downloadAudioIcon"
+    :icon="downloadAudioIcon"
+  >
     <template v-slot:panel>
       <div>
         <button

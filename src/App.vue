@@ -5,7 +5,7 @@ import NotificationBoxComponent from '@/notifications/NotificationBoxComponent.v
 import { onMounted, ref } from 'vue'
 import TranscriptionComponent from '@/transcription/TranscriptionComponent.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
-import NotificationsComponent from '@/notifications/NotificationComponent.vue'
+import NotificationsComponent from '@/notifications/NotificationsComponent.vue'
 
 const mogulUsername = ref<string | null>(null)
 
@@ -13,7 +13,7 @@ onMounted(async () => {
   const res = await mogul.user()
   if (res && res.email) {
     mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
-  }//
+  } //
   else {
     console.log('could not get user info from mogul.user()')
   }
@@ -43,12 +43,12 @@ onMounted(async () => {
           |
           <router-link
             :to="{
-            path: '/podcasts',
-            query: {
-              when: Date.now()
-            }
-          }"
-          >{{ $t('app.menu.podcasts') }}
+              path: '/podcasts',
+              query: {
+                when: Date.now()
+              }
+            }"
+            >{{ $t('app.menu.podcasts') }}
           </router-link>
           |
           <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>

@@ -548,7 +548,7 @@ export class Notifications {
     this.client = client
     const that = this
 
-
+  /*
     setInterval(async () => {
       // don't run a network call if there are no callbacks to benefit from it
       if (that.callbacks.length == 0) {
@@ -582,9 +582,11 @@ export class Notifications {
         })
       }
     }, 5000)
+
+   */
   }
 
-  async notify (visible:boolean , modal:boolean) {
+  async notify(visible: boolean, modal: boolean) {
     const mutation = `
       mutation Notify($visible:Boolean, $modal:Boolean){ 
         notify(visible: $visible, modal: $modal)

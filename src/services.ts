@@ -3,6 +3,7 @@ import mitt from 'mitt'
 import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
 import { marked } from 'marked'
+import * as Ably from 'ably'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -178,6 +179,7 @@ export class Podcasts {
     const res = await this.client.query(q, { podcastId: podcastId })
     return (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
   }
+
   async podcastEpisodes(podcastId: number): Promise<Array<PodcastEpisode>> {
     const q = `
         query GetPodcastEpisodesByPodcast( $podcastId:  Int ){
@@ -544,47 +546,76 @@ export class Notifications {
 
   private callbacksByCategory: Map<string, Array<(notification: Notification) => void>> = new Map()
 
-  constructor(client: Client) {
-    this.client = client
-    const that = this
 
+  async start() {
+    console.log('starting notifications subscriber.')
+    const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())['channel']
+    console.log('channel name is ' + channelName)
 
-    setInterval(async () => {
-      // don't run a network call if there are no callbacks to benefit from it
-      if (that.callbacks.length == 0) {
-        return
-      }
-
-      const q = `
-          query   {
-            notifications { 
-              mogulId , 
-              category , 
-              key , 
-              when , 
-              context ,  
-              visible ,  
-              modal 
-            }
-           }
-          `
-      const result = await this.client.query(q, {})
-      const data = await result.data
-      const d = data['notifications']
-      // don't run a network call if there is no notification to show
-      if (d !== null) {
-        const notificationObj = d as Notification
-        that.callbacks.forEach((callback) => callback(notificationObj))
-        that.callbacksByCategory.forEach((array, key) => {
-          if (key === notificationObj.category) {
-            array.forEach((cb) => cb(notificationObj))
-          }
-        })
-      }
-    }, 5000)
+    const ably = new Ably.Realtime({ authUrl: '/api/notifications/ably/token' })
+    const channel = ably.channels.get(channelName)
+    await channel.subscribe(async (message) => await this.dispatch(message))
   }
 
-  async notify (visible:boolean , modal:boolean) {
+  async dispatch(message: Ably.InboundMessage) {
+
+    if (this.callbacks.length == 0) {
+      return
+    }
+
+    const notification = JSON.parse(message.data) as Notification
+    this.callbacks.forEach((callback) => callback(notification))
+    this.callbacksByCategory.forEach((array, key) => {
+      if (key === notification.category) {
+        array.forEach((cb) => cb(notification))
+      }
+    })
+
+
+  }
+
+  constructor(client: Client) {
+    this.client = client
+    this.start() // don't care that  ignored
+    /*
+      setInterval(async () => {
+        // don't run a network call if there are no callbacks to benefit from it
+        if (that.callbacks.length == 0) {
+          return
+        }
+
+        const q = `
+            query   {
+              notifications {
+                mogulId ,
+                category ,
+                key ,
+                when ,
+                context ,
+                visible ,
+                modal
+              }
+             }
+            `
+        const result = await this.client.query(q, {})
+        const data = await result.data
+        const d = data['notifications']
+        // don't run a network call if there is no notification to show
+        if (d !== null) {
+          const notificationObj = d as Notification
+          that.callbacks.forEach((callback) => callback(notificationObj))
+          that.callbacksByCategory.forEach((array, key) => {
+            if (key === notificationObj.category) {
+              array.forEach((cb) => cb(notificationObj))
+            }
+          })
+        }
+      }, 5000)
+
+     */
+  }
+
+  async notify(visible: boolean, modal: boolean) {
     const mutation = `
       mutation Notify($visible:Boolean, $modal:Boolean){ 
         notify(visible: $visible, modal: $modal)

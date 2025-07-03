@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 import * as Ably from 'ably'
-import { mogul } from '@/services'
 
 async function one() {
 
@@ -16,11 +15,6 @@ async function one() {
   console.log(history.items.map((message) => message.data))
 
   await realtimeChannel.subscribe(e => console.log('event:' + e))
-
-  await realtimeClient.connection.once('connected')
-
-  console.log(`Made my first connection!`)
-
 }
 
 /**

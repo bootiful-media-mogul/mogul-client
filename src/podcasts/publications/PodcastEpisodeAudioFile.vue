@@ -39,7 +39,6 @@ const getPublicationContextFunction =
 const disabled = ref<boolean>(false)
 
 notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
-  console.debug('audioFile: podcast-episode-completed-event', evt)
   disabled.value = await isPluginDisabled()
 })
 

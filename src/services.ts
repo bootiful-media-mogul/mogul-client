@@ -577,42 +577,6 @@ export class Notifications {
   constructor(client: Client) {
     this.client = client
     this.start() // don't care that  ignored
-    /*
-      setInterval(async () => {
-        // don't run a network call if there are no callbacks to benefit from it
-        if (that.callbacks.length == 0) {
-          return
-        }
-
-        const q = `
-            query   {
-              notifications {
-                mogulId ,
-                category ,
-                key ,
-                when ,
-                context ,
-                visible ,
-                modal
-              }
-             }
-            `
-        const result = await this.client.query(q, {})
-        const data = await result.data
-        const d = data['notifications']
-        // don't run a network call if there is no notification to show
-        if (d !== null) {
-          const notificationObj = d as Notification
-          that.callbacks.forEach((callback) => callback(notificationObj))
-          that.callbacksByCategory.forEach((array, key) => {
-            if (key === notificationObj.category) {
-              array.forEach((cb) => cb(notificationObj))
-            }
-          })
-        }
-      }, 5000)
-
-     */
   }
 
   async notify(visible: boolean, modal: boolean) {

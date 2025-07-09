@@ -59,7 +59,7 @@ events.on('transcript-edited-event', async (event) => {
 // Props
 const props = defineProps<{
   podcastId: number
-  episode: PodcastEpisode
+  episodeId: number
 }>()
 
 // State
@@ -68,18 +68,13 @@ const created = ref(-1)
 const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
 const podcast = ref<Podcast>()
 const podcastId = ref<number>(props.podcastId)
+const episodeId = ref<number>(props.episodeId)
 const publicationsDisabled = ref<boolean>(false)
 
 onMounted(async () => {
   podcast.value = await podcasts.podcastById(podcastId.value)
-  // now we decide whether we're editing a draft episode, or if we're being asked to edit a record in the DB.
-  if (props.episode) {
-    if (props.episode.id) {
-      await loadEpisodeFromDbIntoEditor(props.episode.id)
-    } //
-    else {
-      draftEpisode.value = props.episode // we're being asked to edit a draft.
-    }
+  if (props.episodeId) {
+    await loadEpisodeFromDbIntoEditor(episodeId.value)
   }
 })
 
@@ -224,7 +219,6 @@ onMounted(async () => {
       return
     }
     publicationsDisabled.value = ctx['complete'] === false
-    console.log('complete?', ctx['complete'])
   })
 
   notifications.listenForCategory('publication-completed-event', async () => {
@@ -237,6 +231,11 @@ onMounted(async () => {
 })
 </script>
 <template>
+
+  <h1>
+  Episode
+  </h1>
+
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>
@@ -315,8 +314,8 @@ onMounted(async () => {
             <div class="row episode-managed-file-row">
               <div class="segment-controls-type">
                 <b>{{
-                  $t('podcasts.episodes.episode.segments.number', { order: segment.order })
-                }}</b>
+                    $t('podcasts.episodes.episode.segments.number', { order: segment.order })
+                  }}</b>
               </div>
               <div class="segment-controls-row">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">

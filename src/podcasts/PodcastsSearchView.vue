@@ -161,7 +161,7 @@ async function deletePodcast(podcast: Podcast) {
 async function navigateToEpisodesPageForPodcast(podcastId: number, e: Event) {
   await router.push({
     name: 'podcasts/episodes',
-    params: { id: podcastId }
+    params: { podcastId: podcastId }
   })
 }
 

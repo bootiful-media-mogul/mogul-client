@@ -15,15 +15,16 @@ import editAsset from '@/assets/images/edit.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
+import router from '@/index'
 
 const { t } = useI18n()
 
 // Props
-const props = defineProps<{ id: number | string }>()
+const props = defineProps<{ podcastId: number }>()
 const episodes = ref<PodcastEpisode[]>([])
 const currentPodcast = ref<Podcast>()
 const editorVisible = ref(false)
-const selectedPodcastId = ref(parseInt(props.id + ''))
+const selectedPodcastId = ref(props.podcastId)
 const episode = ref<PodcastEpisode | null>()
 
 function dts(date: number): string | null {
@@ -63,17 +64,23 @@ const loadPodcast = async () => {
   })
 }
 
+async function navigateToEpisodeEditor(podcastId: number, episodeId: number) {
+  await router.push({
+    name: 'podcasts/episodes/episode',
+    params: { podcastId: podcastId, episodeId: episodeId }
+  })
+}
+
 const loadEpisode = async (e: PodcastEpisode) => {
-  episode.value = e
-  editorVisible.value = true
+  await navigateToEpisodeEditor(props.podcastId, e.id)
   title.value = t('podcasts.episodes')
 }
 
 async function newEpisode() {
   // todo call create draft episode
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
-  editorVisible.value = true
-  title.value = t('podcasts.episodes')
+
+  await loadEpisode( episode.value )
 }
 </script>
 <template>
@@ -116,7 +123,8 @@ async function newEpisode() {
     </form>
   </div>
   <div v-else>
-    <PodcastsEpisodesEditor :podcast-id="selectedPodcastId" :episode="episode!!" />
+    <PodcastsEpisodesEditor :podcast-id="selectedPodcastId"
+                            :episode-id="episode?.id" />
   </div>
 </template>
 

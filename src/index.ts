@@ -6,6 +6,7 @@ import AboutView from '@/AboutView.vue'
 import PodcastsEpisodesSearchView from '@/podcasts/PodcastsEpisodesSearchView.vue'
 import BlogsSearchView from '@/blogs/BlogsSearchView.vue'
 import TestView from '@/test/TestView.vue'
+import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,12 +37,26 @@ const router = createRouter({
       name: 'settings',
       component: SettingsView
     },
-
     {
-      path: '/podcasts/:id/episodes',
+      props(to) {
+        return {
+          podcastId: Number(to.params.podcastId),
+          episodeId: Number(to.params.episodeId)
+        }
+      },
+      path: '/podcasts/:podcastId/episodes/:episodeId',
+      name: 'podcasts/episodes/episode',
+      component: PodcastsEpisodesEditor
+    },
+    {
+      path: '/podcasts/:podcastId/episodes',
       name: 'podcasts/episodes',
       component: PodcastsEpisodesSearchView,
-      props: true
+      props (route) {
+        return {
+          podcastId: Number(route.params.podcastId),
+        }
+      }
     },
     {
       path: '/about',

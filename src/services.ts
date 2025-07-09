@@ -4,6 +4,8 @@ import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
+import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
+import { withScopeId } from 'vue'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -511,6 +513,45 @@ export class PodcastEpisode {
   }
 }
 
+
+export class AblyTokenRequest {
+  keyName: string
+  nonce: string
+  mac: string
+  ttl: number
+  capability: string
+  timestamp: number
+
+  constructor(
+    keyName: string,
+    nonce: string,
+    mac: string,
+    ttl: number,
+    capability: string,
+    timestamp: number
+  ) {
+    this.keyName = keyName
+    this.nonce = nonce
+    this.mac = mac
+    this.ttl = ttl
+    this.capability = capability
+    this.timestamp = timestamp
+
+  }
+
+}
+
+export class NotificationContext {
+  ablyChannel: string
+  ablyTokenRequest: AblyTokenRequest
+
+  constructor(ablyChannel: string, ablyTokenRequest: AblyTokenRequest) {
+    this.ablyChannel = ablyChannel
+    this.ablyTokenRequest = ablyTokenRequest
+  }
+}
+
+
 export class Notification {
   readonly when: Date
   readonly key: string
@@ -546,9 +587,39 @@ export class Notifications {
 
   private callbacksByCategory: Map<string, Array<(notification: Notification) => void>> = new Map()
 
+  async startGraphql() {
+    const q = `
+        query {
+          notificationContext  { 
+            ablyChannel
+            ablyTokenRequest { 
+              keyName
+              nonce
+              mac
+              ttl
+              capability
+              timestamp
+            }
+          }
+         }
+        `
+    const result = await this.client.query(q, {})
+    const nc = await result.data ['notificationContext'] as NotificationContext
+    const ably = new Ably.Realtime({
+      async authCallback(data: TokenParams,
+                         callback: (error: (ErrorInfo | string | null), tokenRequestOrDetails: (TokenDetails | TokenRequest | string | null)) => void) {
+        callback(
+          null,
+          nc.ablyTokenRequest as Ably.TokenRequest
+        )
+      }
+    })
+    const channel = ably.channels.get(nc.ablyChannel)
+    await channel.subscribe(async (message) => await this.dispatch(message))
+
+  }
 
   async start() {
-    console.log('starting notifications subscriber.')
     const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())['channel']
     console.log('channel name is ' + channelName)
 
@@ -576,7 +647,7 @@ export class Notifications {
 
   constructor(client: Client) {
     this.client = client
-    this.start() // don't care that  ignored
+    this.startGraphql() // don't care that  ignored
   }
 
   async notify(visible: boolean, modal: boolean) {

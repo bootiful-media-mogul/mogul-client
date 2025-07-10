@@ -14,7 +14,6 @@ import editAsset from '@/assets/images/edit.png'
 
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
-import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
 import router from '@/index'
 
 const { t } = useI18n()
@@ -88,7 +87,6 @@ async function newEpisode() {
     {{ t('podcasts.episodes') }}
   </h1>
 
-  <div v-if="!editorVisible">
     <form class="pure-form">
       <fieldset class="episodes-table">
         <legend>
@@ -121,11 +119,7 @@ async function newEpisode() {
         </div>
       </fieldset>
     </form>
-  </div>
-  <div v-else>
-    <PodcastsEpisodesEditor :podcast-id="selectedPodcastId"
-                            :episode-id="episode?.id" />
-  </div>
+
 </template>
 
 <style scoped>

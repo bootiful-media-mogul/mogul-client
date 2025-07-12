@@ -52,9 +52,9 @@ const router = createRouter({
       path: '/podcasts/:podcastId/episodes',
       name: 'podcasts/episodes',
       component: PodcastsEpisodesSearchView,
-      props (route) {
+      props(route) {
         return {
-          podcastId: Number(route.params.podcastId),
+          podcastId: Number(route.params.podcastId)
         }
       }
     },

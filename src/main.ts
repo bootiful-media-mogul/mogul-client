@@ -66,7 +66,7 @@ const translations = {
       'podcast-episode-completed-event':
         'The podcast with ID #{key} is completed and ready for production',
       'podcast-created-event': `The podcast "{context}", with ID #{key}, has been created.`.trim(),
-      'podcast-updated-event' :`The podcast "{context}", with ID #{key}, has been updated.`.trim(),
+      'podcast-updated-event': `The podcast "{context}", with ID #{key}, has been updated.`.trim(),
       'podcast-deleted-event': `The podcast "{context}", with ID #{key}, has been deleted.`.trim()
     },
 

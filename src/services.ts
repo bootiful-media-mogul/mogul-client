@@ -513,7 +513,6 @@ export class PodcastEpisode {
   }
 }
 
-
 export class AblyTokenRequest {
   keyName: string
   nonce: string
@@ -536,9 +535,7 @@ export class AblyTokenRequest {
     this.ttl = ttl
     this.capability = capability
     this.timestamp = timestamp
-
   }
-
 }
 
 export class NotificationContext {
@@ -550,7 +547,6 @@ export class NotificationContext {
     this.ablyTokenRequest = ablyTokenRequest
   }
 }
-
 
 export class Notification {
   readonly when: Date
@@ -604,19 +600,20 @@ export class Notifications {
          }
         `
     const result = await this.client.query(q, {})
-    const nc = await result.data ['notificationContext'] as NotificationContext
+    const nc = (await result.data['notificationContext']) as NotificationContext
     const ably = new Ably.Realtime({
-      async authCallback(data: TokenParams,
-                         callback: (error: (ErrorInfo | string | null), tokenRequestOrDetails: (TokenDetails | TokenRequest | string | null)) => void) {
-        callback(
-          null,
-          nc.ablyTokenRequest as Ably.TokenRequest
-        )
+      async authCallback(
+        data: TokenParams,
+        callback: (
+          error: ErrorInfo | string | null,
+          tokenRequestOrDetails: TokenDetails | TokenRequest | string | null
+        ) => void
+      ) {
+        callback(null, nc.ablyTokenRequest as Ably.TokenRequest)
       }
     })
     const channel = ably.channels.get(nc.ablyChannel)
     await channel.subscribe(async (message) => await this.dispatch(message))
-
   }
 
   async start() {
@@ -629,7 +626,6 @@ export class Notifications {
   }
 
   async dispatch(message: Ably.InboundMessage) {
-
     if (this.callbacks.length == 0) {
       return
     }
@@ -641,8 +637,6 @@ export class Notifications {
         array.forEach((cb) => cb(notification))
       }
     })
-
-
   }
 
   constructor(client: Client) {

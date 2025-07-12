@@ -79,7 +79,7 @@ async function newEpisode() {
   // todo call create draft episode
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
 
-  await loadEpisode( episode.value )
+  await loadEpisode(episode.value)
 }
 </script>
 <template>
@@ -87,39 +87,38 @@ async function newEpisode() {
     {{ t('podcasts.episodes') }}
   </h1>
 
-    <form class="pure-form">
-      <fieldset class="episodes-table">
-        <legend>
-          {{ $t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
-        </legend>
+  <form class="pure-form">
+    <fieldset class="episodes-table">
+      <legend>
+        {{ $t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
+      </legend>
 
-        <div class="toolbar">
-          <a @click.prevent="newEpisode()"> {{ $t('podcasts.episodes.new-episode') }}</a>
+      <div class="toolbar">
+        <a @click.prevent="newEpisode()"> {{ $t('podcasts.episodes.new-episode') }}</a>
+      </div>
+      <div v-for="episode in episodes" v-bind:key="episode.id" class="row episodes-row">
+        <div class="id-column">
+          #<b>{{ episode.id }}</b>
         </div>
-        <div v-for="episode in episodes" v-bind:key="episode.id" class="row episodes-row">
-          <div class="id-column">
-            #<b>{{ episode.id }}</b>
-          </div>
-          <div class="created-column">{{ dts(episode.created) }}</div>
-          <div class="edit">
-            <Icon
-              :icon="editHighlightAsset"
-              :icon-hover="editAsset"
-              @click.prevent="loadEpisode(episode)"
-            />
-          </div>
-          <div class="delete">
-            <Icon
-              :icon="deleteHighlightAsset"
-              :icon-hover="deleteAsset"
-              @click.prevent="deletePodcastEpisode(episode)"
-            />
-          </div>
-          <div class="title">{{ episode.title }}</div>
+        <div class="created-column">{{ dts(episode.created) }}</div>
+        <div class="edit">
+          <Icon
+            :icon="editHighlightAsset"
+            :icon-hover="editAsset"
+            @click.prevent="loadEpisode(episode)"
+          />
         </div>
-      </fieldset>
-    </form>
-
+        <div class="delete">
+          <Icon
+            :icon="deleteHighlightAsset"
+            :icon-hover="deleteAsset"
+            @click.prevent="deletePodcastEpisode(episode)"
+          />
+        </div>
+        <div class="title">{{ episode.title }}</div>
+      </div>
+    </fieldset>
+  </form>
 </template>
 
 <style scoped>

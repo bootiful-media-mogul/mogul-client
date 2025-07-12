@@ -1,11 +1,9 @@
 <template>
-
   <div>
-<!--    <a href="#" @click="modal">modal</a> |-->
-<!--    <a href="#" @click="visible">visible</a> |-->
-<!--    <a href="#" @click="background">system</a>-->
+    <!--    <a href="#" @click="modal">modal</a> |-->
+    <!--    <a href="#" @click="visible">visible</a> |-->
+    <!--    <a href="#" @click="background">system</a>-->
   </div>
-
 </template>
 
 <script setup lang="ts">
@@ -24,7 +22,5 @@ import { onMounted } from 'vue'
 //   await notifications.notify(false, false)
 // }
 
-onMounted(() => {
-})
-
+onMounted(() => {})
 </script>

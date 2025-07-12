@@ -38,6 +38,7 @@ import PublicationsSectionComponent from '@/publications/PublicationsSectionComp
 import PodcastEpisodeBlogPost from '@/podcasts/publications/PodcastEpisodeBlogPost.vue'
 import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudioFile.vue'
 import Podbean from '@/podcasts/publications/Podbean.vue'
+import Ayrshare from '@/podcasts/publications/Ayrshare.vue'
 
 const { t } = useI18n()
 
@@ -369,6 +370,7 @@ onMounted(async () => {
             :disabled="publicationsDisabled"
             :type="'episode'"
           >
+            <Ayrshare />
             <Podbean />
             <PodcastEpisodeBlogPost />
             <PodcastEpisodeAudioFile />

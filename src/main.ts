@@ -23,6 +23,12 @@ const translations = {
 
     publications: {
       plugins: {
+        ayrshare: {
+          ayrshareKey : 'Ayrshare API Key',
+          title: 'Ayrshare',
+          description:
+            'Publish this episode to your Ayrshare.com account for social media syndication'
+        },
         blogPost: {
           description: 'Publish the episode as a blog post'
         },

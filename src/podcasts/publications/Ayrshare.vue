@@ -1,5 +1,5 @@
 <template>
-  <PublicationPanelComponent plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
+  <PublicationPanelComponent plugin="ayrshare" :icon-hover="ayrshareIcon" :icon="ayrshareIcon">
     <template v-slot:panel>
       <div>
         <button
@@ -15,17 +15,17 @@
   </PublicationPanelComponent>
 </template>
 <script setup lang="ts">
-import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
+import ayrshareIcon from '@/assets/images/publications/podcasts/publish-to-ayrshare.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
-import type {
-  GetPublicationContextFunction,
-  IsPluginReadyFunction,
-  PublishFunction
+import {
+  type GetPublicationContextFunction,
+  type IsPluginReadyFunction, PublicationContext,
+  type PublishFunction
 } from '@/publications/input'
-import { notifications } from '@/services'
+import { ayrshare, notifications } from '@/services'
 
-const pluginName = 'podbean'
+const pluginName = 'ayrshare'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
@@ -34,7 +34,7 @@ const getPublicationContextFunction =
 
 async function publish(): Promise<boolean> {
   const clientContext = {}
-  const publicationContext = getPublicationContextFunction()
+  const publicationContext: PublicationContext = getPublicationContextFunction()
   return await publishFunction(
     publicationContext.type,
     publicationContext.publishableId,
@@ -51,6 +51,10 @@ notifications.listenForCategory('podcast-episode-completed-event', async (evt) =
 
 onMounted(async () => {
   disabled.value = await isPluginDisabled()
+
+  const platforms = await ayrshare.platforms()
+  console.log('platforms', platforms)
+
 })
 
 async function isPluginDisabled() {
@@ -64,4 +68,6 @@ async function isPluginDisabled() {
   )
   return !ready!
 }
+
+
 </script>

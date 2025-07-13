@@ -37,7 +37,7 @@ onMounted(async () => {
         <div class="toolbar navigable-section">
           <router-link to="/">{{ $t('app.menu.home') }}</router-link> |
 
-<!--          <router-link to="/test">{{ $t('app.menu.test') }}</router-link> |-->
+          <!--          <router-link to="/test">{{ $t('app.menu.test') }}</router-link> |-->
 
           <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
           |

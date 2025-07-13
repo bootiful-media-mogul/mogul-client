@@ -68,7 +68,7 @@ export class Podcasts {
 
   async createPodcastEpisodeSegment(podcastEpisodeId: number) {
     const mutation = ` 
-      mutation ($podcastEpisodeId:  Int   ){ 
+      mutation ($podcastEpisodeId: Int ){ 
         createPodcastEpisodeSegment(podcastEpisodeId : $podcastEpisodeId  ) 
       }
     `
@@ -617,7 +617,9 @@ export class Notifications {
   }
 
   async start() {
-    const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())['channel']
+    const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())[
+      'channel'
+    ]
     console.log('channel name is ' + channelName)
 
     const ably = new Ably.Realtime({ authUrl: '/api/notifications/ably/token' })
@@ -886,6 +888,24 @@ export class Utils {
   }
 }
 
+export class Ayrshare {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async platforms(): Promise<Array<string>> {
+    const q = `
+        query {
+           ayrsharePlatforms      
+       }
+     `
+    const result = await this.client.query(q, {})
+    return (await result.data['ayrsharePlatforms']) as Array<string>
+  }
+}
+
 export class Publications {
   private readonly client: Client
 
@@ -1005,3 +1025,4 @@ export const podcasts = new Podcasts(graphqlClient)
 export const managedFiles = new ManagedFiles(graphqlClient)
 export const settings = new Settings(graphqlClient)
 export const compositions = new Compositions(graphqlClient)
+export const ayrshare = new Ayrshare(graphqlClient)

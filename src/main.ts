@@ -23,6 +23,37 @@ const translations = {
 
     publications: {
       plugins: {
+        ayrshare: {
+          platforms: {
+            gmb: 'Google Business Profile',
+            facebook: 'Facebook',
+            linkedin: 'LinkedIn',
+            instagram: 'Instagram',
+            telegram: 'Telegram',
+            snapchat: 'Snapchat',
+            pinterest: 'Pinterest',
+            threads: 'Threads',
+            youtube: 'YouTube',
+            reddit: 'Reddit',
+            bluesky: 'Bluesky',
+            tiktok: 'TikTok',
+            twitter: 'X (formerly known as Twitter)'
+          },
+          'combo-post': 'use the same copy for all enabled platforms',
+          ayrshareKey: 'Ayrshare API Key',
+          title: 'Ayrshare',
+          description:
+            `
+            Publish this episode to your Ayrshare.com account for social media syndication. 
+            
+            Please note that before continuing, you must link and enable 
+            the selected target platforms in your Ayrshare account.
+            
+            Please select to which social media platforms you want to publish, and then compose a post targeted to that
+            platform.
+            `
+
+        },
         blogPost: {
           description: 'Publish the episode as a blog post'
         },

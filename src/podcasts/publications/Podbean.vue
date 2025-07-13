@@ -46,12 +46,10 @@ async function publish(): Promise<boolean> {
 const disabled = ref<boolean>(false)
 
 notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
-  console.debug('podbean: podcast-episode-completed-event', evt)
   disabled.value = await isPluginDisabled()
 })
 
 onMounted(async () => {
-  console.log('podbean: calling isPluginDisabled()')
   disabled.value = await isPluginDisabled()
 })
 

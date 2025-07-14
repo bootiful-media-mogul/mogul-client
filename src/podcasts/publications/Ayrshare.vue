@@ -130,18 +130,20 @@ async function publish(): Promise<boolean> {
   )
 }
 
-function reset(post: Post) {
+async function reset(post: Post) {
   post.post = ''
+  disabled.value = await isPluginDisabled()
 }
 
 notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
   disabled.value = await isPluginDisabled()
 })
 
+
 onMounted(async () => {
-  disabled.value = await isPluginDisabled()
   platforms.value = (await ayrshare.platforms()).sort((a, b) => a.localeCompare(b))
   layout()
+  disabled.value = await isPluginDisabled()
 })
 
 function layout() {
@@ -152,6 +154,13 @@ function layout() {
 }
 
 async function isPluginDisabled() {
+
+  // low-level stuff first: are any checkboxes selected?
+  const selected = posts.value.filter((p) => p.platforms.some((x) => x.enabled)).length > 0
+  if (!selected) {
+    return true
+  }
+
   const clientContext = {}
   const publicationContext = getPublicationContextFunction()
   const ready = await isPluginReadyFunction(
@@ -160,6 +169,8 @@ async function isPluginDisabled() {
     clientContext,
     pluginName
   )
+
+
   return !ready!
 }
 </script>

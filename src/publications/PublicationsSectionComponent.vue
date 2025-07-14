@@ -76,6 +76,9 @@
               :icon-hover="checkmarkAsset"
               :icon="checkmarkAsset"
             />
+            <Icon v-else
+                  :icon-hover="errorHighlightAsset"
+                  :icon="errorAsset" />
           </div>
           <div class="uri">
             <a
@@ -95,8 +98,17 @@
   </div>
 </template>
 <style scoped>
+.publications {
+  --icon-column: 40px;
+}
+
 .publications .publications-outcome .success {
   grid-area: success;
+}
+
+.publications .publications-row {
+  padding-top: calc(var(--radius) * 1);
+  border-top: 1px solid black;
 }
 
 .publications .publications-outcome {
@@ -114,20 +126,23 @@
   grid-template-areas:  ' uri success key ';
   grid-column-gap: calc(var(--gutter-space) / 2);
   grid-template-columns: var(--icon-column)  var(--icon-column) auto;
-  margin-left: var(--id-column);
+  margin-left: var(--icon-column);
 }
 
 .publications .publications-outcome:last-child {
-  margin-bottom : calc(var(--radius) * 1);
+  margin-bottom: calc(var(--radius) * 1);
 
 }
+
 .publications .publications-outcome:first-child {
   margin-top: 0;
-  padding-top : 0;
+  padding-top: 0;
 }
+
 .publications .publications-outcome {
   padding-top: var(--radius);
 }
+
 .publications .publications-outcome .key {
   grid-area: key;
 }
@@ -198,11 +213,10 @@
 .publications .publications-row {
   display: grid;
 
-  grid-template-areas: 'id url delete created published plugin ';
+  grid-template-areas: ' plugin . delete  id url  created published   ';
 
   grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
-    auto;
+   min-content var(--gutter-space)   var(--icon-column)   var(--id-column) var(--icon-column) var(--date-column) var(--date-column);
 }
 
 .publications .publications-row {
@@ -272,8 +286,11 @@ import { type PanelSlot, PanelSlotIcon, PublicationContext } from '@/publication
 import { Notification, notifications, Publication, publications } from '@/services'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
+import errorAsset from '@/assets/images/error.png'
+import errorHighlightAsset from '@/assets/images/error-highlight.png'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import { dateTimeToString } from '@/dates'
+
 
 const props = defineProps<{
   disabled: boolean

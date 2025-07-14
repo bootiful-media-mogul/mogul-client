@@ -20,12 +20,13 @@
     </a>
 
     <span class="written">
-      <span v-if="uploading">🕒</span>
+      <span v-if="uploading"> 🕒 </span>
       <span v-else>
-        <span
-          :class="'mogul-icon checkbox-icon ' + (written ? '' : ' disabled')"
-          :title="$t('managedfiles.uploaded')"
-        ></span>
+            <Icon
+              v-if="written"
+              :icon-hover="checkmarkAsset"
+              :icon="checkmarkAsset"
+            />
       </span>
     </span>
     <span class="preview">
@@ -46,7 +47,7 @@
 
     <span class="filename">
       <span v-if="filename" :title="$t('managedfiles.file-name')" class="form-prompt"
-        >{{ filename }}
+      >{{ filename }}
       </span>
       <span v-else class="form-prompt">{{ $t('managedfiles.please-upload-a-file') }}</span>
     </span>
@@ -120,6 +121,8 @@
 import axios from 'axios'
 import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'
+import checkmarkAsset from '@/assets/images/checkbox.png'
+import Icon from '@/ui/Icon.vue'
 
 interface Props {
   readonly disabled?: boolean

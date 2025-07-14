@@ -18,7 +18,6 @@
 
 .platform-panel .platform-post textarea {
   width: 100%;
-
 }
 
 .platform-panel .platform-name {
@@ -29,13 +28,10 @@
   padding-bottom: var(--gutter-space);
   padding-top: var(--gutter-space);
 }
-
-
 </style>
 <template>
   <PublicationPanelComponent plugin="ayrshare" :icon-hover="ayrshareIcon" :icon="ayrshareIcon">
     <template v-slot:panel>
-
       <div class="platform-panels">
         <div v-for="p in posts" v-bind:key="p.platforms.map((x) => x.name).join(',')">
           <div class="platform-panel" v-for="platform in p.platforms" v-bind:key="platform.name">
@@ -54,7 +50,6 @@
               </div>
             </div>
           </div>
-
         </div>
       </div>
       <div>

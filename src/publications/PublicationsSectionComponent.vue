@@ -36,51 +36,234 @@
   </div>
 
   <div class="publications">
-    <div
-      v-for="publication in existingPublications"
-      v-bind:key="publication.id"
-      class="publications-row row"
-    >
-      <div class="id-column">
-        #<b>{{ publication.id }}</b>
-      </div>
-      <div class="plugin-column">
-        <div class="plugin-icon-container">
+    <div v-for="publication in existingPublications" v-bind:key="publication.id">
+      <div class="publications-row row">
+        <div class="id-column">
+          #<b>{{ publication.id }}</b>
+        </div>
+        <div class="plugin-column">
+          <div class="plugin-icon-container">
+            <Icon
+              v-if="iconsAvailable"
+              :width="40"
+              :icon-hover="getIconForPlugin(publication.plugin).iconHover"
+              :icon="getIconForPlugin(publication.plugin).icon"
+            />
+          </div>
+        </div>
+        <div class="created-column">{{ dateTimeToString(publication.created) }}</div>
+        <div class="published-column">
+          {{ dateTimeToString(publication.published) }}
+        </div>
+        <div class="delete-column">
           <Icon
-            v-if="iconsAvailable"
-            :width="40"
-            :icon-hover="getIconForPlugin(publication.plugin).iconHover"
-            :icon="getIconForPlugin(publication.plugin).icon"
+            class="delete-icon"
+            :icon="deleteHighlightAsset"
+            :icon-hover="deleteAsset"
+            :disabled="withdrawn(publication)"
+            @click.prevent="unpublish(publication.id)"
           />
         </div>
+        <div class="url-column preview">
+          <span v-if="publication.publishing"> 🕒 </span>
+        </div>
       </div>
-      <div class="created-column">{{ dateTimeToString(publication.created) }}</div>
-      <div class="published-column">
-        {{ dateTimeToString(publication.published) }}
-      </div>
-      <div class="delete-column">
-        <Icon
-          class="delete-icon"
-          :icon="deleteHighlightAsset"
-          :icon-hover="deleteAsset"
-          :disabled="withdrawn(publication)"
-          @click.prevent="unpublish(publication.id)"
-        />
-      </div>
+      <div class="publications-outcomes">
+        <div class="publications-outcome row " v-for="outcome in publication.outcomes" v-bind:key="outcome.id">
+          <div class="success">
+            <Icon
+              v-if="outcome.success"
+              :icon-hover="checkmarkAsset"
+              :icon="checkmarkAsset"
+            />
+          </div>
+          <div class="uri">
+            <a
+              class="mogul-icon preview-icon"
+              :class="{ disabled: withdrawn(publication) }"
+              :href="outcome.url"
+              target="_blank"
+            ></a>
+          </div>
+          <div class="key">
+            {{ $t('publications.outcomes.keys.' + outcome.key) }}
 
-      <div class="url-column preview">
-        <span v-if="publication.publishing"> 🕒 </span>
-        <a
-          v-else
-          class="mogul-icon preview-icon"
-          :class="{ disabled: withdrawn(publication) }"
-          :href="publication.url"
-          target="_blank"
-        ></a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
+<style scoped>
+.publications .publications-outcome .success {
+  grid-area: success;
+}
+
+.publications .publications-outcome {
+  margin-top: calc(var(--radius) * -1);
+  height: var(--row-height);
+  border-radius: var(--radius);
+  border-top-left-radius: 0;
+  padding-left: var(--gutter-space);
+  border: 1px solid black;
+  border-top: 0;
+  border-right: none;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  display: grid;
+  grid-template-areas:  ' uri success key ';
+  grid-column-gap: calc(var(--gutter-space) / 2);
+  grid-template-columns: var(--icon-column)  var(--icon-column) auto;
+  margin-left: var(--id-column);
+}
+
+.publications .publications-outcome:last-child {
+  margin-bottom : calc(var(--radius) * 1);
+
+}
+.publications .publications-outcome:first-child {
+  margin-top: 0;
+  padding-top : 0;
+}
+.publications .publications-outcome {
+  padding-top: var(--radius);
+}
+.publications .publications-outcome .key {
+  grid-area: key;
+}
+
+.publications .publications-outcome .uri {
+  grid-area: uri;
+}
+
+.publications-toolbar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 50px);
+  gap: calc(var(--gutter-space) / 3);
+}
+
+.toolbar-icon {
+  border-radius: var(--radius);
+  background-color: black;
+}
+
+.toolbar-icon:hover {
+  background-color: white;
+}
+
+.toolbar-icon-selected {
+  background-color: white;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.publication-panel {
+  border-radius: var(--radius);
+  background-color: white;
+  padding: calc(var(--gutter-space) / 2);
+  margin: 0;
+  overflow: hidden;
+}
+
+.publication-panel .plugin {
+  background-color: lightgray;
+  padding: var(--gutter-space-half);
+  border-bottom-right-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  margin-left: calc(var(--gutter-space-half) * -1);
+  margin-bottom: var(--gutter-space-half);
+  font-weight: bold;
+  font-size: smaller;
+}
+
+.publication-panel-selected {
+  border-top-left-radius: 0;
+}
+
+.toolbar-icons {
+  padding-left: var(--gutter-space);
+}
+
+.toolbar-icon-disabled {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.publications {
+  margin-top: var(--gutter-space);
+}
+
+
+/* PUBLICATIONS */
+.publications .publications-row {
+  display: grid;
+
+  grid-template-areas: 'id url delete created published plugin ';
+
+  grid-template-columns:
+    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
+    auto;
+}
+
+.publications .publications-row {
+  padding-bottom: var(--gutter-space-half);
+  border-bottom: 1px solid black;
+}
+
+/*id url delete created published plugin */
+.publications .publications-row .created {
+  grid-area: created;
+}
+
+.publications .publications-row .published {
+  grid-area: published;
+}
+
+.publications .publications-row .plugin {
+  grid-area: plugin;
+}
+
+.publications .publications-row .id {
+  grid-area: id;
+}
+
+.publications .publications-row .url {
+  grid-area: url;
+}
+
+.publications .publications-row .plugin-icon-container {
+  background-color: black;
+  border-radius: var(--radius);
+  overflow: hidden;
+  width: 40px;
+  height: 40px;
+}
+
+.publications .publications-row .delete-column {
+  grid-area: delete;
+}
+
+.publications .publications-row .id-column {
+  grid-area: id;
+}
+
+.publications .publications-row .plugin-column {
+  grid-area: plugin;
+}
+
+.publications .publications-row .created-column {
+  grid-area: created;
+}
+
+.publications .publications-row .published-column {
+  grid-area: published;
+}
+
+.publications .publications-row .url-column {
+  grid-area: url;
+}
+</style>
+
 
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
@@ -89,6 +272,7 @@ import { type PanelSlot, PanelSlotIcon, PublicationContext } from '@/publication
 import { Notification, notifications, Publication, publications } from '@/services'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
+import checkmarkAsset from '@/assets/images/checkbox.png'
 import { dateTimeToString } from '@/dates'
 
 const props = defineProps<{
@@ -186,104 +370,3 @@ provide('isPluginReady', isPluginReady)
 provide('publish', publish)
 provide('registerPublicationPanel', registerPublicationPanel)
 </script>
-
-<style scoped>
-.publications-toolbar {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 50px);
-  gap: calc(var(--gutter-space) / 3);
-}
-
-.toolbar-icon {
-  border-radius: var(--radius);
-  background-color: black;
-}
-
-.toolbar-icon:hover {
-  background-color: white;
-}
-
-.toolbar-icon-selected {
-  background-color: white;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.publication-panel {
-  border-radius: var(--radius);
-  background-color: white;
-  padding: calc(var(--gutter-space) / 2);
-  margin: 0;
-  overflow: hidden;
-}
-
-.publication-panel .plugin {
-  background-color: lightgray;
-  padding: var(--gutter-space-half);
-  border-bottom-right-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-  margin-left: calc(var(--gutter-space-half) * -1);
-  margin-bottom: var(--gutter-space-half);
-  font-weight: bold;
-  font-size: smaller;
-}
-
-.publication-panel-selected {
-  border-top-left-radius: 0;
-}
-
-.toolbar-icons {
-  padding-left: var(--gutter-space);
-}
-
-.toolbar-icon-disabled {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
-.publications {
-  margin-top: var(--gutter-space);
-}
-
-.publications .publications-row {
-  display: grid;
-
-  grid-template-areas: 'id url delete created published plugin ';
-
-  grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) var(--date-column) var(--date-column)
-    auto;
-}
-
-.publications .publications-row .plugin-icon-container {
-  background-color: black;
-  border-radius: var(--radius);
-  overflow: hidden;
-  width: 40px;
-  height: 40px;
-}
-
-.publications .publications-row .delete-column {
-  grid-area: delete;
-}
-
-.publications .publications-row .id-column {
-  grid-area: id;
-}
-
-.publications .publications-row .plugin-column {
-  grid-area: plugin;
-}
-
-.publications .publications-row .created-column {
-  grid-area: created;
-}
-
-.publications .publications-row .published-column {
-  grid-area: published;
-}
-
-.publications .publications-row .url-column {
-  grid-area: url;
-}
-</style>

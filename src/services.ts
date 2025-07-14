@@ -5,7 +5,7 @@ import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
-import { withScopeId } from 'vue'
+
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -452,6 +452,7 @@ export class Publication {
   // this is meant to be set by the UI if and only if we're in the middle of publishing an episode
   publishing: boolean = false
   state: string
+  outcomes: Array<PublicationOutcome>
 
   constructor(
     id: number,
@@ -459,7 +460,8 @@ export class Publication {
     created: number,
     published: number,
     url: string,
-    state: string
+    state: string,
+    outcomes: Array<PublicationOutcome>
   ) {
     this.id = id
     this.url = url
@@ -467,6 +469,7 @@ export class Publication {
     this.created = created
     this.published = published
     this.state = state
+    this.outcomes = outcomes
   }
 }
 
@@ -619,7 +622,7 @@ export class Notifications {
   async start() {
     const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())[
       'channel'
-    ]
+      ]
     console.log('channel name is ' + channelName)
 
     const ably = new Ably.Realtime({ authUrl: '/api/notifications/ably/token' })
@@ -906,6 +909,21 @@ export class Ayrshare {
   }
 }
 
+export class PublicationOutcome {
+
+  readonly id: number
+  readonly success: boolean
+  readonly url: string
+  readonly key: string
+
+  constructor(id: number,  success: boolean, url: string, key: string) {
+    this.id = id
+    this.success = success
+    this.url = url
+    this.key = key
+  }
+}
+
 export class Publications {
   private readonly client: Client
 
@@ -928,7 +946,14 @@ export class Publications {
               created,
               published,
               url,
-              state
+              state, 
+              outcomes  { 
+                id,
+                created,
+                success,
+                url,
+                key
+              }
            }
        }
      `

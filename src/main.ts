@@ -20,9 +20,28 @@ const translations = {
     },
 
     hello: 'Hello, {mogul}',
-
     publications: {
+      outcomes: {
+        keys: {
+          mock: 'Mock',
+          podbean: 'Podbean',
+          gmb: 'Google Business Profile',
+          facebook: 'Facebook',
+          linkedin: 'LinkedIn',
+          instagram: 'Instagram',
+          telegram: 'Telegram',
+          snapchat: 'Snapchat',
+          pinterest: 'Pinterest',
+          threads: 'Threads',
+          youtube: 'YouTube',
+          reddit: 'Reddit',
+          bluesky: 'Bluesky',
+          tiktok: 'TikTok',
+          twitter: 'X (formerly known as Twitter)'
+        }
+      },
       plugins: {
+
         ayrshare: {
           platforms: {
             gmb: 'Google Business Profile',
@@ -42,8 +61,7 @@ const translations = {
           'combo-post': 'use the same copy for all enabled platforms',
           ayrshareKey: 'Ayrshare API Key',
           title: 'Ayrshare',
-          description:
-            `
+          description: `
             Publish this episode to your Ayrshare.com account for social media syndication. 
             
             Please note that before continuing, you must link and enable 
@@ -52,7 +70,6 @@ const translations = {
             Please select to which social media platforms you want to publish, and then compose a post targeted to that
             platform.
             `
-
         },
         blogPost: {
           description: 'Publish the episode as a blog post'
@@ -64,6 +81,7 @@ const translations = {
           clientSecret: 'Client Secret'
         },
         mock: {
+          description: 'Kicks off the production process, and generates dummy data',
           title: 'Mock'
         },
         podcastEpisodeToBlogPost: {
@@ -88,6 +106,7 @@ const translations = {
 
     // notifications
     notifications: {
+      'setting-written-event': 'Plugin configuration has been updated.',
       'transcript-processed-event': 'Transcript for #{key} has been processed.',
       'podcast-episode-render-finished-event':
         'Finished producing an episode of the podcast episode #{key} ',
@@ -109,8 +128,8 @@ const translations = {
     'managedfiles.preview': 'Preview this file',
     'managedfiles.upload': 'Upload a file',
     'managedfiles.uploaded': 'Has this file been uploaded?',
-    'managedfiles.content-type': "This file's content type",
-    'managedfiles.file-name': "This file's name",
+    'managedfiles.content-type': 'This file\'s content type',
+    'managedfiles.file-name': 'This file\'s name',
 
     // markdown
     'markdown.add-link-prompt': 'Where do you want the link to go to?',
@@ -160,7 +179,6 @@ This is NOT reversible! `,
     'podcasts.episodes.basics': 'Basics',
     'podcasts.episodes.segments': 'Segments',
     'podcasts.episodes.segments.number': 'Episode segment # {id}',
-    // 'podcasts.episodes.publish': 'Publish',
     'podcasts.episodes.episodes': 'Episodes for Podcast #{id} - "{title}"',
     'podcasts.episodes.new-episode': 'New Episode',
     'podcasts.episodes.buttons.publish': 'Publish',
@@ -169,7 +187,7 @@ This is NOT reversible! `,
     'podcasts.episodes.episode.graphic': 'Graphic',
     'podcasts.episodes.buttons.add-segment': 'Add a New Segment',
     'podcasts.episodes.episode.reference': 'the episode titled: {title}',
-    'podcasts.episodes.all': "{title}'s episodes",
+    'podcasts.episodes.all': '{title}\'s episodes',
     'podcasts.episodes.episode.editing': 'Editing {id} "{title}"',
     'podcasts.episodes.episode.edit': 'Episode Editor',
     'podcasts.episodes.buttons.save': 'Save',
@@ -183,7 +201,7 @@ This is NOT reversible! `,
 
     // podcasts
     'podcasts.title': 'Podcasts',
-    'podcasts.all': "{user}'s podcasts",
+    'podcasts.all': '{user}\'s podcasts',
     'podcasts.new-podcast': 'New Podcast',
     'podcasts.new-podcast.title': 'Title',
     'podcasts.title.ai.prompt': `Please help me take the following podcast title and make it more pithy and exciting!`,
@@ -194,13 +212,6 @@ This is NOT reversible! `,
     // settings
     'settings.title': 'Settings',
     'settings.save-button': 'Save configuration changes for {plugin}',
-    // 'settings.github': 'Github',
-    // 'settings.github.clientId': 'Client ID',
-    // 'settings.github.clientSecret': 'Client Secret',
-    // 'settings.podcast-blog.blogId': 'Blog ID',
-    // 'settings.podbean': 'Podbean',
-    // 'settings.podbean.clientId': 'Client ID',
-    // 'settings.podbean.clientSecret': 'Client Secret',
     'settings.no-configuration-for-plugin': 'No configuration settings for the {plugin} plugin'
   }
 }

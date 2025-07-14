@@ -39,6 +39,7 @@ import PodcastEpisodeBlogPost from '@/podcasts/publications/PodcastEpisodeBlogPo
 import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudioFile.vue'
 import Podbean from '@/podcasts/publications/Podbean.vue'
 import Ayrshare from '@/podcasts/publications/Ayrshare.vue'
+import Mock from '@/podcasts/publications/Mock.vue'
 
 const { t } = useI18n()
 
@@ -374,6 +375,7 @@ onMounted(async () => {
             <Podbean />
             <PodcastEpisodeBlogPost />
             <PodcastEpisodeAudioFile />
+            <Mock/>
           </PublicationsSectionComponent>
         </div>
       </div>

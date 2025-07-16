@@ -1,61 +1,6 @@
-<template>
-  <input
-    ref="realFileUploadInputField"
-    :accept="accept ? accept : '*/*'"
-    class="managed-file-file-upload"
-    type="file"
-    @change="uploadFile($event)"
-  />
-
-  <div class="managed-file-row row">
-    <span class="controls">
-      <slot></slot>
-    </span>
-
-    <a class="choose" href="#" @click="launchFileUpload">
-      <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
-    </a>
-    <a class="visible" href="#">
-      <input v-model="visible" :title="$t('managedfiles.visible')" type="checkbox" />
-    </a>
-
-    <span class="written">
-      <span v-if="uploading"> 🕒 </span>
-      <span v-else>
-            <Icon
-              v-if="written"
-              :icon-hover="checkmarkAsset"
-              :icon="checkmarkAsset"
-            />
-      </span>
-    </span>
-    <span class="preview">
-      <a
-        :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
-        :title="$t('managedfiles.preview')"
-        href="#"
-        @click="preview"
-      >
-      </a>
-    </span>
-
-    <span class="contentType">
-      <span v-if="contentType">
-        <code :title="$t('managedfiles.content-type')">{{ contentType }}</code>
-      </span>
-    </span>
-
-    <span class="filename">
-      <span v-if="filename" :title="$t('managedfiles.file-name')" class="form-prompt"
-      >{{ filename }}
-      </span>
-      <span v-else class="form-prompt">{{ $t('managedfiles.please-upload-a-file') }}</span>
-    </span>
-  </div>
-</template>
 <style>
 .managed-file-row {
-  /*align-items: center; 
+  /*align-items: center;
   grid-template-rows: minmax( var(--row-height) ,auto);*/
   grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
@@ -117,7 +62,60 @@
   left: -1000px;
 }
 </style>
+
+<template>
+  <input
+    ref="realFileUploadInputField"
+    :accept="accept ? accept : '*/*'"
+    class="managed-file-file-upload"
+    type="file"
+    @change="uploadFile($event)"
+  />
+
+  <div class="managed-file-row row">
+    <span class="controls">
+      <slot></slot>
+    </span>
+
+    <a class="choose" href="#" @click="launchFileUpload">
+      <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
+    </a>
+    <a class="visible" href="#">
+      <input v-model="visible" :title="$t('managedfiles.visible')" type="checkbox" />
+    </a>
+
+    <span class="written">
+      <span v-if="uploading"> 🕒 </span>
+      <span v-else>
+        <Icon v-if="written" :icon-hover="checkmarkAsset" :icon="checkmarkAsset" />
+      </span>
+    </span>
+    <span class="preview">
+      <a
+        :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
+        :title="$t('managedfiles.preview')"
+        href="#"
+        @click="preview"
+      >
+      </a>
+    </span>
+
+    <span class="contentType">
+      <span v-if="contentType">
+        <code :title="$t('managedfiles.content-type')">{{ contentType }}</code>
+      </span>
+    </span>
+
+    <span class="filename">
+      <span v-if="filename" :title="$t('managedfiles.file-name')" class="form-prompt"
+        >{{ filename }}
+      </span>
+      <span v-else class="form-prompt">{{ $t('managedfiles.please-upload-a-file') }}</span>
+    </span>
+  </div>
+</template>
 <script lang="ts" setup>
+
 import axios from 'axios'
 import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'
@@ -138,14 +136,25 @@ const uploading = ref<boolean>(false)
 const written = ref<boolean>(false)
 const realFileUploadInputField = ref<HTMLElement>()
 const visible = ref<boolean>(false)
+const loaded = ref<boolean>(false)
 
 onMounted(async () => {
   await loadManagedFileIntoEditor()
+  loaded.value = true
 })
 
 watch(
   () => visible.value,
   async (n: boolean, o: boolean) => {
+    if (!loaded.value)
+      return ;
+
+    console.log(
+      'setting managed file visibility because the old value was ',
+      o,
+      'and the new value is ',
+      n
+    )
     await managedFiles.setManagedFileVisibility(props.managedFileId, n)
   }
 )

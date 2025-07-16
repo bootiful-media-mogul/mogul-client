@@ -2,13 +2,17 @@
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import mockIcon from '@/assets/images/publications/podcasts/mock.png'
 import { inject } from 'vue'
-import { type GetPublicationContextFunction, PublicationContext, type PublishFunction } from '@/publications/input'
+import {
+  type GetPublicationContextFunction,
+  PublicationContext,
+  type PublishFunction
+} from '@/publications/input'
 const publishFunction = inject<PublishFunction>('publish')!
-const getPublicationContextFunction = inject<GetPublicationContextFunction>('getPublicationContext')!
+const getPublicationContextFunction =
+  inject<GetPublicationContextFunction>('getPublicationContext')!
 const pluginName = 'mock'
 
 async function publish(): Promise<boolean> {
-
   const publicationContext: PublicationContext = getPublicationContextFunction()
   const clientContext: any = {}
   return await publishFunction(
@@ -21,11 +25,7 @@ async function publish(): Promise<boolean> {
 </script>
 
 <template>
-  <PublicationPanelComponent
-    plugin="mock"
-    :icon-hover="mockIcon"
-    :icon="mockIcon"
-  >
+  <PublicationPanelComponent plugin="mock" :icon-hover="mockIcon" :icon="mockIcon">
     <template v-slot:panel>
       <button
         @click.prevent="publish()"
@@ -34,8 +34,6 @@ async function publish(): Promise<boolean> {
       >
         {{ $t('publications.plugins.publish') }}
       </button>
-
     </template>
-
   </PublicationPanelComponent>
 </template>

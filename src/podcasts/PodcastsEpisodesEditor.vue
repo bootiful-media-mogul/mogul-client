@@ -375,7 +375,7 @@ onMounted(async () => {
             <Podbean />
             <PodcastEpisodeBlogPost />
             <PodcastEpisodeAudioFile />
-            <Mock/>
+            <Mock />
           </PublicationsSectionComponent>
         </div>
       </div>

@@ -41,7 +41,6 @@ const translations = {
         }
       },
       plugins: {
-
         ayrshare: {
           platforms: {
             gmb: 'Google Business Profile',
@@ -128,8 +127,8 @@ const translations = {
     'managedfiles.preview': 'Preview this file',
     'managedfiles.upload': 'Upload a file',
     'managedfiles.uploaded': 'Has this file been uploaded?',
-    'managedfiles.content-type': 'This file\'s content type',
-    'managedfiles.file-name': 'This file\'s name',
+    'managedfiles.content-type': "This file's content type",
+    'managedfiles.file-name': "This file's name",
 
     // markdown
     'markdown.add-link-prompt': 'Where do you want the link to go to?',
@@ -187,7 +186,7 @@ This is NOT reversible! `,
     'podcasts.episodes.episode.graphic': 'Graphic',
     'podcasts.episodes.buttons.add-segment': 'Add a New Segment',
     'podcasts.episodes.episode.reference': 'the episode titled: {title}',
-    'podcasts.episodes.all': '{title}\'s episodes',
+    'podcasts.episodes.all': "{title}'s episodes",
     'podcasts.episodes.episode.editing': 'Editing {id} "{title}"',
     'podcasts.episodes.episode.edit': 'Episode Editor',
     'podcasts.episodes.buttons.save': 'Save',
@@ -201,7 +200,7 @@ This is NOT reversible! `,
 
     // podcasts
     'podcasts.title': 'Podcasts',
-    'podcasts.all': '{user}\'s podcasts',
+    'podcasts.all': "{user}'s podcasts",
     'podcasts.new-podcast': 'New Podcast',
     'podcasts.new-podcast.title': 'Title',
     'podcasts.title.ai.prompt': `Please help me take the following podcast title and make it more pithy and exciting!`,

@@ -45,6 +45,12 @@
               <div v-if="platform.enabled">
                 <InputWrapper v-model="p.post">
                   <textarea v-model="p.post" required rows="5" />
+
+                  <CompositionComponent
+                    v-if="descriptionComposition"
+                    :composition-id="parseInt(descriptionComposition.id + '')"
+                  />
+
                   <InputTools v-model="p.post" />
                 </InputWrapper>
               </div>
@@ -78,6 +84,7 @@ import {
 import { ayrshare, notifications } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
+import CompositionComponent from '@/compositions/CompositionComponent.vue'
 
 class Platform {
   public readonly name: string
@@ -139,7 +146,6 @@ notifications.listenForCategory('podcast-episode-completed-event', async (evt) =
   disabled.value = await isPluginDisabled()
 })
 
-
 onMounted(async () => {
   platforms.value = (await ayrshare.platforms()).sort((a, b) => a.localeCompare(b))
   layout()
@@ -154,7 +160,6 @@ function layout() {
 }
 
 async function isPluginDisabled() {
-
   // low-level stuff first: are any checkboxes selected?
   const selected = posts.value.filter((p) => p.platforms.some((x) => x.enabled)).length > 0
   if (!selected) {
@@ -169,7 +174,6 @@ async function isPluginDisabled() {
     clientContext,
     pluginName
   )
-
 
   return !ready!
 }

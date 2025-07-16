@@ -69,16 +69,14 @@
         </div>
       </div>
       <div class="publications-outcomes">
-        <div class="publications-outcome row " v-for="outcome in publication.outcomes" v-bind:key="outcome.id">
+        <div
+          class="publications-outcome row"
+          v-for="outcome in publication.outcomes"
+          v-bind:key="outcome.id"
+        >
           <div class="success">
-            <Icon
-              v-if="outcome.success"
-              :icon-hover="checkmarkAsset"
-              :icon="checkmarkAsset"
-            />
-            <Icon v-else
-                  :icon-hover="errorHighlightAsset"
-                  :icon="errorAsset" />
+            <Icon v-if="outcome.success" :icon-hover="checkmarkAsset" :icon="checkmarkAsset" />
+            <Icon v-else :icon-hover="errorHighlightAsset" :icon="errorAsset" />
           </div>
           <div class="uri">
             <a
@@ -90,7 +88,6 @@
           </div>
           <div class="key">
             {{ $t('publications.outcomes.keys.' + outcome.key) }}
-
           </div>
         </div>
       </div>
@@ -123,15 +120,14 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   display: grid;
-  grid-template-areas:  ' uri success key ';
+  grid-template-areas: ' uri success key ';
   grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-template-columns: var(--icon-column)  var(--icon-column) auto;
+  grid-template-columns: var(--icon-column) var(--icon-column) auto;
   margin-left: var(--icon-column);
 }
 
 .publications .publications-outcome:last-child {
   margin-bottom: calc(var(--radius) * 1);
-
 }
 
 .publications .publications-outcome:first-child {
@@ -208,7 +204,6 @@
   margin-top: var(--gutter-space);
 }
 
-
 /* PUBLICATIONS */
 .publications .publications-row {
   display: grid;
@@ -216,7 +211,8 @@
   grid-template-areas: ' plugin . delete  id url  created published   ';
 
   grid-template-columns:
-   min-content var(--gutter-space)   var(--icon-column)   var(--id-column) var(--icon-column) var(--date-column) var(--date-column);
+    min-content var(--gutter-space) var(--icon-column) var(--id-column) var(--icon-column)
+    var(--date-column) var(--date-column);
 }
 
 .publications .publications-row {
@@ -278,7 +274,6 @@
 }
 </style>
 
-
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
 import { onMounted, provide, ref } from 'vue'
@@ -290,7 +285,6 @@ import errorAsset from '@/assets/images/error.png'
 import errorHighlightAsset from '@/assets/images/error-highlight.png'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import { dateTimeToString } from '@/dates'
-
 
 const props = defineProps<{
   disabled: boolean

@@ -6,7 +6,6 @@ import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
 
-
 export const graphqlClient = new Client({
   url: '/api/graphql',
   exchanges: [
@@ -622,7 +621,7 @@ export class Notifications {
   async start() {
     const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())[
       'channel'
-      ]
+    ]
     console.log('channel name is ' + channelName)
 
     const ably = new Ably.Realtime({ authUrl: '/api/notifications/ably/token' })
@@ -910,13 +909,12 @@ export class Ayrshare {
 }
 
 export class PublicationOutcome {
-
   readonly id: number
   readonly success: boolean
   readonly url: string
   readonly key: string
 
-  constructor(id: number,  success: boolean, url: string, key: string) {
+  constructor(id: number, success: boolean, url: string, key: string) {
     this.id = id
     this.success = success
     this.url = url

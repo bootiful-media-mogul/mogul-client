@@ -115,7 +115,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-
 import axios from 'axios'
 import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'
@@ -146,8 +145,7 @@ onMounted(async () => {
 watch(
   () => visible.value,
   async (n: boolean, o: boolean) => {
-    if (!loaded.value)
-      return ;
+    if (!loaded.value) return
 
     console.log(
       'setting managed file visibility because the old value was ',

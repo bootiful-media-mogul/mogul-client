@@ -46,10 +46,10 @@
                 <InputWrapper v-model="p.post">
                   <textarea v-model="p.post" required rows="5" />
 
-                  <CompositionComponent
+<!--                  <CompositionComponent
                     v-if="descriptionComposition"
                     :composition-id="parseInt(descriptionComposition.id + '')"
-                  />
+                  />-->
 
                   <InputTools v-model="p.post" />
                 </InputWrapper>

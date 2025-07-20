@@ -352,9 +352,9 @@ onMounted(async () => {
           <div class="podcast-episode-controls-row">
             <span class="save">
               <button
+                :disabled="draftEpisode.id === undefined"
                 class="pure-button pure-button-primary"
                 type="submit"
-                :disabled="draftEpisode.id === undefined"
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
               >
                 {{ $t('podcasts.episodes.buttons.add-segment') }}
@@ -367,8 +367,8 @@ onMounted(async () => {
         <div class="publish-menu">
           <PublicationsSectionComponent
             v-if="draftEpisode.id"
-            :publishable="draftEpisode.id + ''"
             :disabled="publicationsDisabled"
+            :publishable="draftEpisode.id + ''"
             :type="'episode'"
           >
             <Ayrshare />

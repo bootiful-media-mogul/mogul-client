@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { inject, onMounted, useSlots } from 'vue'
 import type { RegisterChildFunction } from '@/publications/input'
 

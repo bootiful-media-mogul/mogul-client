@@ -87,7 +87,7 @@
     <span class="written">
       <span v-if="uploading"> 🕒 </span>
       <span v-else>
-        <Icon v-if="written" :icon-hover="checkmarkAsset" :icon="checkmarkAsset" />
+        <Icon v-if="written" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
       </span>
     </span>
     <span class="preview">

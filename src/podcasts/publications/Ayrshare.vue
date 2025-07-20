@@ -30,20 +30,29 @@
 }
 </style>
 <template>
-  <PublicationPanelComponent plugin="ayrshare" :icon-hover="ayrshareIcon" :icon="ayrshareIcon">
+  <PublicationPanelComponent :icon="ayrshareIcon" :icon-hover="ayrshareIcon" plugin="ayrshare">
     <template v-slot:panel>
       <div class="platform-panels">
-        <div v-for="p in posts" v-bind:key="p.ayrsharePublicationComposition.platform" class="platform-panel">
+        <div
+          v-for="p in posts"
+          v-bind:key="p.ayrsharePublicationComposition.platform"
+          class="platform-panel"
+        >
           <div class="platform-enabled">
             <input v-model="p.enabled" :disabled="publishing" type="checkbox" @change="reset(p)" />
           </div>
           <div class="platform-name">
-            {{ $t('publications.plugins.ayrshare.platforms.' + p.ayrsharePublicationComposition.platform) }}
+            {{
+              $t(
+                'publications.plugins.ayrshare.platforms.' +
+                  p.ayrsharePublicationComposition.platform
+              )
+            }}
           </div>
           <div class="platform-post">
             <div v-if="p.enabled">
               <InputWrapper v-model="p.post">
-                <textarea :disabled="publishing" v-model="p.post" required rows="5" />
+                <textarea v-model="p.post" :disabled="publishing" required rows="5" />
                 <CompositionComponent
                   :composition-id="p.ayrsharePublicationComposition.composition.id"
                 />
@@ -52,14 +61,13 @@
             </div>
           </div>
         </div>
-
       </div>
       <div>
         <button
           :disabled="disabled"
-          @click.prevent="publish()"
-          type="button"
           class="pure-button pure-button-primary publish-button"
+          type="button"
+          @click.prevent="publish()"
         >
           {{ $t('publications.plugins.publish') }}
         </button>
@@ -67,7 +75,7 @@
     </template>
   </PublicationPanelComponent>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import ayrshareIcon from '@/assets/images/publications/podcasts/publish-to-ayrshare.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
@@ -84,7 +92,6 @@ import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
 class EnableAyrsharePublicationComposition {
-
   public enabled: boolean = false
   public ayrsharePublicationComposition: AyrsharePublicationComposition
   public post: string = ''
@@ -114,10 +121,10 @@ async function publish(): Promise<boolean> {
   posts.value.forEach((p) => {
     if (p.enabled) {
       clientContext[p.ayrsharePublicationComposition.platform] = p.post
-      clientContext[p.ayrsharePublicationComposition.platform + 'CompositionId'] = p.ayrsharePublicationComposition.composition.id
+      clientContext[p.ayrsharePublicationComposition.platform + 'CompositionId'] =
+        p.ayrsharePublicationComposition.composition.id
     }
   })
-
 
   return await publishFunction(
     publicationContext.type,
@@ -139,24 +146,22 @@ notifications.listenForCategory('podcast-episode-completed-event', async (evt) =
 })
 
 notifications.listenForCategory('ayrshare-publication-completion-event', async (evt) => {
-  console.log('event', evt)
   publishing.value = false
   await refresh()
 })
 
 async function refresh() {
-  posts.value = (await ayrshare.publicationCompositions())
-    .map((x) => new EnableAyrsharePublicationComposition(x))
+  posts.value = (await ayrshare.publicationCompositions()).map(
+    (x) => new EnableAyrsharePublicationComposition(x)
+  )
 }
 
 onMounted(async () => {
   await refresh()
-  console.log('posts: ', posts.value)
   disabled.value = await isPluginDisabled()
 })
 
 async function isPluginDisabled() {
-
   const selected = posts.value.filter((p) => p.enabled).length > 0
   if (!selected) {
     return true

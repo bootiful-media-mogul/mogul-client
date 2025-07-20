@@ -60,7 +60,7 @@
     </form>
   </div>
   <div v-else>
-    <PodcastsEditor :podcast-id="draftPodcast!.id" :podcast="draftPodcast!" />
+    <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" />
   </div>
 </template>
 

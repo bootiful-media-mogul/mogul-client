@@ -62,8 +62,8 @@ img.icon-disabled {
 </style>
 <template>
   <img
-    ref="element"
     v-if="disabled"
+    ref="element"
     :alt="altText"
     :src="src"
     class="icon icon-disabled unselectable"

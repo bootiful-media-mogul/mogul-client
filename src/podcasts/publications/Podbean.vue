@@ -1,12 +1,12 @@
 <template>
-  <PublicationPanelComponent plugin="podbean" :icon-hover="podbeanIcon" :icon="podbeanIcon">
+  <PublicationPanelComponent :icon="podbeanIcon" :icon-hover="podbeanIcon" plugin="podbean">
     <template v-slot:panel>
       <div>
         <button
           :disabled="disabled"
-          @click.prevent="publish()"
-          type="button"
           class="pure-button pure-button-primary publish-button"
+          type="button"
+          @click.prevent="publish()"
         >
           {{ $t('publications.plugins.publish') }}
         </button>
@@ -14,7 +14,7 @@
     </template>
   </PublicationPanelComponent>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'

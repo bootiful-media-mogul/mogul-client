@@ -56,7 +56,7 @@
 </style>
 
 <template>
-  <div ref="element" class="panel" :class="{ 'panel-maximized': maximized }">
+  <div ref="element" :class="{ 'panel-maximized': maximized }" class="panel">
     <div class="panel-menu">
       <div class="panel-menu-title navigable-section">
         {{ props.title }}
@@ -64,16 +64,16 @@
       <div class="panel-menu-buttons">
         <div v-if="!maximized">
           <div v-if="!visible" class="open" @click.prevent="toggleVisible">
-            <img alt="open" :src="open" class="panel-menu-buttons-img" />
+            <img :src="open" alt="open" class="panel-menu-buttons-img" />
           </div>
           <div v-else class="close" @click.prevent="toggleVisible">
-            <img alt="minimize" :src="minimize" class="panel-menu-buttons-img" />
+            <img :src="minimize" alt="minimize" class="panel-menu-buttons-img" />
           </div>
         </div>
         <div>
           <img
-            alt="maximize"
             :src="max"
+            alt="maximize"
             class="panel-menu-buttons-img"
             @click.prevent="toggleMaximize"
           />

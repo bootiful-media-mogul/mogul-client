@@ -5,17 +5,17 @@
     <div class="publications-toolbar">
       <div v-for="(slot, index) in childSlots" :key="index">
         <div
-          class="toolbar-icon"
           :class="{
             'toolbar-icon-selected': slot.selected,
             'toolbar-icon-disabled': isAnyPanelSelected
           }"
+          class="toolbar-icon"
         >
           <Icon
             :alt="slot.plugin"
-            :width="50"
             :icon="slot.icon.icon"
             :icon-hover="slot.icon.iconHover"
+            :width="50"
             @click.prevent="showPanelForSlot(slot)"
           />
         </div>
@@ -23,9 +23,9 @@
     </div>
     <div v-for="(slot, index) in childSlots" :key="index">
       <div
-        class="publication-panel"
-        :class="{ 'publication-panel-selected': isAnyPanelSelected }"
         v-if="slot.selected"
+        :class="{ 'publication-panel-selected': isAnyPanelSelected }"
+        class="publication-panel"
       >
         <div>
           {{ $t('publications.plugins.' + slot.plugin + '.description') }}
@@ -45,9 +45,9 @@
           <div class="plugin-icon-container">
             <Icon
               v-if="iconsAvailable"
-              :width="40"
-              :icon-hover="getIconForPlugin(publication.plugin).iconHover"
               :icon="getIconForPlugin(publication.plugin).icon"
+              :icon-hover="getIconForPlugin(publication.plugin).iconHover"
+              :width="40"
             />
           </div>
         </div>
@@ -57,10 +57,10 @@
         </div>
         <div class="delete-column">
           <Icon
-            class="delete-icon"
+            :disabled="withdrawn(publication)"
             :icon="deleteHighlightAsset"
             :icon-hover="deleteAsset"
-            :disabled="withdrawn(publication)"
+            class="delete-icon"
             @click.prevent="unpublish(publication.id)"
           />
         </div>
@@ -70,19 +70,19 @@
       </div>
       <div class="publications-outcomes">
         <div
-          class="publications-outcome row"
           v-for="outcome in publication.outcomes"
           v-bind:key="outcome.id"
+          class="publications-outcome row"
         >
           <div class="success">
-            <Icon v-if="outcome.success" :icon-hover="checkmarkAsset" :icon="checkmarkAsset" />
-            <Icon v-else :icon-hover="errorHighlightAsset" :icon="errorAsset" />
+            <Icon v-if="outcome.success" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
+            <Icon v-else :icon="errorAsset" :icon-hover="errorHighlightAsset" />
           </div>
           <div class="uri">
             <a
-              class="mogul-icon preview-icon"
               :class="{ disabled: withdrawn(publication) }"
               :href="outcome.url"
+              class="mogul-icon preview-icon"
               target="_blank"
             ></a>
           </div>

@@ -182,8 +182,8 @@ async function addCompositionAttachment(compositionId: number) {
         </div>
         <div v-for="attachment in attachments" :key="attachment.id">
           <div
-            draggable="true"
             :class="attachmentClasses(attachment)"
+            draggable="true"
             @dragstart="handleDragStart($event, attachment)"
             @mouseenter="handleMouseEnter($event, attachment)"
             @mouseleave="handleMouseLeave($event, attachment)"
@@ -203,7 +203,7 @@ async function addCompositionAttachment(compositionId: number) {
               @click.prevent="deleteCompositionAttachment(attachment.id)"
             />
 
-            <ManagedFileComponent accept=".jpg,.png" :managed-file-id="attachment.managedFile.id" />
+            <ManagedFileComponent :managed-file-id="attachment.managedFile.id" accept=".jpg,.png" />
           </div>
         </div>
         <div>

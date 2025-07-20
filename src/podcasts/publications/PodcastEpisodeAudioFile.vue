@@ -1,16 +1,16 @@
 <template>
   <PublicationPanelComponent
-    plugin="audioFile"
-    :icon-hover="downloadAudioIcon"
     :icon="downloadAudioIcon"
+    :icon-hover="downloadAudioIcon"
+    plugin="audioFile"
   >
     <template v-slot:panel>
       <div>
         <button
           :disabled="disabled"
-          @click.prevent="downloadAudio()"
-          type="button"
           class="pure-button pure-button-primary publish-button"
+          type="button"
+          @click.prevent="downloadAudio()"
         >
           {{ $t('publications.plugins.audioFile.download') }}
         </button>
@@ -18,7 +18,7 @@
     </template>
   </PublicationPanelComponent>
 </template>
-<script setup lang="ts">
+<script lang="ts" setup>
 import downloadAudioIcon from '@/assets/images/publications/podcasts/publish-download-produced-audio.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'

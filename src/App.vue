@@ -5,7 +5,6 @@ import NotificationBoxComponent from '@/notifications/NotificationBoxComponent.v
 import { onMounted, ref } from 'vue'
 import TranscriptionComponent from '@/transcription/TranscriptionComponent.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
-import NotificationsComponent from '@/notifications/NotificationsComponent.vue'
 
 const mogulUsername = ref<string | null>(null)
 
@@ -35,10 +34,8 @@ onMounted(async () => {
         </div>
 
         <div class="toolbar navigable-section">
-          <router-link to="/">{{ $t('app.menu.home') }}</router-link> |
-
-          <!--          <router-link to="/test">{{ $t('app.menu.test') }}</router-link> |-->
-
+          <router-link to="/">{{ $t('app.menu.home') }}</router-link>
+          |
           <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
           |
           <router-link
@@ -64,10 +61,6 @@ onMounted(async () => {
           <PanelComponent title="Transcription">
             <TranscriptionComponent />
           </PanelComponent>
-
-          <!--          <PanelComponent title="Notifications">
-            <NotificationsComponent />
-          </PanelComponent>-->
 
           <PanelComponent title="Notes"></PanelComponent>
         </div>

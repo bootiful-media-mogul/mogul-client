@@ -2,4 +2,4 @@
   <h1>Home</h1>
   <p>Here is your activity feed...</p>
 </template>
-<script setup lang="ts"></script>
+<script lang="ts" setup></script>

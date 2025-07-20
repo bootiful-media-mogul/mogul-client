@@ -33,30 +33,26 @@
   <PublicationPanelComponent plugin="ayrshare" :icon-hover="ayrshareIcon" :icon="ayrshareIcon">
     <template v-slot:panel>
       <div class="platform-panels">
-        <div v-for="p in posts" v-bind:key="p.platforms.map((x) => x.name).join(',')">
-          <div class="platform-panel" v-for="platform in p.platforms" v-bind:key="platform.name">
-            <div class="platform-enabled">
-              <input v-model="platform.enabled" type="checkbox" @change="reset(p)" />
-            </div>
-            <div class="platform-name">
-              {{ $t('publications.plugins.ayrshare.platforms.' + platform.name) }}
-            </div>
-            <div class="platform-post">
-              <div v-if="platform.enabled">
-                <InputWrapper v-model="p.post">
-                  <textarea v-model="p.post" required rows="5" />
-
-<!--                  <CompositionComponent
-                    v-if="descriptionComposition"
-                    :composition-id="parseInt(descriptionComposition.id + '')"
-                  />-->
-
-                  <InputTools v-model="p.post" />
-                </InputWrapper>
-              </div>
+        <div v-for="p in posts" v-bind:key="p.ayrsharePublicationComposition.platform" class="platform-panel">
+          <div class="platform-enabled">
+            <input v-model="p.enabled" :disabled="publishing" type="checkbox" @change="reset(p)" />
+          </div>
+          <div class="platform-name">
+            {{ $t('publications.plugins.ayrshare.platforms.' + p.ayrsharePublicationComposition.platform) }}
+          </div>
+          <div class="platform-post">
+            <div v-if="p.enabled">
+              <InputWrapper v-model="p.post">
+                <textarea :disabled="publishing" v-model="p.post" required rows="5" />
+                <CompositionComponent
+                  :composition-id="p.ayrsharePublicationComposition.composition.id"
+                />
+                <InputTools v-model="p.post" />
+              </InputWrapper>
             </div>
           </div>
         </div>
+
       </div>
       <div>
         <button
@@ -81,35 +77,28 @@ import {
   PublicationContext,
   type PublishFunction
 } from '@/publications/input'
-import { ayrshare, notifications } from '@/services'
+
+import { ayrshare, AyrsharePublicationComposition, notifications } from '@/services'
+import CompositionComponent from '@/compositions/CompositionComponent.vue'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
-import CompositionComponent from '@/compositions/CompositionComponent.vue'
 
-class Platform {
-  public readonly name: string
-  public readonly enabled: boolean = false
+class EnableAyrsharePublicationComposition {
 
-  constructor(name: string, enabled: boolean) {
-    this.name = name
-    this.enabled = enabled
-  }
-}
+  public enabled: boolean = false
+  public ayrsharePublicationComposition: AyrsharePublicationComposition
+  public post: string = ''
 
-/* represents a post intended for one or more platforms */
-class Post {
-  public readonly platforms: Array<Platform>
-  public post: string
-
-  constructor(platforms: Array<Platform>, post: string) {
-    this.platforms = platforms
-    this.post = post
+  constructor(ayrsharePublicationComposition: AyrsharePublicationComposition) {
+    this.ayrsharePublicationComposition = ayrsharePublicationComposition
   }
 }
 
 const pluginName = 'ayrshare'
-const posts = ref<Array<Post>>([])
-const platforms = ref<string[]>([])
+
+const publishing = ref<boolean>(false)
+
+const posts = ref<Array<EnableAyrsharePublicationComposition>>([])
 const disabled = ref<boolean>(false)
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
@@ -117,17 +106,18 @@ const getPublicationContextFunction =
   inject<GetPublicationContextFunction>('getPublicationContext')!
 
 async function publish(): Promise<boolean> {
+  publishing.value = true
   const publicationContext: PublicationContext = getPublicationContextFunction()
-  // todo calculate the client context to send when publishing, based on the state of the forms
 
   const clientContext: any = {}
-  posts.value.forEach((post) => {
-    post.platforms.forEach((platform) => {
-      if (platform.enabled) {
-        clientContext[platform.name] = post.post
-      }
-    })
+
+  posts.value.forEach((p) => {
+    if (p.enabled) {
+      clientContext[p.ayrsharePublicationComposition.platform] = p.post
+      clientContext[p.ayrsharePublicationComposition.platform + 'CompositionId'] = p.ayrsharePublicationComposition.composition.id
+    }
   })
+
 
   return await publishFunction(
     publicationContext.type,
@@ -137,8 +127,10 @@ async function publish(): Promise<boolean> {
   )
 }
 
-async function reset(post: Post) {
-  post.post = ''
+async function reset(post: EnableAyrsharePublicationComposition) {
+  if (!post.enabled) {
+    post.post = ''
+  }
   disabled.value = await isPluginDisabled()
 }
 
@@ -146,22 +138,26 @@ notifications.listenForCategory('podcast-episode-completed-event', async (evt) =
   disabled.value = await isPluginDisabled()
 })
 
+notifications.listenForCategory('ayrshare-publication-completion-event', async (evt) => {
+  console.log('event', evt)
+  publishing.value = false
+  await refresh()
+})
+
+async function refresh() {
+  posts.value = (await ayrshare.publicationCompositions())
+    .map((x) => new EnableAyrsharePublicationComposition(x))
+}
+
 onMounted(async () => {
-  platforms.value = (await ayrshare.platforms()).sort((a, b) => a.localeCompare(b))
-  layout()
+  await refresh()
+  console.log('posts: ', posts.value)
   disabled.value = await isPluginDisabled()
 })
 
-function layout() {
-  posts.value = []
-  for (const platform of platforms.value) {
-    posts.value.push(new Post([new Platform(platform, false)], ''))
-  }
-}
-
 async function isPluginDisabled() {
-  // low-level stuff first: are any checkboxes selected?
-  const selected = posts.value.filter((p) => p.platforms.some((x) => x.enabled)).length > 0
+
+  const selected = posts.value.filter((p) => p.enabled).length > 0
   if (!selected) {
     return true
   }
@@ -174,7 +170,6 @@ async function isPluginDisabled() {
     clientContext,
     pluginName
   )
-
   return !ready!
 }
 </script>

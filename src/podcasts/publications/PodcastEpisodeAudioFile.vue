@@ -70,7 +70,6 @@ async function downloadAudio() {
 }
 
 onMounted(async () => {
-  console.log('audioFile: calling isPluginDisabled()')
   disabled.value = await isPluginDisabled()
 })
 </script>

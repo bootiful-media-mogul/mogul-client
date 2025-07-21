@@ -1,18 +1,10 @@
 <script lang="ts" setup>
-//
-// this is an unusual component. it lets us attach attachments (which has managedFiles)
-// to a composition, nominally so we can then include references to them in
-// text blocks via drag and drop.
-//
+
 
 import { inject, onMounted, ref } from 'vue'
 import { Attachment, compositions } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import type {
-  GetInputElementFunction,
-  ReadValueFunction,
-  UpdateValueFunction
-} from '@/ui/input/input'
+import type { GetInputElementFunction, ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import asset from '@/assets/images/compositions/attachments.png'
 import assetHighlight from '@/assets/images/compositions/attachments.png'
@@ -196,14 +188,16 @@ async function addCompositionAttachment(compositionId: number) {
               <div class="dot"></div>
               <div class="dot"></div>
             </div>
-            <Icon
-              :icon="deleteHighlightAsset"
-              :icon-hover="deleteAsset"
-              class="delete-icon"
-              @click.prevent="deleteCompositionAttachment(attachment.id)"
-            />
-
-            <ManagedFileComponent :managed-file-id="attachment.managedFile.id" accept=".jpg,.png" />
+            <div class="delete-icon">
+              <Icon
+                :icon="deleteHighlightAsset"
+                :icon-hover="deleteAsset"
+                @click.prevent="deleteCompositionAttachment(attachment.id)"
+              />
+            </div>
+            <div class="managed-file">
+              <ManagedFileComponent :managed-file-id="attachment.managedFile.id" accept=".jpg,.png" />
+            </div>
           </div>
         </div>
         <div>
@@ -226,9 +220,15 @@ async function addCompositionAttachment(compositionId: number) {
 }
 
 .attachment-row {
+  align-items: center;
   display: grid;
   grid-template-areas: 'draggable-handle delete managed-file';
   grid-template-columns: var(--gutter-space) var(--icon-column) auto;
+  border-top : 1px solid black;
+}
+
+.managed-file {
+  grid-area: managed-file;
 }
 
 .draggable {

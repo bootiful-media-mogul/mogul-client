@@ -794,14 +794,14 @@ export class Compositions {
     this.client = client
   }
 
-  async deleteCompositionAttachment(attachmentId: number) {
+  async deleteCompositionAttachment(compositionAttachmentId: number) {
     const mutation = `
          mutation ($compositionAttachmentId:  Int ) { 
-          deleteCompositionAttachment( compositionAttachmentId: $attachmentId ) 
+          deleteCompositionAttachment( compositionAttachmentId: $compositionAttachmentId ) 
          }
         `
     const result = await this.client.mutation(mutation, {
-      attachmentId: attachmentId
+      compositionAttachmentId: compositionAttachmentId
     })
     const idBag = (await result.data['deleteCompositionAttachment']) as Number
     return true

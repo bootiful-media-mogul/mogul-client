@@ -1,7 +1,6 @@
 <style>
 .managed-file-row {
-  /*align-items: center;
-  grid-template-rows: minmax( var(--row-height) ,auto);*/
+  grid-column-gap: var(--gutter-space-half);
   grid-template-areas: 'controls choose visible written  preview   contentType   filename';
   grid-template-columns:
     min-content

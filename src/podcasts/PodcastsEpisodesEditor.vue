@@ -427,6 +427,7 @@ fieldset.episodes-table {
 div.segment-controls {
   display: grid;
   grid-template-areas: 'up down delete transcript ';
+  grid-column-gap: var(--gutter-space-half);
   grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
 </style>

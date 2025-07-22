@@ -81,6 +81,11 @@
           <Icon :icon="h1Asset" :icon-hover="h1HighlightAsset" @click.prevent="formatText('h1')" />
           <Icon :icon="h2Asset" :icon-hover="h2HighlightAsset" @click.prevent="formatText('h2')" />
           <Icon :icon="h3Asset" :icon-hover="h3HighlightAsset" @click.prevent="formatText('h3')" />
+
+          <Icon :icon="imageAsset" :icon-hover="imageHighlightAsset" @click.prevent="formatText('image')" />
+
+
+
         </div>
       </div>
     </template>
@@ -91,6 +96,9 @@
 </template>
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
+
+import imageAsset from '@/assets/images/formatting-icons/image.png'
+import imageHighlightAsset from '@/assets/images/formatting-icons/image-highlight.png'
 
 import asset from '@/assets/images/markdown/markdown-preview.png'
 import assetHighlight from '@/assets/images/markdown/markdown-preview-highlight.png'
@@ -105,10 +113,11 @@ import h1Asset from '@/assets/images/formatting-icons/h1.png'
 import h1HighlightAsset from '@/assets/images/formatting-icons/h1-highlight.png'
 
 import h2Asset from '@/assets/images/formatting-icons/h2.png'
-import h3Asset from '@/assets/images/formatting-icons/h2.png'
+import h3Asset from '@/assets/images/formatting-icons/h3.png'
 
 import h2HighlightAsset from '@/assets/images/formatting-icons/h2-highlight.png'
-import h3HighlightAsset from '@/assets/images/formatting-icons/h2-highlight.png'
+
+import h3HighlightAsset from '@/assets/images/formatting-icons/h3-highlight.png'
 
 import boldAsset from '@/assets/images/formatting-icons/bold.png'
 import boldHighlightAsset from '@/assets/images/formatting-icons/bold-highlight.png'
@@ -176,6 +185,9 @@ const formatText = (format: string) => {
   }
 
   switch (format) {
+    case 'image':
+      insertAtCursor(`![${window.prompt(t('markdown.add-image-prompt'))?.trim()}](${text.trim()})`)
+      break
     case 'link':
       insertAtCursor(`[${text}](${window.prompt(t('markdown.add-link-prompt'))})`)
       break

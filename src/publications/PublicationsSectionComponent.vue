@@ -315,11 +315,9 @@ async function refresh() {
 
 onMounted(async () => {
   await refresh()
-
   childSlots.value.forEach((slot) => {
     icons.value.set(slot.plugin, slot.icon)
   })
-
   iconsAvailable.value = childSlots.value.length == icons.value.size
 })
 

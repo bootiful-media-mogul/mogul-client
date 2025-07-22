@@ -132,6 +132,7 @@ const translations = {
 
     // markdown
     'markdown.add-link-prompt': 'Where do you want the link to go to?',
+    'markdown.add-image-prompt': 'Provide a caption for the image',
 
     // app
     'app.menu.home': 'Home',

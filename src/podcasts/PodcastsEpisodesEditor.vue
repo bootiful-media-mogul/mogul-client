@@ -284,7 +284,7 @@ onMounted(async () => {
             :disabled="description == '' && title == ''"
             class="pure-button pure-button-primary"
             type="submit"
-            @click="cancel"
+            @click.prevent="cancel"
           >
             {{ $t('podcasts.episodes.buttons.cancel') }}
           </button>

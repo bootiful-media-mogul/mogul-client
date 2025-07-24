@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-
-
 import { inject, onMounted, ref } from 'vue'
 import { Attachment, compositions } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
@@ -196,7 +194,10 @@ async function addCompositionAttachment(compositionId: number) {
               />
             </div>
             <div class="managed-file">
-              <ManagedFileComponent :managed-file-id="attachment.managedFile.id" accept=".jpg,.png" />
+              <ManagedFileComponent
+                :managed-file-id="attachment.managedFile.id"
+                accept=".jpg,.png"
+              />
             </div>
           </div>
         </div>
@@ -224,7 +225,7 @@ async function addCompositionAttachment(compositionId: number) {
   display: grid;
   grid-template-areas: 'draggable-handle delete managed-file';
   grid-template-columns: var(--gutter-space) var(--icon-column) auto;
-  border-top : 1px solid black;
+  border-top: 1px solid black;
 }
 
 .managed-file {
@@ -256,7 +257,6 @@ async function addCompositionAttachment(compositionId: number) {
   visibility: visible;
 }
 
-/* */
 .dot-grid {
   display: grid;
   grid-template-columns: repeat(2, 5px); /* 2 columns, each 5px wide */
@@ -264,8 +264,6 @@ async function addCompositionAttachment(compositionId: number) {
   gap: 2px; /* Space between dots */
   width: 12px; /* Total width: 2 columns x 15px */
   height: 19px; /* Total height: 3 rows x 15px + gaps */
-  /*background-color: white;
-  border: 2px solid white ;*/
 }
 
 .dot {

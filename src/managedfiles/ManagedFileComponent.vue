@@ -120,13 +120,11 @@ import { onMounted, ref, watch } from 'vue'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import Icon from '@/ui/Icon.vue'
 
-interface Props {
+const props = defineProps<{
   readonly disabled?: boolean
   readonly accept: string
   readonly managedFileId: number
-}
-
-const props = defineProps<Props>()
+}>()
 const filename = ref<string>('')
 const contentType = ref<string>('')
 const size = ref<number>(0)

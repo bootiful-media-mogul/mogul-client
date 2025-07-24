@@ -105,6 +105,7 @@ const translations = {
 
     // notifications
     notifications: {
+      'ayrshare-publication-completion-event': 'Publication to the Ayrshare social media platform has completed.',
       'setting-written-event': 'Plugin configuration has been updated.',
       'transcript-processed-event': 'Transcript for #{key} has been processed.',
       'podcast-episode-render-finished-event':

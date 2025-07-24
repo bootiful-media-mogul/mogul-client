@@ -82,10 +82,11 @@
           <Icon :icon="h2Asset" :icon-hover="h2HighlightAsset" @click.prevent="formatText('h2')" />
           <Icon :icon="h3Asset" :icon-hover="h3HighlightAsset" @click.prevent="formatText('h3')" />
 
-          <Icon :icon="imageAsset" :icon-hover="imageHighlightAsset" @click.prevent="formatText('image')" />
-
-
-
+          <Icon
+            :icon="imageAsset"
+            :icon-hover="imageHighlightAsset"
+            @click.prevent="formatText('image')"
+          />
         </div>
       </div>
     </template>

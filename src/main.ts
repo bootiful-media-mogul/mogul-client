@@ -22,6 +22,8 @@ const translations = {
     hello: 'Hello, {mogul}',
     publications: {
       outcomes: {
+        'error-message': 'see error message',
+        'no-error-message': '(no error message given)',
         keys: {
           mock: 'Mock',
           podbean: 'Podbean',

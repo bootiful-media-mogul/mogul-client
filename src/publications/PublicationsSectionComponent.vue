@@ -78,6 +78,15 @@
             <Icon v-if="outcome.success" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
             <Icon v-else :icon="errorAsset" :icon-hover="errorHighlightAsset" />
           </div>
+          <div class="server-error-message">
+            <div v-if="!outcome.success">
+              <a href="#" v-if="outcome.serverErrorMessage"
+                 @click.prevent="popupErrorMessage( outcome.serverErrorMessage )">
+                {{ $t('publications.outcomes.error-message') }}
+              </a>
+              <span v-else>{{ $t('publications.outcomes.no-error-message') }}</span>
+            </div>
+          </div>
           <div class="uri">
             <a
               :class="{ disabled: withdrawn(publication) }"
@@ -120,9 +129,9 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   display: grid;
-  grid-template-areas: ' uri success key ';
+  grid-template-areas: ' uri success key server-error-message ';
   grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-template-columns: var(--icon-column) var(--icon-column) auto;
+  grid-template-columns: var(--icon-column) var(--icon-column) 15em auto;
   margin-left: var(--icon-column);
 }
 
@@ -145,6 +154,10 @@
 
 .publications .publications-outcome .uri {
   grid-area: uri;
+}
+
+.publications .publications-outcome .server-error-message {
+  grid-area: server-error-message;
 }
 
 .publications-toolbar {
@@ -306,6 +319,11 @@ const icons = ref<Map<string, PanelSlotIcon>>(new Map<string, PanelSlotIcon>())
 
 function getIconForPlugin(plugin: string): PanelSlotIcon {
   return icons.value!.get(plugin)!
+}
+
+async function popupErrorMessage(message: string) {
+  if (message !== null)
+    window.alert(message)
 }
 
 async function refresh() {

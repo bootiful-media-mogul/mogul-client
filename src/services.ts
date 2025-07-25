@@ -622,18 +622,6 @@ export class Notifications {
     const channel = ably.channels.get(nc.ablyChannel)
     await channel.subscribe(async (message) => await this.dispatch(message))
   }
-
-  async start() {
-    const channelName = (await (await window.fetch('/api/notifications/ably/channel')).json())[
-      'channel'
-    ]
-    console.log('channel name is ' + channelName)
-
-    const ably = new Ably.Realtime({ authUrl: '/api/notifications/ably/token' })
-    const channel = ably.channels.get(channelName)
-    await channel.subscribe(async (message) => await this.dispatch(message))
-  }
-
   async dispatch(message: Ably.InboundMessage) {
     if (this.callbacks.length == 0) {
       return
@@ -940,12 +928,14 @@ export class PublicationOutcome {
   readonly success: boolean
   readonly url: string
   readonly key: string
+  readonly serverErrorMessage: string
 
-  constructor(id: number, success: boolean, url: string, key: string) {
+  constructor(id: number, success: boolean, url: string, key: string, serverErrorMessage: string) {
     this.id = id
     this.success = success
     this.url = url
     this.key = key
+    this.serverErrorMessage = serverErrorMessage
   }
 }
 
@@ -977,7 +967,8 @@ export class Publications {
                 created,
                 success,
                 url,
-                key
+                key,
+                serverErrorMessage
               }
            }
        }

@@ -820,7 +820,7 @@ export class Compositions {
             attachments { 
               id,
               caption, 
-              embedding,
+              markdown,
               managedFile {
                 id 
               } 
@@ -838,14 +838,14 @@ export class Attachment {
   readonly id: number
   readonly caption: string
   readonly managedFile: ManagedFile
-  readonly embedding: string
+  readonly markdown: string
 
-  constructor(id: number, caption: string, managedFile: ManagedFile, embedding: string) {
+  constructor(id: number, caption: string, managedFile: ManagedFile, markdown: string) {
     this.caption = caption
     this.id = id
     this.managedFile = managedFile
-    this.embedding = embedding
-    console.debug(`got the embedding ${this.embedding} for attachment`)
+    this.markdown = markdown
+    console.debug(`got the markdown ${this.markdown} for attachment`)
   }
 }
 

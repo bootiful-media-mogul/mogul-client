@@ -101,7 +101,7 @@ const handleMouseEnter = (e: Event, attachment: Attachment) => {
 
 // Make the draggable div
 const handleDragStart = (event: DragEvent, attachment: Attachment) => {
-  event.dataTransfer!!.setData('text', attachment.embedding)
+  event.dataTransfer!!.setData('text', attachment.markdown)
 
   // Create a clean clone of just this element
   let dragEl = event.target as HTMLElement

@@ -22,11 +22,7 @@
 import downloadAudioIcon from '@/assets/images/publications/podcasts/publish-download-produced-audio.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
-import type {
-  GetPublicationContextFunction,
-  IsPluginReadyFunction,
-  PublishFunction
-} from '@/publications/input'
+import type { GetPublicationContextFunction, IsPluginReadyFunction, PublishFunction } from '@/publications/input'
 import { managedFiles, notifications, podcasts } from '@/services'
 
 const pluginName = 'audioFile'

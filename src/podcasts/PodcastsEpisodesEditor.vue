@@ -313,8 +313,8 @@ onMounted(async () => {
             <div class="row episode-managed-file-row">
               <div class="segment-controls-type">
                 <b>{{
-                  $t('podcasts.episodes.episode.segments.number', { order: segment.order })
-                }}</b>
+                    $t('podcasts.episodes.episode.segments.number', { order: segment.order })
+                  }}</b>
               </div>
               <div class="segment-controls-row">
                 <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">

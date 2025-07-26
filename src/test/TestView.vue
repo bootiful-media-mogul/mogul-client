@@ -8,19 +8,8 @@
 
 <script lang="ts" setup>
 import { onMounted } from 'vue'
-// import { notifications } from '@/services'
-//
-// const visible = async () => {
-//   await notifications.notify(true, false)
-// }
-//
-// const modal = async () => {
-//   await notifications.notify(false, true)
-// }
-//
-// const background = async () => {
-//   await notifications.notify(false, false)
-// }
 
-onMounted(() => {})
+
+onMounted(() => {
+})
 </script>

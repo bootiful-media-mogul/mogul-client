@@ -80,8 +80,11 @@
           </div>
           <div class="server-error-message">
             <div v-if="!outcome.success">
-              <a href="#" v-if="outcome.serverErrorMessage"
-                 @click.prevent="popupErrorMessage( outcome.serverErrorMessage )">
+              <a
+                v-if="outcome.serverErrorMessage"
+                href="#"
+                @click.prevent="popupErrorMessage(outcome.serverErrorMessage)"
+              >
                 {{ $t('publications.outcomes.error-message') }}
               </a>
               <span v-else>{{ $t('publications.outcomes.no-error-message') }}</span>
@@ -322,8 +325,7 @@ function getIconForPlugin(plugin: string): PanelSlotIcon {
 }
 
 async function popupErrorMessage(message: string) {
-  if (message !== null)
-    window.alert(message)
+  if (message !== null) window.alert(message)
 }
 
 async function refresh() {

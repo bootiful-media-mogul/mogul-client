@@ -622,6 +622,7 @@ export class Notifications {
     const channel = ably.channels.get(nc.ablyChannel)
     await channel.subscribe(async (message) => await this.dispatch(message))
   }
+
   async dispatch(message: Ably.InboundMessage) {
     if (this.callbacks.length == 0) {
       return
@@ -909,7 +910,7 @@ export class Ayrshare {
     const result = await this.client.query(q, {})
     return (await result.data[
       'ayrsharePublicationCompositions'
-    ]) as Array<AyrsharePublicationComposition>
+      ]) as Array<AyrsharePublicationComposition>
   }
 
   async platforms(): Promise<Array<string>> {

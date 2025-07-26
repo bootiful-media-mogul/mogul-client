@@ -4,7 +4,8 @@ export class PanelSlotIcon {
   constructor(
     public icon: string,
     public iconHover: string
-  ) {}
+  ) {
+  }
 }
 
 export class PanelSlot {
@@ -13,7 +14,8 @@ export class PanelSlot {
     public plugin: string,
     public panel: Slot,
     public icon: PanelSlotIcon
-  ) {}
+  ) {
+  }
 }
 
 export class PublicationContext {

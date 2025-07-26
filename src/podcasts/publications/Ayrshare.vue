@@ -45,7 +45,7 @@
             {{
               $t(
                 'publications.plugins.ayrshare.platforms.' +
-                  p.ayrsharePublicationComposition.platform
+                p.ayrsharePublicationComposition.platform
               )
             }}
           </div>

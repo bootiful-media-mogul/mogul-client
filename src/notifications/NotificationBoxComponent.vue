@@ -126,7 +126,7 @@ export default {
       if (that.showToasterNotification) {
         that.show()
         clearTimeout(that.nextTimeoutId)
-        that.nextTimeoutId = setTimeout(function (e: Event) {
+        that.nextTimeoutId = setTimeout(function(e: Event) {
           that.hide()
         }, displayForNMilliseconds)
       }

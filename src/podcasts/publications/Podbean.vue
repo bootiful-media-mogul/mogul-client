@@ -18,7 +18,11 @@
 import podbeanIcon from '@/assets/images/publications/podcasts/publish-to-podbean.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
-import type { GetPublicationContextFunction, IsPluginReadyFunction, PublishFunction } from '@/publications/input'
+import type {
+  GetPublicationContextFunction,
+  IsPluginReadyFunction,
+  PublishFunction
+} from '@/publications/input'
 import { notifications } from '@/services'
 
 const pluginName = 'podbean'

@@ -45,7 +45,7 @@ onMounted(async () => {
                 when: Date.now()
               }
             }"
-          >{{ $t('app.menu.podcasts') }}
+            >{{ $t('app.menu.podcasts') }}
           </router-link>
           |
           <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>

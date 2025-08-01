@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import { events, Notification, notifications, type TranscriptEditEvent } from '@/services'
+import { events, Notification, notifications, type TranscriptEditEvent, transcriptions } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
@@ -8,7 +8,7 @@ const transcript = ref<string>('')
 const el = ref<HTMLElement>()
 const dirty = ref<boolean>()
 const key = ref<string>('')
-const id = ref<number>(0)
+const transcriptionId = ref<number>(0)
 const fresh = ref<boolean>(true)
 const busy = ref<boolean>(false)
 
@@ -19,7 +19,7 @@ onMounted(async () => {
     async (notification: Notification) => {
       const idOfThingWithTranscript = parseInt(notification.key)
       const incoming = parseInt(idOfThingWithTranscript + '')
-      const existing = parseInt(id.value + '')
+      const existing = parseInt(transcriptionId.value + '')
       if (incoming === existing) {
         transcript.value = '' + notification.context
       }
@@ -30,11 +30,11 @@ onMounted(async () => {
   )
 })
 
-events.on('transcript-edit-event', async (event) => {
+events.on('transcription-edit-event', async (event) => {
   const editEvent: TranscriptEditEvent = event as TranscriptEditEvent
   transcript.value = '' + (editEvent.transcript == null ? '' : editEvent.transcript)
   key.value = editEvent.key
-  id.value = editEvent.id
+  transcriptionId.value = editEvent.id
   dirty.value = false
   events.emit('sidebar-panel-opened', el.value)
 })
@@ -45,18 +45,15 @@ function isDirty() {
 
 const cancel = () => {
   key.value = ''
-  id.value = 0
+  transcriptionId.value = 0
   transcript.value = ''
   fresh.value = true
   dirty.value = false
 }
 
-const refresh = () => {
-  events.emit('transcript-refreshed-event', {
-    key: key.value,
-    transcript: transcript.value,
-    id: id.value
-  })
+const refresh = async () => {
+  console.log('refreshing transcription for ' + transcriptionId.value)
+  await transcriptions.refreshTranscription(transcriptionId.value)
   busy.value = true
   dirty.value = false
 }
@@ -73,12 +70,18 @@ watch(
   }
 )
 
-const saveTranscript = () => {
-  events.emit('transcript-edited-event', {
-    key: key.value,
-    transcript: transcript.value,
-    id: id.value
-  })
+notifications.listenForCategory('transcription-completed-event', async (notification: Notification) => {
+  const context = JSON.parse(notification.context)
+  const ctxTranscriptionId = context['transcriptionId']
+  if (ctxTranscriptionId != transcriptionId.value) {
+    return
+  }
+  transcript.value = context.transcript
+  busy.value = false
+})
+
+const saveTranscript = async () => {
+  await transcriptions.writeTranscript(transcriptionId.value, transcript.value)
   dirty.value = false
 }
 </script>
@@ -90,7 +93,7 @@ const saveTranscript = () => {
           {{
             $t('transcripts.text', {
               key: $t(key),
-              id: id
+              id: transcriptionId
             })
           }}
         </label>

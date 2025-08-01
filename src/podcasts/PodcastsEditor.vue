@@ -55,7 +55,7 @@ const props = defineProps<{
   podcast: Podcast
 }>()
 
-const updatePodcast = async function(e: Event) {
+const updatePodcast = async function (e: Event) {
   await podcasts.update(props.podcast.id, title.value)
 }
 

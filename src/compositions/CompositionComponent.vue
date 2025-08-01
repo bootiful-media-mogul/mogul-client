@@ -2,7 +2,11 @@
 import { inject, onMounted, ref } from 'vue'
 import { Attachment, compositions } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import type { GetInputElementFunction, ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
+import type {
+  GetInputElementFunction,
+  ReadValueFunction,
+  UpdateValueFunction
+} from '@/ui/input/input'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import asset from '@/assets/images/compositions/attachments.png'
 import assetHighlight from '@/assets/images/compositions/attachments.png'

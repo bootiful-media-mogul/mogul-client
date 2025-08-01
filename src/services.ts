@@ -38,13 +38,6 @@ export interface TranscriptEditedEvent {
   readonly transcript: string
 }
 
-export function editTranscript(key: string, id: number, text: string) {
-  events.emit('transcript-edit-event', {
-    key: key,
-    transcript: text,
-    id: id
-  } as TranscriptEditEvent)
-}
 
 export class Podcast {
   readonly title: string
@@ -109,7 +102,10 @@ export class Podcasts {
               producedAudio { id  },
               graphic { id  },
               segments { 
-                id, name, audio { id } , order , crossFadeDuration , transcript 
+                id, name, audio { id } , order , crossFadeDuration , 
+                transcription { 
+                 id, transcript 
+                } 
               }
               descriptionComposition { 
                 id,
@@ -220,25 +216,6 @@ export class Podcasts {
     return (await refresh.data['transcribePodcastEpisodeSegment']) as boolean
   }
 
-  async setPodcastEpisodeSegmentTranscript(
-    podcastEpisodeSegmentId: number,
-    transcribable: boolean,
-    transcript: string
-  ): Promise<boolean> {
-    const mutation = ` 
-          mutation ($podcastEpisodeSegmentId: Int, $transcribable: Boolean , $transcript:String ){ 
-            setPodcastEpisodeSegmentTranscript(podcastEpisodeSegmentId: $podcastEpisodeSegmentId,  transcribable: $transcribable, transcript: $transcript )  
-          }
-    `
-    const segmentTranscript = await this.client.mutation(mutation, {
-      podcastEpisodeSegmentId: podcastEpisodeSegmentId,
-      transcribable: transcribable,
-      transcript: transcript
-    })
-    return (await segmentTranscript.data['setPodcastEpisodeSegmentTranscript']) as boolean
-  }
-
-  // transcript
 
   async deletePodcastEpisodeSegment(podcastEpisodeSegmentId: number) {
     const mutation = `
@@ -426,19 +403,30 @@ export class ManagedFile {
   }
 }
 
+export class Transcription {
+
+  id: number
+  transcript: string
+
+  constructor(id: number, transcript: string) {
+    this.id = id
+    this.transcript = transcript
+  }
+}
+
 export class PodcastEpisodeSegment {
   id: number
   name: string
   audio: ManagedFile
   order: number
-  transcript: string
+  transcription: Transcription
 
-  constructor(id: number, name: string, audio: ManagedFile, order: number, transcript: string) {
+  constructor(id: number, name: string, audio: ManagedFile, order: number, transcription: Transcription) {
     this.id = id
     this.name = name
     this.audio = audio
     this.order = order
-    this.transcript = transcript
+    this.transcription = transcription
   }
 }
 
@@ -448,7 +436,6 @@ export class Publication {
   created: number
   published: number
   url: string
-  // this is meant to be set by the UI if and only if we're in the middle of publishing an episode
   publishing: boolean = false
   state: string
   outcomes: Array<PublicationOutcome>
@@ -845,7 +832,6 @@ export class Attachment {
     this.id = id
     this.managedFile = managedFile
     this.markdown = markdown
-    console.debug(`got the markdown ${this.markdown} for attachment`)
   }
 }
 
@@ -887,6 +873,67 @@ export class Utils {
   confirmDeletion(msg: string): boolean {
     return window.confirm(msg)
   }
+}
+
+export class Transcriptions {
+
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async refreshTranscription(id: number): Promise<boolean> {
+    const m = `
+     mutation ($transcriptionId: Int) {
+      refreshTranscription(transcriptionId: $transcriptionId) 
+     }
+    `
+    const result = await this.client.mutation(m, {
+      transcriptionId: id,
+    })
+    return (await result.data['refreshTranscription']) as boolean
+  }
+
+
+
+  async writeTranscript(id: number, transcript: string): Promise<boolean> {
+    const m = `
+     mutation ($transcriptionId: Int, $transcript: String) {
+      writeTranscript(transcriptionId: $transcriptionId, transcript: $transcript) 
+     }
+    `
+    const result = await this.client.mutation(m, {
+      transcriptionId: id,
+      transcript: transcript
+    })
+    return (await result.data['writeTranscript']) as boolean
+  }
+
+
+  editTranscript(id: number, text: string) {
+    events.emit('transcription-edit-event', {
+      transcript: text,
+      id: id
+    } as TranscriptEditEvent)
+  }
+
+
+  async transcriptionById(transcriptionId: number): Promise<Transcription> {
+    const q = `
+        query ($transcriptionId: Int ) {
+          transcriptionById( transcriptionId : $transcriptionId )  { 
+            id, transcript 
+          }
+        }
+        `
+    const result = await this.client.query(q, { transcriptionId: transcriptionId })
+    return (await result.data['transcriptionById']) as Transcription
+  }
+
+
+
+
 }
 
 export class Ayrshare {
@@ -1068,3 +1115,4 @@ export const managedFiles = new ManagedFiles(graphqlClient)
 export const settings = new Settings(graphqlClient)
 export const compositions = new Compositions(graphqlClient)
 export const ayrshare = new Ayrshare(graphqlClient)
+export const transcriptions = new Transcriptions(graphqlClient)

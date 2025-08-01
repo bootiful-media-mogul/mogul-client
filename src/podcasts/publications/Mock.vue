@@ -2,7 +2,11 @@
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import mockIcon from '@/assets/images/publications/podcasts/mock.png'
 import { inject } from 'vue'
-import { type GetPublicationContextFunction, PublicationContext, type PublishFunction } from '@/publications/input'
+import {
+  type GetPublicationContextFunction,
+  PublicationContext,
+  type PublishFunction
+} from '@/publications/input'
 
 const publishFunction = inject<PublishFunction>('publish')!
 const getPublicationContextFunction =

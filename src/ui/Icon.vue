@@ -16,10 +16,10 @@ const props = defineProps<Props>()
 const element = ref<HTMLImageElement>()
 const src = ref<string>()
 
-const swap = function() {
+const swap = function () {
   if (props.iconHover) src.value = props.icon == src.value ? props.iconHover : props.icon
 }
-const mouseSwap = function() {
+const mouseSwap = function () {
   if (props.sticky === true) return
   swap()
 }

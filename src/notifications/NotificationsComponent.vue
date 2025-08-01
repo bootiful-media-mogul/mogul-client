@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue'
 
-onMounted(async () => {
-})
+onMounted(async () => {})
 </script>
 <!--
 this component will show the latest notifications, and toggle the containing panel when

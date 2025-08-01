@@ -11,6 +11,5 @@ const { t } = useI18n()
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
 
-onMounted(() => {
-})
+onMounted(() => {})
 </script>

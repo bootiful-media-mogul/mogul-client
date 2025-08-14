@@ -216,7 +216,6 @@ export class Podcasts {
     return (await refresh.data['transcribePodcastEpisodeSegment']) as boolean
   }
 
-
   async deletePodcastEpisodeSegment(podcastEpisodeSegmentId: number) {
     const mutation = `
          mutation   ($podcastEpisodeSegmentId:  Int  ){ 
@@ -404,7 +403,6 @@ export class ManagedFile {
 }
 
 export class Transcription {
-
   id: number
   transcript: string
 
@@ -421,7 +419,13 @@ export class PodcastEpisodeSegment {
   order: number
   transcription: Transcription
 
-  constructor(id: number, name: string, audio: ManagedFile, order: number, transcription: Transcription) {
+  constructor(
+    id: number,
+    name: string,
+    audio: ManagedFile,
+    order: number,
+    transcription: Transcription
+  ) {
     this.id = id
     this.name = name
     this.audio = audio
@@ -876,7 +880,6 @@ export class Utils {
 }
 
 export class Transcriptions {
-
   private readonly client: Client
 
   constructor(client: Client) {
@@ -890,12 +893,10 @@ export class Transcriptions {
      }
     `
     const result = await this.client.mutation(m, {
-      transcriptionId: id,
+      transcriptionId: id
     })
     return (await result.data['refreshTranscription']) as boolean
   }
-
-
 
   async writeTranscript(id: number, transcript: string): Promise<boolean> {
     const m = `

@@ -340,6 +340,12 @@ textarea {
   padding-top: calc(var(--gutter-space) / 2);
 }
 
+.form-section .form-section-prompt {
+    margin-bottom: var(--gutter-space);
+    margin-top : calc(-1 * var(--gutter-space));
+    padding-bottom: calc(var(--gutter-space) / 3);
+}
+
 .form-section .form-section-title {
   font-size: large;
   border-top: 1px solid black;

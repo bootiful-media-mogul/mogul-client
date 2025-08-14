@@ -1,6 +1,12 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import { events, Notification, notifications, type TranscriptEditEvent, transcriptions } from '@/services'
+import {
+  events,
+  Notification,
+  notifications,
+  type TranscriptEditEvent,
+  transcriptions
+} from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 
@@ -70,15 +76,18 @@ watch(
   }
 )
 
-notifications.listenForCategory('transcription-completed-event', async (notification: Notification) => {
-  const context = JSON.parse(notification.context)
-  const ctxTranscriptionId = context['transcriptionId']
-  if (ctxTranscriptionId != transcriptionId.value) {
-    return
+notifications.listenForCategory(
+  'transcription-completed-event',
+  async (notification: Notification) => {
+    const context = JSON.parse(notification.context)
+    const ctxTranscriptionId = context['transcriptionId']
+    if (ctxTranscriptionId != transcriptionId.value) {
+      return
+    }
+    transcript.value = context.transcript
+    busy.value = false
   }
-  transcript.value = context.transcript
-  busy.value = false
-})
+)
 
 const saveTranscript = async () => {
   await transcriptions.writeTranscript(transcriptionId.value, transcript.value)

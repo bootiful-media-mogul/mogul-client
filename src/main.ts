@@ -28,6 +28,7 @@ const translations = {
           mock: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',
+          audioFile : 'Audio File Download',
           facebook: 'Facebook',
           linkedin: 'LinkedIn',
           instagram: 'Instagram',

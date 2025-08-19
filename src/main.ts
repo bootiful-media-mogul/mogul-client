@@ -28,7 +28,7 @@ const translations = {
           mock: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',
-          audioFile : 'Audio File Download',
+          audioFile: 'Audio File Download',
           facebook: 'Facebook',
           linkedin: 'LinkedIn',
           instagram: 'Instagram',
@@ -112,6 +112,7 @@ const translations = {
         'Publication to the Ayrshare social media platform has completed.',
       'setting-written-event': 'Plugin configuration has been updated.',
       'transcript-processed-event': 'Transcript for #{key} has been processed.',
+      'transcript-completed-event': 'Transcript for #{key} has been completed.',
       'podcast-episode-render-finished-event':
         'Finished producing an episode of the podcast episode #{key} ',
       'podcast-episode-render-started-event': 'Producing an episode of the podcast episode #{key}',
@@ -147,7 +148,9 @@ const translations = {
     'app.menu.blogs': 'Blogs',
     'app.menu.about': 'About',
     'app.made-with-love': ` Mogul, made with love ❤️ by {josh} (and with Spring 🍃) `,
-
+    'app.panels.notes' : 'Notes',
+    'app.panels.transcripts' : 'Transcripts',
+    'app.panels.media-preview' : 'Media Preview',
     'confirm.deletion': `Are you sure you want to delete {title}? 
     
 This is NOT reversible! `,
@@ -183,7 +186,8 @@ This is NOT reversible! `,
     'podcasts.episodes.publications.publishing': 'Publishing...',
     'podcasts.episodes.basics': 'Basics',
     'podcasts.episodes.segments': 'Segments',
-    'podcasts.episodes.segments.prompt': "(don't forget to normalize your audio clips to the same sample rate and bit depth!)",
+    'podcasts.episodes.segments.prompt':
+      "(don't forget to normalize your audio clips to the same sample rate and bit depth!)",
     'podcasts.episodes.segments.number': 'Episode segment # {id}',
     'podcasts.episodes.episodes': 'Episodes for Podcast #{id} - "{title}"',
     'podcasts.episodes.new-episode': 'New Episode',

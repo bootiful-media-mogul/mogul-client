@@ -3,7 +3,7 @@ import { mogul } from '@/services'
 import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBoxComponent from '@/notifications/NotificationBoxComponent.vue'
 import { onMounted, ref } from 'vue'
-import TranscriptionComponent from '@/transcription/TranscriptionComponent.vue'
+import TranscriptComponent from '@/transcripts/TranscriptComponent.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
 
 const mogulUsername = ref<string | null>(null)
@@ -54,15 +54,15 @@ onMounted(async () => {
         </div>
 
         <div class="sidebar">
-          <PanelComponent title="Media Preview">
+          <PanelComponent :title=" $t('app.panels.media-preview') ">
             <PreviewComponent />
           </PanelComponent>
 
-          <PanelComponent title="Transcription">
-            <TranscriptionComponent />
+          <PanelComponent :title="$t('app.panels.transcripts') ">
+            <TranscriptComponent />
           </PanelComponent>
 
-          <PanelComponent title="Notes"></PanelComponent>
+          <PanelComponent :title=" $t('app.panels.notes') "></PanelComponent>
         </div>
       </div>
     </div>

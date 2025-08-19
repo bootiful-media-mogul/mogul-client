@@ -38,7 +38,6 @@ export interface TranscriptEditedEvent {
   readonly transcript: string
 }
 
-
 export class Podcast {
   readonly title: string
   readonly id: number
@@ -61,13 +60,13 @@ export class Podcasts {
   async createPodcastEpisodeSegment(podcastEpisodeId: number) {
     const mutation = ` 
       mutation ($podcastEpisodeId: Int ){ 
-        createPodcastEpisodeSegment(podcastEpisodeId : $podcastEpisodeId  ) 
+        createPodcastEpisodeSegment(podcastEpisodeId : $podcastEpisodeId  )
       }
     `
-    await this.client.mutation(mutation, {
+    const result = await this.client.mutation(mutation, {
       podcastEpisodeId: podcastEpisodeId
     })
-    return true
+
   }
 
   async updatePodcastEpisode(
@@ -103,7 +102,7 @@ export class Podcasts {
               graphic { id  },
               segments { 
                 id, name, audio { id } , order , crossFadeDuration , 
-                transcription { 
+                transcript { 
                  id, transcript 
                 } 
               }
@@ -402,7 +401,7 @@ export class ManagedFile {
   }
 }
 
-export class Transcription {
+export class Transcript {
   id: number
   transcript: string
 
@@ -417,20 +416,20 @@ export class PodcastEpisodeSegment {
   name: string
   audio: ManagedFile
   order: number
-  transcription: Transcription
+  transcript: Transcript
 
   constructor(
     id: number,
     name: string,
     audio: ManagedFile,
     order: number,
-    transcription: Transcription
+    transcript: Transcript
   ) {
     this.id = id
     this.name = name
     this.audio = audio
     this.order = order
-    this.transcription = transcription
+    this.transcript = transcript
   }
 }
 
@@ -879,62 +878,56 @@ export class Utils {
   }
 }
 
-export class Transcriptions {
+export class Transcripts {
   private readonly client: Client
 
   constructor(client: Client) {
     this.client = client
   }
 
-  async refreshTranscription(id: number): Promise<boolean> {
+  async refreshTranscript(id: number): Promise<boolean> {
     const m = `
-     mutation ($transcriptionId: Int) {
-      refreshTranscription(transcriptionId: $transcriptionId) 
+     mutation ($transcriptId: Int) {
+      refreshTranscript(transcriptId: $transcriptId) 
      }
     `
     const result = await this.client.mutation(m, {
-      transcriptionId: id
+      transcriptId: id
     })
-    return (await result.data['refreshTranscription']) as boolean
+    return (await result.data['refreshTranscript']) as boolean
   }
 
   async writeTranscript(id: number, transcript: string): Promise<boolean> {
     const m = `
-     mutation ($transcriptionId: Int, $transcript: String) {
-      writeTranscript(transcriptionId: $transcriptionId, transcript: $transcript) 
+     mutation ($transcriptId: Int, $transcript: String) {
+      writeTranscript(transcriptId: $transcriptId, transcript: $transcript) 
      }
     `
     const result = await this.client.mutation(m, {
-      transcriptionId: id,
+      transcriptId: id,
       transcript: transcript
     })
     return (await result.data['writeTranscript']) as boolean
   }
 
-
   editTranscript(id: number, text: string) {
-    events.emit('transcription-edit-event', {
+    events.emit('transcript-edit-event', {
       transcript: text,
       id: id
     } as TranscriptEditEvent)
   }
 
-
-  async transcriptionById(transcriptionId: number): Promise<Transcription> {
+  async transcriptById(transcriptId: number): Promise<Transcript> {
     const q = `
-        query ($transcriptionId: Int ) {
-          transcriptionById( transcriptionId : $transcriptionId )  { 
+        query ($transcriptId: Int ) {
+          transcriptById( transcriptId : $transcriptId )  { 
             id, transcript 
           }
         }
         `
-    const result = await this.client.query(q, { transcriptionId: transcriptionId })
-    return (await result.data['transcriptionById']) as Transcription
+    const result = await this.client.query(q, { transcriptId: transcriptId })
+    return (await result.data['transcriptById']) as Transcript
   }
-
-
-
-
 }
 
 export class Ayrshare {
@@ -958,7 +951,7 @@ export class Ayrshare {
     const result = await this.client.query(q, {})
     return (await result.data[
       'ayrsharePublicationCompositions'
-      ]) as Array<AyrsharePublicationComposition>
+    ]) as Array<AyrsharePublicationComposition>
   }
 
   async platforms(): Promise<Array<string>> {
@@ -1104,16 +1097,16 @@ export class Publications {
   }
 }
 
+export const events = mitt()
 export const publications = new Publications(graphqlClient)
 export const utils = new Utils()
 export const markdown = new Markdown(graphqlClient)
 export const ai = new Ai(graphqlClient)
 export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)
-export const events = mitt()
 export const podcasts = new Podcasts(graphqlClient)
 export const managedFiles = new ManagedFiles(graphqlClient)
 export const settings = new Settings(graphqlClient)
 export const compositions = new Compositions(graphqlClient)
 export const ayrshare = new Ayrshare(graphqlClient)
-export const transcriptions = new Transcriptions(graphqlClient)
+export const transcripts = new Transcripts(graphqlClient)

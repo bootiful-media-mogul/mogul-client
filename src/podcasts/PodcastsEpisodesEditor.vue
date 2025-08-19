@@ -8,7 +8,7 @@ import {
   PodcastEpisode,
   PodcastEpisodeSegment,
   podcasts,
-  transcriptions,
+  transcripts,
   utils
 } from '@/services'
 
@@ -41,20 +41,6 @@ import Mock from '@/podcasts/publications/Mock.vue'
 
 const { t } = useI18n()
 
-const transcriptEventPrefix = 'transcripts.podcasts.episodes.segments'
-//
-// events.on('transcription-completed-event', async (event) => {
-//   const updatedEvent = event as TranscriptEditedEvent
-//   if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
-//   await podcasts.transcribePodcastEpisodeSegment(updatedEvent.id)
-//   await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
-// })
-
-// events.on('transcript-edited-event', async (event) => {
-//   const updatedEvent = event as TranscriptEditedEvent
-//   if (!updatedEvent.key.startsWith(transcriptEventPrefix)) return
-//   await podcasts.setPodcastEpisodeSegmentTranscript(updatedEvent.id, true, updatedEvent.transcript)
-// })
 
 // Props
 const props = defineProps<{
@@ -137,7 +123,7 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
 async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
   const episode = await podcasts.podcastEpisodeById(draftEpisode.value.id)
   const match = episode.segments.filter((pes) => pes.id == seg.id)[0]
-  transcriptions.editTranscript(match.transcription.id, match.transcription.transcript)
+  transcripts.editTranscript(match.transcript.id, match.transcript.transcript)
 }
 
 const save = async () => {

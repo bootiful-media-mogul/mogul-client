@@ -341,9 +341,9 @@ textarea {
 }
 
 .form-section .form-section-prompt {
-    margin-bottom: var(--gutter-space);
-    margin-top : calc(-1 * var(--gutter-space));
-    padding-bottom: calc(var(--gutter-space) / 3);
+  margin-bottom: var(--gutter-space);
+  margin-top: calc(-1 * var(--gutter-space));
+  padding-bottom: calc(var(--gutter-space) / 3);
 }
 
 .form-section .form-section-title {

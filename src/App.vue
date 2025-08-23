@@ -54,15 +54,15 @@ onMounted(async () => {
         </div>
 
         <div class="sidebar">
-          <PanelComponent :title=" $t('app.panels.media-preview') ">
+          <PanelComponent :title="$t('app.panels.media-preview')">
             <PreviewComponent />
           </PanelComponent>
 
-          <PanelComponent :title="$t('app.panels.transcripts') ">
+          <PanelComponent :title="$t('app.panels.transcripts')">
             <TranscriptComponent />
           </PanelComponent>
 
-          <PanelComponent :title=" $t('app.panels.notes') "></PanelComponent>
+          <PanelComponent :title="$t('app.panels.notes')"></PanelComponent>
         </div>
       </div>
     </div>

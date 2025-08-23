@@ -41,7 +41,6 @@ import Mock from '@/podcasts/publications/Mock.vue'
 
 const { t } = useI18n()
 
-
 // Props
 const props = defineProps<{
   podcastId: number

@@ -66,7 +66,6 @@ export class Podcasts {
     const result = await this.client.mutation(mutation, {
       podcastEpisodeId: podcastEpisodeId
     })
-
   }
 
   async updatePodcastEpisode(
@@ -418,13 +417,7 @@ export class PodcastEpisodeSegment {
   order: number
   transcript: Transcript
 
-  constructor(
-    id: number,
-    name: string,
-    audio: ManagedFile,
-    order: number,
-    transcript: Transcript
-  ) {
+  constructor(id: number, name: string, audio: ManagedFile, order: number, transcript: Transcript) {
     this.id = id
     this.name = name
     this.audio = audio
@@ -436,8 +429,8 @@ export class PodcastEpisodeSegment {
 export class Publication {
   id: number
   plugin: string
-  created: number
-  published: number
+  created: Date
+  published: Date
   url: string
   publishing: boolean = false
   state: string
@@ -446,8 +439,8 @@ export class Publication {
   constructor(
     id: number,
     plugin: string,
-    created: number,
-    published: number,
+    created: Date,
+    published: Date,
     url: string,
     state: string,
     outcomes: Array<PublicationOutcome>
@@ -455,8 +448,9 @@ export class Publication {
     this.id = id
     this.url = url
     this.plugin = plugin
-    this.created = created
-    this.published = published
+    this.created = new Date(created)
+    this.published = new Date(published)
+    console.log(published + ':' + created)
     this.state = state
     this.outcomes = outcomes
   }
@@ -971,12 +965,21 @@ export class PublicationOutcome {
   readonly url: string
   readonly key: string
   readonly serverErrorMessage: string
+  readonly created: Date
 
-  constructor(id: number, success: boolean, url: string, key: string, serverErrorMessage: string) {
+  constructor(
+    id: number,
+    success: boolean,
+    url: string,
+    key: string,
+    serverErrorMessage: string,
+    created: Date
+  ) {
     this.id = id
     this.success = success
     this.url = url
     this.key = key
+    this.created = created
     this.serverErrorMessage = serverErrorMessage
   }
 }
@@ -1004,7 +1007,7 @@ export class Publications {
               published,
               url,
               state, 
-              outcomes  { 
+              outcomes { 
                 id,
                 created,
                 success,
@@ -1019,7 +1022,38 @@ export class Publications {
       id: id,
       type: type
     })
-    return (await result.data['publicationsForPublishable']) as Array<Publication>
+    const pubs = await result.data['publicationsForPublishable'] //as Array<Map<string,object>>
+    const newPubs = new Array<Publication>()
+    pubs.forEach((pub: any) => {
+      const outcomes = pub['outcomes'] as Array<any>
+      const newOutcomes = new Array<PublicationOutcome>()
+      outcomes.forEach((outcome: any) => {
+        newOutcomes.push(
+          new PublicationOutcome(
+            outcome['id'] as number,
+            outcome['success'] as boolean,
+            outcome['url'] as string,
+            outcome['key'] as string,
+            outcome['serverErrorMessage'] as string,
+            outcome['created'] as Date
+          )
+        )
+      })
+      const createdString = pub['created'] as string
+      const publishedString = pub['published'] as string
+      console.log(createdString + ':' + publishedString)
+      const publication = new Publication(
+        pub['id'] as number,
+        pub['plugin'] as string,
+        new Date(createdString),
+        new Date(publishedString),
+        pub['url'] as string,
+        pub['state'],
+        newOutcomes
+      )
+      newPubs.push(publication)
+    })
+    return newPubs
   }
 
   async unpublish(publicationId: number): Promise<boolean> {
@@ -1028,7 +1062,6 @@ export class Publications {
             unpublish( publicationId: $publicationId )  
          }
         `
-
     const result = await this.client.mutation(mutation, {
       publicationId: publicationId
     })

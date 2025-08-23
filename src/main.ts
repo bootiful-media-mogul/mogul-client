@@ -148,9 +148,9 @@ const translations = {
     'app.menu.blogs': 'Blogs',
     'app.menu.about': 'About',
     'app.made-with-love': ` Mogul, made with love ❤️ by {josh} (and with Spring 🍃) `,
-    'app.panels.notes' : 'Notes',
-    'app.panels.transcripts' : 'Transcripts',
-    'app.panels.media-preview' : 'Media Preview',
+    'app.panels.notes': 'Notes',
+    'app.panels.transcripts': 'Transcripts',
+    'app.panels.media-preview': 'Media Preview',
     'confirm.deletion': `Are you sure you want to delete {title}? 
     
 This is NOT reversible! `,

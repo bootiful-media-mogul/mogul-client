@@ -142,6 +142,7 @@ const translations = {
 
     // app
     'app.menu.home': 'Home',
+    'app.menu.search': 'Search',
     'app.menu.settings': 'Settings',
     'app.menu.test': 'Test',
     'app.menu.podcasts': 'Podcasts',

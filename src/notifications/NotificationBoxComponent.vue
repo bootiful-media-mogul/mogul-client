@@ -28,6 +28,7 @@
   left: 30%;
   transform: translate(-50%);
   text-align: center;
+  z-index: 100000;
 }
 
 .animated-element-visible {

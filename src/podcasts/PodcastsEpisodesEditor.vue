@@ -217,7 +217,6 @@ onMounted(async () => {
 </script>
 <template>
   <h1>Episode</h1>
-
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>
@@ -229,7 +228,6 @@ onMounted(async () => {
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
       </legend>
-
       <div class="form-section">
         <div class="form-section-title">{{ $t('podcasts.episodes.basics') }}</div>
         <div class="form-row">
@@ -276,9 +274,9 @@ onMounted(async () => {
 
       <div class="form-section">
         <div class="form-section-title">{{ $t('podcasts.episodes.segments') }}</div>
-        <div class="form-section-prompt">
-          {{ $t('podcasts.episodes.segments.prompt') }}
-        </div>
+        <!--        <div class="form-section-prompt">
+&lt;!&ndash;          {{ $t('podcasts.episodes.segments.prompt') }}&ndash;&gt;
+        </div>-->
 
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">

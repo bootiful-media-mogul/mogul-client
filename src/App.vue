@@ -5,6 +5,7 @@ import NotificationBoxComponent from '@/notifications/NotificationBoxComponent.v
 import { onMounted, ref } from 'vue'
 import TranscriptComponent from '@/transcripts/TranscriptComponent.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
+import Search from '@/search/Search.vue'
 
 const mogulUsername = ref<string | null>(null)
 
@@ -51,6 +52,12 @@ onMounted(async () => {
           <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>
           |
           <router-link to="/about">{{ $t('app.menu.about') }}</router-link>
+
+          <!-- <a href="#">{{ $t('app.menu.search') }} </a> -->
+        </div>
+
+        <div class="search">
+          <Search />
         </div>
 
         <div class="sidebar">

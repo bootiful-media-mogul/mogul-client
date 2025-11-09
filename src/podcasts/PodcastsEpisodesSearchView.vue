@@ -54,7 +54,7 @@ const loadPodcast = async () => {
   currentPodcast.value = await podcasts.podcastById(newPodcastId)
 
   const podcastEpisodes = await podcasts.podcastEpisodesPreviews(newPodcastId)
-  if (podcastEpisodes) podcastEpisodes.sort((a, b) => b.created - a.created)
+  // if (podcastEpisodes) podcastEpisodes.sort((a, b) => b.created - a.created)
   episodes.value = podcastEpisodes
 
   title.value = t('podcasts.episodes.all', {

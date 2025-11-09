@@ -1,11 +1,12 @@
 <style>
-
-
-.top-right-trigger {
+.search-input-panel {
   position: fixed;
   top: var(--gutter-space);
   right: var(--gutter-space);
-  background: #fff;
+}
+
+.search-input-panel input {
+  width: max(400px, 100%);
 }
 
 /* hidden by default; JS will add .is-open */
@@ -69,24 +70,25 @@
 }
 </style>
 <template>
-  <a class="top-right-trigger" ref="openPanelElement">
-    <input  @keydown.enter="openPanelFunction"   :value="search" />
-  </a>
+  <div class="search-input-panel" ref="openPanelElement">
+    <form class="pure-form" >
+      <input :placeholder="$t('search.prompt') "
+             type="text" @keydown.enter="openPanelFunction" :value="search" />
+    </form>
+  </div>
 
   <div class="expanding-panel" ref="expandingPanel" aria-hidden="true">
     <div class="expanding-panel__bg">
       <button class="panel-close" ref="closePanel">Close</button>
-     <div>
+      <div>
+        <!--       -->
 
-
-       <!-- the search forms -->
-       <h1>Your content here</h1>
-       <p>Make this as tall as you like...</p>
-       <p style="height: 1200px; background: rgba(0, 0, 0, 0.03)">
-         Tall content demo
-       </p>
-       <!-- the search forms -->
-     </div>
+        <!-- the search forms -->
+        <h1>Your content here</h1>
+        <p>Make this as tall as you like...</p>
+        <p style="height: 1200px; background: rgba(0, 0, 0, 0.03)">Tall content demo</p>
+        <!-- the search forms -->
+      </div>
     </div>
   </div>
 </template>

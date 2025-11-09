@@ -106,6 +106,10 @@ const translations = {
       }
     },
 
+    search :  {
+      prompt : 'Enter a search term and press enter',
+    },
+
     // notifications
     notifications: {
       'ayrshare-publication-completion-event':

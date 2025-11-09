@@ -106,8 +106,8 @@ const translations = {
       }
     },
 
-    search :  {
-      prompt : 'Enter a search term and press enter',
+    search: {
+      prompt: 'Enter a search term and press enter'
     },
 
     // notifications

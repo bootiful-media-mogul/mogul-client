@@ -5,6 +5,7 @@ import NotificationBoxComponent from '@/notifications/NotificationBoxComponent.v
 import { onMounted, ref } from 'vue'
 import TranscriptComponent from '@/transcripts/TranscriptComponent.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
+import PopupPage from '@/layout/PopupPage.vue'
 import Search from '@/search/Search.vue'
 
 const mogulUsername = ref<string | null>(null)
@@ -57,7 +58,7 @@ onMounted(async () => {
         </div>
 
         <div class="search">
-          <Search />
+         <Search/>
         </div>
 
         <div class="sidebar">

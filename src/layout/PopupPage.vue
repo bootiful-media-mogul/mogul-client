@@ -1,10 +1,4 @@
 <style>
-.search-input-panel {
-  position: fixed;
-  top: var(--gutter-space);
-  right: var(--gutter-space);
-}
-
 .search-input-panel input {
   width: max(400px, 100%);
 }
@@ -70,8 +64,8 @@
 }
 </style>
 <template>
-  <div class="search-input-panel" ref="openPanelElement">
-  <slot :open="openPanelFunction"> default panel content </slot>
+  <div ref="openPanelElement">
+    <slot :open="openPanelFunction"> default panel content </slot>
   </div>
 
   <div class="expanding-panel" ref="expandingPanel" aria-hidden="true">
@@ -96,7 +90,6 @@ import { onMounted, ref } from 'vue'
 const openPanelElement = ref<HTMLElement>()
 const expandingPanel = ref<HTMLElement>()
 const closePanel = ref<HTMLElement>()
-
 
 onMounted(() => {
   closePanel!!.value!!.addEventListener('click', closePanelFunction)

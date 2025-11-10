@@ -7,6 +7,7 @@ import PodcastsEpisodesSearchView from '@/podcasts/PodcastsEpisodesSearchView.vu
 import BlogsSearchView from '@/blogs/BlogsSearchView.vue'
 import TestView from '@/test/TestView.vue'
 import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
+import SearchView from '@/search/SearchView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       component: BlogsSearchView
     },
 
+    {
+      path: '/search',
+      name: 'search',
+      component: SearchView
+    },
     {
       path: '/settings',
       name: 'settings',

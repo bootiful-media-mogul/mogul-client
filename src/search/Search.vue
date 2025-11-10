@@ -2,13 +2,12 @@
 .search-outer-box {
 }
 
-.search-outer-box .pure-form input {
-  scale: 150%;
-  opacity: 40%;
-}
+
 .search-outer-box {
   .pure-form {
     input {
+      scale: 150%;
+      opacity: 40%;
       text-align: center;
     }
     input::placeholder {
@@ -18,6 +17,7 @@
     input:focus,
     input:active {
       opacity: 1;
+
     }
   }
 }

@@ -2,7 +2,6 @@
 .search-outer-box {
 }
 
-
 .search-outer-box {
   .pure-form {
     input {
@@ -17,7 +16,6 @@
     input:focus,
     input:active {
       opacity: 1;
-
     }
   }
 }

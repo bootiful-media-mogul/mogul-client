@@ -19,7 +19,7 @@ const translations = {
       create: 'Create'
     },
 
-    hello: 'Hello, {mogul}',
+    hello: 'Hi, {mogul}',
     publications: {
       outcomes: {
         'error-message': 'see error message',

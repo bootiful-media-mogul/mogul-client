@@ -37,26 +37,27 @@ onMounted(async () => {
           <router-view :key="$route.fullPath"></router-view>
         </div>
 
-        <div class="toolbar navigable-section">
-          <router-link to="/">{{ $t('app.menu.home') }}</router-link>
-          |
-          <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
-          |
-          <router-link
-            :to="{
-              path: '/podcasts',
-              query: {
-                when: Date.now()
-              }
-            }"
-            >{{ $t('app.menu.podcasts') }}
-          </router-link>
-          |
-          <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>
-          |
-          <router-link to="/about">{{ $t('app.menu.about') }}</router-link>
+        <div class="toolbar">
+          <div class="navigable-section navigation-links">
+            <router-link to="/">{{ $t('app.menu.home') }}</router-link>
+            |
+            <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
+            |
+            <router-link
+              :to="{
+                path: '/podcasts',
+                query: {
+                  when: Date.now()
+                }
+              }"
+              >{{ $t('app.menu.podcasts') }}
+            </router-link>
+            |
+            <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>
+            |
+            <router-link to="/about">{{ $t('app.menu.about') }}</router-link>
+          </div>
         </div>
-
         <div class="sidebar">
           <PanelComponent :title="$t('app.panels.media-preview')">
             <PreviewComponent />

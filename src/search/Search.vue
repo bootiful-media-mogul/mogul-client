@@ -40,7 +40,7 @@ import { useRouter } from 'vue-router'
 import { events } from '@/services'
 
 const router = useRouter()
-const termInput = ref <HTMLInputElement>()
+const termInput = ref<HTMLInputElement>()
 const search = ref('')
 
 async function openSearchPage() {

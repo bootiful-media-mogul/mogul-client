@@ -1129,8 +1129,33 @@ export class Publications {
     return (await result.data['canPublish']) as boolean
   }
 }
+export class Search {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async search(query: string): Promise<any> {
+    const q = `
+          query($query: String, $metadata: JSON) {
+                    search(query: $query, metadata: $metadata) {
+                                searchableId
+                                title
+                                description
+                                type
+                                rank
+                    }
+                } 
+        `
+    const result = await this.client.query(q,
+      { query: query, metadata: {} }) ;
+    return (await result.data['search']) as Array<Podcast>
+  }
+}
 
 export const events = mitt()
+export const search = new Search(graphqlClient)
 export const publications = new Publications(graphqlClient)
 export const utils = new Utils()
 export const markdown = new Markdown(graphqlClient)

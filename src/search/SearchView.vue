@@ -1,18 +1,24 @@
-<template>so you want to search for [{{ searchTerm }}]</template>
+<template>
+  search for <em>{{ searchTerm }}</em
+  >.
+</template>
 
 <script setup lang="ts">
-import { events } from '@/services'
+import { events, search } from '@/services'
 import { onMounted, ref } from 'vue'
 
 const searchTerm = ref<string>('')
+
+async function doSearch(q: string) {
+  const results = await search.search(q)
+  console.log(results)
+}
 
 onMounted(async () => {
   events.on('search-term-entered', async (event) => {
     console.log(event)
     searchTerm.value = event as string
-
-    // todo drive a call to the search endpoint
-
+    await doSearch(searchTerm.value)
   })
 })
 </script>

@@ -107,6 +107,9 @@ const translations = {
     },
 
     search: {
+      results : {
+        prompt: 'Results for your search <span class="term">{term}</span>'
+      } ,
       prompt: 'Enter a search term and press enter'
     },
 

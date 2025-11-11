@@ -1131,14 +1131,19 @@ export class Publications {
 }
 
 export class RankedSearchResult {
+  readonly searchableId: number
+  readonly title: string
+  readonly description: string
+  readonly type: string
+  readonly rank: number
 
-  readonly searchableId : number
-  readonly title :string
-  readonly description :string
-  readonly type :string
-  readonly rank:number
-
-  constructor(searchableId: number, title:string, description:string, type:string, rank:number) {
+  constructor(
+    searchableId: number,
+    title: string,
+    description: string,
+    type: string,
+    rank: number
+  ) {
     this.searchableId = searchableId
     this.title = title
     this.type = type

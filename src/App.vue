@@ -26,13 +26,10 @@ onMounted(async () => {
 
     <div class="frame">
       <div class="page">
-        <div class="welcome">
-          <div class="hello">{{ $t('hello', { mogul: mogulUsername }) }}</div>
-          <div class="search">
-            <Search />
-          </div>
+        <div class="hello">{{ $t('hello', { mogul: mogulUsername }) }}</div>
+        <div class="search">
+          <Search />
         </div>
-
         <div class="view">
           <router-view :key="$route.fullPath"></router-view>
         </div>

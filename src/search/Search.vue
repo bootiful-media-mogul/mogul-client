@@ -24,6 +24,7 @@
   <div class="search-outer-box">
     <form class="pure-form">
       <input
+        ref="termInput"
         type="text"
         :value="search"
         class="search-input"
@@ -36,12 +37,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { events } from '@/services'
 
 const router = useRouter()
-
+const termInput = ref <HTMLInputElement>()
 const search = ref('')
 
 async function openSearchPage() {
+  const term = termInput.value?.value || ''
+  events.emit('search-term-entered', term)
   await router.push({ name: 'search' })
 }
 </script>

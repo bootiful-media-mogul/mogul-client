@@ -274,10 +274,6 @@ onMounted(async () => {
 
       <div class="form-section">
         <div class="form-section-title">{{ $t('podcasts.episodes.segments') }}</div>
-        <!--        <div class="form-section-prompt">
-&lt;!&ndash;          {{ $t('podcasts.episodes.segments.prompt') }}&ndash;&gt;
-        </div>-->
-
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">
             <div class="segment-controls-type">

@@ -1148,8 +1148,7 @@ export class Search {
                     }
                 } 
         `
-    const result = await this.client.query(q,
-      { query: query, metadata: {} }) ;
+    const result = await this.client.query(q, { query: query, metadata: {} })
     return (await result.data['search']) as Array<Podcast>
   }
 }

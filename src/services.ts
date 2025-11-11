@@ -1129,6 +1129,24 @@ export class Publications {
     return (await result.data['canPublish']) as boolean
   }
 }
+
+export class RankedSearchResult {
+
+  readonly searchableId : number
+  readonly title :string
+  readonly description :string
+  readonly type :string
+  readonly rank:number
+
+  constructor(searchableId: number, title:string, description:string, type:string, rank:number) {
+    this.searchableId = searchableId
+    this.title = title
+    this.type = type
+    this.description = description
+    this.rank = rank
+  }
+}
+
 export class Search {
   private readonly client: Client
 
@@ -1136,7 +1154,7 @@ export class Search {
     this.client = client
   }
 
-  async search(query: string): Promise<any> {
+  async search(query: string): Promise<Array<RankedSearchResult>> {
     const q = `
           query($query: String, $metadata: JSON) {
                     search(query: $query, metadata: $metadata) {
@@ -1149,7 +1167,7 @@ export class Search {
                 } 
         `
     const result = await this.client.query(q, { query: query, metadata: {} })
-    return (await result.data['search']) as Array<Podcast>
+    return (await result.data['search']) as Array<RankedSearchResult>
   }
 }
 

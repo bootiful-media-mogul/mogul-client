@@ -5,13 +5,16 @@
   padding-top: var(--gutter-space);
 }
 .results-prompt {
-  padding-bottom : var(--gutter-space);
+  padding-bottom: var(--gutter-space);
 }
 .term {
   font-weight: bold;
 }
 </style>
 <template>
+<!--
+ we need some generic way to refer to other types of assets: podcasts, blogs, etc. i think for now rather than having completely different hierarchies of components, we need to have a component that takes some parameters and renders the right client-side navigation behavior
+ -->
   <div>
     <div class="results-prompt">
       <div v-html="$t('search.results.prompt', { term: searchTerm })" />
@@ -19,7 +22,7 @@
     <div>
       <div v-for="result in results" v-bind:key="result.searchableId">
         <div class="result">
-          {{ result.searchableId }}
+          {{ result.searchableId }} || {{ result.aggregateId }} ||
           | {{ result.type }} | {{ result.title }} | {{ result.rank }}
         </div>
       </div>

@@ -1132,12 +1132,14 @@ export class Publications {
 
 export class RankedSearchResult {
   readonly searchableId: number
+  readonly aggregateId : number
   readonly title: string
   readonly description: string
   readonly type: string
   readonly rank: number
 
   constructor(
+    aggregateId : number,
     searchableId: number,
     title: string,
     description: string,
@@ -1148,6 +1150,7 @@ export class RankedSearchResult {
     this.title = title
     this.type = type
     this.description = description
+    this.aggregateId = aggregateId
     this.rank = rank
   }
 }
@@ -1165,6 +1168,7 @@ export class Search {
                     search(query: $query, metadata: $metadata) {
                                 searchableId
                                 title
+                                aggregateId
                                 description
                                 type
                                 rank

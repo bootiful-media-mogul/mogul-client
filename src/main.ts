@@ -107,6 +107,9 @@ const translations = {
     },
 
     search: {
+      navigation : {
+        episode : 'visit podcast episode'
+      } ,
       results: {
         prompt: 'Results for your search <span class="term">{term}</span>'
       },

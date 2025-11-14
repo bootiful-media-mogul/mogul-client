@@ -95,6 +95,7 @@ export class Podcasts {
               created, 
               id, 
               title, 
+              podcastId, 
               description, 
               complete,  
               producedAudio { id  },
@@ -461,6 +462,7 @@ export class PodcastEpisode {
   id: number
   title: string
   description: string
+  podcastId: number
   graphic: ManagedFile
   producedAudio: ManagedFile
   complete: boolean = false
@@ -481,9 +483,12 @@ export class PodcastEpisode {
     segments: Array<PodcastEpisodeSegment>,
     publications: Array<Publication>,
     producedAudio: ManagedFile,
+    podcastId: number ,
     descriptionComposition?: Composition,
     titleComposition?: Composition
+
   ) {
+    this.podcastId = podcastId
     this.descriptionComposition = descriptionComposition
     this.titleComposition = titleComposition
     this.availablePlugins = availablePlugins
@@ -1132,14 +1137,14 @@ export class Publications {
 
 export class RankedSearchResult {
   readonly searchableId: number
-  readonly aggregateId : number
+  readonly aggregateId: number
   readonly title: string
   readonly description: string
   readonly type: string
   readonly rank: number
 
   constructor(
-    aggregateId : number,
+    aggregateId: number,
     searchableId: number,
     title: string,
     description: string,

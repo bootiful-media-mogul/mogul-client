@@ -3,10 +3,18 @@
   border-top: 1px solid black;
   padding-bottom: var(--gutter-space);
   padding-top: var(--gutter-space);
-
+  grid-template-areas:
+    'title  '
+    'link  ';
+  grid-template-columns: auto min(100%, 1fr);
   display: grid;
-
-
+  .title {
+    grid-area: title;
+  }
+  .navigation-link {
+    /*text-align: right;*/
+    grid-area: link;
+  }
 }
 .results-prompt {
   padding-bottom: var(--gutter-space);
@@ -16,14 +24,6 @@
 }
 </style>
 <template>
-  <!--
- we need some generic way to refer to other
- types of assets: podcasts, blogs, etc.
- i think for now rather than having completely
- different hierarchies of components, we need to
- have a component that takes some parameters and
- renders the right client-side navigation behavior
- -->
   <div>
     <div class="results-prompt">
       <div v-html="$t('search.results.prompt', { term: searchTerm })" />
@@ -31,15 +31,10 @@
     <div>
       <div v-for="result in results" v-bind:key="result.searchableId">
         <div class="result">
-          <component
-            :id="result.searchableId"
-            :aggregate="result.aggregateId"
-            :is="renderers[result.type]"
-          >
-          </component>
-
-          {{ result.searchableId }} || {{ result.aggregateId }} || {{ result.type }} |
-          {{ result.title }} | {{ result.rank }}
+          <div class="title">{{ result.title }}</div>
+          <div class="navigation-link">
+            <a href="#" @click="navigate(result)">{{ $t('search.results.result.view') }}</a>
+          </div>
         </div>
       </div>
     </div>
@@ -47,17 +42,36 @@
 </template>
 
 <script setup lang="ts">
-import { events, RankedSearchResult, search } from '@/services'
+import { events, podcasts, RankedSearchResult, search } from '@/services'
 import { onMounted, ref } from 'vue'
-import PodcastEpisodeSearchResult from '@/search/results/PodcastEpisodeSearchResult.vue'
+import router from '@/index'
 
-// a directory of components that can render a given type of preview
 const renderers: Record<string, any> = {
-  segment: PodcastEpisodeSearchResult
+  segment: navigateToPodcastEpisode
+}
+
+async function navigate(result: RankedSearchResult): Promise<void> {
+  const navigationFunction = renderers[result.type]
+  console.log(
+    'navigationFunction for type ' + result.type,
+    navigationFunction == null ? 'null' : 'not null'
+  )
+  await navigationFunction(result)
 }
 
 const searchTerm = ref<string>('')
 const results = ref([] as Array<RankedSearchResult>)
+
+async function navigateToPodcastEpisode(result: RankedSearchResult): Promise<void> {
+  const episode = await podcasts.podcastEpisodeById(result.aggregateId)
+  await router.push({
+    name: 'podcasts/episodes/episode',
+    params: {
+      podcastId: episode.podcastId,
+      episodeId: episode.id
+    }
+  })
+}
 
 async function doSearch(q: string) {
   searchTerm.value = q
@@ -72,7 +86,6 @@ onMounted(async () => {
     await doSearch(event as string)
   })
 
-  // todo remove the following single line! it's only useful for me to develop the css!
   await doSearch('rot')
 })
 </script>

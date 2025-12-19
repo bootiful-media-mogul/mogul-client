@@ -483,10 +483,9 @@ export class PodcastEpisode {
     segments: Array<PodcastEpisodeSegment>,
     publications: Array<Publication>,
     producedAudio: ManagedFile,
-    podcastId: number ,
+    podcastId: number,
     descriptionComposition?: Composition,
     titleComposition?: Composition
-
   ) {
     this.podcastId = podcastId
     this.descriptionComposition = descriptionComposition

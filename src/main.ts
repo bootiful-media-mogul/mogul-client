@@ -107,13 +107,13 @@ const translations = {
     },
 
     search: {
-      navigation : {
-        episode : 'visit podcast episode'
-      } ,
+      navigation: {
+        episode: 'visit podcast episode'
+      },
       results: {
-        result : {
-          view : 'view'
-        } ,
+        result: {
+          view: 'view'
+        },
         prompt: 'Results for your search <span class="term">{term}</span>'
       },
       prompt: 'Enter a search term and press enter'

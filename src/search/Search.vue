@@ -40,7 +40,6 @@ import { useRouter } from 'vue-router'
 import { events } from '@/services'
 import PodcastEpisodeSearchResult from '@/search/results/PodcastEpisodeSearchResult.vue'
 
-
 const router = useRouter()
 const termInput = ref<HTMLInputElement>()
 const search = ref('')

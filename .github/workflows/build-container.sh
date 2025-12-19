@@ -7,7 +7,7 @@ cp -r $ROOT_DIR/dist/* ${ROOT_DIR}/build/public
 cd "$ROOT_DIR/build"
 
 pack build  $IMAGE_NAME \
-  --builder paketobuildpacks/builder:base \
+  --builder paketobuildpacks/builder-jammy-base \
  --buildpack docker.io/paketobuildpacks/nginx:latest \
  --env PORT=8080
 

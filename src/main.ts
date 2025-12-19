@@ -19,7 +19,7 @@ const translations = {
       create: 'Create'
     },
 
-    hello: 'Hello, {mogul}',
+    hello: 'Hi, {mogul}',
     publications: {
       outcomes: {
         'error-message': 'see error message',
@@ -106,6 +106,19 @@ const translations = {
       }
     },
 
+    search: {
+      navigation: {
+        episode: 'visit podcast episode'
+      },
+      results: {
+        result: {
+          view: 'view'
+        },
+        prompt: 'Results for your search <span class="term">{term}</span>'
+      },
+      prompt: 'Enter a search term and press enter'
+    },
+
     // notifications
     notifications: {
       'ayrshare-publication-completion-event':
@@ -142,6 +155,7 @@ const translations = {
 
     // app
     'app.menu.home': 'Home',
+    'app.menu.search': 'Search',
     'app.menu.settings': 'Settings',
     'app.menu.test': 'Test',
     'app.menu.podcasts': 'Podcasts',

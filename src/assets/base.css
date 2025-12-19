@@ -235,7 +235,6 @@ textarea {
 
 .folder-icon {
   background: url('../assets/images/folder-highlight.png');
-
   height: var(--icon-width);
   display: inline-block;
   width: var(--icon-width);
@@ -250,26 +249,34 @@ textarea {
   background-size: var(--icon-width) var(--icon-width);
 }
 
-.page {
-  display: grid;
-  grid-template-areas:
-    'welcome welcome welcome'
-    'toolbar toolbar toolbar'
-    'main . sidebar';
-  /* todo fix this extra row so it's a fixed */
-  grid-template-rows: auto auto auto;
-  grid-template-columns: auto var(--main-toolbar-gutter) minmax(min-content, var(--sidebar-width));
-}
-
 .notifications {
   grid-area: notifications;
   padding-top: var(--gutter-space);
   padding-bottom: var(--gutter-space);
 }
 
-.welcome {
-  grid-area: welcome;
-  padding-bottom: var(--gutter-space);
+.search {
+  grid-area: search;
+  padding-left: 40%;
+  padding-right: 40%;
+}
+
+.hello {
+  grid-area: hello;
+  text-align: center;
+}
+
+.page {
+  display: grid;
+  grid-template-areas:
+    ' hello hello hello '
+    ' toolbar toolbar toolbar'
+    ' search search search '
+    ' . . . '
+    ' main . sidebar ';
+  grid-template-rows: auto auto auto 1em auto;
+  grid-row-gap: 1em;
+  grid-template-columns: auto var(--main-toolbar-gutter) minmax(min-content, var(--sidebar-width));
 }
 
 .navigable-section {
@@ -278,10 +285,16 @@ textarea {
     sans-serif;
 }
 
+.navigation-links {
+  grid-area: navigation;
+  text-align: center;
+}
+
 .toolbar {
   grid-area: toolbar;
-  padding-top: calc(var(--gutter-space) / 2);
-  padding-bottom: calc(var(--gutter-space) / 2);
+  display: grid;
+  grid-template-areas: '. navigation . ';
+  grid-template-columns: auto auto auto;
 }
 
 .view {

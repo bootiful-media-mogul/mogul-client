@@ -12,6 +12,8 @@ import {
 } from '@/publications/input'
 
 import { notifications } from '@/services'
+import { useI18n } from 'vue-i18n'
+const {t} = useI18n()
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 
@@ -63,7 +65,7 @@ async function publish(): Promise<boolean> {
         type="button"
         @click.prevent="publish()"
       >
-        {{ $t('publications.plugins.publish') }}
+        {{ t('publications.plugins.publish') }}
       </button>
     </template>
   </PublicationPanelComponent>

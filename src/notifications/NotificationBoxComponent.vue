@@ -4,8 +4,8 @@
     <div class="modal-notification-panel">
       {{ latestNotification }}
       <div class="buttons">
-        <button type="submit" @click.prevent="dismiss()">
-          {{ $t('ok') }}
+        <button type="submit" @click.prevent="dismiss">
+          {{ t('ok') }}
         </button>
       </div>
     </div>
@@ -15,9 +15,74 @@
     {{ latestNotification }}
   </div>
 </template>
+
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { Notification, notifications } from '@/services'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
+const showToasterNotification = ref(false)
+const showModalNotification = ref(false)
+const latestNotification = ref('')
+const toasterNotificationCss = ref<Record<string, boolean>>({
+  'toaster-notification-panel': true,
+  'animated-element-hidden': true
+})
+
+let nextTimeoutId: number | undefined
+
+function show() {
+  toasterNotificationCss.value = {
+    'toaster-notification-panel': true,
+    'animated-element-visible': true,
+    'animated-element-hidden': false
+  }
+}
+
+function hide() {
+  toasterNotificationCss.value = {
+    'toaster-notification-panel': true,
+    'animated-element-visible': false,
+    'animated-element-hidden': true
+  }
+}
+
+function dismiss() {
+  showToasterNotification.value = false
+  showModalNotification.value = false
+}
+
+function processNotification(notification: Notification) {
+  latestNotification.value = t('notifications.' + notification.category, {
+    key: notification.key,
+    mogulId: notification.mogulId,
+    when: notification.when,
+    context: notification.context
+  })
+
+  showModalNotification.value = notification.modal
+  showToasterNotification.value = notification.visible
+
+  const displayForNMilliseconds = 5000
+
+  if (showToasterNotification.value) {
+    show()
+    clearTimeout(nextTimeoutId)
+    nextTimeoutId = window.setTimeout(() => {
+      hide()
+    }, displayForNMilliseconds)
+  }
+}
+
+onMounted(() => {
+  notifications.listen(processNotification)
+})
+</script>
+
 <style>
 .toaster-notification-panel {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* horizontal-offset vertical-offset blur-radius color */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
   border-radius: 0 0 var(--gutter-space) var(--gutter-space);
   background-color: white;
   padding: var(--gutter-space);
@@ -66,75 +131,3 @@
   color: white;
 }
 </style>
-
-<script lang="ts">
-import { Notification, notifications } from '@/services'
-import { ref } from 'vue'
-
-export default {
-  components: {},
-  computed: {},
-  methods: {
-    dismiss() {
-      this.showToasterNotification = false
-      this.showModalNotification = false
-    },
-    show() {
-      this.toasterNotificationCss = {
-        'toaster-notification-panel': true,
-        'animated-element-visible': true,
-        'animated-element-hidden': false
-      }
-    },
-    hide() {
-      this.toasterNotificationCss = {
-        'toaster-notification-panel': true,
-        'animated-element-visible': false,
-        'animated-element-hidden': true
-      }
-    }
-  },
-
-  data() {
-    return {
-      nextTimeoutId: 0,
-      toasterNotificationCss: {},
-      showToasterNotification: true,
-      showModalNotification: false,
-      notification: ref(null),
-      latestNotification: '' as string
-    }
-  },
-  async created() {
-    const that = this
-    this.toasterNotificationCss = {
-      'toaster-notification-panel': true,
-      'animated-element-hidden': true
-    }
-
-    function processor(notification: Notification) {
-      that.latestNotification = that.$t('notifications.' + notification.category, {
-        key: notification.key,
-        mogulId: notification.mogulId,
-        when: notification.when,
-        context: notification.context
-      })
-
-      that.showModalNotification = notification.modal
-      that.showToasterNotification = notification.visible
-
-      const displayForNMilliseconds = 1000 * 5 // 2 seconds
-      if (that.showToasterNotification) {
-        that.show()
-        clearTimeout(that.nextTimeoutId)
-        that.nextTimeoutId = setTimeout(function (e: Event) {
-          that.hide()
-        }, displayForNMilliseconds)
-      }
-    }
-
-    const processorRef: (notification: Notification) => void = processor
-    notifications.listen(processorRef)
-  }
-}
-</script>

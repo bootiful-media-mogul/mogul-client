@@ -26,14 +26,14 @@
 <template>
   <div>
     <div class="results-prompt">
-      <div v-html="$t('search.results.prompt', { term: searchTerm })" />
+      <div v-html="t('search.results.prompt', { term: searchTerm })" />
     </div>
     <div>
       <div v-for="result in results" v-bind:key="result.searchableId">
         <div class="result">
           <div class="title">{{ result.title }}</div>
           <div class="navigation-link">
-            <a href="#" @click="navigate(result)">{{ $t('search.results.result.view') }}</a>
+            <a href="#" @click="navigate(result)">{{ t('search.results.result.view') }}</a>
           </div>
         </div>
       </div>
@@ -45,6 +45,9 @@
 import { events, podcasts, RankedSearchResult, search } from '@/services'
 import { onMounted, ref } from 'vue'
 import router from '@/index'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const renderers: Record<string, any> = {
   segment: navigateToPodcastEpisode
@@ -86,6 +89,5 @@ onMounted(async () => {
     await doSearch(event as string)
   })
 
-  await doSearch('rot')
 })
 </script>

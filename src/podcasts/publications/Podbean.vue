@@ -8,7 +8,7 @@
           type="button"
           @click.prevent="publish()"
         >
-          {{ $t('publications.plugins.publish') }}
+          {{ t('publications.plugins.publish') }}
         </button>
       </div>
     </template>
@@ -24,6 +24,8 @@ import type {
   PublishFunction
 } from '@/publications/input'
 import { notifications } from '@/services'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const pluginName = 'podbean'
 

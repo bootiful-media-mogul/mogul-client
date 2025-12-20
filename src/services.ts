@@ -6,6 +6,7 @@ import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
 
+
 export const graphqlClient = new Client({
   url: '/api/graphql',
   exchanges: [

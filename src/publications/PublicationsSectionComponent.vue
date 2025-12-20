@@ -28,7 +28,7 @@
         class="publication-panel"
       >
         <div>
-          {{ $t('publications.plugins.' + slot.plugin + '.description') }}
+          {{ t('publications.plugins.' + slot.plugin + '.description') }}
         </div>
         <component :is="slot.panel" />
       </div>
@@ -51,9 +51,9 @@
             />
           </div>
         </div>
-        <div class="created-column">{{ dateTimeToString(publication.created) }}</div>
+        <div class="created-column">{{ dateTimeToString(publication.created.getDate()) }}</div>
         <div class="published-column">
-          {{ dateTimeToString(publication.published) }}
+          {{ dateTimeToString(publication.published.getDate()) }}
         </div>
         <div class="delete-column">
           <Icon
@@ -85,9 +85,9 @@
                 href="#"
                 @click.prevent="popupErrorMessage(outcome.serverErrorMessage)"
               >
-                {{ $t('publications.outcomes.error-message') }}
+                {{ t('publications.outcomes.error-message') }}
               </a>
-              <span v-else>{{ $t('publications.outcomes.no-error-message') }}</span>
+              <span v-else>{{ t('publications.outcomes.no-error-message') }}</span>
             </div>
           </div>
           <div class="uri">
@@ -99,7 +99,7 @@
             ></a>
           </div>
           <div class="key">
-            {{ $t('publications.outcomes.keys.' + outcome.key) }}
+            {{ t('publications.outcomes.keys.' + outcome.key) }}
           </div>
         </div>
       </div>
@@ -301,6 +301,8 @@ import errorAsset from '@/assets/images/error.png'
 import errorHighlightAsset from '@/assets/images/error-highlight.png'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import { dateTimeToString } from '@/dates'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const props = defineProps<{
   disabled: boolean

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { Attachment, compositions } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import type {
@@ -14,6 +15,9 @@ import Icon from '@/ui/Icon.vue'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 
+
+
+const { t } = useI18n()
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
@@ -172,7 +176,7 @@ async function addCompositionAttachment(compositionId: number) {
     <template v-slot:panel>
       <div>
         <div v-if="attachments?.length ?? 0 > 0" class="compositions-attachments-prompt">
-          {{ $t('compositions.attachments.drag-and-drop-attachments') }}
+          {{ t('compositions.attachments.drag-and-drop-attachments') }}
         </div>
         <div v-for="attachment in attachments" :key="attachment.id">
           <div
@@ -211,7 +215,7 @@ async function addCompositionAttachment(compositionId: number) {
             type="submit"
             @click.prevent="addCompositionAttachment(compositionId)"
           >
-            {{ $t('compositions.buttons.add-attachment') }}
+            {{ t('compositions.buttons.add-attachment') }}
           </button>
         </div>
       </div>

@@ -6,7 +6,11 @@ import { onMounted, ref } from 'vue'
 import TranscriptComponent from '@/transcripts/TranscriptComponent.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
 import Search from '@/search/Search.vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
+const route = useRoute()
 const mogulUsername = ref<string | null>(null)
 
 onMounted(async () => {
@@ -23,22 +27,21 @@ onMounted(async () => {
 <template>
   <div v-if="mogulUsername">
     <NotificationBoxComponent ref="notifications" />
-
     <div class="frame">
       <div class="page">
-        <div class="hello">{{ $t('hello', { mogul: mogulUsername }) }}</div>
+        <div class="hello">{{ t('hello', { mogul: mogulUsername }) }}</div>
         <div class="search">
           <Search />
         </div>
         <div class="view">
-          <router-view :key="$route.fullPath"></router-view>
+          <router-view :key="route.fullPath"></router-view>
         </div>
 
         <div class="toolbar">
           <div class="navigable-section navigation-links">
-            <router-link to="/">{{ $t('app.menu.home') }}</router-link>
+            <router-link to="/">{{ t('app.menu.home') }}</router-link>
             |
-            <router-link to="/settings">{{ $t('app.menu.settings') }}</router-link>
+            <router-link to="/settings">{{ t('app.menu.settings') }}</router-link>
             |
             <router-link
               :to="{
@@ -47,24 +50,24 @@ onMounted(async () => {
                   when: Date.now()
                 }
               }"
-              >{{ $t('app.menu.podcasts') }}
+              >{{ t('app.menu.podcasts') }}
             </router-link>
             |
-            <router-link to="/blogs">{{ $t('app.menu.blogs') }}</router-link>
+            <router-link to="/blogs">{{ t('app.menu.blogs') }}</router-link>
             |
-            <router-link to="/about">{{ $t('app.menu.about') }}</router-link>
+            <router-link to="/about">{{ t('app.menu.about') }}</router-link>
           </div>
         </div>
         <div class="sidebar">
-          <PanelComponent :title="$t('app.panels.media-preview')">
+          <PanelComponent :title="t('app.panels.media-preview')">
             <PreviewComponent />
           </PanelComponent>
 
-          <PanelComponent :title="$t('app.panels.transcripts')">
+          <PanelComponent :title="t('app.panels.transcripts')">
             <TranscriptComponent />
           </PanelComponent>
 
-          <PanelComponent :title="$t('app.panels.notes')"></PanelComponent>
+          <PanelComponent :title="t('app.panels.notes')"></PanelComponent>
         </div>
       </div>
     </div>

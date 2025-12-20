@@ -77,10 +77,10 @@
     </span>
 
     <a class="choose" href="#" @click="launchFileUpload">
-      <span :title="$t('managedfiles.upload')" class="folder-icon"></span>
+      <span :title="t('managedfiles.upload')" class="folder-icon"></span>
     </a>
     <a class="visible" href="#">
-      <input v-model="visible" :title="$t('managedfiles.visible')" type="checkbox" />
+      <input v-model="visible" :title="t('managedfiles.visible')" type="checkbox" />
     </a>
 
     <span class="written">
@@ -92,7 +92,7 @@
     <span class="preview">
       <a
         :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
-        :title="$t('managedfiles.preview')"
+        :title="t('managedfiles.preview')"
         href="#"
         @click="preview"
       >
@@ -101,15 +101,15 @@
 
     <span class="contentType">
       <span v-if="contentType">
-        <code :title="$t('managedfiles.content-type')">{{ contentType }}</code>
+        <code :title="t('managedfiles.content-type')">{{ contentType }}</code>
       </span>
     </span>
 
     <span class="filename">
-      <span v-if="filename" :title="$t('managedfiles.file-name')" class="form-prompt"
+      <span v-if="filename" :title="t('managedfiles.file-name')" class="form-prompt"
         >{{ filename }}
       </span>
-      <span v-else class="form-prompt">{{ $t('managedfiles.please-upload-a-file') }}</span>
+      <span v-else class="form-prompt">{{ t('managedfiles.please-upload-a-file') }}</span>
     </span>
   </div>
 </template>
@@ -119,6 +119,8 @@ import { managedFiles, previewManagedFile } from '@/services'
 import { onMounted, ref, watch } from 'vue'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import Icon from '@/ui/Icon.vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const props = defineProps<{
   readonly disabled?: boolean

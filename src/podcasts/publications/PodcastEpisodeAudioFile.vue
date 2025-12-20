@@ -12,7 +12,7 @@
           type="button"
           @click.prevent="downloadAudio()"
         >
-          {{ $t('publications.plugins.audioFile.download') }}
+          {{ t('publications.plugins.audioFile.download') }}
         </button>
       </div>
     </template>
@@ -21,13 +21,16 @@
 <script lang="ts" setup>
 import downloadAudioIcon from '@/assets/images/publications/podcasts/publish-download-produced-audio.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
+import { managedFiles, notifications, podcasts } from '@/services'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
+
 import { inject, onMounted, ref } from 'vue'
 import type {
   GetPublicationContextFunction,
   IsPluginReadyFunction,
   PublishFunction
 } from '@/publications/input'
-import { managedFiles, notifications, podcasts } from '@/services'
 
 const pluginName = 'audioFile'
 

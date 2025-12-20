@@ -1,17 +1,17 @@
 <template>
-  <h1 v-if="mogul">{{ $t('settings.title') }}</h1>
+  <h1 v-if="mogul">{{ t('settings.title') }}</h1>
   <div v-for="settingsPage in settingsRef" v-bind:key="settingsPage.category">
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>
-          {{ $t('publications.plugins.' + settingsPage.category + '.title') }}
+          {{ t('publications.plugins.' + settingsPage.category + '.title') }}
         </legend>
         <div v-for="setting in settingsPage.settings" v-bind:key="setting.name">
           <div class="pure-control-group">
             <label :for="textAreaElementId(settingsPage.category, setting.name)">
-              {{ $t('publications.plugins.' + settingsPage.category + '.' + setting.name) }}
+              {{ t('publications.plugins.' + settingsPage.category + '.' + setting.name) }}
               <PrivatePasswordInputComponent
-                :prompt="$t('podcasts.episodes.episode.description.ai-prompt')"
+                :prompt="t('podcasts.episodes.episode.description.ai-prompt')"
               />
             </label>
             <input
@@ -22,7 +22,7 @@
               type="password"
             />
             <span class="pure-form-message-inline">
-              <span v-if="!setting.valid">{{ $t('labels.required-value') }}</span>
+              <span v-if="!setting.valid">{{ t('labels.required-value') }}</span>
             </span>
           </div>
         </div>
@@ -34,16 +34,16 @@
             @click.prevent="save(settingsPage.category)"
           >
             {{
-              $t('settings.save-button', {
-                plugin: $t('publications.plugins.' + settingsPage.category + '.title')
+              t('settings.save-button', {
+                plugin: t('publications.plugins.' + settingsPage.category + '.title')
               })
             }}
           </button>
           <div
             v-if="settingsPage.settings.length == 0"
             v-html="
-              $t('settings.no-configuration-for-plugin', {
-                plugin: $t('publications.plugins.' + settingsPage.category + '.title')
+              t('settings.no-configuration-for-plugin', {
+                plugin: t('publications.plugins.' + settingsPage.category + '.title')
               })
             "
           ></div>
@@ -62,7 +62,8 @@ import {
   SettingsPage
 } from '@/services'
 import PrivatePasswordInputComponent from '@/ui/input/PrivatePasswordInputComponent.vue'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const mogul = ref('')
 const settingsRef = ref<Array<SettingsPage>>([])
 const loadedSettingsRef = ref<Array<SettingsPage>>([])

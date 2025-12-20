@@ -2,11 +2,11 @@
   <form class="pure-form pure-form-stacked">
     <fieldset>
       <legend>
-        {{ $t('podcasts.editing', { podcast: title }) }}
+        {{ t('podcasts.editing', { podcast: title }) }}
       </legend>
       <div class="pure-control-group">
         <label for="title">
-          {{ $t('podcasts.new-podcast.title') }}
+          {{ t('podcasts.new-podcast.title') }}
         </label>
 
         <InputWrapper v-model="title">
@@ -22,7 +22,7 @@
           value="create"
           @click.prevent="updatePodcast"
         >
-          {{ $t('podcasts.save') }}
+          {{ t('podcasts.save') }}
         </button>
       </div>
     </fieldset>
@@ -40,6 +40,8 @@ import { mogul, Podcast, podcasts } from '@/services'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 function computeDirtyKey() {
   return title.value + ''

@@ -43,7 +43,7 @@
           </div>
           <div class="platform-name">
             {{
-              $t(
+              t(
                 'publications.plugins.ayrshare.platforms.' +
                   p.ayrsharePublicationComposition.platform
               )
@@ -69,13 +69,15 @@
           type="button"
           @click.prevent="publish()"
         >
-          {{ $t('publications.plugins.publish') }}
+          {{ t('publications.plugins.publish') }}
         </button>
       </div>
     </template>
   </PublicationPanelComponent>
 </template>
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n'
+
 import ayrshareIcon from '@/assets/images/publications/podcasts/publish-to-ayrshare.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
@@ -85,7 +87,7 @@ import {
   PublicationContext,
   type PublishFunction
 } from '@/publications/input'
-
+const { t } = useI18n()
 import { ayrshare, AyrsharePublicationComposition, notifications } from '@/services'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
 import InputTools from '@/ui/InputTools.vue'

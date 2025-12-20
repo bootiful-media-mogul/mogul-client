@@ -11,9 +11,10 @@ import {
   transcripts,
   utils
 } from '@/services'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import { useI18n } from 'vue-i18n'
 
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
@@ -38,8 +39,6 @@ import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudio
 import Podbean from '@/podcasts/publications/Podbean.vue'
 import Ayrshare from '@/podcasts/publications/Ayrshare.vue'
 import Mock from '@/podcasts/publications/Mock.vue'
-
-const { t } = useI18n()
 
 // Props
 const props = defineProps<{
@@ -221,18 +220,18 @@ onMounted(async () => {
     <fieldset>
       <legend>
         <span v-if="title">
-          {{ $t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
+          {{ t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
         </span>
         <span v-else>
-          {{ $t('podcasts.episodes.new-episode') }}
+          {{ t('podcasts.episodes.new-episode') }}
         </span>
         <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
       </legend>
       <div class="form-section">
-        <div class="form-section-title">{{ $t('podcasts.episodes.basics') }}</div>
+        <div class="form-section-title">{{ t('podcasts.episodes.basics') }}</div>
         <div class="form-row">
           <label for="episodeTitle">
-            {{ $t('podcasts.episodes.episode.title') }}
+            {{ t('podcasts.episodes.episode.title') }}
           </label>
           <InputWrapper v-model="title">
             <input id="episodeTitle" v-model="title" required type="text" />
@@ -241,7 +240,7 @@ onMounted(async () => {
         </div>
         <div class="form-row">
           <label for="episodeDescription">
-            {{ $t('podcasts.episodes.episode.description') }}
+            {{ t('podcasts.episodes.episode.description') }}
           </label>
           <InputWrapper v-model="description">
             <textarea id="episodeDescription" v-model="description" required rows="10" />
@@ -259,7 +258,7 @@ onMounted(async () => {
             type="submit"
             @click.prevent="save"
           >
-            {{ $t('podcasts.episodes.buttons.save') }}
+            {{ t('podcasts.episodes.buttons.save') }}
           </button>
           <button
             :disabled="description == '' && title == ''"
@@ -267,17 +266,17 @@ onMounted(async () => {
             type="submit"
             @click.prevent="cancel"
           >
-            {{ $t('podcasts.episodes.buttons.cancel') }}
+            {{ t('podcasts.episodes.buttons.cancel') }}
           </button>
         </div>
       </div>
 
       <div class="form-section">
-        <div class="form-section-title">{{ $t('podcasts.episodes.segments') }}</div>
+        <div class="form-section-title">{{ t('podcasts.episodes.segments') }}</div>
         <div v-if="draftEpisode">
           <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">
             <div class="segment-controls-type">
-              <b>{{ $t('podcasts.episodes.episode.graphic') }}</b>
+              <b>{{ t('podcasts.episodes.episode.graphic') }}</b>
             </div>
             <div class="segment-controls-row">
               <ManagedFileComponent
@@ -293,7 +292,7 @@ onMounted(async () => {
             <div class="row episode-managed-file-row">
               <div class="segment-controls-type">
                 <b>{{
-                  $t('podcasts.episodes.episode.segments.number', { order: segment.order })
+                  t('podcasts.episodes.episode.segments.number', { order: segment.order })
                 }}</b>
               </div>
               <div class="segment-controls-row">
@@ -337,13 +336,13 @@ onMounted(async () => {
                 type="submit"
                 @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
               >
-                {{ $t('podcasts.episodes.buttons.add-segment') }}
+                {{ t('podcasts.episodes.buttons.add-segment') }}
               </button>
             </span>
           </div>
         </div>
 
-        <div class="form-section-title">{{ $t('podcasts.episodes.publications') }}</div>
+        <div class="form-section-title">{{ t('podcasts.episodes.publications') }}</div>
         <div class="publish-menu">
           <PublicationsSectionComponent
             v-if="draftEpisode.id"

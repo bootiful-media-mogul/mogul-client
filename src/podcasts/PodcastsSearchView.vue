@@ -1,6 +1,6 @@
 <template>
   <h1>
-    {{ $t('podcasts.title') }}
+    {{ t('podcasts.title') }}
   </h1>
 
   <div v-if="!editorVisible">
@@ -8,11 +8,11 @@
       <fieldset>
         <div class="toolbar">
           <a @click.prevent="createPodcast">
-            {{ $t('podcasts.new-podcast') }}
+            {{ t('podcasts.new-podcast') }}
           </a>
         </div>
 
-        <legend>{{ $t('podcasts.all', { user: mogulName }) }}</legend>
+        <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
 
         <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcast-rows">
           <div class="id">
@@ -27,7 +27,7 @@
               href="#"
               @click.prevent="navigateToEpisodesPageForPodcast(podcast.id, $event)"
             >
-              {{ $t('podcasts.episodes') }}
+              {{ t('podcasts.episodes') }}
             </a>
           </div>
           <div class="edit">
@@ -115,7 +115,6 @@ import { useRouter } from 'vue-router'
 import { mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
 import { onMounted, ref } from 'vue'
-import { useI18n } from 'vue-i18n'
 import Icon from '@/ui/Icon.vue'
 
 import rssHighlightAsset from '@/assets/images/rss-highlight.png'
@@ -124,8 +123,7 @@ import rssAsset from '@/assets/images/rss.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import PodcastsEditor from '@/podcasts/PodcastsEditor.vue'
-
-const { t } = useI18n()
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const title = ref<string>('')
@@ -138,7 +136,7 @@ const editorVisible = ref(false)
 //
 const mogulId = ref<number>(0)
 const mogulName = ref<string>('')
-
+const { t } = useI18n()
 async function refresh() {
   all.value = await podcasts.podcasts()
 }

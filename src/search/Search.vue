@@ -28,7 +28,7 @@
         type="text"
         :value="search"
         class="search-input"
-        :placeholder="$t('search.prompt')"
+        :placeholder="t('search.prompt')"
         @keydown.enter.prevent="openSearchPage"
       />
     </form>
@@ -38,7 +38,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { events } from '@/services'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const router = useRouter()
 const termInput = ref<HTMLInputElement>()
 const search = ref('')

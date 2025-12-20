@@ -132,8 +132,8 @@
           </div>
         </div>
         <div v-if="proposalApprovalRequired" class="proposal-approval">
-          <a class="accept-link" href="#" @click.prevent="accept">{{ $t('buttons.accept') }}</a> |
-          <a class="revert-link" href="#" @click.prevent="revert">{{ $t('buttons.revert') }}</a>
+          <a class="accept-link" href="#" @click.prevent="accept">{{ t('buttons.accept') }}</a> |
+          <a class="revert-link" href="#" @click.prevent="revert">{{ t('buttons.revert') }}</a>
         </div>
       </div>
     </template>
@@ -145,14 +145,13 @@
 <script lang="ts" setup>
 import asset from '@/assets/images/writing-tools/rewrite.png'
 import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
-
-import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
-
 import { ai } from '@/services'
+import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 import { inject, ref } from 'vue'
 import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
 import Icon from '@/ui/Icon.vue'
+import { useI18n } from 'vue-i18n'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
@@ -164,7 +163,7 @@ const rewriteStylesClasses = ref<string>('styles')
 const rewriteToolsClasses = ref<string>('rewrite-button')
 const toggleButtonClasses = ref<string>('toggle-icon edit-icon')
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
-
+const { t } = useI18n()
 function reset() {
   proposalApprovalRequired.value = false
   rewriteStylesVisible.value = false

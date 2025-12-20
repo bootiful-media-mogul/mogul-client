@@ -4,7 +4,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { Podcast, PodcastEpisode, podcasts, utils } from '@/services'
-import { useI18n } from 'vue-i18n'
 
 import { dateTimeToString } from '@/dates'
 import Icon from '@/ui/Icon.vue'
@@ -15,9 +14,6 @@ import editAsset from '@/assets/images/edit.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import router from '@/index'
-
-const { t } = useI18n()
-
 // Props
 const props = defineProps<{ podcastId: number }>()
 const episodes = ref<PodcastEpisode[]>([])
@@ -25,6 +21,8 @@ const currentPodcast = ref<Podcast>()
 const editorVisible = ref(false)
 const selectedPodcastId = ref(props.podcastId)
 const episode = ref<PodcastEpisode | null>()
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 function dts(date: number): string | null {
   return dateTimeToString(date)
@@ -90,11 +88,11 @@ async function newEpisode() {
   <form class="pure-form">
     <fieldset class="episodes-table">
       <legend>
-        {{ $t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
+        {{ t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
       </legend>
 
       <div class="toolbar">
-        <a @click.prevent="newEpisode()"> {{ $t('podcasts.episodes.new-episode') }}</a>
+        <a @click.prevent="newEpisode()"> {{ t('podcasts.episodes.new-episode') }}</a>
       </div>
       <div v-for="episode in episodes" v-bind:key="episode.id" class="row episodes-row">
         <div class="id-column">

@@ -9,7 +9,8 @@ import {
 } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
-
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const transcript = ref<string>('')
 const el = ref<HTMLElement>()
 const dirty = ref<boolean>()
@@ -99,8 +100,8 @@ const saveTranscript = async () => {
       <div class="pure-control-group">
         <label v-if="key" for="transcript">
           {{
-            $t('transcripts.text', {
-              key: $t(key),
+            t('transcripts.text', {
+              key: t(key),
               id: transcriptId
             })
           }}
@@ -114,7 +115,7 @@ const saveTranscript = async () => {
       <div>
         <span class="refresh">
           <button class="pure-button" type="submit" @click.prevent="refresh">
-            {{ $t('transcripts.buttons.refresh') }}
+            {{ t('transcripts.buttons.refresh') }}
           </button>
         </span>
         <span class="save">
@@ -123,7 +124,7 @@ const saveTranscript = async () => {
             type="submit"
             @click.prevent="saveTranscript"
           >
-            {{ $t('transcripts.buttons.save') }}
+            {{ t('transcripts.buttons.save') }}
           </button>
         </span>
 
@@ -133,7 +134,7 @@ const saveTranscript = async () => {
             type="submit"
             @click.prevent="cancel"
           >
-            {{ $t('transcripts.buttons.cancel') }}
+            {{ t('transcripts.buttons.cancel') }}
           </button>
         </span>
       </div>

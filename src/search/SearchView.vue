@@ -24,7 +24,18 @@
 <template>
   <div>
     <div class="results-prompt">
-      <div v-html="t('search.results.prompt', { term: searchTerm })" />
+      <div
+        v-if="results.length"
+        v-html="
+          t('search.results.prompt', {
+            count: results.length,
+            term: searchTerm
+          })
+        "
+      />
+      <div v-else>
+          {{ t ('search.no-results.prompt') }}
+      </div>
     </div>
     <div>
       <div v-for="result in results" v-bind:key="result.searchableId">

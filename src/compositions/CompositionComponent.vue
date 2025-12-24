@@ -15,8 +15,6 @@ import Icon from '@/ui/Icon.vue'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 
-
-
 const { t } = useI18n()
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const getInputElement = inject<GetInputElementFunction>('getInputElement')!

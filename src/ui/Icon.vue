@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
-
 interface Props {
   readonly alt?: string
   readonly iconHover: string

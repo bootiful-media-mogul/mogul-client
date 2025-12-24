@@ -51,9 +51,9 @@
             />
           </div>
         </div>
-        <div class="created-column">{{ dateTimeToString(publication.created.getDate()) }}</div>
+        <div class="created-column">{{ dateTimeToString(publication.created) }}</div>
         <div class="published-column">
-          {{ dateTimeToString(publication.published.getDate()) }}
+          {{ dateTimeToString(publication.published) }}
         </div>
         <div class="delete-column">
           <Icon

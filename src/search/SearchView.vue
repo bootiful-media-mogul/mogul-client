@@ -34,7 +34,7 @@
         "
       />
       <div v-else>
-          {{ t ('search.no-results.prompt') }}
+        {{ t('search.no-results.prompt') }}
       </div>
     </div>
     <div>

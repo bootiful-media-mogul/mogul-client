@@ -110,8 +110,8 @@ const translations = {
       navigation: {
         episode: 'visit podcast episode'
       },
-      'no-results' : {
-        prompt : 'There are no results.'
+      'no-results': {
+        prompt: 'There are no results.'
       },
       results: {
         result: {

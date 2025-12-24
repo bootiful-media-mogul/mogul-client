@@ -6,7 +6,6 @@ import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
 
-
 export const graphqlClient = new Client({
   url: '/api/graphql',
   exchanges: [
@@ -431,8 +430,8 @@ export class PodcastEpisodeSegment {
 export class Publication {
   id: number
   plugin: string
-  created: Date
-  published: Date
+  created: number
+  published: number
   url: string
   publishing: boolean = false
   state: string
@@ -441,8 +440,8 @@ export class Publication {
   constructor(
     id: number,
     plugin: string,
-    created: Date,
-    published: Date,
+    created: number,
+    published: number,
     url: string,
     state: string,
     outcomes: Array<PublicationOutcome>
@@ -450,9 +449,8 @@ export class Publication {
     this.id = id
     this.url = url
     this.plugin = plugin
-    this.created = new Date(created)
-    this.published = new Date(published)
-    console.log(published + ':' + created)
+    this.created = created
+    this.published = published
     this.state = state
     this.outcomes = outcomes
   }
@@ -1044,14 +1042,12 @@ export class Publications {
           )
         )
       })
-      const createdString = pub['created'] as string
-      const publishedString = pub['published'] as string
-      console.log(createdString + ':' + publishedString)
+
       const publication = new Publication(
         pub['id'] as number,
         pub['plugin'] as string,
-        new Date(createdString),
-        new Date(publishedString),
+        pub.created,
+        pub.published,
         pub['url'] as string,
         pub['state'],
         newOutcomes

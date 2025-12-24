@@ -23,7 +23,6 @@ onMounted(async () => {
   }
 })
 </script>
-
 <template>
   <div v-if="mogulUsername">
     <NotificationBoxComponent ref="notifications" />

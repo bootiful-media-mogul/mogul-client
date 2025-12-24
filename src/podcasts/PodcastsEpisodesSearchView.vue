@@ -9,9 +9,9 @@ import { dateTimeToString } from '@/dates'
 import Icon from '@/ui/Icon.vue'
 
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
+import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 
-import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import router from '@/index'
 // Props

@@ -39,6 +39,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { events } from '@/services'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 const router = useRouter()
 const termInput = ref<HTMLInputElement>()
@@ -47,6 +48,6 @@ const search = ref('')
 async function openSearchPage() {
   const term = termInput.value?.value || ''
   events.emit('search-term-entered', term)
-  await router.push({ name: 'search' })
+  await router.push({ name: 'search', query: { query: term } })
 }
 </script>

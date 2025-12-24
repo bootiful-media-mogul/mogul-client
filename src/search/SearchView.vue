@@ -3,10 +3,8 @@
   border-top: 1px solid black;
   padding-bottom: var(--gutter-space);
   padding-top: var(--gutter-space);
-  grid-template-areas:
-    'title  '
-    'link  ';
-  grid-template-columns: auto min(100%, 1fr);
+  grid-template-areas: ' link . title ';
+  grid-template-columns: var(--icon-column) var(--gutter-space) auto;
   display: grid;
   .title {
     grid-area: title;
@@ -33,7 +31,11 @@
         <div class="result">
           <div class="title">{{ result.title }}</div>
           <div class="navigation-link">
-            <a href="#" @click="navigate(result)">{{ t('search.results.result.view') }}</a>
+            <Icon
+              :icon="editHighlightAsset"
+              :icon-hover="editAsset"
+              @click.prevent="navigate(result)"
+            />
           </div>
         </div>
       </div>
@@ -42,24 +44,34 @@
 </template>
 
 <script setup lang="ts">
-import { events, podcasts, RankedSearchResult, search } from '@/services'
-import { onMounted, ref } from 'vue'
+import Icon from '@/ui/Icon.vue'
+
+import editHighlightAsset from '@/assets/images/edit-highlight.png'
+import editAsset from '@/assets/images/edit.png'
+
 import router from '@/index'
+import { podcasts, RankedSearchResult, search } from '@/services'
+
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 
 const { t } = useI18n()
+
+const route = useRoute()
+
+const query = route.query.query as string
+
+onMounted(async () => {
+  await doSearch(query)
+})
 
 const renderers: Record<string, any> = {
   segment: navigateToPodcastEpisode
 }
 
 async function navigate(result: RankedSearchResult): Promise<void> {
-  const navigationFunction = renderers[result.type]
-  console.log(
-    'navigationFunction for type ' + result.type,
-    navigationFunction == null ? 'null' : 'not null'
-  )
-  await navigationFunction(result)
+  await renderers[result.type](result)
 }
 
 const searchTerm = ref<string>('')
@@ -79,15 +91,5 @@ async function navigateToPodcastEpisode(result: RankedSearchResult): Promise<voi
 async function doSearch(q: string) {
   searchTerm.value = q
   results.value = await search.search(q)
-  results.value.forEach((result) => {
-    console.debug(result)
-  })
 }
-
-onMounted(async () => {
-  events.on('search-term-entered', async (event) => {
-    await doSearch(event as string)
-  })
-
-})
 </script>

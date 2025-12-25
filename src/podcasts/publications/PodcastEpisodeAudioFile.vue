@@ -60,16 +60,19 @@ async function isPluginDisabled() {
 async function downloadAudio() {
   const publicationContext = getPublicationContextFunction()
   const clientContext = {}
+  console.log('going to download audio file, before publishFunction')
   await publishFunction(
     publicationContext.type,
     publicationContext.publishableId,
     clientContext,
     pluginName
   )
+  console.log('going to download audio file, after publishFunction')
   const episode = await podcasts.podcastEpisodeById(publicationContext.publishableId)
   const mf = await managedFiles.managedFileById(episode.producedAudio.id)
   const url = mf.downloadableUrl
-  window.open(url, '_blank')
+  console.log('there should now be a publication outcome for the following url ' +url )
+  // window.open(url, '_blank')
 }
 
 onMounted(async () => {

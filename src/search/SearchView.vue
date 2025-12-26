@@ -25,7 +25,7 @@
   <div>
     <div class="results-prompt">
       <div
-        v-if="results.length"
+        v-if="results"
         v-html="
           t('search.results.prompt', {
             count: results.length,

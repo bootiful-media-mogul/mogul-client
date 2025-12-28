@@ -38,6 +38,36 @@ export interface TranscriptEditedEvent {
   readonly transcript: string
 }
 
+export class Job {
+
+  readonly  name: string
+  readonly  requiredContextAttributes : string[]
+
+  constructor(name: string, requiredContextAttributes: string[]) {
+    this.name = name
+    this.requiredContextAttributes = requiredContextAttributes
+  }
+}
+
+export class Jobs {
+
+  private readonly client:Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async jobs(): Promise<Job[]> {
+    const q = `
+        query {
+         jobs { name, value } 
+        }
+        `
+    const res = await this.client.query(q ,{})
+    return (await res.data['jobs']) as Job[]
+  }
+}
+
 export class Podcast {
   readonly title: string
   readonly id: number
@@ -764,6 +794,7 @@ export class Ai {
 }
 
 export class Compositions {
+
   private readonly client: Client
 
   constructor(client: Client) {
@@ -825,7 +856,7 @@ export class Attachment {
   readonly id: number
   readonly caption: string
   readonly managedFile: ManagedFile
-  readonly markdown: string
+   markdown: string
 
   constructor(id: number, caption: string, managedFile: ManagedFile, markdown: string) {
     this.caption = caption
@@ -1183,6 +1214,7 @@ export class Search {
 
 export const events = mitt()
 export const search = new Search(graphqlClient)
+export const jobs = new Jobs(graphqlClient)
 export const publications = new Publications(graphqlClient)
 export const utils = new Utils()
 export const markdown = new Markdown(graphqlClient)

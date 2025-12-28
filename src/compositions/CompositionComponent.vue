@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Attachment, compositions } from '@/services'
+import { Attachment, compositions, Notification, notifications } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import type {
   GetInputElementFunction,
@@ -39,6 +39,26 @@ const props = defineProps<{
   compositionId: number
 }>()
 
+notifications.listenForCategory(
+  'attachment-managed-file-updated-event',
+  async (notification: Notification) => {
+    const managedFileId = parseInt(notification.key)
+    const composition = await compositions.getCompositionById(props.compositionId)
+    composition.attachments.forEach((attachment) => {
+      if (attachment.managedFile.id == managedFileId) {
+        const newMarkdown = attachment.markdown
+        const newContentType = attachment.managedFile.contentType
+        attachments.value?.forEach((existingAttachment) => {
+          if (existingAttachment.managedFile.id == managedFileId) {
+            existingAttachment.managedFile.contentType = newContentType
+            existingAttachment.markdown = newMarkdown
+          }
+        })
+      }
+    })
+  }
+)
+
 const text = ref<string>()
 const textareaRef = ref<HTMLInputElement>()
 const lastCursorPos = ref<number>(0)
@@ -65,14 +85,9 @@ const handleDrop = (e: DragEvent) => {
   e.preventDefault()
 
   const droppedText = e.dataTransfer!!.getData('text')
-
-  // Get the cursor position where the drop occurred
   const dropPosition = textareaRef.value!!.selectionStart!!
-
-  // Insert the dropped text at the cursor position
   const newText =
     readValue()!!.slice(0, dropPosition) + droppedText + readValue()!!.slice(dropPosition)
-
   setText(newText)
 
   // After setState, focus and set cursor position after inserted text

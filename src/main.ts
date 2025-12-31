@@ -166,6 +166,7 @@ const translations = {
     'jobs.name.podcastIndexerJob': 'Podcast Indexer',
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',
+    'jobs.title': 'Jobs',
 
     // app
     'app.menu.home': 'Home',

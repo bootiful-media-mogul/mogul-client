@@ -1,31 +1,35 @@
 <template>
+  <h1>{{ t('jobs.title') }}</h1>
   <div class="jobs">
-    <div class="job-row" v-for="job in allJobs" :key="job.job.name">
-      <div class="job-name">
-        {{ t('jobs.name.' + job.job.name) }}
-      </div>
+    <form class="pure-form pure-form-stacked">
+      <div class="job-row" v-for="job in allJobs" :key="job.job.name">
+        <fieldset class="job-name">
+          <legend>{{ t('jobs.name.' + job.job.name) }}</legend>
+        </fieldset>
 
-      <div class="attributes">
-        <div
-          class="attribute"
-          v-for="attribute in job.job.requiredContextAttributes"
-          :key="attribute"
-        >
-          <div class="attribute-label">
-            {{ t('selections.params.' + job.job.name + '.' + attribute) }}
-          </div>
-          <div class="attribute-input">
-            <component :is="resolveComponent(attribute)" v-model="job.selections[attribute]" />
+        <div class="attributes">
+          <div
+            class="attribute"
+            v-for="attribute in job.job.requiredContextAttributes"
+            :key="attribute"
+          >
+            <label  class="attribute-label">
+              {{ t('selections.params.' + job.job.name + '.' + attribute) }}
+            </label>
+
+            <div class="attribute-input">
+              <component :is="resolveComponent(attribute)" v-model="job.selections[attribute]" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="launch">
-        <button class="pure-button" type="submit" value="create" @click.prevent="launch(job)">
-          {{ t('jobs.launch', { name: t('jobs.name.' + job.job.name) }) }}
-        </button>
+        <div class="launch">
+          <button class="pure-button" type="submit" value="create" @click.prevent="launch(job)">
+            {{ t('jobs.launch', { name: t('jobs.name.' + job.job.name) }) }}
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 
@@ -87,34 +91,21 @@ onMounted(async () => {
   display: grid;
 
   .job-row {
-    border-top: 1px solid black;
-
-    padding-bottom: var(--gutter-space);
 
     grid-template-areas:
       ' job-name '
       ' attributes'
       ' launch ';
 
+    padding-bottom: var(--gutter-space);
+
     .job-name {
-      background-color: #129fea;
       grid-area: job-name;
     }
 
     .attributes {
       .attribute {
-        display: grid;
         grid-area: attributes;
-        grid-template: 'attribute-label . attribute-input';
-        grid-template-columns: 200px var(--gutter-space) auto;
-
-        .attribute-label {
-          grid-area: attribute-label;
-        }
-        .attribute-input {
-          border: 1px solid yellow;
-          grid-area: attribute-input;
-        }
       }
     }
 

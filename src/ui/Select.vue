@@ -1,8 +1,8 @@
 <template>
   <div class="select">
-    <label v-if="label" >{{ label }}</label>
+    <label v-if="label">{{ label }}</label>
 
-    <select  :disabled="disabled" :value="selectedKey" @change="onChange">
+    <select :disabled="disabled" :value="selectedKey" @change="onChange">
       <option v-if="placeholder" disabled value="">
         {{ placeholder }}
       </option>
@@ -17,6 +17,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 
 export type SelectOption = { label: string; value: string }
@@ -45,7 +46,7 @@ const emit = defineEmits<{
 // - If `value` is guaranteed unique, you can just use opt.value.
 // - This uses value by default; if you worry about duplicates, use value+label.
 function keyFor(opt: SelectOption) {
-  return opt.value
+  return '' + opt.value + opt.label
 }
 
 const selectedKey = computed(() => {

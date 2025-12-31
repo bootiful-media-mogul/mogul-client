@@ -13,12 +13,16 @@
             v-for="attribute in job.job.requiredContextAttributes"
             :key="attribute"
           >
-            <label  class="attribute-label">
+            <label class="attribute-label">
               {{ t('selections.params.' + job.job.name + '.' + attribute) }}
             </label>
 
             <div class="attribute-input">
-              <component :is="resolveComponent(attribute)" v-model="job.selections[attribute]" />
+              <component
+                :is="resolveComponent(attribute)"
+                v-model="job.selections[attribute]"
+                @change="validate"
+              />
             </div>
           </div>
         </div>
@@ -38,7 +42,7 @@ import { Job, jobs } from '@/services'
 import { onMounted, reactive, ref } from 'vue'
 import PodcastsSelect from '@/podcasts/PodcastsSelect.vue'
 import Input from '@/ui/Input.vue'
-import type { SelectOption } from '@/ui/Select.vue'
+import { type SelectOption } from '@/ui/Select.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -46,29 +50,34 @@ const { t } = useI18n()
 const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
 
+function validate() {
+}
+
 function resolveComponent(paramName: string): any {
   return paramComponents.get(paramName) ?? Input
 }
+
 const allJobs = ref<Array<JobRequest>>([])
 
 async function launch(req: JobRequest) {
   const payload = new Map<string, any>()
   for (const [k, v] of Object.entries(req.selections)) {
-    payload.set(k, v)
+    if (v != null && 'value' in v)
+      payload.set(k, v['value'])
+    else payload.set(k, v)
   }
-  return jobs.launch(req.job.name, payload)
+  console.log('launching job', req.job.name, payload)
+  return await jobs.launch(req.job.name, payload)
 }
 
 class JobRequest {
   readonly job: Job
-
+  ready: boolean = false
   selections: Record<string, SelectOption | string | number | null>
 
   constructor(job: Job) {
     this.job = job
     this.selections = reactive({})
-
-    // initialize for required attributes
     for (const attr of job.requiredContextAttributes) {
       this.selections[attr] = null
     }
@@ -91,7 +100,6 @@ onMounted(async () => {
   display: grid;
 
   .job-row {
-
     grid-template-areas:
       ' job-name '
       ' attributes'

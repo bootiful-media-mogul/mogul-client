@@ -5,6 +5,7 @@ import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
+import * as console from 'node:console'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -62,9 +63,12 @@ export class Jobs {
         launchJob(jobName : $jobName , contextAsJson: $contextAsJson)
       }
     `
+
+    const contextAsJson = JSON.stringify(Object.fromEntries(context))
+    window.alert ('launching job' + contextAsJson)
     const result = await this.client.mutation(mutation, {
       jobName: jobName,
-      contextAsJson: JSON.stringify(context)
+      contextAsJson: contextAsJson
     })
     return await result.data['JobLaunch']
   }

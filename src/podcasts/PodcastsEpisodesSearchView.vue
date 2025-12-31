@@ -136,7 +136,7 @@ async function newEpisode() {
     var(--icon-column)
     var(--date-column)
     auto;
-  grid-template-rows: auto minmax(var(--row-height), auto);
+  grid-template-rows: minmax(var(--row-height), auto) minmax(var(--row-height), auto);
 
   display: grid;
 }

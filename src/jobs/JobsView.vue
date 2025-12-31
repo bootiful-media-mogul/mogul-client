@@ -1,16 +1,29 @@
 <template>
   <div class="jobs">
     <div class="job-row" v-for="job in allJobs" :key="job.job.name">
-      <div class="launch">
-        <a @click.prevent="launch(job)" href="#">
-          {{ t('jobs.launch', { name: t('jobs.name.' + job.job.name) }) }}
-        </a>
+      <div class="job-name">
+        {{ t('jobs.name.' + job.job.name) }}
       </div>
+
       <div class="attributes">
-        <div v-for="attribute in job.job.requiredContextAttributes" :key="attribute">
-          {{ t('selections.params.' + job.job.name + '.' + attribute) }}
-          <component :is="resolveComponent(attribute)" v-model="job.selections[attribute]" />
+        <div
+          class="attribute"
+          v-for="attribute in job.job.requiredContextAttributes"
+          :key="attribute"
+        >
+          <div class="attribute-label">
+            {{ t('selections.params.' + job.job.name + '.' + attribute) }}
+          </div>
+          <div class="attribute-input">
+            <component :is="resolveComponent(attribute)" v-model="job.selections[attribute]" />
+          </div>
         </div>
+      </div>
+
+      <div class="launch">
+        <button class="pure-button" type="submit" value="create" @click.prevent="launch(job)">
+          {{ t('jobs.launch', { name: t('jobs.name.' + job.job.name) }) }}
+        </button>
       </div>
     </div>
   </div>
@@ -64,7 +77,7 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped>
+<style>
 /*
   the following grid uses "subgrid" which lets me
   style the columns using the .jobs class,
@@ -72,25 +85,42 @@ onMounted(async () => {
 */
 .jobs {
   display: grid;
-  grid-template-areas: 'launch . attributes';
-  grid-template-columns: max-content var(--gutter-space) auto;
-}
 
-.job-row {
-  border-top: 1px solid black;
-  padding-top: var(--gutter-space);
-  padding-bottom: var(--gutter-space);
-  display: grid;
-  grid-column: 1 / -1; /* span all columns */
-  grid-template-columns: subgrid;
+  .job-row {
+    border-top: 1px solid black;
 
-  .attributes {
-    border: 1px solid black;
-    grid-area: attributes;
-  }
+    padding-bottom: var(--gutter-space);
 
-  .launch {
-    grid-area: launch;
+    grid-template-areas:
+      ' job-name '
+      ' attributes'
+      ' launch ';
+
+    .job-name {
+      background-color: #129fea;
+      grid-area: job-name;
+    }
+
+    .attributes {
+      .attribute {
+        display: grid;
+        grid-area: attributes;
+        grid-template: 'attribute-label . attribute-input';
+        grid-template-columns: 200px var(--gutter-space) auto;
+
+        .attribute-label {
+          grid-area: attribute-label;
+        }
+        .attribute-input {
+          border: 1px solid yellow;
+          grid-area: attribute-input;
+        }
+      }
+    }
+
+    .launch {
+      grid-area: launch;
+    }
   }
 }
 </style>

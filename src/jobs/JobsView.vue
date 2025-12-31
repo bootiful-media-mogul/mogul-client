@@ -49,6 +49,7 @@ const { t } = useI18n()
 
 const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
+// todo arrange other components for other types of components
 
 function validate() {
 }
@@ -66,7 +67,6 @@ async function launch(req: JobRequest) {
       payload.set(k, v['value'])
     else payload.set(k, v)
   }
-  console.log('launching job', req.job.name, payload)
   return await jobs.launch(req.job.name, payload)
 }
 

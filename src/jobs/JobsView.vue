@@ -51,8 +51,7 @@ const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
 // todo arrange other components for other types of components
 
-function validate() {
-}
+function validate() {}
 
 function resolveComponent(paramName: string): any {
   return paramComponents.get(paramName) ?? Input
@@ -63,8 +62,7 @@ const allJobs = ref<Array<JobRequest>>([])
 async function launch(req: JobRequest) {
   const payload = new Map<string, any>()
   for (const [k, v] of Object.entries(req.selections)) {
-    if (v != null && 'value' in v)
-      payload.set(k, v['value'])
+    if (v != null && typeof v === 'object' && 'value' in v) payload.set(k, v['value'])
     else payload.set(k, v)
   }
   return await jobs.launch(req.job.name, payload)

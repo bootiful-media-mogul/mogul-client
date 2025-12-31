@@ -20,7 +20,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-export type SelectOption = { label: string; value: string }
+export type SelectOption = { label: string; value: string | number }
 
 const props = withDefaults(
   defineProps<{

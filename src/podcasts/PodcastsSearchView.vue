@@ -99,7 +99,7 @@
 
 .podcasts-row {
   padding-top: calc(var(--gutter-space) / 2);
-  grid-template-rows:  minmax(var(--row-height), auto);
+  grid-template-rows: minmax(var(--row-height), auto);
 
   border-top: 1px solid black;
   display: grid;

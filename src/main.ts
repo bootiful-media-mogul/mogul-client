@@ -157,9 +157,9 @@ const translations = {
     'markdown.add-image-prompt': 'Provide a caption for the image',
 
     // selections
-    'selections.podcasts' : 'Select a Podcast',
-    'selections.params.podcastIndexerJob.podcastId':'Podcast ID',
-    'selections.params.helloWorldJob.name':'Name',
+    'selections.podcasts': 'Select a Podcast',
+    'selections.params.podcastIndexerJob.podcastId': 'Podcast ID',
+    'selections.params.helloWorldJob.name': 'Name',
 
     // jobs
     'jobs.name.helloWorldJob': '"Hello World!"',

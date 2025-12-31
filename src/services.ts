@@ -65,7 +65,7 @@ export class Jobs {
     `
 
     const contextAsJson = JSON.stringify(Object.fromEntries(context))
-    window.alert ('launching job' + contextAsJson)
+
     const result = await this.client.mutation(mutation, {
       jobName: jobName,
       contextAsJson: contextAsJson

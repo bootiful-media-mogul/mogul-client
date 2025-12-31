@@ -54,6 +54,10 @@ onMounted(async () => {
             |
             <router-link to="/blogs">{{ t('app.menu.blogs') }}</router-link>
             |
+
+            <router-link to="/jobs">{{ t('app.menu.jobs') }}</router-link>
+            |
+
             <router-link to="/about">{{ t('app.menu.about') }}</router-link>
           </div>
         </div>

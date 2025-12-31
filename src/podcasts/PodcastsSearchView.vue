@@ -14,7 +14,7 @@
 
         <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
 
-        <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcast-rows">
+        <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcasts-row">
           <div class="id">
             #<b>{{ podcast.id }}</b>
           </div>
@@ -97,7 +97,11 @@
   padding-left: var(--gutter-space);
 }
 
-.podcast-rows {
+.podcasts-row {
+  padding-top: calc(var(--gutter-space) / 2);
+  grid-template-rows: minmax(var(--row-height), auto);
+
+  border-top: 1px solid black;
   display: grid;
   grid-template-areas: 'id  edit delete rss episodes   created  podcast-title';
   grid-template-columns:

@@ -156,10 +156,23 @@ const translations = {
     'markdown.add-link-prompt': 'Where do you want the link to go to?',
     'markdown.add-image-prompt': 'Provide a caption for the image',
 
+    // selections
+    'selections.podcasts': 'Select a Podcast',
+    'selections.params.podcastIndexerJob.podcastId': 'Podcast ID',
+    'selections.params.helloWorldJob.name': 'Name',
+
+    // jobs
+    'jobs.name.helloWorldJob': '"Hello World!"',
+    'jobs.name.podcastIndexerJob': 'Podcast Indexer',
+    'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
+    'jobs.launch': 'Launch {name}',
+    'jobs.title': 'Jobs',
+
     // app
     'app.menu.home': 'Home',
     'app.menu.search': 'Search',
     'app.menu.settings': 'Settings',
+    'app.menu.jobs': 'Jobs',
     'app.menu.test': 'Test',
     'app.menu.podcasts': 'Podcasts',
     'app.menu.blogs': 'Blogs',

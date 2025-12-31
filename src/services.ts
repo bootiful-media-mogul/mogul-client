@@ -5,6 +5,7 @@ import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
+import * as console from 'node:console'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -39,9 +40,8 @@ export interface TranscriptEditedEvent {
 }
 
 export class Job {
-
-  readonly  name: string
-  readonly  requiredContextAttributes : string[]
+  readonly name: string
+  readonly requiredContextAttributes: string[]
 
   constructor(name: string, requiredContextAttributes: string[]) {
     this.name = name
@@ -50,21 +50,37 @@ export class Job {
 }
 
 export class Jobs {
-
-  private readonly client:Client
+  private readonly client: Client
 
   constructor(client: Client) {
     this.client = client
   }
 
-  async jobs(): Promise<Job[]> {
+  async launch(jobName: string, context: Map<string, object>): Promise<boolean> {
+    context = context ?? new Map()
+    const mutation = ` 
+      mutation JobLaunch($jobName: String, $contextAsJson: String ){ 
+        launchJob(jobName : $jobName , contextAsJson: $contextAsJson)
+      }
+    `
+
+    const contextAsJson = JSON.stringify(Object.fromEntries(context))
+
+    const result = await this.client.mutation(mutation, {
+      jobName: jobName,
+      contextAsJson: contextAsJson
+    })
+    return await result.data['JobLaunch']
+  }
+
+  async jobs(): Promise<Array<Job>> {
     const q = `
-        query {
-         jobs { name, value } 
-        }
-        `
-    const res = await this.client.query(q ,{})
-    return (await res.data['jobs']) as Job[]
+      query { 
+        jobs { name, requiredContextAttributes } 
+      }
+    `
+    const result = await this.client.query(q, {})
+    return (await result.data['jobs']) as Array<Job>
   }
 }
 
@@ -178,7 +194,7 @@ export class Podcasts {
 
   async create(title: string): Promise<Podcast> {
     const mutation = `
-         mutation   ($title: String){ 
+         mutation($title: String){ 
           createPodcast(title: $title) { 
            id, title
           }
@@ -247,7 +263,7 @@ export class Podcasts {
 
   async deletePodcastEpisodeSegment(podcastEpisodeSegmentId: number) {
     const mutation = `
-         mutation   ($podcastEpisodeSegmentId:  Int  ){ 
+         mutation ($podcastEpisodeSegmentId:  Int  ){ 
           deletePodcastEpisodeSegment(podcastEpisodeSegmentId: $podcastEpisodeSegmentId)  
          }
         `
@@ -271,7 +287,7 @@ export class Podcasts {
 
   async deletePodcast(podcastId: number) {
     const mutation = `
-       mutation ($podcastId:  Int  ){ 
+       mutation($podcastId:  Int  ){ 
         deletePodcast(podcastId: $podcastId)  
        }
     `
@@ -794,7 +810,6 @@ export class Ai {
 }
 
 export class Compositions {
-
   private readonly client: Client
 
   constructor(client: Client) {
@@ -856,7 +871,7 @@ export class Attachment {
   readonly id: number
   readonly caption: string
   readonly managedFile: ManagedFile
-   markdown: string
+  markdown: string
 
   constructor(id: number, caption: string, managedFile: ManagedFile, markdown: string) {
     this.caption = caption

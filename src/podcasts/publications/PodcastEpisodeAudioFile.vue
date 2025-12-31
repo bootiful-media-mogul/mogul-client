@@ -71,7 +71,7 @@ async function downloadAudio() {
   const episode = await podcasts.podcastEpisodeById(publicationContext.publishableId)
   const mf = await managedFiles.managedFileById(episode.producedAudio.id)
   const url = mf.downloadableUrl
-  console.log('there should now be a publication outcome for the following url ' +url )
+  console.log('there should now be a publication outcome for the following url ' + url)
   // window.open(url, '_blank')
 }
 

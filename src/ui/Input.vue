@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const emit = defineEmits(['update:modelValue', 'change'])
 
 function onChange(e: any) {
-  const v = e.target.value
+  const v = e.target.value == '' || e.target.value.trimEnd() == '' ? null : e.target.value
   emit('update:modelValue', v)
   emit('change', v)
 }

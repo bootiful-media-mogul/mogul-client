@@ -1227,7 +1227,36 @@ export class Search {
   }
 }
 
+export class Blog {
+  readonly id: number
+  readonly title: string
+  readonly description: string
+
+  constructor(id: number, title: string, description: string) {
+    this.id = id
+    this.title = title
+    this.description = description
+  }
+}
+
+export class Blogs {
+  readonly graphqlClient: Client
+
+  constructor(graphqlClient: Client) {
+    this.graphqlClient = graphqlClient
+  }
+
+  async blogs(): Promise<Array<Blog>> {
+    return Promise.resolve([
+      new Blog(1, 'a blog', 'a description'),
+      new Blog(2, 'another blog', 'another description'),
+      new Blog(3, 'this is hardcoded', 'data in the javascript client')
+    ])
+  }
+}
+
 export const events = mitt()
+export const blogs = new Blogs(graphqlClient)
 export const search = new Search(graphqlClient)
 export const jobs = new Jobs(graphqlClient)
 export const publications = new Publications(graphqlClient)

@@ -28,7 +28,13 @@
         </div>
 
         <div class="launch">
-          <button class="pure-button" type="submit" value="create" @click.prevent="launch(job)">
+          <button
+            :disabled="!job.ready"
+            class="pure-button"
+            type="submit"
+            value="create"
+            @click.prevent="launch(job)"
+          >
             {{ t('jobs.launch', { name: t('jobs.name.' + job.job.name) }) }}
           </button>
         </div>
@@ -44,14 +50,19 @@ import PodcastsSelect from '@/podcasts/PodcastsSelect.vue'
 import Input from '@/ui/Input.vue'
 import { type SelectOption } from '@/ui/Select.vue'
 import { useI18n } from 'vue-i18n'
+import BlogsSelect from '@/blogs/BlogsSelect.vue'
 
 const { t } = useI18n()
 
 const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
-// todo arrange other components for other types of components
+paramComponents.set('blogId', BlogsSelect)
 
-function validate() {}
+function validate() {
+  allJobs.value.forEach((job: JobRequest) => {
+    job.ready = Object.values(job.selections).every((v) => v != null)
+  })
+}
 
 function resolveComponent(paramName: string): any {
   return paramComponents.get(paramName) ?? Input
@@ -61,9 +72,14 @@ const allJobs = ref<Array<JobRequest>>([])
 
 async function launch(req: JobRequest) {
   const payload = new Map<string, any>()
+  const valueKey = 'value'
   for (const [k, v] of Object.entries(req.selections)) {
-    if (v != null && typeof v === 'object' && 'value' in v) payload.set(k, v['value'])
-    else payload.set(k, v)
+    if (v != null && typeof v === 'object' && valueKey in v) {
+      payload.set(k, v[valueKey])
+    } //
+    else {
+      payload.set(k, v)
+    }
   }
   return await jobs.launch(req.job.name, payload)
 }
@@ -85,15 +101,11 @@ class JobRequest {
 onMounted(async () => {
   const jobsResults = await jobs.jobs()
   allJobs.value = jobsResults.map((job) => new JobRequest(job))
+  validate()
 })
 </script>
 
 <style>
-/*
-  the following grid uses "subgrid" which lets me
-  style the columns using the .jobs class,
-  even though the divs are defined for each row
-*/
 .jobs {
   display: grid;
 

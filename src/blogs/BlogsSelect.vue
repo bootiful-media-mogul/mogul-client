@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import { blogs  } from '@/services'
+import { blogs } from '@/services'
 import Select, { type SelectOption } from '@/ui/Select.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -20,7 +20,6 @@ const model = computed<SelectOption | null>({
 const podcastSelections = ref<SelectOption[]>([])
 
 onMounted(async () => {
-
   podcastSelections.value = (await blogs.blogs()).map((p) => ({
     value: p.id,
     label: p.title

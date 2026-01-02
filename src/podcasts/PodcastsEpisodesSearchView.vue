@@ -74,9 +74,7 @@ const loadEpisode = async (e: PodcastEpisode) => {
 }
 
 async function newEpisode() {
-  // todo call create draft episode
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
-
   await loadEpisode(episode.value)
 }
 </script>

@@ -163,10 +163,14 @@ const translations = {
 
     // jobs
     'jobs.name.helloWorldJob': '"Hello World!"',
+    'jobs.name.failingJob': 'Fail',
     'jobs.name.podcastIndexerJob': 'Podcast Indexer',
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',
     'jobs.title': 'Jobs',
+    'jobs.busy': 'running {name}',
+    'jobs.done': '{name} has completed successfully.',
+    'jobs.failed': '{name} failed.',
 
     // app
     'app.menu.home': 'Home',

@@ -21,6 +21,7 @@
 }
 </style>
 <template>
+
   <div class="search-outer-box">
     <form class="pure-form">
       <input

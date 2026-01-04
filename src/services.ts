@@ -5,7 +5,6 @@ import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
-import * as console from 'node:console'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -175,6 +174,7 @@ export class Podcasts {
         }
         `
     const res = await this.client.query(q, { podcastEpisodeId: podcastEpisodeId })
+
     return (await res.data['podcastEpisodeById']) as PodcastEpisode
   }
 
@@ -219,7 +219,9 @@ export class Podcasts {
         } 
     `
     const res = await this.client.query(q, { podcastId: podcastId })
-    return (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
+    const results = (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
+    // alert (JSON.stringify(results))
+    return results
   }
 
   async podcastEpisodes(podcastId: number): Promise<Array<PodcastEpisode>> {
@@ -511,7 +513,7 @@ export class PodcastEpisode {
   graphic: ManagedFile
   producedAudio: ManagedFile
   complete: boolean = false
-  created: number = 0
+  created: string = ''
   segments: Array<PodcastEpisodeSegment>
   publications: Array<Publication> //todo remove this i dont think its necessary any more.
   descriptionComposition?: Composition
@@ -523,7 +525,7 @@ export class PodcastEpisode {
     description: string,
     graphic: ManagedFile,
     complete: boolean,
-    created: number,
+    created: string,
     availablePlugins: Array<string>,
     segments: Array<PodcastEpisodeSegment>,
     publications: Array<Publication>,
@@ -1184,6 +1186,7 @@ export class RankedSearchResult {
   readonly description: string
   readonly type: string
   readonly rank: number
+  readonly created: number
 
   constructor(
     aggregateId: number,
@@ -1191,7 +1194,8 @@ export class RankedSearchResult {
     title: string,
     description: string,
     type: string,
-    rank: number
+    rank: number,
+    created: number
   ) {
     this.searchableId = searchableId
     this.title = title
@@ -1199,6 +1203,7 @@ export class RankedSearchResult {
     this.description = description
     this.aggregateId = aggregateId
     this.rank = rank
+    this.created = created
   }
 }
 
@@ -1212,15 +1217,16 @@ export class Search {
   async search(query: string): Promise<Array<RankedSearchResult>> {
     const q = `
           query($query: String, $metadata: JSON) {
-                    search(query: $query, metadata: $metadata) {
-                                searchableId
-                                title
-                                aggregateId
-                                description
-                                type
-                                rank
-                    }
-                } 
+            search(query: $query, metadata: $metadata) {
+                created
+                searchableId
+                title
+                aggregateId
+                description
+                type
+                rank
+            }
+          } 
         `
     const result = await this.client.query(q, { query: query, metadata: {} })
     return (await result.data['search']) as Array<RankedSearchResult>

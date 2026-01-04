@@ -107,6 +107,7 @@ const translations = {
     },
 
     search: {
+
       navigation: {
         episode: 'visit podcast episode'
       },
@@ -114,10 +115,11 @@ const translations = {
         prompt: 'There are no results.'
       },
       results: {
+        title : 'Search Results',
         result: {
           view: 'view'
         },
-        prompt: 'There are {count} result(s) for your search <span class="term">{term}</span>'
+        prompt: '{count} result(s) for your search "<span class="term">{term}</span>"'
       },
       prompt: 'Enter a search term and press enter'
     },

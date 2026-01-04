@@ -1,71 +1,49 @@
 <style>
-.result {
-  border-top: 1px solid black;
-  padding-bottom: var(--gutter-space);
-  padding-top: var(--gutter-space);
-  grid-template-areas: ' link . title ';
-  grid-template-columns: var(--icon-column) var(--gutter-space) auto;
-  display: grid;
-  .title {
-    grid-area: title;
-  }
-  .navigation-link {
-    /*text-align: right;*/
-    grid-area: link;
-  }
-}
-.results-prompt {
-  padding-bottom: var(--gutter-space);
-}
 .term {
   font-weight: bold;
 }
 </style>
 <template>
-  <div>
-    <div class="results-prompt">
-      <div
-        v-if="results"
-        v-html="
-          t('search.results.prompt', {
-            count: results.length,
-            term: searchTerm
-          })
-        "
-      />
-      <div v-else>
-        {{ t('search.no-results.prompt') }}
-      </div>
-    </div>
-    <div>
+  <h1>
+    {{ t('search.results.title') }}
+  </h1>
+  <form class="pure-form">
+    <fieldset>
+      <legend>
+        <span
+          v-if="results"
+          v-html="
+            t('search.results.prompt', {
+              count: results.length,
+              term: searchTerm
+            })
+          "
+        />
+        <span v-else>
+          {{ t('search.no-results.prompt') }}
+        </span>
+      </legend>
+
       <div v-for="result in results" v-bind:key="result.searchableId">
-        <div class="result">
-          <div class="title">{{ result.title }}</div>
-          <div class="navigation-link">
-            <Icon
-              :icon="editHighlightAsset"
-              :icon-hover="editAsset"
-              @click.prevent="navigate(result)"
-            />
-          </div>
-        </div>
+        <Result
+          :aggregate-id="result?.aggregateId"
+          :created="result.created"
+          :title="result.title"
+          :id="result.searchableId"
+        />
       </div>
-    </div>
-  </div>
+    </fieldset>
+  </form>
 </template>
 
 <script setup lang="ts">
-import Icon from '@/ui/Icon.vue'
-
-import editHighlightAsset from '@/assets/images/edit-highlight.png'
-import editAsset from '@/assets/images/edit.png'
-
 import router from '@/index'
 import { podcasts, RankedSearchResult, search } from '@/services'
 
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
+import Result from '@/search/Result.vue'
 
 const { t } = useI18n()
 

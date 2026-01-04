@@ -362,7 +362,7 @@ onMounted(async () => {
   </form>
 </template>
 <style>
-.episodes-row {
+.result-row {
   grid-template-areas: 'id edit delete created title';
   grid-template-columns:
     var(--id-column)

@@ -7,37 +7,41 @@ import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 
 import deleteAsset from '@/assets/images/delete.png'
+import { results, type ResultType, utils } from '@/services'
+import { useI18n } from 'vue-i18n'
 
-const deleteEntity = async () => {
-  /*
-  const podcastEpisodeDescription = t('podcasts.episodes.episode.reference', {
-    title: props.title
-  })
-  const msg = t('confirm.deletion', { title: podcastEpisodeDescription })
+const { t } = useI18n()
 
-  if (!utils.confirmDeletion(msg)) return
-
-  await podcasts.deletePodcastEpisode(props.id)
-  */
-}
+const emit = defineEmits<{
+  delete: [context: Map<string, number>]
+  navigate: [context: Map<string, number>]
+}>()
 
 const props = defineProps<{
   id: number
+  context: Map<string, number>
+  type: ResultType
   created: number | string | null
   title: string
   aggregateId: number | undefined
 }>()
 
-async function navigateToEntityEditor(aggregateId: number, id: number) {
-/*  await router.push({
-    name: 'podcasts/episodes/episode',
-    params: { podcastId: aggregateId, episodeId: id }
-  })
-*/
+async function deleteEntity() {
+  const context = props.context
+  const msg = t('confirm.deletion', { title: props?.title ?? '' })
+
+  if (!utils.confirmDeletion(msg)) return
+
+  const func = results.deletion(props.type as ResultType)!!
+  func(context)
+  emit('delete', context)
 }
 
-const loadEntity = async () => {
-  await navigateToEntityEditor(props?.aggregateId ?? 0, props.id)
+async function navigateToEntity() {
+  const context = props.context
+  const func = results.navigation(props.type as ResultType)!!
+  await func(context)
+  emit('navigate', context)
 }
 </script>
 <template>
@@ -49,7 +53,11 @@ const loadEntity = async () => {
       {{ dateTimeToString(props.created) }}
     </div>
     <div class="edit">
-      <Icon :icon="editHighlightAsset" :icon-hover="editAsset" @click.prevent="loadEntity()" />
+      <Icon
+        :icon="editHighlightAsset"
+        :icon-hover="editAsset"
+        @click.prevent="navigateToEntity()"
+      />
     </div>
     <div class="delete">
       <Icon

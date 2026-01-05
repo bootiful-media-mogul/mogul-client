@@ -107,7 +107,6 @@ const translations = {
     },
 
     search: {
-
       navigation: {
         episode: 'visit podcast episode'
       },
@@ -115,11 +114,11 @@ const translations = {
         prompt: 'There are no results.'
       },
       results: {
-        title : 'Search Results',
+        title: 'Search Results',
         result: {
           view: 'view'
         },
-        prompt: '{count} result(s) for your search "<span class="term">{term}</span>"'
+        prompt: '{count} result(s) for your search "{term}"'
       },
       prompt: 'Enter a search term and press enter'
     },
@@ -187,7 +186,7 @@ const translations = {
     'app.panels.notes': 'Notes',
     'app.panels.transcripts': 'Transcripts',
     'app.panels.media-preview': 'Media Preview',
-    'confirm.deletion': `Are you sure you want to delete {title}? 
+    'confirm.deletion': `Are you sure you want to delete "{title}"? 
     
 This is NOT reversible! `,
     ok: 'OK',

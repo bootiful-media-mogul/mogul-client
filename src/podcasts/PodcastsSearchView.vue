@@ -137,7 +137,6 @@ const draftPodcast = ref<Podcast>()
 
 const editorVisible = ref(false)
 
-//
 const mogulId = ref<number>(0)
 const mogulName = ref<string>('')
 const { t } = useI18n()

@@ -291,8 +291,10 @@ textarea {
 }
 
 .toolbar {
+  align-items: center;
   grid-area: toolbar;
   display: grid;
+  height: var(--icon-size);
   grid-template-areas: '. navigation . ';
   grid-template-columns: auto auto auto;
 }

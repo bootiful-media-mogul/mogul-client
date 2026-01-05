@@ -23,13 +23,16 @@
           {{ t('search.no-results.prompt') }}
         </span>
       </legend>
-
+      <div class="toolbar"></div>
       <div v-for="result in results" v-bind:key="result.searchableId">
         <Result
+          :context="result.contextMap"
+          :type="result.type as ResultType"
           :aggregate-id="result?.aggregateId"
           :created="result.created"
           :title="result.title"
-          :id="result.searchableId"
+          :id="result.aggregateId"
+          @delete="refresh"
         />
       </div>
     </fieldset>
@@ -37,8 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import router from '@/index'
-import { podcasts, RankedSearchResult, search } from '@/services'
+import { ResultType, search, SearchableResult } from '@/services'
 
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -51,31 +53,15 @@ const route = useRoute()
 
 const query = route.query.query as string
 
-onMounted(async () => {
+async function refresh() {
   await doSearch(query)
+}
+onMounted(async () => {
+  await refresh()
 })
 
-const renderers: Record<string, any> = {
-  segment: navigateToPodcastEpisode
-}
-
-async function navigate(result: RankedSearchResult): Promise<void> {
-  await renderers[result.type](result)
-}
-
 const searchTerm = ref<string>('')
-const results = ref([] as Array<RankedSearchResult>)
-
-async function navigateToPodcastEpisode(result: RankedSearchResult): Promise<void> {
-  const episode = await podcasts.podcastEpisodeById(result.aggregateId)
-  await router.push({
-    name: 'podcasts/episodes/episode',
-    params: {
-      podcastId: episode.podcastId,
-      episodeId: episode.id
-    }
-  })
-}
+const results = ref([] as Array<SearchableResult>)
 
 async function doSearch(q: string) {
   searchTerm.value = q

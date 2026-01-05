@@ -3,7 +3,7 @@
 -->
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { Podcast, PodcastEpisode, podcasts } from '@/services'
+import { Podcast, PodcastEpisode, podcasts, ResultType } from '@/services'
 import router from '@/index'
 import { useI18n } from 'vue-i18n'
 import Result from '@/search/Result.vue'
@@ -21,10 +21,17 @@ onMounted(async () => {
 
 const title = ref<string>('')
 
-const loadPodcast = async () => {
+async function loadPodcast() {
   const newPodcastId = selectedPodcastId.value
+
   currentPodcast.value = await podcasts.podcastById(newPodcastId)
+
   episodes.value = await podcasts.podcastEpisodesPreviews(newPodcastId)
+
+  console.debug(
+    'loading podcast ' + selectedPodcastId.value + ', got episode length ' + episodes.value.length
+  )
+
   title.value = t('podcasts.episodes.all', {
     id: currentPodcast.value.id,
     title: currentPodcast.value.title
@@ -43,6 +50,13 @@ const loadEpisode = async (e: PodcastEpisode) => {
   title.value = t('podcasts.episodes')
 }
 
+function context(episode: PodcastEpisode) {
+  const m = new Map<string, number>()
+  m.set('podcastId', selectedPodcastId.value)
+  m.set('episodeId', episode.id)
+  return m
+}
+
 async function newEpisode() {
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
   await loadEpisode(episode.value)
@@ -57,15 +71,18 @@ async function newEpisode() {
       <legend>
         {{ t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
       </legend>
-      <!--      <div class="toolbar">
+      <div class="toolbar">
         <a @click.prevent="newEpisode()"> {{ t('podcasts.episodes.new-episode') }}</a>
-      </div>-->
+      </div>
       <div v-for="episode in episodes" v-bind:key="episode.id">
         <Result
+          :context="context(episode)"
+          :type="ResultType.Segment"
           :aggregate-id="currentPodcast?.id"
           :created="episode.created"
           :title="episode.title"
           :id="episode.id"
+          @delete="loadPodcast"
         />
       </div>
     </fieldset>

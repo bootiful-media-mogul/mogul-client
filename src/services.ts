@@ -26,6 +26,69 @@ export function previewManagedFile(managedFileId: number) {
   events.emit('preview-managed-file-event', managedFileId)
 }
 
+export enum ResultType {
+  Segment = 'segment'
+}
+
+export class Results {
+  private readonly handlers = new Map<
+    string,
+    {
+      deletion: (context: Map<string, number>) => void
+      navigation: (context: Map<string, number>) => void
+    }
+  >()
+
+  readonly graphqlClient: Client
+
+  private debug(name: string, m: Map<string, number>) {
+    const sets = []
+    for (const [k, v] of m) {
+      sets.push(k + '=' + v)
+    }
+    const str = '====\n' + name + ' [ ' + sets.join(', ') + ' ] '
+    console.log(str)
+  }
+
+  constructor(gc: Client) {
+    this.graphqlClient = gc
+    const that = this
+    this.entry(
+      ResultType.Segment,
+      async function (context: Map<string, number>) {
+        that.debug('segment navigation', context)
+        await router.push({
+          name: 'podcasts/episodes/episode',
+          params: { podcastId: context.get('podcastId'), episodeId: context.get('episodeId') }
+        })
+      },
+      async function (context: Map<string, number>) {
+        that.debug('segment deletion', context)
+        const podcastEpisodeId = context.get('episodeId') as number
+        if (podcastEpisodeId) {
+          await podcasts.deletePodcastEpisode(podcastEpisodeId)
+        }
+      }
+    )
+  }
+
+  deletion(type: ResultType | string): ((context: Map<string, number>) => void) | undefined {
+    return this.handlers.get(type)?.deletion
+  }
+
+  navigation(type: ResultType | string): ((context: Map<string, number>) => void) | undefined {
+    return this.handlers.get(type)?.navigation
+  }
+
+  private entry(
+    type: string,
+    navigation: (context: Map<string, number>) => void,
+    deletion: (context: Map<string, number>) => void
+  ): void {
+    this.handlers.set(type, { navigation, deletion })
+  }
+}
+
 export interface TranscriptEditEvent {
   readonly key: string
   readonly id: number
@@ -108,7 +171,7 @@ export class Podcasts {
         createPodcastEpisodeSegment(podcastEpisodeId : $podcastEpisodeId  )
       }
     `
-    const result = await this.client.mutation(mutation, {
+    await this.client.mutation(mutation, {
       podcastEpisodeId: podcastEpisodeId
     })
   }
@@ -219,9 +282,7 @@ export class Podcasts {
         } 
     `
     const res = await this.client.query(q, { podcastId: podcastId })
-    const results = (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
-    // alert (JSON.stringify(results))
-    return results
+    return (await res.data['podcastEpisodesByPodcast']) as Array<PodcastEpisode>
   }
 
   async podcastEpisodes(podcastId: number): Promise<Array<PodcastEpisode>> {
@@ -1179,14 +1240,28 @@ export class Publications {
   }
 }
 
-export class RankedSearchResult {
+export class SearchableResult {
   readonly searchableId: number
   readonly aggregateId: number
   readonly title: string
+  readonly context: string // json from the server
   readonly description: string
   readonly type: string
   readonly rank: number
   readonly created: number
+
+  static fromJson(obj: SearchableResult): SearchableResult {
+    return new SearchableResult(
+      obj.aggregateId,
+      obj.searchableId,
+      obj.title,
+      obj.description,
+      obj.type,
+      obj.rank,
+      obj.created,
+      obj.context
+    )
+  }
 
   constructor(
     aggregateId: number,
@@ -1195,8 +1270,10 @@ export class RankedSearchResult {
     description: string,
     type: string,
     rank: number,
-    created: number
+    created: number,
+    context: string
   ) {
+    this.context = context
     this.searchableId = searchableId
     this.title = title
     this.type = type
@@ -1204,6 +1281,10 @@ export class RankedSearchResult {
     this.aggregateId = aggregateId
     this.rank = rank
     this.created = created
+  }
+
+  public get contextMap(): Map<string, number> {
+    return new Map<string, number>(Object.entries(JSON.parse(this.context)))
   }
 }
 
@@ -1214,7 +1295,7 @@ export class Search {
     this.client = client
   }
 
-  async search(query: string): Promise<Array<RankedSearchResult>> {
+  async search(query: string): Promise<Array<SearchableResult>> {
     const q = `
           query($query: String, $metadata: JSON) {
             search(query: $query, metadata: $metadata) {
@@ -1223,13 +1304,18 @@ export class Search {
                 title
                 aggregateId
                 description
+                context
                 type
                 rank
             }
           } 
         `
     const result = await this.client.query(q, { query: query, metadata: {} })
-    return (await result.data['search']) as Array<RankedSearchResult>
+    const data = (await result.data['search']) as Array<SearchableResult>
+    if (data && data.length && data.length > 0)
+      return data //
+        .map((sr) => SearchableResult.fromJson(sr))
+    return []
   }
 }
 
@@ -1277,3 +1363,4 @@ export const settings = new Settings(graphqlClient)
 export const compositions = new Compositions(graphqlClient)
 export const ayrshare = new Ayrshare(graphqlClient)
 export const transcripts = new Transcripts(graphqlClient)
+export const results = new Results(graphqlClient)

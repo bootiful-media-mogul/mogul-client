@@ -51,7 +51,6 @@ import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import type { PanelSlot } from './input'
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
-// const text = ref<String>('')
 const root = ref<HTMLElement>()
 const inputElement = ref<HTMLInputElement>()
 const childSlots = ref<Array<PanelSlot>>([])

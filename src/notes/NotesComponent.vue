@@ -2,7 +2,12 @@
 import { onMounted, ref } from 'vue'
 import NoteEditor from '@/notes/NoteEditor.vue'
 import { events, notes } from '@/services'
+import InputWrapper from '@/ui/input/InputWrapper.vue'
+import InputTools from '@/ui/InputTools.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
+const transcript = ref<string>('')
 const el = ref<HTMLElement>()
 
 /* internal representation */
@@ -40,23 +45,53 @@ onMounted(async () => {
   mogulNotes.value = await mogul()
   await expandIfNotesAvailable()
 })
+
+const noteText = ref<string>('')
 </script>
 
 <template>
-  <div ref="el">
+  <form ref="el" class="pure-form pure-form-stacked">
+    <fieldset>
+      <div class="note-composition">
+        <div class="pure-control-group">
+          <label for="note">
+            <!--
+               todo we'll have an event that loads this note composition form and specifies an Notable entity. by default, if not specified. the note will be for the Mogul (system-wide)
+                otherwise, it'll be for the selected item. (unless they user clicks cancel in which case it'll revert back to the Mogul). So, we'll parameterize this prompt to indicate to what
+                entity we're attaching this note.
+               -->
+            {{ t('notes.new.prompt') }}
+          </label>
 
-    <div>
-      <textarea />
-      <div>
-        <button>global note</button>
-        <button>note for episode</button>
+          <InputWrapper v-model="noteText">
+            <textarea id="transcript" v-model="noteText" required rows="10" />
+            <InputTools v-model="noteText" />
+          </InputWrapper>
+        </div>
+        <div>
+          <span class="save">
+            <button :class="'pure-button pure-button-primary '" type="submit">
+              {{ t('transcripts.buttons.save') }}
+            </button>
+          </span>
+
+          <span class="cancel">
+            <button :class="'pure-button '" type="submit">
+              {{ t('transcripts.buttons.cancel') }}
+            </button>
+          </span>
+        </div>
       </div>
-    </div>
+      <div class="existing-notes">
+        <div v-for="note in mogulNotes" :key="note.id">
+          <NoteEditor :id="note.id" :note="note.note" :type="note.type" />
+        </div>
+      </div>
+    </fieldset>
+  </form>
 
-    <div v-for="note in mogulNotes" :key="note.id">
-      <NoteEditor :id="note.id" :note="note.note" :type="note.type" />
-    </div>
-  </div>
+  <!--    -->
+
   <!--
  todo:
   - by default we should load all system-wide Mogul notes
@@ -65,4 +100,10 @@ onMounted(async () => {
   - there should be some reusable component to let us view or edit a note. so, we can iterate over a list of Note-s
 --></template>
 
-<style scoped></style>
+<style scoped>
+
+.note-composition {
+  padding-bottom: var(--gutter-space);
+}
+
+</style>

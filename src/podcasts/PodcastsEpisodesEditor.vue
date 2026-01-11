@@ -12,8 +12,6 @@ import {
   utils
 } from '@/services'
 import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
-
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 
 import { dateTimeToString } from '@/dates'
@@ -40,6 +38,8 @@ import Podbean from '@/podcasts/publications/Podbean.vue'
 import Ayrshare from '@/podcasts/publications/Ayrshare.vue'
 import Mock from '@/podcasts/publications/Mock.vue'
 
+const { t } = useI18n()
+
 // Props
 const props = defineProps<{
   podcastId: number
@@ -48,7 +48,7 @@ const props = defineProps<{
 
 // State
 const segments = ref<PodcastEpisodeSegment[]>([])
-const created = ref(-1)
+const created = ref<string | number>(-1)
 const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
 const podcast = ref<Podcast>()
 const podcastId = ref<number>(props.podcastId)
@@ -91,7 +91,7 @@ const loadEpisodeFromDbIntoEditor = async (episodeId: number): Promise<PodcastEp
 }
 
 // Methods
-const dts = (date: number): string | null => {
+const dts = (date: string | number): string | null => {
   return dateTimeToString(date)
 }
 

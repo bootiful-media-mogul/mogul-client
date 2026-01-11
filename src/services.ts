@@ -1362,6 +1362,7 @@ export class Note {
 }
 
 export class Notes {
+
   readonly client: Client
 
   constructor(gc: Client) {

@@ -7,7 +7,7 @@
 }
 
 .panel {
-  background-color: white;
+  background-color: lightgray;
   border-radius: var(--radius);
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;

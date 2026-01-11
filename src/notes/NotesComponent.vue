@@ -7,7 +7,6 @@ import InputTools from '@/ui/InputTools.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const transcript = ref<string>('')
 const el = ref<HTMLElement>()
 
 /* internal representation */
@@ -15,21 +14,24 @@ class UiNote {
   readonly id: number
   readonly note: string
   readonly type: string
-  constructor(id: number, note: string, type: string) {
+  readonly created : number
+  constructor(id: number, note: string, type: string, created : number) {
     this.id = id
     this.note = note
     this.type = type
+    this.created  = created
   }
 }
 
 const mogulNotes = ref<UiNote[]>([])
 
-async function mogul(): Promise<Array<UiNote>> {
+async function getMogulNotes(): Promise<Array<UiNote>> {
   // call the notes service and load the mogul-wide notes.
   const items = await notes.notesForMogul()
   const arr: Array<UiNote> = []
   for (const item of items) {
-    arr.push(new UiNote(item.id, item.note, item.type))
+    console.log(item.created)
+    arr.push(new UiNote(item.id, item.note, item.type, item.created))
   }
   return arr
 }
@@ -42,7 +44,7 @@ async function expandIfNotesAvailable(): Promise<void> {
 }
 
 onMounted(async () => {
-  mogulNotes.value = await mogul()
+  mogulNotes.value = await getMogulNotes()
   await expandIfNotesAvailable()
 })
 
@@ -84,7 +86,7 @@ const noteText = ref<string>('')
       </div>
       <div class="existing-notes">
         <div v-for="note in mogulNotes" :key="note.id">
-          <NoteEditor :id="note.id" :note="note.note" :type="note.type" />
+          <NoteEditor :created ="note.created" :id="note.id" :note="note.note" :type="note.type" />
         </div>
       </div>
     </fieldset>

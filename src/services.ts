@@ -1347,6 +1347,69 @@ export class Blogs {
   }
 }
 
+export class Note {
+  readonly id: number
+  readonly note: string
+  readonly type: string
+  readonly created: number
+
+  constructor(id: number, note: string, type: string, created: number) {
+    this.id = id
+    this.note = note
+    this.type = type
+    this.created = created
+  }
+}
+
+export class Notes {
+  readonly client: Client
+
+  constructor(gc: Client) {
+    this.client = gc
+  }
+
+  async notesForMogul(): Promise<Array<Note>> {
+    const results = await this.client.query(`
+      query {
+       notesForMogul {
+          created
+          id 
+          description
+          type
+          note
+        }
+      }  
+    `, {}
+    )
+    console.log(results)
+    return (await results.data['notesForMogul']) as Array<Note>
+  }
+
+  async notesForNotable(): Promise<Array<Note>> {
+    return await this.extracted('notesForMogul', {})
+  }
+
+  private async extracted(opName: string, context: any) {
+    const results = await this.client.query(
+      `
+      query($type: String, $id : Int ) {
+        ` +
+        opName +
+        `(  type: $type , id: $id ) {
+          created
+          id 
+          description
+          type
+        }
+      }  
+    `,
+      context
+    )
+    console.log(results)
+    return (await results.data[opName]) as Array<Note>
+  }
+}
+
 export const events = mitt()
 export const blogs = new Blogs(graphqlClient)
 export const search = new Search(graphqlClient)
@@ -1364,3 +1427,4 @@ export const compositions = new Compositions(graphqlClient)
 export const ayrshare = new Ayrshare(graphqlClient)
 export const transcripts = new Transcripts(graphqlClient)
 export const results = new Results(graphqlClient)
+export const notes = new Notes(graphqlClient)

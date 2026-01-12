@@ -35,7 +35,7 @@
         </div>
       </InputWrapperMenu>
     </div>
-    <div v-if="panelVisible" class="panel">
+    <div v-if="panelVisible" class="input-panel">
       <div v-for="(slot, index) in childSlots" :key="index">
         <div v-if="slot.panelVisible">
           <component :is="slot.panel"></component>
@@ -180,7 +180,7 @@ provide('getInputElement', getInputElement)
   grid-area: icons;
 }
 
-.panel {
+.input-panel {
   z-index: 8;
   --writing-tools-panel-padding: calc(var(--gutter-space) / 3);
   grid-area: panel;

@@ -63,18 +63,17 @@ onMounted(async () => {
           </div>
         </div>
         <div class="sidebar">
+
+          <PanelComponent :title="t('app.panels.notes')">
+            <NotesComponent />
+          </PanelComponent>
+
           <PanelComponent :title="t('app.panels.media-preview')">
             <PreviewComponent />
           </PanelComponent>
 
           <PanelComponent :title="t('app.panels.transcripts')">
             <TranscriptComponent />
-          </PanelComponent>
-
-          <PanelComponent :title="t('app.panels.notes')">
-
-            <NotesComponent />
-
           </PanelComponent>
         </div>
       </div>

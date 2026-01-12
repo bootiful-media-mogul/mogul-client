@@ -6,6 +6,7 @@ import Icon from '@/ui/Icon.vue'
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 import { dateTimeToString } from '@/dates'
+import { notes } from '@/services'
 
 const { t } = useI18n()
 
@@ -13,6 +14,11 @@ const emit = defineEmits<{
   deleted: [id: number, type: string]
   updated: [id: number, type: string]
 }>()
+
+async function deleteNote() {
+  await notes.deleteNote(props.id)
+  emit('deleted', props.id, props.type)
+}
 
 const props = defineProps<{
   id: number
@@ -30,22 +36,19 @@ const props = defineProps<{
     </div>
     <div class="note-controls">
       <Icon :icon="editHighlightAsset" :icon-hover="editAsset" />
-      <Icon :icon="deleteHighlightAsset" :icon-hover="deleteAsset" class="delete-icon" />
+      <Icon
+        @click.prevent="deleteNote"
+        :icon="deleteHighlightAsset"
+        :icon-hover="deleteAsset"
+        class="delete-icon"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-/*
-div.segment-controls {
-  display: grid;
-  grid-template-areas: 'up down delete transcript ';
-  grid-column-gap: var(--gutter-space-half);
-  grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
-}*/
-
 .note {
-  padding-bottom: var(--gutter-space);
+  padding-bottom: var(--gutter-space-half);
   display: grid;
   grid-template-areas:
     ' created '
@@ -54,7 +57,7 @@ div.segment-controls {
 
   .created {
     border-top: 1px solid black;
-    padding-top: calc(var(--gutter-space) / 2);
+    padding-top: var(--gutter-space-half);
     padding-bottom: calc(var(--gutter-space) / 2);
     font-size: smaller;
     text-align: right;

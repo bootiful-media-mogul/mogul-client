@@ -1362,15 +1362,54 @@ export class Note {
 }
 
 export class Notes {
-
   readonly client: Client
 
   constructor(gc: Client) {
     this.client = gc
   }
 
+  async deleteNote(id: number): Promise<boolean> {
+    const mutation = ` 
+      mutation DeleteNote( $id: Int  ){  
+        deleteNote( id : $id)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      id : id
+    })
+    return await result.data['deleteNote']
+  }
+
+  async createMogulNote(note: string): Promise<boolean> {
+    const mutation = ` 
+      mutation CreateMogulNote( $note: String  ){  
+        createMogulNote( note: $note)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      note: note
+    })
+    return await result.data['createMogulNote']
+  }
+
+  async createNote(type: string, id: number, note: string): Promise<boolean> {
+    const mutation = ` 
+      mutation CreateNote($type: String, $note: String , $id: Int ){ } 
+        createNote( type : $type, id: $id , note: $note)
+      }
+    `
+
+    const result = await this.client.mutation(mutation, {
+      type: type,
+      id: id,
+      note: note
+    })
+    return await result.data['createNote']
+  }
+
   async notesForMogul(): Promise<Array<Note>> {
-    const results = await this.client.query(`
+    const results = await this.client.query(
+      `
       query {
        notesForMogul {
           created
@@ -1380,7 +1419,8 @@ export class Notes {
           note
         }
       }  
-    `, {}
+    `,
+      {}
     )
     console.log(results)
     return (await results.data['notesForMogul']) as Array<Note>

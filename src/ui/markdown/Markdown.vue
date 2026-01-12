@@ -40,9 +40,6 @@
   align-items: center;
   /*padding-top: var(--gutter-space);*/
   padding-bottom: var(--gutter-space);
-
-
-
 }
 
 .formatting-menu img {

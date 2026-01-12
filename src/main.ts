@@ -21,7 +21,8 @@ const translations = {
 
     hello: 'Hi, {mogul}',
     notes: {
-      'new': { prompt: 'New Note' }
+      'system-wide': { title: 'Global Notes' },
+      new: { prompt: 'New Note' }
     },
     publications: {
       outcomes: {

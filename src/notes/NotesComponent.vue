@@ -12,13 +12,9 @@ const el = ref<HTMLElement>()
 /* internal representation */
 class UiNote {
   readonly id: number
-
   readonly note: string
-
   readonly type: string
-
   readonly created: number
-
   constructor(id: number, note: string, type: string, created: number) {
     this.id = id
     this.note = note
@@ -32,6 +28,7 @@ const noteText = ref<string>('')
 const mogulNotes = ref<UiNote[]>([])
 const id = ref<number>(defaultId)
 const mogulId = ref<number>(-1)
+const type = ref<string>('mogul')
 
 async function resultsToUiNotes(items: Array<Note>) {
   const arr: Array<UiNote> = []
@@ -50,8 +47,8 @@ async function saveNote() {
   if (id.value > 0) {
     await notes.updateNote(id.value, noteText.value)
   } //
-  else {
-    await notes.createNote(noteText.value)
+  else {// todo we need to make sure that the form has an ID and that the ID is
+    await notes.createNote('mogul', mogulId.value, noteText.value)
   }
   await reload()
   await clear()
@@ -73,15 +70,15 @@ async function reload() {
   await expandIfNotesAvailable()
 }
 
-onMounted(async () => {
-  mogulId.value = (await mogul.user()).id
-  await reload()
-})
-
 async function loadIntoEditor(note: UiNote) {
   noteText.value = note.note
   id.value = note.id
 }
+
+onMounted(async () => {
+  mogulId.value = (await mogul.user()).id
+  await reload()
+})
 </script>
 <!--
 todo we'll have an event that loads this note composition form and specifies an Notable entity.

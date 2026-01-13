@@ -1390,15 +1390,19 @@ export class Notes {
     return await result.data['updateNote']
   }
 
-  async createNote(note: string): Promise<boolean> {
+  async createNote(type: string, id: number, note: string): Promise<boolean> {
+    // console.log('creating note', type, id, note)
     const mutation = ` 
-      mutation CreateNote( $type: String, $id: Long,  $note: String  ){  
-        createNote( type: $type, id: $id, note: $note)
+      mutation CreateNote( $type : String, $id : Int , $note : String){  
+        createNote( type : $type, id : $id, note : $note)
       }
     `
     const result = await this.client.mutation(mutation, {
-      note: note
+      note: note,
+      id: id,
+      type: type
     })
+    // console.log('result', result)
     return await result.data['createNote']
   }
 

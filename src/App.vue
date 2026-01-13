@@ -63,7 +63,6 @@ onMounted(async () => {
           </div>
         </div>
         <div class="sidebar">
-
           <PanelComponent :title="t('app.panels.notes')">
             <NotesComponent />
           </PanelComponent>

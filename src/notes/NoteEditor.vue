@@ -35,9 +35,10 @@ const props = defineProps<{
       {{ note }}
     </div>
     <div class="note-controls">
-      <Icon :icon="editHighlightAsset"
-            :icon-hover="editAsset"
-          @click.prevent="$emit('update', id, type)"
+      <Icon
+        :icon="editHighlightAsset"
+        :icon-hover="editAsset"
+        @click.prevent="$emit('update', id, type)"
       />
       <Icon
         @click.prevent="deleteNote"

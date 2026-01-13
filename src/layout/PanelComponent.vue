@@ -20,7 +20,7 @@
   overflow: hidden;
   margin-bottom: var(--gutter-space);
   /* shadow */
-  box-shadow: 0 var(--gutter-space) 40px rgba(0, 0, 0, .2);
+  box-shadow: 0 var(--gutter-space) 40px rgba(0, 0, 0, 0.2);
 }
 
 .panel-menu-buttons {

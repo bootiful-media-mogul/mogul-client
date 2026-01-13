@@ -69,7 +69,6 @@ onMounted(async () => {
 })
 
 async function loadIntoEditor(note: UiNote) {
-  console.log('loading into editor', note)
   noteText.value = note.note
   id.value = note.id
 }

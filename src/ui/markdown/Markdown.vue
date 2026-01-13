@@ -26,6 +26,7 @@
   display: grid;
   grid-template-areas: ' . toolbar . ';
   grid-template-columns: auto auto auto;
+  /*grid-template-rows: fit-content(100%) auto ;*/
 }
 
 .formatting-menu {
@@ -35,13 +36,15 @@
   grid-area: toolbar;
   justify-self: center;
   max-width: fit-content;
+  /*max-height: fit-content;*/
   align-items: center;
-  padding-top: var(--gutter-space);
+  /*padding-top: var(--gutter-space);*/
   padding-bottom: var(--gutter-space);
 }
 
 .formatting-menu img {
-  max-width: calc(var(--icon-width) * 0.8);
+  max-width: calc(var(--icon-width) * 0.7);
+  /*max-height: calc(var(--icon-width) * 0.5);*/
   padding: 0 calc(var(--icon-width) / 2);
 }
 </style>

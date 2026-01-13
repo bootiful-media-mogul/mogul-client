@@ -8,6 +8,7 @@ import PanelComponent from '@/layout/PanelComponent.vue'
 import Search from '@/search/Search.vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import NotesComponent from '@/notes/NotesComponent.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -62,6 +63,11 @@ onMounted(async () => {
           </div>
         </div>
         <div class="sidebar">
+
+          <PanelComponent :title="t('app.panels.notes')">
+            <NotesComponent />
+          </PanelComponent>
+
           <PanelComponent :title="t('app.panels.media-preview')">
             <PreviewComponent />
           </PanelComponent>
@@ -69,8 +75,6 @@ onMounted(async () => {
           <PanelComponent :title="t('app.panels.transcripts')">
             <TranscriptComponent />
           </PanelComponent>
-
-          <PanelComponent :title="t('app.panels.notes')"></PanelComponent>
         </div>
       </div>
     </div>

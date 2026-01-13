@@ -20,6 +20,10 @@ const translations = {
     },
 
     hello: 'Hi, {mogul}',
+    notes: {
+      'system-wide': { title: 'Global Notes' },
+      new: { prompt: 'New Note' }
+    },
     publications: {
       outcomes: {
         'error-message': 'see error message',

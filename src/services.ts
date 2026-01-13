@@ -1347,6 +1347,119 @@ export class Blogs {
   }
 }
 
+export class Note {
+  readonly id: number
+  readonly note: string
+  readonly type: string
+  readonly created: number
+
+  constructor(id: number, note: string, type: string, created: number) {
+    this.id = id
+    this.note = note
+    this.type = type
+    this.created = created
+  }
+}
+
+export class Notes {
+  readonly client: Client
+
+  constructor(gc: Client) {
+    this.client = gc
+  }
+
+  async deleteNote(id: number): Promise<boolean> {
+    const mutation = ` 
+      mutation DeleteNote( $id: Int  ){  
+        deleteNote( id : $id)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      id: id
+    })
+    return await result.data['deleteNote']
+  }
+
+  async updateMogulNote(id: number, note: string): Promise<boolean> {
+    const mutation = ` 
+      mutation UpdateMogulNote( $id: Int , $note: String  ){  
+        updateMogulNote(  id: $id , note: $note)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      note: note,
+      id: id
+    })
+    return await result.data['updateMogulNote']
+  }
+
+  async createMogulNote(note: string): Promise<boolean> {
+    const mutation = ` 
+      mutation CreateMogulNote( $note: String  ){  
+        createMogulNote( note: $note)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      note: note
+    })
+    return await result.data['createMogulNote']
+  }
+
+  async createNote(type: string, id: number, note: string): Promise<boolean> {
+    const mutation = ` 
+      mutation CreateNote($type: String, $note: String , $id: Int ){ } 
+        createNote( type : $type, id: $id , note: $note)
+      }
+    `
+
+    const result = await this.client.mutation(mutation, {
+      type: type,
+      id: id,
+      note: note
+    })
+    return await result.data['createNote']
+  }
+
+  async notesForMogul(): Promise<Array<Note>> {
+    const results = await this.client.query(
+      `
+      query {
+       notesForMogul {
+          created
+          id 
+          description
+          type
+          note
+        }
+      }  
+    `,
+      {}
+    )
+    return (await results.data['notesForMogul']) as Array<Note>
+  }
+
+  async notesForNotable(): Promise<Array<Note>> {
+    const opName = 'notesForNotable'
+    const results = await this.client.query(
+      `
+      query($type: String, $id : Int ) {
+        ` +
+        opName +
+        `(  type: $type , id: $id ) {
+          created
+          id 
+          description
+          type
+        }
+      }  
+    `,
+      {}
+    )
+    console.log(results)
+    return (await results.data[opName]) as Array<Note>
+  }
+}
+
 export const events = mitt()
 export const blogs = new Blogs(graphqlClient)
 export const search = new Search(graphqlClient)
@@ -1364,3 +1477,4 @@ export const compositions = new Compositions(graphqlClient)
 export const ayrshare = new Ayrshare(graphqlClient)
 export const transcripts = new Transcripts(graphqlClient)
 export const results = new Results(graphqlClient)
+export const notes = new Notes(graphqlClient)

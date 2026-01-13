@@ -1,4 +1,4 @@
-<style scoped>
+<style>
 .panel-menu {
   background-color: black;
   padding: calc(var(--gutter-space) / 2);
@@ -6,13 +6,21 @@
   grid-template-columns: auto min-content min-content;
 }
 
+.panel-menu-subtitle {
+  font-size: smaller;
+  text-transform: uppercase;
+  font-family: 'arial Black', sans-serif;
+  color: #777777;
+}
 .panel {
-  background-color: white;
+  background-color: lightgray;
   border-radius: var(--radius);
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   overflow: hidden;
   margin-bottom: var(--gutter-space);
+  /* shadow */
+  box-shadow: 0 var(--gutter-space) 40px rgba(0, 0, 0, .2);
 }
 
 .panel-menu-buttons {
@@ -42,6 +50,7 @@
   font-size: smaller;
   text-transform: uppercase;
   color: white;
+  font-family: 'arial Black', sans-serif;
 }
 
 .panel-maximized {

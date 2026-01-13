@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import NoteEditor from '@/notes/NoteEditor.vue'
-import { events, notes } from '@/services'
+import { events, mogul, Note, notes } from '@/services'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { useI18n } from 'vue-i18n'
@@ -12,9 +12,13 @@ const el = ref<HTMLElement>()
 /* internal representation */
 class UiNote {
   readonly id: number
+
   readonly note: string
+
   readonly type: string
+
   readonly created: number
+
   constructor(id: number, note: string, type: string, created: number) {
     this.id = id
     this.note = note
@@ -27,24 +31,27 @@ const defaultId = -1
 const noteText = ref<string>('')
 const mogulNotes = ref<UiNote[]>([])
 const id = ref<number>(defaultId)
+const mogulId = ref<number>(-1)
 
-async function getMogulNotes(): Promise<Array<UiNote>> {
-  // call the notes service and load the mogul-wide notes.
-  const items = await notes.notesForMogul()
+async function resultsToUiNotes(items: Array<Note>) {
   const arr: Array<UiNote> = []
   for (const item of items) {
-    console.log(item.created)
     arr.push(new UiNote(item.id, item.note, item.type, item.created))
   }
   return arr
 }
 
+async function getMogulNotes(): Promise<Array<UiNote>> {
+  const items = await notes.notesForNotable(mogulId.value, 'mogul')
+  return resultsToUiNotes(items)
+}
+
 async function saveNote() {
   if (id.value > 0) {
-    await notes.updateMogulNote(id.value, noteText.value)
+    await notes.updateNote(id.value, noteText.value)
   } //
   else {
-    await notes.createMogulNote(noteText.value)
+    await notes.createNote(noteText.value)
   }
   await reload()
   await clear()
@@ -55,16 +62,19 @@ async function expandIfNotesAvailable(): Promise<void> {
     events.emit('sidebar-panel-opened', el.value)
   }
 }
+
 async function clear() {
   noteText.value = ''
   id.value = defaultId
 }
+
 async function reload() {
   mogulNotes.value = await getMogulNotes()
   await expandIfNotesAvailable()
 }
 
 onMounted(async () => {
+  mogulId.value = (await mogul.user()).id
   await reload()
 })
 
@@ -74,13 +84,12 @@ async function loadIntoEditor(note: UiNote) {
 }
 </script>
 <!--
-  todo we'll have an event that loads this note composition form and specifies an Notable entity.
+todo we'll have an event that loads this note composition form and specifies an Notable entity.
     by default, if not specified. the note will be for the Mogul (system-wide)
     otherwise, it'll be for the selected item. (unless they user clicks cancel in which case it'll
     revert back to the Mogul). So, we'll parameterize this prompt to indicate to what
     entity we're attaching this note.
--->
-<!--
+
 todo:
 - by default we should load all system-wide Mogul notes
 - then we should load the notes for whatever is in view ('contextual notes').

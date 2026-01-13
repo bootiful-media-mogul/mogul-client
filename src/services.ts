@@ -52,18 +52,15 @@ export class Results {
 
   constructor(gc: Client) {
     this.graphqlClient = gc
-    const that = this
     this.entry(
       ResultType.Segment,
       async function (context: Map<string, number>) {
-        that.debug('segment navigation', context)
         await router.push({
           name: 'podcasts/episodes/episode',
           params: { podcastId: context.get('podcastId'), episodeId: context.get('episodeId') }
         })
       },
       async function (context: Map<string, number>) {
-        that.debug('segment deletion', context)
         const podcastEpisodeId = context.get('episodeId') as number
         if (podcastEpisodeId) {
           await podcasts.deletePodcastEpisode(podcastEpisodeId)
@@ -1380,83 +1377,46 @@ export class Notes {
     return await result.data['deleteNote']
   }
 
-  async updateMogulNote(id: number, note: string): Promise<boolean> {
+  async updateNote(id: number, note: string): Promise<boolean> {
     const mutation = ` 
-      mutation UpdateMogulNote( $id: Int , $note: String  ){  
-        updateMogulNote(  id: $id , note: $note)
+      mutation UpdateNote( $id:Int,$note:String  ){  
+        updateNote(id:$id, note:$note)
       }
     `
     const result = await this.client.mutation(mutation, {
       note: note,
       id: id
     })
-    return await result.data['updateMogulNote']
+    return await result.data['updateNote']
   }
 
-  async createMogulNote(note: string): Promise<boolean> {
+  async createNote(note: string): Promise<boolean> {
     const mutation = ` 
-      mutation CreateMogulNote( $note: String  ){  
-        createMogulNote( note: $note)
+      mutation CreateNote( $type: String, $id: Long,  $note: String  ){  
+        createNote( type: $type, id: $id, note: $note)
       }
     `
     const result = await this.client.mutation(mutation, {
-      note: note
-    })
-    return await result.data['createMogulNote']
-  }
-
-  async createNote(type: string, id: number, note: string): Promise<boolean> {
-    const mutation = ` 
-      mutation CreateNote($type: String, $note: String , $id: Int ){ } 
-        createNote( type : $type, id: $id , note: $note)
-      }
-    `
-
-    const result = await this.client.mutation(mutation, {
-      type: type,
-      id: id,
       note: note
     })
     return await result.data['createNote']
   }
 
-  async notesForMogul(): Promise<Array<Note>> {
-    const results = await this.client.query(
-      `
-      query {
-       notesForMogul {
-          created
-          id 
-          description
-          type
-          note
-        }
-      }  
-    `,
-      {}
-    )
-    return (await results.data['notesForMogul']) as Array<Note>
-  }
-
-  async notesForNotable(): Promise<Array<Note>> {
-    const opName = 'notesForNotable'
+  async notesForNotable(id: number, type: string): Promise<Array<Note>> {
     const results = await this.client.query(
       `
       query($type: String, $id : Int ) {
-        ` +
-        opName +
-        `(  type: $type , id: $id ) {
+        notesForNotable(type: $type, id: $id ) {
           created
           id 
-          description
+          note 
           type
         }
       }  
     `,
-      {}
+      { type: type, id: id }
     )
-    console.log(results)
-    return (await results.data[opName]) as Array<Note>
+    return (await results.data['notesForNotable']) as Array<Note>
   }
 }
 

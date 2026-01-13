@@ -12,7 +12,7 @@ const { t } = useI18n()
 
 const emit = defineEmits<{
   deleted: [id: number, type: string]
-  updated: [id: number, type: string]
+  update: [id: number, type: string]
 }>()
 
 async function deleteNote() {
@@ -35,7 +35,10 @@ const props = defineProps<{
       {{ note }}
     </div>
     <div class="note-controls">
-      <Icon :icon="editHighlightAsset" :icon-hover="editAsset" />
+      <Icon :icon="editHighlightAsset"
+            :icon-hover="editAsset"
+          @click.prevent="$emit('update', id, type)"
+      />
       <Icon
         @click.prevent="deleteNote"
         :icon="deleteHighlightAsset"

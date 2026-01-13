@@ -23,8 +23,10 @@ class UiNote {
   }
 }
 
+const defaultId = -1
 const noteText = ref<string>('')
 const mogulNotes = ref<UiNote[]>([])
+const id = ref<number>(defaultId)
 
 async function getMogulNotes(): Promise<Array<UiNote>> {
   // call the notes service and load the mogul-wide notes.
@@ -38,7 +40,12 @@ async function getMogulNotes(): Promise<Array<UiNote>> {
 }
 
 async function saveNote() {
-  await notes.createMogulNote(noteText.value)
+  if (id.value > 0) {
+    await notes.updateMogulNote(id.value, noteText.value)
+  } //
+  else {
+    await notes.createMogulNote(noteText.value)
+  }
   await reload()
   await clear()
 }
@@ -50,6 +57,7 @@ async function expandIfNotesAvailable(): Promise<void> {
 }
 async function clear() {
   noteText.value = ''
+  id.value = defaultId
 }
 async function reload() {
   mogulNotes.value = await getMogulNotes()
@@ -59,6 +67,12 @@ async function reload() {
 onMounted(async () => {
   await reload()
 })
+
+async function loadIntoEditor(note: UiNote) {
+  console.log('loading into editor', note)
+  noteText.value = note.note
+  id.value = note.id
+}
 </script>
 <!--
   todo we'll have an event that loads this note composition form and specifies an Notable entity.
@@ -66,6 +80,14 @@ onMounted(async () => {
     otherwise, it'll be for the selected item. (unless they user clicks cancel in which case it'll
     revert back to the Mogul). So, we'll parameterize this prompt to indicate to what
     entity we're attaching this note.
+-->
+<!--
+todo:
+- by default we should load all system-wide Mogul notes
+- then we should load the notes for whatever is in view ('contextual notes').
+  how do we determine that? each page (episodes, posts, etc.)
+  will publish an event indicating the notable id and the type.
+- there should be some reusable component to let us view or edit a note. so, we can iterate over a list of Note-s
 -->
 <template>
   <form ref="el" class="pure-form pure-form-stacked">
@@ -85,16 +107,20 @@ onMounted(async () => {
           <span class="save">
             <button
               :class="'pure-button pure-button-primary '"
-              @click.prevent="saveNote"
               type="submit"
+              @click.prevent="saveNote"
               :disabled="noteText.length === 0"
             >
               {{ t('transcripts.buttons.save') }}
             </button>
           </span>
-
           <span class="cancel">
-            <button :class="'pure-button '" type="submit" @click.prevent="clear">
+            <button
+              :class="'pure-button '"
+              :disabled="noteText.length === 0"
+              type="submit"
+              @click.prevent="clear"
+            >
               {{ t('transcripts.buttons.cancel') }}
             </button>
           </span>
@@ -111,19 +137,13 @@ onMounted(async () => {
             :note="note.note"
             :type="note.type"
             @deleted="reload"
+            @update="loadIntoEditor(note)"
           />
         </div>
       </div>
     </fieldset>
   </form>
-
-  <!--
- todo:
-  - by default we should load all system-wide Mogul notes
-  - then we should load the notes for whatever is in view. how do we determine that? each page (episodes, posts, etc.)
-    will publish an event indicating the notable id and the type.
-  - there should be some reusable component to let us view or edit a note. so, we can iterate over a list of Note-s
---></template>
+</template>
 
 <style scoped>
 .notes-section {

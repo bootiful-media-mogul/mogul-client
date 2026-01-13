@@ -1375,9 +1375,22 @@ export class Notes {
       }
     `
     const result = await this.client.mutation(mutation, {
-      id : id
+      id: id
     })
     return await result.data['deleteNote']
+  }
+
+  async updateMogulNote(id: number, note: string): Promise<boolean> {
+    const mutation = ` 
+      mutation UpdateMogulNote( $id: Int , $note: String  ){  
+        updateMogulNote(  id: $id , note: $note)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      note: note,
+      id: id
+    })
+    return await result.data['updateMogulNote']
   }
 
   async createMogulNote(note: string): Promise<boolean> {
@@ -1422,15 +1435,11 @@ export class Notes {
     `,
       {}
     )
-    console.log(results)
     return (await results.data['notesForMogul']) as Array<Note>
   }
 
   async notesForNotable(): Promise<Array<Note>> {
-    return await this.extracted('notesForMogul', {})
-  }
-
-  private async extracted(opName: string, context: any) {
+    const opName = 'notesForNotable'
     const results = await this.client.query(
       `
       query($type: String, $id : Int ) {
@@ -1444,7 +1453,7 @@ export class Notes {
         }
       }  
     `,
-      context
+      {}
     )
     console.log(results)
     return (await results.data[opName]) as Array<Note>

@@ -9,6 +9,7 @@ import TestView from '@/test/TestView.vue'
 import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
 import SearchView from '@/search/SearchView.vue'
 import JobsView from '@/jobs/JobsView.vue'
+import { resetNotesForNotable } from '@/services'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,5 +79,8 @@ const router = createRouter({
     }
   ]
 })
-
+router.beforeEach(async (to, from, next) => {
+  await resetNotesForNotable()
+  next()
+})
 export default router

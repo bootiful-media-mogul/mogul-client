@@ -9,7 +9,6 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const el = ref<HTMLElement>()
 
-/* internal representation */
 class UiNote {
   readonly id: number
   readonly note: string
@@ -22,7 +21,7 @@ class UiNote {
     this.created = created
   }
 }
-
+const mogulName = ref <string> ('')
 const defaultId = -1
 const mogulId = ref<number>(-1)
 const noteText = ref<string>('')
@@ -32,7 +31,7 @@ const noteId = ref<number>(defaultId)
 const notableId = ref<number>(-1)
 const type = ref<string>('mogul')
 const entityLoaded = ref<boolean>(false)
-const entityName = ref <string> ('')
+const entityName = ref<string>('')
 
 function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
   const arr: Array<UiNote> = []
@@ -42,7 +41,6 @@ function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
   return arr
 }
 
-// todo this will be put into an event listener so that any other component can trigger that the notes panel display contextual
 
 async function loadIntoEditor(note: UiNote) {
   noteText.value = note.note
@@ -65,7 +63,6 @@ events.on('notes-for-notable-event', async (event: any) => {
 })
 
 async function saveEntityNote(notableId: number, type: string) {
-  console.log('the id is ' + noteId.value)
   if (noteId.value > 0) {
     await notes.updateNote(noteId.value, noteText.value)
   } //
@@ -90,24 +87,20 @@ async function clear() {
 async function reload() {
   mogulNotes.value = resultsToUiNotes(await notes.notesForNotable(mogulId.value, 'mogul'))
   if (notableId.value > 0 && (type.value + '').trim() !== '') {
-    console.log('reloading notes for notable entity ' + notableId.value + ' of type ' + type.value)
     entityNotes.value = resultsToUiNotes(await notes.notesForNotable(notableId.value, type.value))
-    console.log('entity notes.length = ' + entityNotes.value.length)
   }
   await expandIfNotesAvailable()
 }
 
 onMounted(async () => {
-  mogulId.value = (await mogul.user()).id
+  const  user = await mogul.user()
+  mogulId.value = user.id
+  mogulName.value = user.givenName
   await reload()
 })
 </script>
 <!--
-todo we'll have an event that loads this note composition form and specifies an Notable entity.
-    by default, if not specified. the note will be for the Mogul (system-wide)
-    otherwise, it'll be for the selected item. (unless they user clicks cancel in which case it'll
-    revert back to the Mogul). So, we'll parameterize this prompt to indicate to what
-    entity we're attaching this note.
+
 
 todo:
 - by default we should load all system-wide Mogul notes
@@ -122,7 +115,7 @@ todo:
       <div class="note-composition">
         <div class="pure-control-group">
           <label for="note">
-            {{ t('notes.new.prompt') }}
+            {{ t('notes.new.prompt', { entityName: entityLoaded ? entityName : mogulName }) }}
           </label>
 
           <InputWrapper v-model="noteText">
@@ -131,27 +124,18 @@ todo:
           </InputWrapper>
         </div>
         <div>
-          <span  class="save">
+          <span class="save">
             <button
               :class="'pure-button pure-button-primary '"
               type="submit"
-              @click.prevent="saveEntityNote(mogulId, 'mogul')"
+              @click.prevent="
+                entityLoaded ? saveEntityNote(notableId, type) : saveEntityNote(mogulId, 'mogul')
+              "
               :disabled="noteText.length === 0"
             >
-              {{ t('notes.buttons.save-for-mogul') }}
+              {{ t('notes.buttons.save') }}
             </button>
           </span>
-          <span v-if="entityLoaded">
-            <button
-              :class="'pure-button pure-button-primary '"
-              type="submit"
-              @click.prevent="saveEntityNote(notableId, type)"
-              :disabled="noteText.length === 0"
-            >
-              {{ t('notes.buttons.save-for-entity') }}
-            </button>
-          </span>
-
           <span class="cancel">
             <button
               :class="'pure-button '"
@@ -164,36 +148,38 @@ todo:
           </span>
         </div>
       </div>
-
-      <div class="existing-notes" v-if="mogulNotes.length > 0">
-        <div class="panel-menu-subtitle notes-section">
-          {{ t('notes.system-wide.title') }}
-        </div>
-        <div class="note" v-for="note in mogulNotes" :key="note.id">
-          <NoteEditor
-            :created="note.created"
-            :id="note.id"
-            :note="note.note"
-            :type="note.type"
-            @deleted="reload"
-            @update="loadIntoEditor(note)"
-          />
+      <div v-if="!entityLoaded">
+        <div class="existing-notes" v-if="mogulNotes.length > 0">
+          <div class="panel-menu-subtitle notes-section">
+            {{ t('notes.system-wide.title') }}
+          </div>
+          <div class="note" v-for="note in mogulNotes" :key="note.id">
+            <NoteEditor
+              :created="note.created"
+              :id="note.id"
+              :note="note.note"
+              :type="note.type"
+              @deleted="reload"
+              @update="loadIntoEditor(note)"
+            />
+          </div>
         </div>
       </div>
-
-      <div class="entity-notes" v-if="entityNotes.length > 0">
-        <div class="panel-menu-subtitle notes-section">
-          {{ t('notes.entity.title', {entityName : entityName}) }}
-        </div>
-        <div class="note" v-for="note in entityNotes" :key="note.id">
-          <NoteEditor
-            :created="note.created"
-            :id="note.id"
-            :note="note.note"
-            :type="note.type"
-            @deleted="reload"
-            @update="loadIntoEditor(note)"
-          />
+      <div v-else>
+        <div class="entity-notes" v-if="entityNotes.length > 0">
+          <div class="panel-menu-subtitle notes-section">
+            {{ t('notes.entity.title', { entityName: entityName }) }}
+          </div>
+          <div class="note" v-for="note in entityNotes" :key="note.id">
+            <NoteEditor
+              :created="note.created"
+              :id="note.id"
+              :note="note.note"
+              :type="note.type"
+              @deleted="reload"
+              @update="loadIntoEditor(note)"
+            />
+          </div>
         </div>
       </div>
     </fieldset>

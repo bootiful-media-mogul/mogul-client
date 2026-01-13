@@ -2,6 +2,8 @@
 import { computed, onMounted, ref } from 'vue'
 import {
   Composition,
+  loadNotesForNotable,
+  notes,
   Notification,
   notifications,
   Podcast,
@@ -116,6 +118,8 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
   dirtyKey.value = computeDirtyKey()
+
+  await loadNotesForNotable('episode', episodeId.value, title.value)
 }
 
 async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {

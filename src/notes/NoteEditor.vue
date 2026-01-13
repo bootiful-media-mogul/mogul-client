@@ -31,7 +31,7 @@ const props = defineProps<{
 <template>
   <div class="note">
     <div class="created">{{ dateTimeToString(created) }}</div>
-    <div class="note">
+    <div class="note-text">
       {{ note }}
     </div>
     <div class="note-controls">
@@ -56,20 +56,23 @@ const props = defineProps<{
   display: grid;
   grid-template-areas:
     ' created '
-    ' note '
+    ' note-text '
     ' buttons ';
 
   .created {
-    border-top: 1px solid black;
     padding-top: var(--gutter-space-half);
     padding-bottom: calc(var(--gutter-space) / 2);
     font-size: smaller;
     text-align: right;
   }
-  .note {
-    grid-area: note;
+  .note-text {
+    hyphens: auto;
+
+    grid-area: note-text;
   }
   .note-controls {
+    padding-top: var(--gutter-space-half);
+    padding-bottom: var(--gutter-space-half);
     grid-area: buttons;
     display: grid;
     grid-template-areas: 'edit delete';

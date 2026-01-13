@@ -7,6 +7,7 @@
 }
 
 .panel-menu-subtitle {
+
   font-size: smaller;
   text-transform: uppercase;
   font-family: 'arial Black', sans-serif;

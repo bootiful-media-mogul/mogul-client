@@ -22,6 +22,17 @@ export const graphqlClient = new Client({
   ]
 })
 
+export async function resetNotesForNotable() {
+  events.emit('reset-notes-for-notable-event')
+}
+export async function loadNotesForNotable(type: string, notableId: number, entityName: string) {
+  events.emit('notes-for-notable-event', {
+    type: type,
+    notableId: notableId,
+    entityName: entityName
+  })
+}
+
 export function previewManagedFile(managedFileId: number) {
   events.emit('preview-managed-file-event', managedFileId)
 }

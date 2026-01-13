@@ -116,7 +116,7 @@ import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 import { useRouter } from 'vue-router'
 
-import { mogul, Podcast, podcasts, utils } from '@/services'
+import { loadNotesForNotable, mogul, Podcast, podcasts, utils } from '@/services'
 import { dateTimeToString } from '@/dates'
 import { onMounted, ref } from 'vue'
 import Icon from '@/ui/Icon.vue'
@@ -186,6 +186,7 @@ async function editPodcast(podcast: Podcast) {
   draftPodcast.value = podcast
   title.value = podcast.title
   editorVisible.value = true
+  await loadNotesForNotable('podcast', podcast.id, podcast.title)
 }
 
 onMounted(async () => {

@@ -21,8 +21,13 @@ const translations = {
 
     hello: 'Hi, {mogul}',
     notes: {
+      buttons: {
+        'save-for-mogul': 'Save globally',
+        'save-for-entity': 'Save for entity',
+      },
       'system-wide': { title: 'Global Notes' },
-      new: { prompt: 'New Note' }
+      entity: { title: 'Notes for {entityName}'  },
+      new: { prompt: 'Compose a new note...' },
     },
     publications: {
       outcomes: {

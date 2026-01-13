@@ -24,13 +24,17 @@ class UiNote {
 }
 
 const defaultId = -1
-const noteText = ref<string>('')
-const mogulNotes = ref<UiNote[]>([])
-const id = ref<number>(defaultId)
 const mogulId = ref<number>(-1)
+const noteText = ref<string>('')
+const mogulNotes = ref<Array<UiNote>>([])
+const entityNotes = ref<Array<UiNote>>([])
+const noteId = ref<number>(defaultId)
+const notableId = ref<number>(-1)
 const type = ref<string>('mogul')
+const entityLoaded = ref<boolean>(false)
+const entityName = ref <string> ('')
 
-async function resultsToUiNotes(items: Array<Note>) {
+function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
   const arr: Array<UiNote> = []
   for (const item of items) {
     arr.push(new UiNote(item.id, item.note, item.type, item.created))
@@ -38,41 +42,59 @@ async function resultsToUiNotes(items: Array<Note>) {
   return arr
 }
 
-async function getMogulNotes(): Promise<Array<UiNote>> {
-  const items = await notes.notesForNotable(mogulId.value, 'mogul')
-  return resultsToUiNotes(items)
+// todo this will be put into an event listener so that any other component can trigger that the notes panel display contextual
+
+async function loadIntoEditor(note: UiNote) {
+  noteText.value = note.note
+  noteId.value = note.id
 }
 
-async function saveNote() {
-  if (id.value > 0) {
-    await notes.updateNote(id.value, noteText.value)
+events.on('reset-notes-for-notable-event', async (event: any) => {
+  notableId.value = -1
+  type.value = 'mogul'
+  entityNotes.value = []
+  entityLoaded.value = false
+})
+
+events.on('notes-for-notable-event', async (event: any) => {
+  notableId.value = event.notableId as number
+  entityName.value = event.entityName as string
+  type.value = event.type as string
+  entityLoaded.value = true
+  await reload()
+})
+
+async function saveEntityNote(notableId: number, type: string) {
+  console.log('the id is ' + noteId.value)
+  if (noteId.value > 0) {
+    await notes.updateNote(noteId.value, noteText.value)
   } //
-  else {// todo we need to make sure that the form has an ID and that the ID is
-    await notes.createNote('mogul', mogulId.value, noteText.value)
+  else {
+    await notes.createNote(type, notableId, noteText.value)
   }
   await reload()
-  await clear()
+  // await clear()
 }
 
 async function expandIfNotesAvailable(): Promise<void> {
-  if (mogulNotes.value.length > 0) {
+  if (entityNotes.value.length > 0 || mogulNotes.value.length > 0) {
     events.emit('sidebar-panel-opened', el.value)
   }
 }
 
 async function clear() {
   noteText.value = ''
-  id.value = defaultId
+  noteId.value = defaultId
 }
 
 async function reload() {
-  mogulNotes.value = await getMogulNotes()
+  mogulNotes.value = resultsToUiNotes(await notes.notesForNotable(mogulId.value, 'mogul'))
+  if (notableId.value > 0 && (type.value + '').trim() !== '') {
+    console.log('reloading notes for notable entity ' + notableId.value + ' of type ' + type.value)
+    entityNotes.value = resultsToUiNotes(await notes.notesForNotable(notableId.value, type.value))
+    console.log('entity notes.length = ' + entityNotes.value.length)
+  }
   await expandIfNotesAvailable()
-}
-
-async function loadIntoEditor(note: UiNote) {
-  noteText.value = note.note
-  id.value = note.id
 }
 
 onMounted(async () => {
@@ -109,16 +131,27 @@ todo:
           </InputWrapper>
         </div>
         <div>
-          <span class="save">
+          <span  class="save">
             <button
               :class="'pure-button pure-button-primary '"
               type="submit"
-              @click.prevent="saveNote"
+              @click.prevent="saveEntityNote(mogulId, 'mogul')"
               :disabled="noteText.length === 0"
             >
-              {{ t('transcripts.buttons.save') }}
+              {{ t('notes.buttons.save-for-mogul') }}
             </button>
           </span>
+          <span v-if="entityLoaded">
+            <button
+              :class="'pure-button pure-button-primary '"
+              type="submit"
+              @click.prevent="saveEntityNote(notableId, type)"
+              :disabled="noteText.length === 0"
+            >
+              {{ t('notes.buttons.save-for-entity') }}
+            </button>
+          </span>
+
           <span class="cancel">
             <button
               :class="'pure-button '"
@@ -131,11 +164,28 @@ todo:
           </span>
         </div>
       </div>
-      <div class="existing-notes">
+
+      <div class="existing-notes" v-if="mogulNotes.length > 0">
         <div class="panel-menu-subtitle notes-section">
           {{ t('notes.system-wide.title') }}
         </div>
-        <div v-for="note in mogulNotes" :key="note.id">
+        <div class="note" v-for="note in mogulNotes" :key="note.id">
+          <NoteEditor
+            :created="note.created"
+            :id="note.id"
+            :note="note.note"
+            :type="note.type"
+            @deleted="reload"
+            @update="loadIntoEditor(note)"
+          />
+        </div>
+      </div>
+
+      <div class="entity-notes" v-if="entityNotes.length > 0">
+        <div class="panel-menu-subtitle notes-section">
+          {{ t('notes.entity.title', {entityName : entityName}) }}
+        </div>
+        <div class="note" v-for="note in entityNotes" :key="note.id">
           <NoteEditor
             :created="note.created"
             :id="note.id"
@@ -151,9 +201,15 @@ todo:
 </template>
 
 <style scoped>
+.note {
+  border-top: 1px solid black;
+}
+.note:first-of-type {
+  border-top: none;
+}
 .notes-section {
-  padding-bottom: var(--gutter-space-half);
   padding-top: var(--gutter-space-half);
+  padding-bottom: var(--gutter-space-half);
 }
 
 .note-composition {

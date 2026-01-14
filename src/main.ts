@@ -22,11 +22,11 @@ const translations = {
     hello: 'Hi, {mogul}',
     notes: {
       buttons: {
-        'save' : 'Save',
+        save: 'Save'
       },
       'system-wide': { title: 'System Notes' },
-      entity: { title: 'Notes for {entityName}'  },
-      new: { prompt: '{entityName}\'s Notes' },
+      entity: { title: 'Notes for {entityName}' },
+      new: { prompt: "{entityName}'s Notes" }
     },
     publications: {
       outcomes: {

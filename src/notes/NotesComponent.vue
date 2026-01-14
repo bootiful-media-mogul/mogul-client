@@ -21,7 +21,7 @@ class UiNote {
     this.created = created
   }
 }
-const mogulName = ref <string> ('')
+const mogulName = ref<string>('')
 const defaultId = -1
 const mogulId = ref<number>(-1)
 const noteText = ref<string>('')
@@ -41,26 +41,10 @@ function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
   return arr
 }
 
-
 async function loadIntoEditor(note: UiNote) {
   noteText.value = note.note
   noteId.value = note.id
 }
-
-events.on('reset-notes-for-notable-event', async (event: any) => {
-  notableId.value = -1
-  type.value = 'mogul'
-  entityNotes.value = []
-  entityLoaded.value = false
-})
-
-events.on('notes-for-notable-event', async (event: any) => {
-  notableId.value = event.notableId as number
-  entityName.value = event.entityName as string
-  type.value = event.type as string
-  entityLoaded.value = true
-  await reload()
-})
 
 async function saveEntityNote(notableId: number, type: string) {
   if (noteId.value > 0) {
@@ -93,7 +77,21 @@ async function reload() {
 }
 
 onMounted(async () => {
-  const  user = await mogul.user()
+  events.on('reset-notes-for-notable-event', async (event: any) => {
+    notableId.value = -1
+    type.value = 'mogul'
+    entityNotes.value = []
+    entityLoaded.value = false
+  })
+
+  events.on('notes-for-notable-event', async (event: any) => {
+    notableId.value = event.notableId as number
+    entityName.value = event.entityName as string
+    type.value = event.type as string
+    entityLoaded.value = true
+    await reload()
+  })
+  const user = await mogul.user()
   mogulId.value = user.id
   mogulName.value = user.givenName
   await reload()

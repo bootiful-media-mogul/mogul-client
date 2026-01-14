@@ -64,7 +64,6 @@ const updatePodcast = async function (e: Event) {
   await podcasts.update(props.podcast.id, title.value)
 }
 
-
 function updateDisabled() {
   return computeDirtyKey() === dirtyKey.value || (title.value + '').trim() === ''
 }

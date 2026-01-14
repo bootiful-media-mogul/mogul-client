@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useI18n } from 'vue-i18n'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import Icon from '@/ui/Icon.vue'
@@ -7,8 +6,6 @@ import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 import { dateTimeToString } from '@/dates'
 import { notes } from '@/services'
-
-const { t } = useI18n()
 
 const emit = defineEmits<{
   deleted: [id: number, type: string]

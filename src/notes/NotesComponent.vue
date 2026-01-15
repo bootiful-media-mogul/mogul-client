@@ -68,6 +68,14 @@ async function clear() {
   noteId.value = defaultId
 }
 
+async function notesForNotableEvent(event: any) {
+  notableId.value = event.notableId as number
+  entityName.value = event.entityName as string
+  type.value = event.type as string
+  entityLoaded.value = true
+  await reload()
+}
+
 async function reload() {
   mogulNotes.value = resultsToUiNotes(await notes.notesForNotable(mogulId.value, 'mogul'))
   if (notableId.value > 0 && (type.value + '').trim() !== '') {
@@ -77,20 +85,9 @@ async function reload() {
 }
 
 onMounted(async () => {
-  events.on('reset-notes-for-notable-event', async (event: any) => {
-    notableId.value = -1
-    type.value = 'mogul'
-    entityNotes.value = []
-    entityLoaded.value = false
-  })
+  events.on('reset-notes-for-notable-event', notesForNotableEvent)
 
-  events.on('notes-for-notable-event', async (event: any) => {
-    notableId.value = event.notableId as number
-    entityName.value = event.entityName as string
-    type.value = event.type as string
-    entityLoaded.value = true
-    await reload()
-  })
+  events.on('notes-for-notable-event', async (event: any) => {})
   const user = await mogul.user()
   mogulId.value = user.id
   mogulName.value = user.givenName

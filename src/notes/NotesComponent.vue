@@ -34,11 +34,14 @@ const entityLoaded = ref<boolean>(false)
 const entityName = ref<string>('')
 
 function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
-  const arr: Array<UiNote> = []
-  for (const item of items) {
-    arr.push(new UiNote(item.id, item.note, item.type, item.created))
+  if (items && items.length > 0) {
+    const arr: Array<UiNote> = []
+    for (const item of items) {
+      arr.push(new UiNote(item.id, item.note, item.type, item.created))
+    }
+    return arr
   }
-  return arr
+  return []
 }
 
 async function loadIntoEditor(note: UiNote) {
@@ -58,7 +61,10 @@ async function saveEntityNote(notableId: number, type: string) {
 }
 
 async function expandIfNotesAvailable(): Promise<void> {
-  if (entityNotes.value.length > 0 || mogulNotes.value.length > 0) {
+  if (
+    (mogulNotes.value || entityNotes.value) &&
+    (entityNotes.value.length > 0 || mogulNotes.value.length > 0)
+  ) {
     events.emit('sidebar-panel-opened', el.value)
   }
 }
@@ -66,14 +72,6 @@ async function expandIfNotesAvailable(): Promise<void> {
 async function clear() {
   noteText.value = ''
   noteId.value = defaultId
-}
-
-async function notesForNotableEvent(event: any) {
-  notableId.value = event.notableId as number
-  entityName.value = event.entityName as string
-  type.value = event.type as string
-  entityLoaded.value = true
-  await reload()
 }
 
 async function reload() {
@@ -84,14 +82,23 @@ async function reload() {
   await expandIfNotesAvailable()
 }
 
-onMounted(async () => {
-  events.on('reset-notes-for-notable-event', notesForNotableEvent)
-
-  events.on('notes-for-notable-event', async (event: any) => {})
-  const user = await mogul.user()
-  mogulId.value = user.id
-  mogulName.value = user.givenName
+async function notesForNotableEventHandler(event: any) {
+  notableId.value = event.notableId as number
+  entityName.value = event.entityName as string
+  type.value = event.type as string
+  entityLoaded.value = true
   await reload()
+}
+
+onMounted(async () => {
+  events.on('reset-notes-for-notable-event', async (event: any) => {
+    notableId.value = -1
+    type.value = 'mogul'
+    entityNotes.value = []
+    entityLoaded.value = false
+  })
+
+  events.on('notes-for-notable-event', notesForNotableEventHandler)
 })
 </script>
 <!--

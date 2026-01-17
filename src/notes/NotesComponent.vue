@@ -93,7 +93,7 @@ async function notesForNotableEventHandler(event: any) {
 onMounted(async () => {
 
   const m = await mogul.user()
-  mogulName.value = m.name
+  mogulName.value = m.givenName
   mogulId.value = m.id
 
   events.on('reset-notes-for-notable-event', async (event: any) => {
@@ -106,16 +106,6 @@ onMounted(async () => {
   events.on('notes-for-notable-event', notesForNotableEventHandler)
 })
 </script>
-<!--
-
-
-todo:
-- by default we should load all system-wide Mogul notes
-- then we should load the notes for whatever is in view ('contextual notes').
-  how do we determine that? each page (episodes, posts, etc.)
-  will publish an event indicating the notable id and the type.
-- there should be some reusable component to let us view or edit a note. so, we can iterate over a list of Note-s
--->
 <template>
   <form ref="el" class="pure-form pure-form-stacked">
     <fieldset>

@@ -23,15 +23,8 @@ const title = ref<string>('')
 
 async function loadPodcast() {
   const newPodcastId = selectedPodcastId.value
-
   currentPodcast.value = await podcasts.podcastById(newPodcastId)
-
   episodes.value = await podcasts.podcastEpisodesPreviews(newPodcastId)
-
-  console.debug(
-    'loading podcast ' + selectedPodcastId.value + ', got episode length ' + episodes.value.length
-  )
-
   title.value = t('podcasts.episodes.all', {
     id: currentPodcast.value.id,
     title: currentPodcast.value.title

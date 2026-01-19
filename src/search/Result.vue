@@ -42,10 +42,6 @@ const router = useRouter()
 
 async function navigateToEntity() {
   const context = props.context
-  console.log('inside navigateToEntity')
-  for (const [k, v] of props.context) {
-    console.debug(' Result#navigateToEntity context key: ' + k + ' value:' + v)
-  }
   await router.push({
     name: 'entity',
     params: { id: context.get('id'), type: context.get('type') }

@@ -78,13 +78,6 @@ export class Results {
     this.entry(
       ResultType.Segment,
       function (context: Map<string, number>): NavigationContext {
-        console.log(
-          'inside the handler for ' +
-            ResultType.Segment +
-            ' accepting the following context ' +
-            JSON.stringify(context)
-        )
-
         const map = new Map(
           Object.entries({
             podcastId: context.get('podcastId'),

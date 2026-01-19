@@ -51,9 +51,11 @@ const loadEpisode = async (e: PodcastEpisode) => {
 }
 
 function context(episode: PodcastEpisode) {
-  const m = new Map<string, number>()
+  const m = new Map<string, any>()
   m.set('podcastId', selectedPodcastId.value)
   m.set('episodeId', episode.id)
+  m.set('id', episode.id)
+  m.set('type', 'episode')
   return m
 }
 
@@ -74,6 +76,7 @@ async function newEpisode() {
       <div class="toolbar">
         <a @click.prevent="newEpisode()"> {{ t('podcasts.episodes.new-episode') }}</a>
       </div>
+
       <div v-for="episode in episodes" v-bind:key="episode.id">
         <Result
           :context="context(episode)"

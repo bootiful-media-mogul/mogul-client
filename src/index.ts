@@ -9,7 +9,12 @@ import TestView from '@/test/TestView.vue'
 import PodcastsEpisodesEditor from '@/podcasts/PodcastsEpisodesEditor.vue'
 import SearchView from '@/search/SearchView.vue'
 import JobsView from '@/jobs/JobsView.vue'
-import { resetNotesForNotable } from '@/services'
+import {
+  entityNavigationContexts,
+  NavigationContext,
+  resetNotesForNotable,
+  results
+} from '@/services'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -50,6 +55,36 @@ const router = createRouter({
       name: 'settings',
       component: SettingsView
     },
+
+    /* new entities route */
+    {
+      path: '/entities/:type/:id',
+      name: 'entity',
+      beforeEnter: async (to) => {
+        /**
+         * todo:
+         * - request comes in with just type and id
+         * - we exchange for full context from server
+         * - we send full context to local handlers which provide full routing.
+         */
+        const type: string = to.params.type as string
+        const id: number = Number(to.params.id) as number
+        const context = await entityNavigationContexts.buildEntityContextFor(type, id)
+        const navigationContext: NavigationContext = results.navigation(context.resolvedType)(
+          context.context
+        )
+        const entries = Object.fromEntries(navigationContext.params)
+        return {
+          name: navigationContext.name,
+          params: entries
+        }
+      },
+      // i don't need the component, technically, but the TypeScript fails to validate if it's not
+      // there. it needs <em>either</em> template or component. so we're going with component.
+      component: { template: '<div>Redirecting...</div>' }
+    },
+
+    /* new entities route */
     {
       props(to) {
         return {

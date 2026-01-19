@@ -91,7 +91,6 @@ async function notesForNotableEventHandler(event: any) {
 }
 
 onMounted(async () => {
-
   const m = await mogul.user()
   mogulName.value = m.givenName
   mogulId.value = m.id

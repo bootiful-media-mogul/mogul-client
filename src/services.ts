@@ -38,38 +38,61 @@ export function previewManagedFile(managedFileId: number) {
 }
 
 export enum ResultType {
-  Segment = 'segment'
+  Segment = 'segment',
+  Note = 'note',
+  Episode = 'episode'
+}
+
+export class NavigationContext {
+  readonly name: string
+  readonly params: Map<string, number>
+
+  constructor(name: string, params: Map<string, number>) {
+    this.name = name
+    this.params = params
+  }
 }
 
 export class Results {
   private readonly handlers = new Map<
     string,
     {
+      navigation: (context: Map<string, number>) => NavigationContext
       deletion: (context: Map<string, number>) => void
-      navigation: (context: Map<string, number>) => void
     }
   >()
 
   readonly graphqlClient: Client
 
-  private debug(name: string, m: Map<string, number>) {
-    const sets = []
-    for (const [k, v] of m) {
-      sets.push(k + '=' + v)
-    }
-    const str = '====\n' + name + ' [ ' + sets.join(', ') + ' ] '
-    console.log(str)
-  }
-
   constructor(gc: Client) {
     this.graphqlClient = gc
+
+    this.entry(
+      ResultType.Episode,
+      function (ctx: Map<string, number>): NavigationContext {
+        return new NavigationContext('podcasts/episodes/episode', ctx)
+      },
+      function (ctx: Map<string, number>) {}
+    )
+
     this.entry(
       ResultType.Segment,
-      async function (context: Map<string, number>) {
-        await router.push({
-          name: 'podcasts/episodes/episode',
-          params: { podcastId: context.get('podcastId'), episodeId: context.get('episodeId') }
-        })
+      function (context: Map<string, number>): NavigationContext {
+        console.log(
+          'inside the handler for ' +
+            ResultType.Segment +
+            ' accepting the following context ' +
+            JSON.stringify(context)
+        )
+
+        const map = new Map(
+          Object.entries({
+            podcastId: context.get('podcastId'),
+            episodeId: context.get('episodeId')
+          })
+        ) as Map<string, number>
+
+        return new NavigationContext('podcasts/episodes/episode', map)
       },
       async function (context: Map<string, number>) {
         const podcastEpisodeId = context.get('episodeId') as number
@@ -83,14 +106,14 @@ export class Results {
   deletion(type: ResultType | string): ((context: Map<string, number>) => void) | undefined {
     return this.handlers.get(type)?.deletion
   }
-
-  navigation(type: ResultType | string): ((context: Map<string, number>) => void) | undefined {
-    return this.handlers.get(type)?.navigation
+  navigation(type: ResultType | string): (context: Map<string, number>) => NavigationContext {
+    const handler = this.handlers.get(type)
+    return handler?.navigation!!
   }
 
   private entry(
     type: string,
-    navigation: (context: Map<string, number>) => void,
+    navigation: (context: Map<string, number>) => NavigationContext,
     deletion: (context: Map<string, number>) => void
   ): void {
     this.handlers.set(type, { navigation, deletion })
@@ -1311,10 +1334,8 @@ export class Search {
                 searchableId
                 title
                 aggregateId
-                description
                 context
                 type
-                rank
             }
           } 
         `
@@ -1435,6 +1456,44 @@ export class Notes {
   }
 }
 
+export class EntityContext {
+  readonly resolvedType: string
+  readonly context: Map<string, number>
+
+  constructor(resolvedType: string, context: Map<string, number>) {
+    this.resolvedType = resolvedType
+    this.context = context
+  }
+}
+
+export class EntityContexts {
+  readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async buildEntityContextFor(type: string, id: number): Promise<EntityContext> {
+    const results = await this.client.query(
+      `      
+      query($type: String, $id : Int ) {
+        entityContext(type: $type, id: $id ) {
+          resolvedType
+          context 
+        }
+      }  
+    `,
+      { type: type, id: id }
+    )
+    const entityContext = (await results.data['entityContext']) as any
+    const resolvedType = entityContext['resolvedType']
+    const context = JSON.parse(entityContext['context'])
+    const contextMap = new Map<string, number>(Object.entries(context))
+    const nc = new EntityContext(resolvedType, contextMap)
+    return Promise.resolve(nc)
+  }
+}
+
 export const events = mitt()
 export const blogs = new Blogs(graphqlClient)
 export const search = new Search(graphqlClient)
@@ -1451,5 +1510,7 @@ export const settings = new Settings(graphqlClient)
 export const compositions = new Compositions(graphqlClient)
 export const ayrshare = new Ayrshare(graphqlClient)
 export const transcripts = new Transcripts(graphqlClient)
-export const results = new Results(graphqlClient)
 export const notes = new Notes(graphqlClient)
+// i think these two things should be more closely aligned? are they really separate concerns now?
+export const results = new Results(graphqlClient)
+export const entityNavigationContexts = new EntityContexts(graphqlClient)

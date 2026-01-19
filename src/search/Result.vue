@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import { dateTimeToString } from '@/dates'
 import Icon from '@/ui/Icon.vue'
 
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
@@ -7,8 +6,11 @@ import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 
 import deleteAsset from '@/assets/images/delete.png'
+import { useRouter } from 'vue-router'
 import { results, type ResultType, utils } from '@/services'
 import { useI18n } from 'vue-i18n'
+
+import { dateTimeToString } from '@/dates'
 
 const { t } = useI18n()
 
@@ -27,20 +29,27 @@ const props = defineProps<{
 }>()
 
 async function deleteEntity() {
-  const context = props.context
   const msg = t('confirm.deletion', { title: props?.title ?? '' })
 
   if (!utils.confirmDeletion(msg)) return
 
+  const context = props.context
   const func = results.deletion(props.type as ResultType)!!
   func(context)
   emit('delete', context)
 }
+const router = useRouter()
 
 async function navigateToEntity() {
   const context = props.context
-  const func = results.navigation(props.type as ResultType)!!
-  await func(context)
+  console.log('inside navigateToEntity')
+  for (const [k, v] of props.context) {
+    console.debug(' Result#navigateToEntity context key: ' + k + ' value:' + v)
+  }
+  await router.push({
+    name: 'entity',
+    params: { id: context.get('id'), type: context.get('type') }
+  })
   emit('navigate', context)
 }
 </script>

@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
 
+import noteIconAsset from '@/assets/images/search/note-icon.png'
+import segmentIconAsset from '@/assets/images/search/segment-icon.png'
+
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import editAsset from '@/assets/images/edit.png'
@@ -48,52 +51,89 @@ async function navigateToEntity() {
   })
   emit('navigate', context)
 }
+
+function sourceFor(type: string): string {
+  const map = new Map<string, string>()
+  map.set('segment', segmentIconAsset)
+  map.set('note', noteIconAsset)
+  return map.get(type)!!
+}
 </script>
 <template>
-  <div class="row result-row">
-    <div class="id-column">
-      #<b>{{ id }}</b>
+  <div class="badged-row">
+    <div class="type-badge">
+      <img :alt="props.type + ' result'" :src="sourceFor(props.type)" />
     </div>
-    <div class="created-column">
-      {{ dateTimeToString(props.created) }}
+    <div class="results-result-row result-row">
+      <div class="id-column">
+        #<b>{{ id }}</b>
+      </div>
+      <div class="created-column">
+        {{ dateTimeToString(props.created) }}
+      </div>
+      <div class="edit">
+        <Icon
+          :icon="editHighlightAsset"
+          :icon-hover="editAsset"
+          @click.prevent="navigateToEntity()"
+        />
+      </div>
+      <div class="delete">
+        <Icon
+          :icon="deleteHighlightAsset"
+          :icon-hover="deleteAsset"
+          @click.prevent="deleteEntity()"
+        />
+      </div>
+      <div class="title">{{ props.title }}</div>
     </div>
-    <div class="edit">
-      <Icon
-        :icon="editHighlightAsset"
-        :icon-hover="editAsset"
-        @click.prevent="navigateToEntity()"
-      />
-    </div>
-    <div class="delete">
-      <Icon
-        :icon="deleteHighlightAsset"
-        :icon-hover="deleteAsset"
-        @click.prevent="deleteEntity()"
-      />
-    </div>
-    <div class="title">{{ props.title }}</div>
   </div>
 </template>
 
 <style scoped>
-.title {
-  grid-area: title;
-}
-
-.result-row {
-  padding-top: calc(var(--gutter-space) / 2);
+.badged-row {
+  --badge-width: calc(1.5 * var(--gutter-space));
   border-top: 1px solid black;
-  grid-template-areas:
-    ' title    title   title title title '
-    ' id  edit  delete created created   ';
-  grid-template-columns:
-    var(--id-column)
-    var(--icon-column)
-    var(--icon-column)
-    var(--date-column)
-    auto;
-  grid-template-rows: minmax(var(--row-height), auto) auto;
-  padding-bottom: var(--gutter-space);
+  padding-bottom: var(--gutter-space-half);
+  padding-top: var(--gutter-space-half);
+  grid-template-areas: ' badge result  ';
   display: grid;
+  grid-template-columns: calc(var(--gutter-space) + var(--badge-width)) auto;
+
+  .type-badge {
+    grid-area: badge;
+    img {
+      width: var(--badge-width);
+    }
+  }
+
+  .results-result-row {
+    .title {
+      grid-area: title;
+    }
+
+    .type-badge {
+      img {
+        width: var(--icon-column);
+      }
+    }
+    grid-area: result;
+    grid-template-areas:
+      ' title title title title title '
+      ' id  edit  delete created created   ';
+    grid-template-columns:
+      var(--id-column)
+      var(--icon-column)
+      var(--icon-column)
+      var(--date-column)
+      auto;
+    grid-template-rows:  minmax(var(--row-height), auto)  auto;
+    row-gap: var(--gutter-space);
+
+    display: grid;
+  }
+  .id-column {
+    grid-area: id;
+  }
 }
 </style>

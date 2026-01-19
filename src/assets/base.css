@@ -11,7 +11,7 @@
   --icon-width: 20px;
   --bg-color: cadetblue;
   --icon-column: calc(var(--gutter-space) * 1.5);
-  --id-column: calc(var(--gutter-space) * 3);
+  --id-column: calc(var(--gutter-space) * 5);
   --footer-height: calc(var(--gutter-space) * 1.5);
   --date-column: calc(11em);
   --datetime-column: calc(2 * var(--date-column));

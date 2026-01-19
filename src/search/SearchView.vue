@@ -34,13 +34,16 @@
           :id="result.aggregateId"
           @delete="refresh"
         />
+
+
+
       </div>
     </fieldset>
   </form>
 </template>
 
 <script setup lang="ts">
-import { ResultType, search, SearchableResult } from '@/services'
+import { results, ResultType, search, SearchableResult } from '@/services'
 
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'

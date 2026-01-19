@@ -34,9 +34,6 @@
           :id="result.aggregateId"
           @delete="refresh"
         />
-
-
-
       </div>
     </fieldset>
   </form>

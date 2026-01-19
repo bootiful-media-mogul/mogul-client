@@ -5,10 +5,6 @@ import noteIconAsset from '@/assets/images/search/note-icon.png'
 import segmentIconAsset from '@/assets/images/search/segment-icon.png'
 
 import editHighlightAsset from '@/assets/images/edit-highlight.png'
-import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
-import editAsset from '@/assets/images/edit.png'
-
-import deleteAsset from '@/assets/images/delete.png'
 import { useRouter } from 'vue-router'
 import { results, type ResultType, utils } from '@/services'
 import { useI18n } from 'vue-i18n'
@@ -62,30 +58,34 @@ function sourceFor(type: string): string {
 <template>
   <div class="badged-row">
     <div class="type-badge">
-      <img :alt="props.type + ' result'" :src="sourceFor(props.type)" />
+      <Icon
+        @click.prevent="navigateToEntity()"
+        :icon-hover="editHighlightAsset"
+        :icon="sourceFor(type)"
+      />
     </div>
     <div class="results-result-row result-row">
-      <div class="id-column">
+      <div class="result-id-column">
         #<b>{{ id }}</b>
       </div>
-      <div class="created-column">
+      <div class="result-title-column">{{ props.title }}</div>
+      <div class="result-created-column">
         {{ dateTimeToString(props.created) }}
       </div>
-      <div class="edit">
+      <!--      <div class="edit">
         <Icon
           :icon="editHighlightAsset"
           :icon-hover="editAsset"
           @click.prevent="navigateToEntity()"
         />
-      </div>
-      <div class="delete">
+      </div>-->
+      <!--      <div class="delete">
         <Icon
           :icon="deleteHighlightAsset"
           :icon-hover="deleteAsset"
           @click.prevent="deleteEntity()"
         />
-      </div>
-      <div class="title">{{ props.title }}</div>
+      </div>-->
     </div>
   </div>
 </template>
@@ -95,7 +95,7 @@ function sourceFor(type: string): string {
   --badge-width: calc(1.5 * var(--gutter-space));
   border-top: 1px solid black;
   padding-bottom: var(--gutter-space-half);
-  padding-top: var(--gutter-space-half);
+  padding-top: var(--gutter-space);
   grid-template-areas: ' badge result  ';
   display: grid;
   grid-template-columns: calc(var(--gutter-space) + var(--badge-width)) auto;
@@ -108,8 +108,15 @@ function sourceFor(type: string): string {
   }
 
   .results-result-row {
-    .title {
+    .result-title-column {
       grid-area: title;
+    }
+    .result-created-column {
+      grid-area: created;
+    }
+    .result-id-column {
+      grid-area: id;
+      text-align: right;
     }
 
     .type-badge {
@@ -119,21 +126,15 @@ function sourceFor(type: string): string {
     }
     grid-area: result;
     grid-template-areas:
-      ' title title title title title '
-      ' id  edit  delete created created   ';
-    grid-template-columns:
-      var(--id-column)
-      var(--icon-column)
-      var(--icon-column)
-      var(--date-column)
-      auto;
-    grid-template-rows:  minmax(var(--row-height), auto)  auto;
+      '  created id     '
+      '  title title ';
+    grid-template-rows: auto minmax(var(--row-height), auto);
+    grid-template-columns: auto var(--id-column);
     row-gap: var(--gutter-space);
+    /*column-gap: var(--gutter-space);*/
+    padding-bottom: var(--gutter-space);
 
     display: grid;
-  }
-  .id-column {
-    grid-area: id;
   }
 }
 </style>

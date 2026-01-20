@@ -14,6 +14,7 @@ import { results, type ResultType, utils } from '@/services'
 import { useI18n } from 'vue-i18n'
 
 import { dateTimeToString } from '@/dates'
+import WatermarkedImage from '@/ui/WatermarkedImage.vue'
 
 const { t } = useI18n()
 
@@ -62,6 +63,9 @@ function sourceFor(type: string): string {
 </script>
 <template>
   <div class="result">
+    <div class="watermark">
+<!--      <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />-->
+    </div>
     <div class="buttons">
       <Icon
         class="edit-button"
@@ -101,6 +105,25 @@ function sourceFor(type: string): string {
   grid-template-columns: var(--badge-width) var(--gutter-space) auto;
   padding-bottom: var(--gutter-space);
   padding-top: var(--gutter-space);
+
+  .watermark {
+    grid-area: watermark;
+    .watermark-image {
+      /* */
+      top: var(--gutter-space);
+      right: var(--gutter-space);
+
+
+
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      /* */
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+    }
+  }
 
   .buttons {
     grid-area: buttons;

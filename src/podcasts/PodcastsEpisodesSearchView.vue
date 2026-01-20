@@ -8,7 +8,7 @@ import router from '@/index'
 import { useI18n } from 'vue-i18n'
 import Result from '@/search/Result.vue'
 import TextIcon from '@/ui/TextIcon.vue'
-import WatermarkedView from '@/ui/WatermarkedView.vue'
+import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 
 import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 
@@ -64,7 +64,7 @@ async function newEpisode() {
 }
 </script>
 <template>
-  <WatermarkedView :watermark-image="segmentAsset">
+  <EntityViewDecorator :watermark-image="segmentAsset">
     <h1>
       {{ t('podcasts.episodes') }}
     </h1>
@@ -90,7 +90,7 @@ async function newEpisode() {
         </div>
       </fieldset>
     </form>
-  </WatermarkedView>
+  </EntityViewDecorator>
 </template>
 
 <style scoped></style>

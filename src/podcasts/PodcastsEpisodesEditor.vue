@@ -14,7 +14,7 @@ import {
 } from '@/services'
 import { useI18n } from 'vue-i18n'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-import EntityViewDecorator from '@/ui/WatermarkedView.vue'
+import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 
 import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 

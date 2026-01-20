@@ -1,5 +1,5 @@
 <template>
-  <WatermarkedView :watermark-image="segmentAsset">
+  <EntityViewDecorator :watermark-image="segmentAsset">
     <h1>
       {{ t('podcasts.title') }}
     </h1>
@@ -61,7 +61,7 @@
     <div v-else>
       <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" />
     </div>
-  </WatermarkedView>
+  </EntityViewDecorator>
 </template>
 
 <style>
@@ -129,7 +129,7 @@ import deleteAsset from '@/assets/images/delete.png'
 import PodcastsEditor from '@/podcasts/PodcastsEditor.vue'
 import TextIcon from '@/ui/TextIcon.vue'
 import { useI18n } from 'vue-i18n'
-import WatermarkedView from '@/ui/WatermarkedView.vue'
+import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 
 import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 

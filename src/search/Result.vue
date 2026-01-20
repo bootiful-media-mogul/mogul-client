@@ -109,10 +109,12 @@ function sourceFor(type: string): string {
 
   .watermark {
     position: absolute;
+    /*left: calc(-1 * var(--gutter-space));
+    top: calc(-2 * var(--gutter-space));*/
+    bottom: 0;
     right: 0;
-    bottom : 0;
     padding-top: var(--gutter-space-half);
-    padding-bottom : var(--gutter-space-half);
+    padding-bottom: var(--gutter-space-half);
 
     .watermark-image {
       top: var(--gutter-space);

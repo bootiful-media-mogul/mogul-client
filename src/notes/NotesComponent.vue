@@ -128,7 +128,11 @@ onMounted(async () => {
       <div v-if="showComposer" class="note-composition">
         <div class="pure-control-group">
           <label for="note">
-            {{ t('notes.new.prompt', { entityName: noteTarget === 'entity' ? entityName : mogulName }) }}
+            {{
+              t('notes.new.prompt', {
+                entityName: noteTarget === 'entity' ? entityName : mogulName
+              })
+            }}
           </label>
 
           <InputWrapper v-model="noteText">
@@ -142,7 +146,9 @@ onMounted(async () => {
               :class="'pure-button pure-button-primary '"
               type="submit"
               @click.prevent="
-                noteTarget === 'entity' ? saveEntityNote(notableId, type) : saveEntityNote(mogulId, 'mogul')
+                noteTarget === 'entity'
+                  ? saveEntityNote(notableId, type)
+                  : saveEntityNote(mogulId, 'mogul')
               "
               :disabled="noteText.length === 0"
             >
@@ -189,7 +195,9 @@ onMounted(async () => {
       <!-- Show entity-specific notes section when on entity page -->
       <div class="entity-notes" v-if="entityLoaded">
         <div class="panel-menu-subtitle notes-section section-header">
-          <span>{{ t('notes.entity.title', { entityName: entityName }) }}</span>
+          <span class="notes-section-title">{{
+            t('notes.entity.title', { entityName: entityName })
+          }}</span>
           <button
             type="button"
             class="add-note-btn"
@@ -233,25 +241,30 @@ onMounted(async () => {
 }
 
 .section-header {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: auto var(--gutter-space) min-content;
+  grid-template-areas: 'title . plus-button';
   align-items: center;
 }
-
+.notes-section-title {
+  grid-area: title;
+}
 .add-note-btn {
+  --button-size: calc(3 * var(--gutter-space-half));
+  font-size: calc(0.8 * var(--button-size));
+  font-weight: bolder;
   background: none;
   border: 1px solid currentColor;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 18px;
+  width: var(--button-size);
+  height: var(--button-size);
   line-height: 1;
   cursor: pointer;
   padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
+  margin: 0;
+  align-self: center;
+  text-align: center;
+  grid-area: plus-button;
 }
 
 .add-note-btn:hover {

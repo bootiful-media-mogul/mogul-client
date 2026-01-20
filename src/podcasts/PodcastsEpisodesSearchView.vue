@@ -7,6 +7,7 @@ import { Podcast, PodcastEpisode, podcasts, ResultType } from '@/services'
 import router from '@/index'
 import { useI18n } from 'vue-i18n'
 import Result from '@/search/Result.vue'
+import TextIcon from '@/ui/TextIcon.vue'
 // Props
 const props = defineProps<{ podcastId: number }>()
 const episodes = ref<PodcastEpisode[]>([])
@@ -67,7 +68,7 @@ async function newEpisode() {
         {{ t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
       </legend>
       <div class="toolbar">
-        <a @click.prevent="newEpisode()"> {{ t('podcasts.episodes.new-episode') }}</a>
+        <TextIcon text="+" :title="t('podcasts.episodes.new-episode')" @click="newEpisode" />
       </div>
 
       <div v-for="episode in episodes" v-bind:key="episode.id">

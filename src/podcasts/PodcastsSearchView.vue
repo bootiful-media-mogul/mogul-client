@@ -7,9 +7,7 @@
     <form class="pure-form">
       <fieldset>
         <div class="toolbar">
-          <a @click.prevent="createPodcast">
-            {{ t('podcasts.new-podcast') }}
-          </a>
+          <TextIcon text="+" :title="t('podcasts.new-podcast')" @click="createPodcast" />
         </div>
 
         <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
@@ -127,6 +125,7 @@ import rssAsset from '@/assets/images/rss.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import PodcastsEditor from '@/podcasts/PodcastsEditor.vue'
+import TextIcon from '@/ui/TextIcon.vue'
 import { useI18n } from 'vue-i18n'
 
 const router = useRouter()

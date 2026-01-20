@@ -4,6 +4,7 @@ import NoteEditor from '@/notes/NoteEditor.vue'
 import { events, mogul, Note, notes } from '@/services'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
+import TextIcon from '@/ui/TextIcon.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -171,14 +172,12 @@ onMounted(async () => {
       <div class="existing-notes">
         <div class="panel-menu-subtitle notes-section section-header">
           <span>{{ t('notes.system-wide.title') }}</span>
-          <button
-            type="button"
-            class="add-note-btn"
-            @click="showComposerFor('mogul')"
+          <TextIcon
+            text="+"
+            class="plus-button"
             :title="'Add system-wide note'"
-          >
-            +
-          </button>
+            @click="showComposerFor('mogul')"
+          />
         </div>
         <div class="note" v-for="note in mogulNotes" :key="note.id">
           <NoteEditor
@@ -198,14 +197,12 @@ onMounted(async () => {
           <span class="notes-section-title">{{
             t('notes.entity.title', { entityName: entityName })
           }}</span>
-          <button
-            type="button"
-            class="add-note-btn"
-            @click="showComposerFor('entity')"
+          <TextIcon
+            text="+"
+            class="plus-button"
             :title="'Add ' + entityName + ' note'"
-          >
-            +
-          </button>
+            @click="showComposerFor('entity')"
+          />
         </div>
         <div class="note" v-for="note in entityNotes" :key="note.id">
           <NoteEditor
@@ -249,31 +246,7 @@ onMounted(async () => {
 .notes-section-title {
   grid-area: title;
 }
-.add-note-btn {
-  --button-size: calc(3 * var(--gutter-space-half));
-  font-size: calc(0.8 * var(--button-size));
-  font-weight: bolder;
-  background: none;
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  width: var(--button-size);
-  height: var(--button-size);
-  cursor: pointer;
-  padding: 0;
-  margin: 0;
-  align-self: center;
+.plus-button {
   grid-area: plus-button;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.add-note-btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-  transform: scale(1.1);
-}
-
-.add-note-btn:active {
-  transform: scale(0.95);
 }
 </style>

@@ -64,7 +64,7 @@ function sourceFor(type: string): string {
 <template>
   <div class="result">
     <div class="watermark">
-<!--      <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />-->
+      <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />
     </div>
     <div class="buttons">
       <Icon
@@ -105,23 +105,24 @@ function sourceFor(type: string): string {
   grid-template-columns: var(--badge-width) var(--gutter-space) auto;
   padding-bottom: var(--gutter-space);
   padding-top: var(--gutter-space);
+  position: relative;
 
   .watermark {
-    grid-area: watermark;
+    position: absolute;
+    right: 0;
+    bottom : 0;
+    padding-top: var(--gutter-space-half);
+    padding-bottom : var(--gutter-space-half);
+
     .watermark-image {
-      /* */
       top: var(--gutter-space);
-      right: var(--gutter-space);
-
-
 
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
       /* */
-      width: 100px;
-      height: 100px;
-      border: 1px solid black;
+      width: 80px;
+      height: 80px;
     }
   }
 

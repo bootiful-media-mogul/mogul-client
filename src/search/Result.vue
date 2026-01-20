@@ -99,43 +99,38 @@ function sourceFor(type: string): string {
 .result {
   --badge-width: calc(1.5 * var(--gutter-space));
   border-top: 1px solid black;
-  grid-template-rows: minmax(calc(2 * var(--row-height)), auto);
-  grid-template-areas: ' buttons . details';
+  grid-template-rows: minmax(calc(1.5 * var(--row-height)), auto)  auto ;
+  grid-row-gap: var(--gutter-space);
+  grid-template-areas:
+    'details'
+    'buttons';
   display: grid;
-  grid-template-columns: var(--badge-width) var(--gutter-space) auto;
+  grid-template-columns: auto;
   padding-bottom: var(--gutter-space);
   padding-top: var(--gutter-space);
   position: relative;
 
   .watermark {
+    --image-dimension: calc(3 * var(--gutter-space));
     position: absolute;
-    /*left: calc(-1 * var(--gutter-space));
-    top: calc(-2 * var(--gutter-space));*/
-    bottom: 0;
-    right: 0;
-    padding-top: var(--gutter-space-half);
-    padding-bottom: var(--gutter-space-half);
-
+    top: 10px;
+    right: 0px;
+    display: flex;
+    align-items: center;
     .watermark-image {
-      top: var(--gutter-space);
-
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      /* */
-      width: 80px;
-      height: 80px;
+      width: var(--image-dimension);
+      height: var(--image-dimension);
     }
   }
 
   .buttons {
     grid-area: buttons;
     display: grid;
-    grid-template-rows: min-content auto min-content;
-    grid-template-areas:
-      'edit '
-      ' . '
-      'delete';
+    grid-template-columns: min-content auto min-content;
+    grid-template-areas: 'edit . delete  ';
     .edit-button {
       grid-area: edit;
       width: var(--badge-width);
@@ -150,14 +145,16 @@ function sourceFor(type: string): string {
     grid-area: details;
     display: grid;
     grid-template-areas:
-      ' created id '
-      ' title title ';
-    grid-template-columns: auto 100px;
+      ' created '
+      ' title ';
+    grid-template-columns: auto;
     grid-template-rows: min-content auto;
     grid-row-gap: var(--gutter-space);
     .id {
-      grid-area: id;
-      text-align: right;
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
     }
     .title {
       grid-area: title;

@@ -299,7 +299,7 @@ textarea {
   grid-area: toolbar;
   display: grid;
   height: var(--icon-size);
-  grid-template-areas: '. navigation . ';
+  grid-template-areas: ' . navigation . ';
   grid-template-columns: auto auto auto;
 }
 

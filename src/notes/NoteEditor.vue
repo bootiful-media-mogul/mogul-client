@@ -33,14 +33,14 @@ const props = defineProps<{
     </div>
     <div class="note-controls">
       <Icon
-        :icon="editHighlightAsset"
-        :icon-hover="editAsset"
+        :icon="editAsset"
+        :icon-hover="editHighlightAsset"
         @click.prevent="$emit('update', id, type)"
       />
       <Icon
         @click.prevent="deleteNote"
-        :icon="deleteHighlightAsset"
-        :icon-hover="deleteAsset"
+        :icon="deleteAsset"
+        :icon-hover="deleteHighlightAsset"
         class="delete-icon"
       />
     </div>

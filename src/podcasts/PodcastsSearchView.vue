@@ -8,7 +8,7 @@
       <form class="pure-form">
         <fieldset>
           <div class="toolbar">
-            <TextIcon text="+" :title="t('podcasts.new-podcast')" @click="createPodcast" />
+            <Icon :icon-hover="plusIconHighlight" :icon="plusIcon" @click="createPodcast" />
           </div>
 
           <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
@@ -127,11 +127,12 @@ import rssAsset from '@/assets/images/rss.png'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import PodcastsEditor from '@/podcasts/PodcastsEditor.vue'
-import TextIcon from '@/ui/TextIcon.vue'
 import { useI18n } from 'vue-i18n'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 
 import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
+import plusIconHighlight from '@/assets/images/plus-icon-highlight.png'
+import plusIcon from '@/assets/images/plus-icon.png'
 
 const router = useRouter()
 const title = ref<string>('')

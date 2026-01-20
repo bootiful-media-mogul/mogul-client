@@ -62,99 +62,93 @@ function sourceFor(type: string): string {
 }
 </script>
 <template>
-  <div class="result">
-    <div class="edit-button">
-      <Icon
-        @click.prevent="navigateToEntity()"
-        :icon="editHighlightAsset"
-        :icon-hover="editAsset"
-      />
-    </div>
-    <div class="id-column">#{{ id }}</div>
-    <div class="delete-button">
-      <Icon
-        v-if="props.allowDeletion"
-        :icon="deleteHighlightAsset"
-        :icon-hover="deleteAsset"
-        @click.prevent="deleteEntity()"
-      />
-    </div>
-    <div class="created-column">
-      {{ dateTimeToString(props.created) }}
-    </div>
-    <div class="content">
-      <div class="title">{{ props.title }}</div>
-      <div class="watermark">
-        <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />
+  <div class="result-container">
+    <div class="result">
+      <div class="edit-button">
+        <Icon
+          @click.prevent="navigateToEntity()"
+          :icon="editHighlightAsset"
+          :icon-hover="editAsset"
+        />
       </div>
+      <div class="id-column">#{{ id }}</div>
+      <div class="delete-button">
+        <Icon
+          v-if="props.allowDeletion"
+          :icon="deleteHighlightAsset"
+          :icon-hover="deleteAsset"
+          @click.prevent="deleteEntity()"
+        />
+      </div>
+      <div class="created-column">
+        {{ dateTimeToString(props.created) }}
+      </div>
+      <div class="title">{{ props.title }}</div>
+    </div>
+
+    <div class="watermark">
+      <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.result {
-  --badge-width: calc(5 * var(--gutter-space));
-  position: relative;
-  border-top: 1px solid black;
-  grid-template-areas:
-    ' content content content content content content         '
-    ' edit-button . created-column id-column . delete-button ';
-  grid-template-columns: var(--icon-width) var(--gutter-space) 1fr 1fr var(--gutter-space) var(
-      --icon-width
-    );
-  grid-template-rows: auto min-content;
-  grid-row-gap: var(--gutter-space);
+.result-container {
+  --watermark-image-dimension: calc(3 * var(--gutter-space));
   display: grid;
+  grid-template-areas: 'watermark result';
+  grid-template-columns: calc(var(--gutter-space-half) + var(--watermark-image-dimension)) auto;
+  border-top: 1px solid black;
   padding-bottom: var(--gutter-space-half);
   padding-top: var(--gutter-space-half);
 
-  .edit-button {
-    grid-area: edit-button;
-    width: var(--icon-width);
-  }
-
-  .content {
-    grid-area: content;
-    grid-template-areas: 'watermark title ';
+  .result {
+    grid-area: result;
+    position: relative;
+    grid-template-areas:
+      ' title       title          title     title          '
+      ' edit-button created-column id-column delete-button  ';
+    grid-template-columns: var(--icon-width) 1fr 1fr var(--icon-width);
+    grid-template-rows: min-content min-content;
+    grid-row-gap: var(--gutter-space);
     display: grid;
-    grid-template-columns: max-content auto;
-    grid-column-gap: 0;
-    align-items: start;
-    .watermark {
-      grid-area: watermark;
+
+    .edit-button {
+      grid-area: edit-button;
+      width: var(--icon-width);
     }
+
     .title {
-      padding-left: var(--gutter-space );
       grid-area: title;
       text-align: left;
     }
+    .id-column {
+      grid-area: id-column;
+      padding-left: calc(0.5 * var(--gutter-space));
+      border-left: 0.5px solid black;
+    }
+    .created-column {
+      grid-area: created-column;
+      text-align: right;
+      border-right: 0.5px solid black;
+      padding-right: calc(0.5 * var(--gutter-space));
+    }
+    .delete-button {
+      grid-area: delete-button;
+      width: var(--icon-width);
+    }
   }
 
-  .id-column {
-    grid-area: id-column;
-    padding-left: calc(0.5 * var(--gutter-space));
-    border-left: 0.5px solid black;
-  }
-  .created-column {
-    grid-area: created-column;
-    text-align: right;
-    border-right: 0.5px solid black;
-    padding-right: calc(0.5 * var(--gutter-space));
-  }
-  .delete-button {
-    grid-area: delete-button;
-    width: var(--icon-width);
-  }
   .watermark {
-    --image-dimension: calc(3 * var(--gutter-space));
     display: flex;
-    align-items: center;
+    grid-area: watermark;
+    align-items: start;
     .watermark-image {
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
-      width: var(--image-dimension);
-      height: var(--image-dimension);
+      width: var(--watermark-image-dimension);
+      height: var(--watermark-image-dimension);
     }
   }
 }

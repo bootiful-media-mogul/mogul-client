@@ -4,8 +4,10 @@ import NoteEditor from '@/notes/NoteEditor.vue'
 import { events, mogul, Note, notes } from '@/services'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
-import TextIcon from '@/ui/TextIcon.vue'
 import { useI18n } from 'vue-i18n'
+import plusIconHighlight from '@/assets/images/plus-icon-highlight.png'
+import plusIcon from '@/assets/images/plus-icon.png'
+import Icon from '@/ui/Icon.vue'
 
 const { t } = useI18n()
 const el = ref<HTMLElement>()
@@ -172,10 +174,9 @@ onMounted(async () => {
       <div class="existing-notes">
         <div class="panel-menu-subtitle notes-section section-header">
           <span>{{ t('notes.system-wide.title') }}</span>
-          <TextIcon
-            text="+"
-            class="plus-button"
-            :title="'Add system-wide note'"
+          <Icon
+            :icon-hover="plusIconHighlight"
+            :icon="plusIcon"
             @click="showComposerFor('mogul')"
           />
         </div>
@@ -197,10 +198,10 @@ onMounted(async () => {
           <span class="notes-section-title">{{
             t('notes.entity.title', { entityName: entityName })
           }}</span>
-          <TextIcon
-            text="+"
-            class="plus-button"
-            :title="'Add ' + entityName + ' note'"
+
+          <Icon
+            :icon-hover="plusIconHighlight"
+            :icon="plusIcon"
             @click="showComposerFor('entity')"
           />
         </div>

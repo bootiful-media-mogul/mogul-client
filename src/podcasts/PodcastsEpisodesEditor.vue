@@ -368,8 +368,8 @@ onMounted(async () => {
             </PublicationsSectionComponent>
           </div>
         </div>
-      </fieldset></form
-  >
+      </fieldset>
+    </form>
   </EntityViewDecorator>
 </template>
 <style>

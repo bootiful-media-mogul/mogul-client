@@ -97,9 +97,9 @@ function sourceFor(type: string): string {
 
 <style scoped>
 .result {
-  --badge-width: calc(1.5 * var(--gutter-space));
+  --badge-width: calc(5 * var(--gutter-space));
   border-top: 1px solid black;
-  grid-template-rows: minmax(calc(1.5 * var(--row-height)), auto)  auto ;
+  grid-template-rows: minmax(calc(1.5 * var(--row-height)), auto) auto;
   grid-row-gap: var(--gutter-space);
   grid-template-areas:
     'details'
@@ -133,11 +133,11 @@ function sourceFor(type: string): string {
     grid-template-areas: 'edit . delete  ';
     .edit-button {
       grid-area: edit;
-      width: var(--badge-width);
+      width: var(--icon-width);
     }
     .delete-button {
       grid-area: delete;
-      width: var(--badge-width);
+      width: var(--icon-width);
     }
   }
 

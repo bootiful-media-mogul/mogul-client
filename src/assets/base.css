@@ -92,6 +92,10 @@ a {
   color: white;
 }
 
+.pure-form-stacked .pure-button:hover {
+  background-color: #333;
+}
+
 .pure-form-stacked select {
 }
 

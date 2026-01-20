@@ -32,6 +32,8 @@ const notableId = ref<number>(-1)
 const type = ref<string>('mogul')
 const entityLoaded = ref<boolean>(false)
 const entityName = ref<string>('')
+const noteTarget = ref<'mogul' | 'entity'>('mogul')
+const showComposer = ref<boolean>(false)
 
 function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
   if (items && items.length > 0) {
@@ -47,6 +49,8 @@ function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
 async function loadIntoEditor(note: UiNote) {
   noteText.value = note.note
   noteId.value = note.id
+  noteTarget.value = note.type === 'mogul' ? 'mogul' : 'entity'
+  showComposer.value = true
 }
 
 async function saveEntityNote(notableId: number, type: string) {
@@ -57,7 +61,7 @@ async function saveEntityNote(notableId: number, type: string) {
     await notes.createNote(type, notableId, noteText.value)
   }
   await reload()
-  // await clear()
+  await clear()
 }
 
 async function expandIfNotesAvailable(): Promise<void> {
@@ -72,6 +76,12 @@ async function expandIfNotesAvailable(): Promise<void> {
 async function clear() {
   noteText.value = ''
   noteId.value = defaultId
+  showComposer.value = false
+}
+
+function showComposerFor(target: 'mogul' | 'entity') {
+  noteTarget.value = target
+  showComposer.value = true
 }
 
 async function reload() {
@@ -100,18 +110,25 @@ onMounted(async () => {
     type.value = 'mogul'
     entityNotes.value = []
     entityLoaded.value = false
+    showComposer.value = false
+    // Reload mogul notes to keep them fresh
+    mogulNotes.value = resultsToUiNotes(await notes.notesForNotable(mogulId.value, 'mogul'))
   })
 
   events.on('notes-for-notable-event', notesForNotableEventHandler)
+
+  // Load mogul notes on initial mount
+  await reload()
 })
 </script>
 <template>
   <form ref="el" class="pure-form pure-form-stacked">
     <fieldset>
-      <div class="note-composition">
+      <!-- Composition panel - hidden by default -->
+      <div v-if="showComposer" class="note-composition">
         <div class="pure-control-group">
           <label for="note">
-            {{ t('notes.new.prompt', { entityName: entityLoaded ? entityName : mogulName }) }}
+            {{ t('notes.new.prompt', { entityName: noteTarget === 'entity' ? entityName : mogulName }) }}
           </label>
 
           <InputWrapper v-model="noteText">
@@ -125,7 +142,7 @@ onMounted(async () => {
               :class="'pure-button pure-button-primary '"
               type="submit"
               @click.prevent="
-                entityLoaded ? saveEntityNote(notableId, type) : saveEntityNote(mogulId, 'mogul')
+                noteTarget === 'entity' ? saveEntityNote(notableId, type) : saveEntityNote(mogulId, 'mogul')
               "
               :disabled="noteText.length === 0"
             >
@@ -144,38 +161,53 @@ onMounted(async () => {
           </span>
         </div>
       </div>
-      <div v-if="!entityLoaded">
-        <div class="existing-notes" v-if="mogulNotes.length > 0">
-          <div class="panel-menu-subtitle notes-section">
-            {{ t('notes.system-wide.title') }}
-          </div>
-          <div class="note" v-for="note in mogulNotes" :key="note.id">
-            <NoteEditor
-              :created="note.created"
-              :id="note.id"
-              :note="note.note"
-              :type="note.type"
-              @deleted="reload"
-              @update="loadIntoEditor(note)"
-            />
-          </div>
+      <!-- Always show mogul notes section -->
+      <div class="existing-notes">
+        <div class="panel-menu-subtitle notes-section section-header">
+          <span>{{ t('notes.system-wide.title') }}</span>
+          <button
+            type="button"
+            class="add-note-btn"
+            @click="showComposerFor('mogul')"
+            :title="'Add system-wide note'"
+          >
+            +
+          </button>
+        </div>
+        <div class="note" v-for="note in mogulNotes" :key="note.id">
+          <NoteEditor
+            :created="note.created"
+            :id="note.id"
+            :note="note.note"
+            :type="note.type"
+            @deleted="reload"
+            @update="loadIntoEditor(note)"
+          />
         </div>
       </div>
-      <div v-else>
-        <div class="entity-notes" v-if="entityNotes.length > 0">
-          <div class="panel-menu-subtitle notes-section">
-            {{ t('notes.entity.title', { entityName: entityName }) }}
-          </div>
-          <div class="note" v-for="note in entityNotes" :key="note.id">
-            <NoteEditor
-              :created="note.created"
-              :id="note.id"
-              :note="note.note"
-              :type="note.type"
-              @deleted="reload"
-              @update="loadIntoEditor(note)"
-            />
-          </div>
+
+      <!-- Show entity-specific notes section when on entity page -->
+      <div class="entity-notes" v-if="entityLoaded">
+        <div class="panel-menu-subtitle notes-section section-header">
+          <span>{{ t('notes.entity.title', { entityName: entityName }) }}</span>
+          <button
+            type="button"
+            class="add-note-btn"
+            @click="showComposerFor('entity')"
+            :title="'Add ' + entityName + ' note'"
+          >
+            +
+          </button>
+        </div>
+        <div class="note" v-for="note in entityNotes" :key="note.id">
+          <NoteEditor
+            :created="note.created"
+            :id="note.id"
+            :note="note.note"
+            :type="note.type"
+            @deleted="reload"
+            @update="loadIntoEditor(note)"
+          />
         </div>
       </div>
     </fieldset>
@@ -196,5 +228,38 @@ onMounted(async () => {
 
 .note-composition {
   padding-bottom: var(--gutter-space);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+  margin-bottom: var(--gutter-space);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.add-note-btn {
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.add-note-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: scale(1.1);
+}
+
+.add-note-btn:active {
+  transform: scale(0.95);
 }
 </style>

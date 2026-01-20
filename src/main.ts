@@ -173,6 +173,7 @@ const translations = {
     // jobs
     'jobs.name.helloWorldJob': '"Hello World!"',
     'jobs.name.failingJob': 'Fail',
+    'jobs.name.notesIndexerJob': 'Notes Indexer',
     'jobs.name.podcastIndexerJob': 'Podcast Indexer',
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',

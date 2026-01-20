@@ -258,13 +258,14 @@ onMounted(async () => {
   border-radius: 50%;
   width: var(--button-size);
   height: var(--button-size);
-  line-height: 1;
   cursor: pointer;
   padding: 0;
   margin: 0;
   align-self: center;
-  text-align: center;
   grid-area: plus-button;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-note-btn:hover {

@@ -54,6 +54,7 @@ function context(episode: PodcastEpisode) {
 }
 
 async function newEpisode() {
+  console.log('calling new episode')
   episode.value = await podcasts.createPodcastEpisodeDraft(selectedPodcastId.value, '', '')
   await loadEpisode(episode.value)
 }
@@ -68,9 +69,12 @@ async function newEpisode() {
         {{ t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
       </legend>
       <div class="toolbar">
-        <TextIcon text="+" :title="t('podcasts.episodes.new-episode')" @click="newEpisode" />
+        <TextIcon
+          text="+"
+          :title="t('podcasts.episodes.new-episode')"
+          @click="newEpisode()"
+        />
       </div>
-
       <div v-for="episode in episodes" v-bind:key="episode.id">
         <Result
           :context="context(episode)"
@@ -79,6 +83,7 @@ async function newEpisode() {
           :created="episode.created"
           :title="episode.title"
           :id="episode.id"
+          :allow-deletion="true"
           @delete="loadPodcast"
         />
       </div>

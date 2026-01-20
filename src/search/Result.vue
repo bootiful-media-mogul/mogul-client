@@ -4,7 +4,11 @@ import Icon from '@/ui/Icon.vue'
 import noteIconAsset from '@/assets/images/search/note-icon.png'
 import segmentIconAsset from '@/assets/images/search/segment-icon.png'
 
-import editHighlightAsset from '@/assets/images/edit-highlight.png'
+import editAsset from '@/assets/images/edit-highlight.png'
+import editHighlightAsset from '@/assets/images/edit.png'
+import deleteHighlightAsset from '@/assets/images/delete.png'
+import deleteAsset from '@/assets/images/delete-highlight.png'
+
 import { useRouter } from 'vue-router'
 import { results, type ResultType, utils } from '@/services'
 import { useI18n } from 'vue-i18n'
@@ -25,6 +29,7 @@ const props = defineProps<{
   created: number | string | null
   title: string
   aggregateId: number | undefined
+  allowDeletion: boolean | undefined
 }>()
 
 async function deleteEntity() {
@@ -56,85 +61,84 @@ function sourceFor(type: string): string {
 }
 </script>
 <template>
-  <div class="badged-row">
-    <div class="type-badge">
+  <div class="result">
+    <div class="buttons">
       <Icon
+        class="edit-button"
         @click.prevent="navigateToEntity()"
-        :icon-hover="editHighlightAsset"
-        :icon="sourceFor(type)"
+        :icon="editHighlightAsset"
+        :icon-hover="editAsset"
+      />
+
+      <Icon
+        v-if="props.allowDeletion"
+        :icon="deleteHighlightAsset"
+        :icon-hover="deleteAsset"
+        class="delete-button"
+        @click.prevent="deleteEntity()"
       />
     </div>
-    <div class="results-result-row result-row">
-      <div class="result-id-column">
+
+    <div class="details">
+      <div class="id">
         #<b>{{ id }}</b>
       </div>
-      <div class="result-title-column">{{ props.title }}</div>
-      <div class="result-created-column">
+      <div class="title">{{ props.title }}</div>
+      <div class="created">
         {{ dateTimeToString(props.created) }}
       </div>
-      <!--      <div class="edit">
-        <Icon
-          :icon="editHighlightAsset"
-          :icon-hover="editAsset"
-          @click.prevent="navigateToEntity()"
-        />
-      </div>-->
-      <!--      <div class="delete">
-        <Icon
-          :icon="deleteHighlightAsset"
-          :icon-hover="deleteAsset"
-          @click.prevent="deleteEntity()"
-        />
-      </div>-->
     </div>
   </div>
 </template>
 
 <style scoped>
-.badged-row {
+.result {
   --badge-width: calc(1.5 * var(--gutter-space));
   border-top: 1px solid black;
-  padding-bottom: var(--gutter-space-half);
-  padding-top: var(--gutter-space);
-  grid-template-areas: ' badge result  ';
+  grid-template-rows: minmax(calc(2 * var(--row-height)), auto);
+  grid-template-areas: ' buttons . details';
   display: grid;
-  grid-template-columns: calc(var(--gutter-space) + var(--badge-width)) auto;
+  grid-template-columns: var(--badge-width) var(--gutter-space) auto;
+  padding-bottom: var(--gutter-space);
+  padding-top: var(--gutter-space);
 
-  .type-badge {
-    grid-area: badge;
-    img {
+  .buttons {
+    grid-area: buttons;
+    display: grid;
+    grid-template-rows: min-content auto min-content;
+    grid-template-areas:
+      'edit '
+      ' . '
+      'delete';
+    .edit-button {
+      grid-area: edit;
+      width: var(--badge-width);
+    }
+    .delete-button {
+      grid-area: delete;
       width: var(--badge-width);
     }
   }
 
-  .results-result-row {
-    .result-title-column {
-      grid-area: title;
-    }
-    .result-created-column {
-      grid-area: created;
-    }
-    .result-id-column {
+  .details {
+    grid-area: details;
+    display: grid;
+    grid-template-areas:
+      ' created id '
+      ' title title ';
+    grid-template-columns: auto 100px;
+    grid-template-rows: min-content auto;
+    grid-row-gap: var(--gutter-space);
+    .id {
       grid-area: id;
       text-align: right;
     }
-
-    .type-badge {
-      img {
-        width: var(--icon-column);
-      }
+    .title {
+      grid-area: title;
     }
-    grid-area: result;
-    grid-template-areas:
-      '  created id     '
-      '  title title ';
-    grid-template-rows: auto minmax(var(--row-height), auto);
-    grid-template-columns: auto var(--id-column);
-    row-gap: var(--gutter-space);
-    /*column-gap: var(--gutter-space);*/
-    padding-bottom: var(--gutter-space);
-
-    display: grid;
+    .created {
+      grid-area: created;
+    }
   }
 }
 </style>

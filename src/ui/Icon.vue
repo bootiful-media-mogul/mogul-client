@@ -23,12 +23,11 @@ const mouseSwap = function () {
 }
 
 const emit = defineEmits<{
-  (e: 'click', me: MouseEvent): void
+  click: [event: MouseEvent]
 }>()
 
 const clickDelegate = (e: MouseEvent): void => {
   if (props.sticky) swap()
-
   emit('click', e)
 }
 

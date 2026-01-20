@@ -31,6 +31,7 @@
           :aggregate-id="result?.aggregateId"
           :created="result.created"
           :title="result.title"
+          :allow-deletion="false"
           :id="result.aggregateId"
           @delete="refresh"
         />

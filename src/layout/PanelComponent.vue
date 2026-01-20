@@ -42,6 +42,7 @@
 
 .panel-menu-buttons-img {
   filter: invert(100%);
+  cursor: pointer;
   width: calc(var(--gutter-space) * 0.7);
   height: calc(var(--gutter-space) * 0.7);
 }

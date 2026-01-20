@@ -1,17 +1,28 @@
 <script setup lang="ts">
-defineProps<{
-  watermarkImage: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    watermarkImage: string
+    invert?: boolean
+  }>(),
+  {
+    invert: true
+  }
+)
 </script>
 
 <template>
-  <div class="watermark-badge" :style="{ backgroundImage: `url(${watermarkImage})` }" />
+  <div
+    class="watermark-badge"
+    :style="{
+      backgroundImage: `url(${watermarkImage})`,
+      filter: invert ? 'invert(1)' : 'none'
+    }"
+  />
 </template>
 
 <style scoped>
 .watermark-badge {
   --badge-width: calc(0.4 * var(--sidebar-width));
-  filter: invert(1);
   opacity: 0.3;
   z-index: -1000;
   pointer-events: none;

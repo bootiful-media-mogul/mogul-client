@@ -85,9 +85,12 @@ function sourceFor(type: string): string {
       </div>
       <div class="title">{{ props.title }}</div>
     </div>
-
     <div class="watermark">
-      <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />
+      <WatermarkedImage
+        class="watermark-image"
+        :invert="false"
+        :watermark-image="sourceFor(type)"
+      />
     </div>
   </div>
 </template>

@@ -3,7 +3,6 @@ import { computed, onMounted, ref } from 'vue'
 import {
   Composition,
   loadNotesForNotable,
-  notes,
   Notification,
   notifications,
   Podcast,
@@ -15,6 +14,9 @@ import {
 } from '@/services'
 import { useI18n } from 'vue-i18n'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
+import EntityViewDecorator from '@/ui/WatermarkedView.vue'
+
+import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
@@ -219,151 +221,156 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <h1>Episode</h1>
-  <form class="pure-form pure-form-stacked">
-    <fieldset>
-      <legend>
-        <span v-if="title">
-          {{ t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
-        </span>
-        <span v-else>
-          {{ t('podcasts.episodes.new-episode') }}
-        </span>
-        <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
-      </legend>
-      <div class="form-section">
-        <div class="form-section-title">{{ t('podcasts.episodes.basics') }}</div>
-        <div class="form-row">
-          <label for="episodeTitle">
-            {{ t('podcasts.episodes.episode.title') }}
-          </label>
-          <InputWrapper v-model="title">
-            <input id="episodeTitle" v-model="title" required type="text" />
-            <InputTools v-model="title" />
-          </InputWrapper>
-        </div>
-        <div class="form-row">
-          <label for="episodeDescription">
-            {{ t('podcasts.episodes.episode.description') }}
-          </label>
-          <InputWrapper v-model="description">
-            <textarea id="episodeDescription" v-model="description" required rows="10" />
-            <CompositionComponent
-              v-if="descriptionComposition"
-              :composition-id="parseInt(descriptionComposition.id + '')"
-            />
-            <InputTools v-model="description" />
-          </InputWrapper>
-        </div>
-        <div>
-          <button
-            :disabled="buttonsDisabled"
-            class="pure-button pure-button-primary"
-            type="submit"
-            @click.prevent="save"
-          >
-            {{ t('podcasts.episodes.buttons.save') }}
-          </button>
-          <button
-            :disabled="description == '' && title == ''"
-            class="pure-button pure-button-primary"
-            type="submit"
-            @click.prevent="cancel"
-          >
-            {{ t('podcasts.episodes.buttons.cancel') }}
-          </button>
-        </div>
-      </div>
-
-      <div class="form-section">
-        <div class="form-section-title">{{ t('podcasts.episodes.segments') }}</div>
-        <div v-if="draftEpisode">
-          <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">
-            <div class="segment-controls-type">
-              <b>{{ t('podcasts.episodes.episode.graphic') }}</b>
-            </div>
-            <div class="segment-controls-row">
-              <ManagedFileComponent
-                :managed-file-id="draftEpisode.graphic.id"
-                accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
-              >
-                <div class="segment-controls"></div>
-              </ManagedFileComponent>
-            </div>
+  <EntityViewDecorator :watermark-image="segmentAsset">
+    <h1>Episode</h1>
+    <form class="pure-form pure-form-stacked">
+      <fieldset>
+        <legend>
+          <span v-if="title">
+            {{ t('podcasts.episodes.episode.editing', { id: draftEpisode.id, title: title }) }}
+          </span>
+          <span v-else>
+            {{ t('podcasts.episodes.new-episode') }}
+          </span>
+          <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
+        </legend>
+        <div class="form-section">
+          <div class="form-section-title">{{ t('podcasts.episodes.basics') }}</div>
+          <div class="form-row">
+            <label for="episodeTitle">
+              {{ t('podcasts.episodes.episode.title') }}
+            </label>
+            <InputWrapper v-model="title">
+              <input id="episodeTitle" v-model="title" required type="text" />
+              <InputTools v-model="title" />
+            </InputWrapper>
           </div>
+          <div class="form-row">
+            <label for="episodeDescription">
+              {{ t('podcasts.episodes.episode.description') }}
+            </label>
+            <InputWrapper v-model="description">
+              <textarea id="episodeDescription" v-model="description" required rows="10" />
+              <CompositionComponent
+                v-if="descriptionComposition"
+                :composition-id="parseInt(descriptionComposition.id + '')"
+              />
+              <InputTools v-model="description" />
+            </InputWrapper>
+          </div>
+          <div>
+            <button
+              :disabled="buttonsDisabled"
+              class="pure-button pure-button-primary"
+              type="submit"
+              @click.prevent="save"
+            >
+              {{ t('podcasts.episodes.buttons.save') }}
+            </button>
+            <button
+              :disabled="description == '' && title == ''"
+              class="pure-button pure-button-primary"
+              type="submit"
+              @click.prevent="cancel"
+            >
+              {{ t('podcasts.episodes.buttons.cancel') }}
+            </button>
+          </div>
+        </div>
 
-          <div v-for="segment in segments" v-bind:key="segment.id">
-            <div class="row episode-managed-file-row">
+        <div class="form-section">
+          <div class="form-section-title">{{ t('podcasts.episodes.segments') }}</div>
+          <div v-if="draftEpisode">
+            <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">
               <div class="segment-controls-type">
-                <b>{{
-                  t('podcasts.episodes.episode.segments.number', { order: segment.order })
-                }}</b>
+                <b>{{ t('podcasts.episodes.episode.graphic') }}</b>
               </div>
               <div class="segment-controls-row">
-                <ManagedFileComponent :managed-file-id="segment.audio.id" accept=".mp3,audio/mpeg">
-                  <div class="segment-controls">
-                    <Icon
-                      :disabled="upArrowDisabled(draftEpisode, segment)"
-                      :icon="upHighlightAsset"
-                      :icon-hover="upAsset"
-                      @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                    />
-                    <Icon
-                      :disabled="downArrowDisabled(draftEpisode, segment)"
-                      :icon="downHighlightAsset"
-                      :icon-hover="downAsset"
-                      @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                    />
-                    <Icon
-                      :icon="deleteHighlightAsset"
-                      :icon-hover="deleteAsset"
-                      class="delete-icon"
-                      @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
-                    />
-                    <Icon
-                      :icon="transcriptHighlightAsset"
-                      :icon-hover="transcriptAsset"
-                      class="transcript-icon"
-                      @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
-                    />
-                  </div>
+                <ManagedFileComponent
+                  :managed-file-id="draftEpisode.graphic.id"
+                  accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
+                >
+                  <div class="segment-controls"></div>
                 </ManagedFileComponent>
               </div>
             </div>
+
+            <div v-for="segment in segments" v-bind:key="segment.id">
+              <div class="row episode-managed-file-row">
+                <div class="segment-controls-type">
+                  <b>{{
+                    t('podcasts.episodes.episode.segments.number', { order: segment.order })
+                  }}</b>
+                </div>
+                <div class="segment-controls-row">
+                  <ManagedFileComponent
+                    :managed-file-id="segment.audio.id"
+                    accept=".mp3,audio/mpeg"
+                  >
+                    <div class="segment-controls">
+                      <Icon
+                        :disabled="upArrowDisabled(draftEpisode, segment)"
+                        :icon="upHighlightAsset"
+                        :icon-hover="upAsset"
+                        @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
+                      />
+                      <Icon
+                        :disabled="downArrowDisabled(draftEpisode, segment)"
+                        :icon="downHighlightAsset"
+                        :icon-hover="downAsset"
+                        @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
+                      />
+                      <Icon
+                        :icon="deleteHighlightAsset"
+                        :icon-hover="deleteAsset"
+                        class="delete-icon"
+                        @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
+                      />
+                      <Icon
+                        :icon="transcriptHighlightAsset"
+                        :icon-hover="transcriptAsset"
+                        class="transcript-icon"
+                        @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
+                      />
+                    </div>
+                  </ManagedFileComponent>
+                </div>
+              </div>
+            </div>
+
+            <div class="podcast-episode-controls-row">
+              <span class="save">
+                <button
+                  :disabled="draftEpisode.id === undefined"
+                  class="pure-button pure-button-primary"
+                  type="submit"
+                  @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
+                >
+                  {{ t('podcasts.episodes.buttons.add-segment') }}
+                </button>
+              </span>
+            </div>
           </div>
 
-          <div class="podcast-episode-controls-row">
-            <span class="save">
-              <button
-                :disabled="draftEpisode.id === undefined"
-                class="pure-button pure-button-primary"
-                type="submit"
-                @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
-              >
-                {{ t('podcasts.episodes.buttons.add-segment') }}
-              </button>
-            </span>
+          <div class="form-section-title">{{ t('podcasts.episodes.publications') }}</div>
+          <div class="publish-menu">
+            <PublicationsSectionComponent
+              v-if="draftEpisode.id"
+              :disabled="publicationsDisabled"
+              :publishable="draftEpisode.id + ''"
+              :type="'episode'"
+            >
+              <Ayrshare />
+              <Podbean />
+              <PodcastEpisodeBlogPost />
+              <PodcastEpisodeAudioFile />
+              <Mock />
+            </PublicationsSectionComponent>
           </div>
         </div>
-
-        <div class="form-section-title">{{ t('podcasts.episodes.publications') }}</div>
-        <div class="publish-menu">
-          <PublicationsSectionComponent
-            v-if="draftEpisode.id"
-            :disabled="publicationsDisabled"
-            :publishable="draftEpisode.id + ''"
-            :type="'episode'"
-          >
-            <Ayrshare />
-            <Podbean />
-            <PodcastEpisodeBlogPost />
-            <PodcastEpisodeAudioFile />
-            <Mock />
-          </PublicationsSectionComponent>
-        </div>
-      </div>
-    </fieldset>
-  </form>
+      </fieldset></form
+  >
+  </EntityViewDecorator>
 </template>
 <style>
 .result-row {

@@ -8,6 +8,10 @@ import router from '@/index'
 import { useI18n } from 'vue-i18n'
 import Result from '@/search/Result.vue'
 import TextIcon from '@/ui/TextIcon.vue'
+import WatermarkedView from '@/ui/WatermarkedView.vue'
+
+import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
+
 // Props
 const props = defineProps<{ podcastId: number }>()
 const episodes = ref<PodcastEpisode[]>([])
@@ -60,35 +64,33 @@ async function newEpisode() {
 }
 </script>
 <template>
-  <h1>
-    {{ t('podcasts.episodes') }}
-  </h1>
-  <form class="pure-form">
-    <fieldset>
-      <legend>
-        {{ t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
-      </legend>
-      <div class="toolbar">
-        <TextIcon
-          text="+"
-          :title="t('podcasts.episodes.new-episode')"
-          @click="newEpisode()"
-        />
-      </div>
-      <div v-for="episode in episodes" v-bind:key="episode.id">
-        <Result
-          :context="context(episode)"
-          :type="ResultType.Segment"
-          :aggregate-id="currentPodcast?.id"
-          :created="episode.created"
-          :title="episode.title"
-          :id="episode.id"
-          :allow-deletion="true"
-          @delete="loadPodcast"
-        />
-      </div>
-    </fieldset>
-  </form>
+  <WatermarkedView :watermark-image="segmentAsset">
+    <h1>
+      {{ t('podcasts.episodes') }}
+    </h1>
+    <form class="pure-form">
+      <fieldset>
+        <legend>
+          {{ t('podcasts.episodes.title', { title: currentPodcast?.title }) }}
+        </legend>
+        <div class="toolbar">
+          <TextIcon text="+" :title="t('podcasts.episodes.new-episode')" @click="newEpisode()" />
+        </div>
+        <div v-for="episode in episodes" v-bind:key="episode.id">
+          <Result
+            :context="context(episode)"
+            :type="ResultType.Segment"
+            :aggregate-id="currentPodcast?.id"
+            :created="episode.created"
+            :title="episode.title"
+            :id="episode.id"
+            :allow-deletion="true"
+            @delete="loadPodcast"
+          />
+        </div>
+      </fieldset>
+    </form>
+  </WatermarkedView>
 </template>
 
 <style scoped></style>

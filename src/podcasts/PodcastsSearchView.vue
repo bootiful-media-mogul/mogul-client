@@ -1,65 +1,67 @@
 <template>
-  <h1>
-    {{ t('podcasts.title') }}
-  </h1>
+  <WatermarkedView :watermark-image="segmentAsset">
+    <h1>
+      {{ t('podcasts.title') }}
+    </h1>
 
-  <div v-if="!editorVisible">
-    <form class="pure-form">
-      <fieldset>
-        <div class="toolbar">
-          <TextIcon text="+" :title="t('podcasts.new-podcast')" @click="createPodcast" />
-        </div>
+    <div v-if="!editorVisible">
+      <form class="pure-form">
+        <fieldset>
+          <div class="toolbar">
+            <TextIcon text="+" :title="t('podcasts.new-podcast')" @click="createPodcast" />
+          </div>
 
-        <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
+          <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
 
-        <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcasts-row">
-          <div class="id">
-            #<b>{{ podcast.id }}</b>
+          <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcasts-row">
+            <div class="id">
+              #<b>{{ podcast.id }}</b>
+            </div>
+            <div class="created-column">
+              {{ dts(podcast.created) }}
+            </div>
+            <div class="episodes">
+              <a
+                class="podcasts-icon"
+                href="#"
+                @click.prevent="navigateToEpisodesPageForPodcast(podcast.id, $event)"
+              >
+                {{ t('podcasts.episodes') }}
+              </a>
+            </div>
+            <div class="edit">
+              <Icon
+                :icon="editHighlightAsset"
+                :icon-hover="editAsset"
+                @click.prevent="editPodcast(podcast)"
+              />
+            </div>
+            <div class="rss">
+              <Icon
+                :icon="rssHighlightAsset"
+                :icon-hover="rssAsset"
+                @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
+              />
+            </div>
+            <div class="delete">
+              <Icon
+                :disabled="all.length == 1"
+                :icon="deleteHighlightAsset"
+                :icon-hover="deleteAsset"
+                @click.prevent="deletePodcast(podcast)"
+              />
+            </div>
+            <div class="podcast-title">
+              {{ podcast.title }}
+            </div>
           </div>
-          <div class="created-column">
-            {{ dts(podcast.created) }}
-          </div>
-          <div class="episodes">
-            <a
-              class="podcasts-icon"
-              href="#"
-              @click.prevent="navigateToEpisodesPageForPodcast(podcast.id, $event)"
-            >
-              {{ t('podcasts.episodes') }}
-            </a>
-          </div>
-          <div class="edit">
-            <Icon
-              :icon="editHighlightAsset"
-              :icon-hover="editAsset"
-              @click.prevent="editPodcast(podcast)"
-            />
-          </div>
-          <div class="rss">
-            <Icon
-              :icon="rssHighlightAsset"
-              :icon-hover="rssAsset"
-              @click.prevent="openRssFeed(podcast.id, podcastRssFeedUrl(podcast))"
-            />
-          </div>
-          <div class="delete">
-            <Icon
-              :disabled="all.length == 1"
-              :icon="deleteHighlightAsset"
-              :icon-hover="deleteAsset"
-              @click.prevent="deletePodcast(podcast)"
-            />
-          </div>
-          <div class="podcast-title">
-            {{ podcast.title }}
-          </div>
-        </div>
-      </fieldset>
-    </form>
-  </div>
-  <div v-else>
-    <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" />
-  </div>
+        </fieldset>
+      </form>
+    </div>
+    <div v-else>
+      <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" />
+    </div>
+  </WatermarkedView>
 </template>
 
 <style>
@@ -127,6 +129,9 @@ import deleteAsset from '@/assets/images/delete.png'
 import PodcastsEditor from '@/podcasts/PodcastsEditor.vue'
 import TextIcon from '@/ui/TextIcon.vue'
 import { useI18n } from 'vue-i18n'
+import WatermarkedView from '@/ui/WatermarkedView.vue'
+
+import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 
 const router = useRouter()
 const title = ref<string>('')

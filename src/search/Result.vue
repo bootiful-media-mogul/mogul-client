@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
 
-import noteIconAsset from '@/assets/images/search/note-icon.png'
-import segmentIconAsset from '@/assets/images/search/segment-icon.png'
+import noteIconAsset from '@/assets/images/entity-badges/note-icon.png'
+import segmentIconAsset from '@/assets/images/entity-badges/segment-icon.png'
 
 import editAsset from '@/assets/images/edit-highlight.png'
 import editHighlightAsset from '@/assets/images/edit.png'

@@ -32,7 +32,7 @@
 </template>
 
 <style>
-.id b {
+.id-column b {
   font-weight: bold;
   font-size: medium;
 }

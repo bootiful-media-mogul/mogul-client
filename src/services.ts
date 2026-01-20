@@ -40,6 +40,7 @@ export function previewManagedFile(managedFileId: number) {
 export enum ResultType {
   Segment = 'segment',
   Note = 'note',
+  Mogul = 'mogul',
   Episode = 'episode'
 }
 
@@ -71,6 +72,14 @@ export class Results {
       ResultType.Episode,
       function (ctx: Map<string, number>): NavigationContext {
         return new NavigationContext('podcasts/episodes/episode', ctx)
+      },
+      function (ctx: Map<string, number>) {}
+    )
+
+    this.entry(
+      ResultType.Mogul,
+      function (ctx: Map<string, number>) {
+        return new NavigationContext('home', new Map<string, number>())
       },
       function (ctx: Map<string, number>) {}
     )

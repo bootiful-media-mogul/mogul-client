@@ -12,7 +12,7 @@ defineProps<{
 .watermark-badge {
   --badge-width: calc(0.4 * var(--sidebar-width));
   filter: invert(1);
-  opacity: 0.2;
+  opacity: 0.3;
   z-index: -1000;
   pointer-events: none;
 }

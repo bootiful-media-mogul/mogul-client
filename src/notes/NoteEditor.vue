@@ -27,7 +27,7 @@ const props = defineProps<{
 
 <template>
   <div class="note">
-    <div class="created">{{ dateTimeToString(created) }}</div>
+    <div class="created-column">{{ dateTimeToString(created) }}</div>
     <div class="note-text">
       {{ note }}
     </div>
@@ -56,7 +56,7 @@ const props = defineProps<{
     ' note-text '
     ' buttons ';
 
-  .created {
+  .created-column {
     padding-top: var(--gutter-space-half);
     padding-bottom: calc(var(--gutter-space) / 2);
     font-size: smaller;

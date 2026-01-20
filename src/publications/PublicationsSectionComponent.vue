@@ -237,7 +237,7 @@
 }
 
 /*id url delete created published plugin */
-.publications .publications-row .created {
+.publications .publications-row .created-column {
   grid-area: created;
 }
 
@@ -249,7 +249,7 @@
   grid-area: plugin;
 }
 
-.publications .publications-row .id {
+.publications .publications-row .id-column {
   grid-area: id;
 }
 

@@ -63,33 +63,29 @@ function sourceFor(type: string): string {
 </script>
 <template>
   <div class="result">
-    <div class="watermark">
-      <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />
-    </div>
-    <div class="buttons">
+    <div class="edit-button">
       <Icon
-        class="edit-button"
         @click.prevent="navigateToEntity()"
         :icon="editHighlightAsset"
         :icon-hover="editAsset"
       />
-
+    </div>
+    <div class="id-column">#{{ id }}</div>
+    <div class="delete-button">
       <Icon
         v-if="props.allowDeletion"
         :icon="deleteHighlightAsset"
         :icon-hover="deleteAsset"
-        class="delete-button"
         @click.prevent="deleteEntity()"
       />
     </div>
-
-    <div class="details">
-      <div class="id">
-        #<b>{{ id }}</b>
-      </div>
+    <div class="created-column">
+      {{ dateTimeToString(props.created) }}
+    </div>
+    <div class="content">
       <div class="title">{{ props.title }}</div>
-      <div class="created">
-        {{ dateTimeToString(props.created) }}
+      <div class="watermark">
+        <WatermarkedImage class="watermark-image" :watermark-image="sourceFor(type)" />
       </div>
     </div>
   </div>
@@ -98,23 +94,59 @@ function sourceFor(type: string): string {
 <style scoped>
 .result {
   --badge-width: calc(5 * var(--gutter-space));
-  border-top: 1px solid black;
-  grid-template-rows: minmax(calc(1.5 * var(--row-height)), auto) auto;
-  grid-row-gap: var(--gutter-space);
-  grid-template-areas:
-    'details'
-    'buttons';
-  display: grid;
-  grid-template-columns: auto;
-  padding-bottom: var(--gutter-space);
-  padding-top: var(--gutter-space);
   position: relative;
+  border-top: 1px solid black;
+  grid-template-areas:
+    ' content content content content content content         '
+    ' edit-button . created-column id-column . delete-button ';
+  grid-template-columns: var(--icon-width) var(--gutter-space) 1fr 1fr var(--gutter-space) var(
+      --icon-width
+    );
+  grid-template-rows: auto min-content;
+  grid-row-gap: var(--gutter-space);
+  display: grid;
+  padding-bottom: var(--gutter-space-half);
+  padding-top: var(--gutter-space-half);
 
+  .edit-button {
+    grid-area: edit-button;
+    width: var(--icon-width);
+  }
+
+  .content {
+    grid-area: content;
+    grid-template-areas: 'watermark title ';
+    display: grid;
+    grid-template-columns: max-content auto;
+    grid-column-gap: 0;
+    align-items: start;
+    .watermark {
+      grid-area: watermark;
+    }
+    .title {
+      padding-left: var(--gutter-space );
+      grid-area: title;
+      text-align: left;
+    }
+  }
+
+  .id-column {
+    grid-area: id-column;
+    padding-left: calc(0.5 * var(--gutter-space));
+    border-left: 0.5px solid black;
+  }
+  .created-column {
+    grid-area: created-column;
+    text-align: right;
+    border-right: 0.5px solid black;
+    padding-right: calc(0.5 * var(--gutter-space));
+  }
+  .delete-button {
+    grid-area: delete-button;
+    width: var(--icon-width);
+  }
   .watermark {
     --image-dimension: calc(3 * var(--gutter-space));
-    position: absolute;
-    top: 10px;
-    right: 0px;
     display: flex;
     align-items: center;
     .watermark-image {
@@ -123,44 +155,6 @@ function sourceFor(type: string): string {
       background-position: center;
       width: var(--image-dimension);
       height: var(--image-dimension);
-    }
-  }
-
-  .buttons {
-    grid-area: buttons;
-    display: grid;
-    grid-template-columns: min-content auto min-content;
-    grid-template-areas: 'edit . delete  ';
-    .edit-button {
-      grid-area: edit;
-      width: var(--icon-width);
-    }
-    .delete-button {
-      grid-area: delete;
-      width: var(--icon-width);
-    }
-  }
-
-  .details {
-    grid-area: details;
-    display: grid;
-    grid-template-areas:
-      ' created '
-      ' title ';
-    grid-template-columns: auto;
-    grid-template-rows: min-content auto;
-    grid-row-gap: var(--gutter-space);
-    .id {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .title {
-      grid-area: title;
-    }
-    .created {
-      grid-area: created;
     }
   }
 }

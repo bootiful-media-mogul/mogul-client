@@ -14,7 +14,7 @@
           <legend>{{ t('podcasts.all', { user: mogulName }) }}</legend>
 
           <div v-for="podcast in all" v-bind:key="podcast.id" class="row podcasts-row">
-            <div class="id">
+            <div class="id-column">
               #<b>{{ podcast.id }}</b>
             </div>
             <div class="created-column">
@@ -65,7 +65,7 @@
 </template>
 
 <style>
-.id {
+.id-column {
   font-weight: normal;
 }
 
@@ -83,7 +83,7 @@
   padding-left: var(--gutter-space);
 }
 
-.id b {
+.id-column b {
   font-weight: bold;
   font-size: medium;
 }

@@ -166,7 +166,7 @@
 .publications-toolbar {
   display: grid;
   grid-template-columns: repeat(auto-fill, 50px);
-  gap: calc(var(--gutter-space) / 3);
+  gap: var(--gutter-space-half);
 }
 
 .toolbar-icon {
@@ -302,6 +302,7 @@ import errorHighlightAsset from '@/assets/images/error-highlight.png'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import { dateTimeToString } from '@/dates'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 
 const props = defineProps<{

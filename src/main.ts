@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/base.css'
 
 import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
@@ -183,6 +183,7 @@ const translations = {
     'jobs.failed': '{name} failed.',
 
     // app
+    'app.tabs.main': 'Main',
     'app.menu.home': 'Home',
     'app.menu.search': 'Search',
     'app.menu.settings': 'Settings',

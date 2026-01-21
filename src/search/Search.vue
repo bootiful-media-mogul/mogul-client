@@ -1,13 +1,11 @@
 <style>
 .search-outer-box {
-}
 
-.search-outer-box {
-  .pure-form {
     input {
-      scale: 150%;
-      opacity: 40%;
+      border: 1px solid red;
+      border-radius: var(--radius);
       text-align: center;
+      font-size: 1rem ;
     }
     input::placeholder {
       text-align: center;
@@ -16,7 +14,6 @@
     input:focus,
     input:active {
       opacity: 1;
-    }
   }
 }
 </style>

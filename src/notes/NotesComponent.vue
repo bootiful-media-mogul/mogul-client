@@ -72,7 +72,7 @@ async function expandIfNotesAvailable(): Promise<void> {
     (mogulNotes.value || entityNotes.value) &&
     (entityNotes.value.length > 0 || mogulNotes.value.length > 0)
   ) {
-    events.emit('sidebar-panel-opened', el.value)
+   // events.emit('sidebar-panel-opened', el.value)
   }
 }
 

@@ -14,14 +14,14 @@
 }
 .panel {
   background-color: lightgray;
-  border-radius: var(--radius);
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
+
   overflow: hidden;
   margin-bottom: var(--gutter-space);
   /* shadow */
   box-shadow: 0 var(--gutter-space) 40px rgba(0, 0, 0, 0.2);
 }
+
+
 
 .panel-menu-buttons {
   display: grid;
@@ -62,6 +62,14 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   z-index: 100;
   border-radius: var(--radius);
+}
+
+@container app (min-width: 670px) {
+  .panel {
+    border-radius: var(--radius);
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+  }
 }
 </style>
 

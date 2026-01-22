@@ -68,7 +68,9 @@ onMounted(async () => {
   gap: var(--gutter-space);
 
   img {
-    width: 5vw;
+    max-height: calc(3 * var(--gutter-space));
+    width: auto;
+
   }
 }
 </style>

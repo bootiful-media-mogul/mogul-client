@@ -336,8 +336,8 @@ textarea {
     width: 100%;
     position: static;
     box-sizing: border-box;
-    padding-left : var(--gutter-space);
-    padding-right : var(--gutter-space);
+    padding-left: var(--gutter-space);
+    padding-right: var(--gutter-space);
 }
 
 .sidebar textarea {
@@ -461,6 +461,7 @@ button {
     }
 
     .page {
+
         display: grid;
         grid-template-areas:
       ' hello hello hello '
@@ -485,13 +486,14 @@ button {
         grid-area: main;
         width: auto;
         padding-left: var(--gutter-space);
+
     }
 
     .sidebar {
         grid-area: sidebar;
         width: auto;
         position: relative;
-
+        padding-right: 0;
     }
 
     /* Show desktop panel controls */
@@ -520,13 +522,7 @@ button {
         left: calc(-1 * var(--gutter-space));
         padding-left: var(--gutter-space);
         position: relative;
-
         width: calc(100%);
-        /*
-            left: calc(-4 * var(--gutter-space));
-            width: 100%;
-            padding-left: calc(4 * var(--gutter-space));
-            padding-right: var(--gutter-space);*/
     }
 
 

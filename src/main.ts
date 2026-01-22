@@ -33,6 +33,7 @@ const translations = {
         'error-message': 'see error message',
         'no-error-message': '(no error message given)',
         keys: {
+          ayrshare: 'Ayrshare',
           mock: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',

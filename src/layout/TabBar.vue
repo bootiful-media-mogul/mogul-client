@@ -30,9 +30,12 @@
 .tab {
   border: none;
   background-color: transparent;
-  color: white;
   cursor: pointer;
   text-align: center;
+  font-size: smaller;
+  text-transform: uppercase;
+  color: white;
+  font-family: 'arial Black', sans-serif;
   border-top-left-radius: var(--radius);
   border-top-right-radius: var(--radius);
   padding: var(--gutter-space-third);
@@ -111,7 +114,7 @@ onMounted(() => {
     if (element && element.closest) {
       const panelElement = element.closest('.panel')
       if (panelElement) {
-          const title = panelElement.querySelector('.panel-menu-title')?.textContent?.trim()
+        const title = panelElement.querySelector('.panel-menu-title')?.textContent?.trim()
         // Match panel title to tab
         if (title === t('app.panels.notes')) {
           selectTab('notes')

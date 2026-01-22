@@ -288,7 +288,7 @@ textarea {
 
 .search {
     grid-area: search;
-    width: 70%;
+    width: 50%;
     justify-self: center;
     padding-bottom: var(--gutter-space);
 }

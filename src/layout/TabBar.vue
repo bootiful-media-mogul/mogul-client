@@ -10,10 +10,24 @@
         >{{ tab.label }}</a
       >
     </div>
+    <div class="tab-bar-bumper"><div class="tab-bar-bumper-corners"></div></div>
   </div>
 </template>
 
 <style scoped>
+.tab-bar-bumper {
+  background-color: black;
+
+  position: relative;
+  margin-bottom: var(--gutter-space);
+  .tab-bar-bumper-corners {
+    border-top-left-radius: var(--radius);
+    border-top-right-radius: var(--radius);
+    background-color: var(--bg-color);
+    height: var(--gutter-space);
+  }
+}
+
 .tab-bar-container {
   display: block;
 }
@@ -21,14 +35,15 @@
 .tab-bar {
   display: flex;
   background-color: black;
-  height: calc(0.5 * var(--row-height));
+
   padding-left: var(--gutter-space);
   gap: var(--gutter-space-half);
   padding-top: var(--gutter-space-third);
+  padding-bottom : var(--gutter-space-third);
 }
 
 .tab {
-  border: none;
+
   background-color: transparent;
   cursor: pointer;
   text-align: center;
@@ -36,10 +51,12 @@
   text-transform: uppercase;
   color: white;
   font-family: 'arial Black', sans-serif;
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
+  /*border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);*/
+
   padding: var(--gutter-space-third);
   text-decoration: none;
+  border-radius: var(--radius);
 }
 
 .tab-active {
@@ -53,7 +70,7 @@
 }
 
 /* Hide on desktop */
-@container app (min-width: 670px) {
+@container app (min-width: 900px) {
   .tab-bar-container {
     display: none;
   }

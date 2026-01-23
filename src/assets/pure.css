@@ -1,4 +1,3 @@
-
 /* ==== Pure CSS Framework (used rules only) ==== */
 
 /*!
@@ -22,8 +21,8 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
  */
 
 html {
-    line-height: 1.15; /* 1 */
-    -webkit-text-size-adjust: 100%; /* 2 */
+  line-height: 1.15; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
 }
 
 /* Sections
@@ -34,7 +33,7 @@ html {
  */
 
 body {
-    margin: 0;
+  margin: 0;
 }
 
 /**
@@ -42,7 +41,7 @@ body {
  */
 
 main {
-    display: block;
+  display: block;
 }
 
 /**
@@ -51,8 +50,8 @@ main {
  */
 
 h1 {
-    /*font-size: 2em;*/
-    margin: 0.67em 0;
+  /*font-size: 2em;*/
+  margin: 0.67em 0;
 }
 
 /* Grouping content
@@ -64,9 +63,9 @@ h1 {
  */
 
 hr {
-    box-sizing: content-box; /* 1 */
-    height: 0; /* 1 */
-    overflow: visible; /* 2 */
+  box-sizing: content-box; /* 1 */
+  height: 0; /* 1 */
+  overflow: visible; /* 2 */
 }
 
 /**
@@ -75,8 +74,8 @@ hr {
  */
 
 pre {
-    font-family: monospace, monospace; /* 1 */
-    /*font-size: 1em; !* 2 *!*/
+  font-family: monospace, monospace; /* 1 */
+  /*font-size: 1em; !* 2 *!*/
 }
 
 /* Text-level semantics
@@ -87,7 +86,7 @@ pre {
  */
 
 a {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 /**
@@ -96,10 +95,10 @@ a {
  */
 
 abbr[title] {
-    border-bottom: none; /* 1 */
-    text-decoration: underline; /* 2 */
-    -webkit-text-decoration: underline dotted;
-    text-decoration: underline dotted; /* 2 */
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted; /* 2 */
 }
 
 /**
@@ -108,7 +107,7 @@ abbr[title] {
 
 b,
 strong {
-    font-weight: bolder;
+  font-weight: bolder;
 }
 
 /**
@@ -119,8 +118,8 @@ strong {
 code,
 kbd,
 samp {
-    font-family: monospace, monospace; /* 1 */
-    /*font-size: 1em; !* 2 *!*/
+  font-family: monospace, monospace; /* 1 */
+  /*font-size: 1em; !* 2 *!*/
 }
 
 /**
@@ -128,7 +127,7 @@ samp {
  */
 
 small {
-    /*font-size: 80%;*/
+  /*font-size: 80%;*/
 }
 
 /**
@@ -138,18 +137,18 @@ small {
 
 sub,
 sup {
-    /*font-size: 75%;*/
-    line-height: 0;
-    position: relative;
-    vertical-align: baseline;
+  /*font-size: 75%;*/
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
 }
 
 sub {
-    bottom: -0.25em;
+  bottom: -0.25em;
 }
 
 sup {
-    top: -0.5em;
+  top: -0.5em;
 }
 
 /* Embedded content
@@ -160,7 +159,7 @@ sup {
  */
 
 img {
-    border-style: none;
+  border-style: none;
 }
 
 /* Forms
@@ -176,10 +175,10 @@ input,
 optgroup,
 select,
 textarea {
-    /*font-family: inherit; !* 1 *!*/
-    /*font-size: 100%; !* 1 *!*/
-    line-height: 1.15; /* 1 */
-    margin: 0; /* 2 */
+  /*font-family: inherit; !* 1 *!*/
+  /*font-size: 100%; !* 1 *!*/
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
 }
 
 /**
@@ -189,8 +188,8 @@ textarea {
 
 button,
 input {
-    /* 1 */
-    overflow: visible;
+  /* 1 */
+  overflow: visible;
 }
 
 /**
@@ -200,8 +199,8 @@ input {
 
 button,
 select {
-    /* 1 */
-    text-transform: none;
+  /* 1 */
+  text-transform: none;
 }
 
 /**
@@ -212,7 +211,7 @@ button,
 [type='button'],
 [type='reset'],
 [type='submit'] {
-    -webkit-appearance: button;
+  -webkit-appearance: button;
 }
 
 /**
@@ -223,8 +222,8 @@ button::-moz-focus-inner,
 [type='button']::-moz-focus-inner,
 [type='reset']::-moz-focus-inner,
 [type='submit']::-moz-focus-inner {
-    border-style: none;
-    padding: 0;
+  border-style: none;
+  padding: 0;
 }
 
 /**
@@ -235,7 +234,7 @@ button:-moz-focusring,
 [type='button']:-moz-focusring,
 [type='reset']:-moz-focusring,
 [type='submit']:-moz-focusring {
-    outline: 1px dotted ButtonText;
+  outline: 1px dotted ButtonText;
 }
 
 /**
@@ -243,7 +242,7 @@ button:-moz-focusring,
  */
 
 fieldset {
-    padding: 0.35em 0.75em 0.625em;
+  padding: 0.35em 0.75em 0.625em;
 }
 
 /**
@@ -269,7 +268,7 @@ legend {
  */
 
 progress {
-    vertical-align: baseline;
+  vertical-align: baseline;
 }
 
 /**
@@ -277,7 +276,7 @@ progress {
  */
 
 textarea {
-    overflow: auto;
+  overflow: auto;
 }
 
 /**
@@ -287,8 +286,8 @@ textarea {
 
 [type='checkbox'],
 [type='radio'] {
-    box-sizing: border-box; /* 1 */
-    padding: 0; /* 2 */
+  box-sizing: border-box; /* 1 */
+  padding: 0; /* 2 */
 }
 
 /**
@@ -297,7 +296,7 @@ textarea {
 
 [type='number']::-webkit-inner-spin-button,
 [type='number']::-webkit-outer-spin-button {
-    height: auto;
+  height: auto;
 }
 
 /**
@@ -306,8 +305,8 @@ textarea {
  */
 
 [type='search'] {
-    -webkit-appearance: textfield; /* 1 */
-    outline-offset: -2px; /* 2 */
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
 }
 
 /**
@@ -315,7 +314,7 @@ textarea {
  */
 
 [type='search']::-webkit-search-decoration {
-    -webkit-appearance: none;
+  -webkit-appearance: none;
 }
 
 /**
@@ -324,8 +323,8 @@ textarea {
  */
 
 ::-webkit-file-upload-button {
-    -webkit-appearance: button; /* 1 */
-    font: inherit; /* 2 */
+  -webkit-appearance: button; /* 1 */
+  font: inherit; /* 2 */
 }
 
 /* Interactive
@@ -336,7 +335,7 @@ textarea {
  */
 
 details {
-    display: block;
+  display: block;
 }
 
 /*
@@ -344,7 +343,7 @@ details {
  */
 
 summary {
-    display: list-item;
+  display: list-item;
 }
 
 /* Misc
@@ -355,7 +354,7 @@ summary {
  */
 
 template {
-    display: none;
+  display: none;
 }
 
 /**
@@ -363,7 +362,7 @@ template {
  */
 
 [hidden] {
-    display: none;
+  display: none;
 }
 
 /*csslint important:false*/
@@ -377,7 +376,7 @@ template {
  */
 
 html {
-    font-family: sans-serif;
+  font-family: sans-serif;
 }
 
 /**
@@ -386,60 +385,60 @@ html {
 
 .hidden,
 [hidden] {
-    display: none !important;
+  display: none !important;
 }
 
 /*csslint box-model:false*/
 
 .pure-button {
-    /* Structure */
-    display: inline-block;
-    line-height: normal;
-    white-space: nowrap;
-    vertical-align: middle;
-    text-align: center;
-    cursor: pointer;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    user-select: none;
-    box-sizing: border-box;
+  /* Structure */
+  display: inline-block;
+  line-height: normal;
+  white-space: nowrap;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+  box-sizing: border-box;
 }
 
 /* Firefox: Get rid of the inner focus border */
 .pure-button::-moz-focus-inner {
-    padding: 0;
-    border: 0;
+  padding: 0;
+  border: 0;
 }
 
 /*csslint outline-none:false*/
 
 .pure-button {
-    font-family: inherit;
-    /*font-size: 100%;*/
-    padding: 0.5em 1em;
-    color: rgba(0, 0, 0, 0.8);
-    border: none rgba(0, 0, 0, 0);
-    background-color: #e6e6e6;
-    text-decoration: none;
-    border-radius: 2px;
+  font-family: inherit;
+  /*font-size: 100%;*/
+  padding: 0.5em 1em;
+  color: rgba(0, 0, 0, 0.8);
+  border: none rgba(0, 0, 0, 0);
+  background-color: #e6e6e6;
+  text-decoration: none;
+  border-radius: 2px;
 }
 
 .pure-button-hover,
 .pure-button:hover,
 .pure-button:focus {
-    background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.1));
+  background-image: linear-gradient(transparent, rgba(0, 0, 0, 0.05) 40%, rgba(0, 0, 0, 0.1));
 }
 
 .pure-button:focus {
-    outline: 0;
+  outline: 0;
 }
 
 .pure-button-active,
 .pure-button:active {
-    box-shadow:
-            0 0 0 1px rgba(0, 0, 0, 0.15) inset,
-            0 0 6px rgba(0, 0, 0, 0.2) inset;
-    border-color: #000;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.15) inset,
+    0 0 6px rgba(0, 0, 0, 0.2) inset;
+  border-color: #000;
 }
 
 .pure-button[disabled],
@@ -447,24 +446,24 @@ html {
 .pure-button-disabled:hover,
 .pure-button-disabled:focus,
 .pure-button-disabled:active {
-    border: none;
-    background-image: none;
-    opacity: 0.4;
-    cursor: not-allowed;
-    box-shadow: none;
-    pointer-events: none;
+  border: none;
+  background-image: none;
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 .pure-button-hidden {
-    display: none;
+  display: none;
 }
 
 .pure-button-primary,
 .pure-button-selected,
 a.pure-button-primary,
 a.pure-button-selected {
-    background-color: rgb(0, 120, 231);
-    color: #fff;
+  background-color: rgb(0, 120, 231);
+  color: #fff;
 }
 
 /*csslint box-model:false*/
@@ -491,13 +490,13 @@ so we can ignore the csslint warning.
 .pure-form input[type='color'],
 .pure-form select,
 .pure-form textarea {
-    padding: 0.5em 0.6em;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 3px #ddd;
-    border-radius: 4px;
-    vertical-align: middle;
-    box-sizing: border-box;
+  padding: 0.5em 0.6em;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 3px #ddd;
+  border-radius: 4px;
+  vertical-align: middle;
+  box-sizing: border-box;
 }
 
 /*
@@ -505,18 +504,18 @@ Need to separate out the :not() selector from the rest of the CSS 2.1 selectors
 since IE8 won't execute CSS that contains a CSS3 selector.
 */
 .pure-form input:not([type]) {
-    padding: 0.5em 0.6em;
-    display: inline-block;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 3px #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
+  padding: 0.5em 0.6em;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 3px #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 /* Chrome (as of v.32/34 on OS X) needs additional room for color to display. */
 /* May be able to remove this tweak as color inputs become more standardized across browsers. */
 .pure-form input[type='color'] {
-    padding: 0.2em 0.5em;
+  padding: 0.2em 0.5em;
 }
 
 .pure-form input[type='text']:focus,
@@ -535,8 +534,8 @@ since IE8 won't execute CSS that contains a CSS3 selector.
 .pure-form input[type='color']:focus,
 .pure-form select:focus,
 .pure-form textarea:focus {
-    outline: 0;
-    border-color: #129fea;
+  outline: 0;
+  border-color: #129fea;
 }
 
 /*
@@ -544,21 +543,21 @@ Need to separate out the :not() selector from the rest of the CSS 2.1 selectors
 since IE8 won't execute CSS that contains a CSS3 selector.
 */
 .pure-form input:not([type]):focus {
-    outline: 0;
-    border-color: #129fea;
+  outline: 0;
+  border-color: #129fea;
 }
 
 .pure-form input[type='file']:focus,
 .pure-form input[type='radio']:focus,
 .pure-form input[type='checkbox']:focus {
-    outline: thin solid #129fea;
-    outline: 1px auto #129fea;
+  outline: thin solid #129fea;
+  outline: 1px auto #129fea;
 }
 
 .pure-form .pure-checkbox,
 .pure-form .pure-radio {
-    margin: 0.5em 0;
-    display: block;
+  margin: 0.5em 0;
+  display: block;
 }
 
 .pure-form input[type='text'][disabled],
@@ -577,9 +576,9 @@ since IE8 won't execute CSS that contains a CSS3 selector.
 .pure-form input[type='color'][disabled],
 .pure-form select[disabled],
 .pure-form textarea[disabled] {
-    cursor: not-allowed;
-    background-color: #eaeded;
-    color: #cad2d3;
+  cursor: not-allowed;
+  background-color: #eaeded;
+  color: #cad2d3;
 }
 
 /*
@@ -587,51 +586,51 @@ Need to separate out the :not() selector from the rest of the CSS 2.1 selectors
 since IE8 won't execute CSS that contains a CSS3 selector.
 */
 .pure-form input:not([type])[disabled] {
-    cursor: not-allowed;
-    background-color: #eaeded;
-    color: #cad2d3;
+  cursor: not-allowed;
+  background-color: #eaeded;
+  color: #cad2d3;
 }
 
 .pure-form input[readonly],
 .pure-form select[readonly],
 .pure-form textarea[readonly] {
-    background-color: #eee; /* menu hover bg color */
-    color: #777; /* menu text color */
-    border-color: #ccc;
+  background-color: #eee; /* menu hover bg color */
+  color: #777; /* menu text color */
+  border-color: #ccc;
 }
 
 .pure-form input:focus:invalid,
 .pure-form textarea:focus:invalid,
 .pure-form select:focus:invalid {
-    color: #b94a48;
-    border-color: #e9322d;
+  color: #b94a48;
+  border-color: #e9322d;
 }
 
 .pure-form input[type='file']:focus:invalid:focus,
 .pure-form input[type='radio']:focus:invalid:focus,
 .pure-form input[type='checkbox']:focus:invalid:focus {
-    outline-color: #e9322d;
+  outline-color: #e9322d;
 }
 
 .pure-form select {
-    /* Normalizes the height; padding is not sufficient. */
-    height: 2.25em;
-    border: 1px solid #ccc;
-    background-color: white;
+  /* Normalizes the height; padding is not sufficient. */
+  height: 2.25em;
+  border: 1px solid #ccc;
+  background-color: white;
 }
 
 .pure-form select[multiple] {
-    height: auto;
+  height: auto;
 }
 
 .pure-form label {
-    margin: 0.5em 0 0.2em;
+  margin: 0.5em 0 0.2em;
 }
 
 .pure-form fieldset {
-    margin: 0;
-    padding: 0.35em 0 0.75em;
-    border: 0;
+  margin: 0;
+  padding: 0.35em 0 0.75em;
+  border: 0;
 }
 
 /*
@@ -663,8 +662,8 @@ since IE8 won't execute CSS that contains a CSS3 selector.
 .pure-form-stacked select,
 .pure-form-stacked label,
 .pure-form-stacked textarea {
-    display: block;
-    margin: 0.25em 0;
+  display: block;
+  margin: 0.25em 0;
 }
 
 /*
@@ -672,51 +671,51 @@ Need to separate out the :not() selector from the rest of the CSS 2.1 selectors
 since IE8 won't execute CSS that contains a CSS3 selector.
 */
 .pure-form-stacked input:not([type]) {
-    display: block;
-    margin: 0.25em 0;
+  display: block;
+  margin: 0.25em 0;
 }
 
 .pure-form-aligned input,
 .pure-form-aligned textarea,
 .pure-form-aligned select,
 .pure-form-message-inline {
-    display: inline-block;
-    vertical-align: middle;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .pure-form-aligned textarea {
-    vertical-align: top;
+  vertical-align: top;
 }
 
 /* Aligned Forms */
 .pure-form-aligned .pure-control-group {
-    margin-bottom: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .pure-form-aligned .pure-control-group label {
-    text-align: right;
-    display: inline-block;
-    vertical-align: middle;
-    width: 10em;
-    margin: 0 1em 0 0;
+  text-align: right;
+  display: inline-block;
+  vertical-align: middle;
+  width: 10em;
+  margin: 0 1em 0 0;
 }
 
 .pure-form-aligned .pure-controls {
-    margin: 1.5em 0 0 11em;
+  margin: 1.5em 0 0 11em;
 }
 
 /* Inline help for forms */
 .pure-form-message-inline {
-    display: inline-block;
-    padding-left: 0.3em;
-    color: #666;
-    vertical-align: middle;
-    /*font-size: 0.875em;*/
+  display: inline-block;
+  padding-left: 0.3em;
+  color: #666;
+  vertical-align: middle;
+  /*font-size: 0.875em;*/
 }
 
 /* Block help for forms */
 .pure-form-message {
-    display: block;
-    color: #666;
-    /*font-size: 0.875em;*/
+  display: block;
+  color: #666;
+  /*font-size: 0.875em;*/
 }

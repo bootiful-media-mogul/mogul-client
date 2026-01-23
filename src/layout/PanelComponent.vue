@@ -14,14 +14,14 @@
 }
 .panel {
   background-color: lightgray;
-
+  top: calc(-1 * var(--gutter-space));
+  position: relative;
   overflow: hidden;
   margin-bottom: var(--gutter-space);
   /* shadow */
   box-shadow: 0 var(--gutter-space) 40px rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius);
 }
-
-
 
 .panel-menu-buttons {
   display: grid;
@@ -64,7 +64,7 @@
   border-radius: var(--radius);
 }
 
-@container app (min-width: 670px) {
+@container app (min-width: 900px) {
   .panel {
     border-radius: var(--radius);
     border-bottom-right-radius: 0;

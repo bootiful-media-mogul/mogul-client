@@ -70,7 +70,6 @@ onMounted(async () => {
   img {
     max-height: calc(3 * var(--gutter-space));
     width: auto;
-
   }
 }
 </style>
@@ -147,8 +146,12 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
     <div class="footer">
-      <router-link to="/about">{{ t('app.menu.about') }}</router-link>
+      <div class="footer-bumper"></div>
+      <div class="footer-content">
+        <router-link to="/about">{{ t('app.menu.about') }}</router-link>
+      </div>
     </div>
   </div>
 </template>

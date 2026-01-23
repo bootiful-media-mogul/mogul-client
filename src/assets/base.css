@@ -1,7 +1,6 @@
 @import url(pure.css);
 
 :root {
-    --desktop-breakpoint: 670px;
     --gutter-space: 12pt;
     --gutter-space-half: calc(var(--gutter-space) / 2);
     --gutter-space-third: calc(var(--gutter-space) / 3);
@@ -15,7 +14,7 @@
     --bg-color: cadetblue;
     --icon-column: calc(var(--gutter-space) * 1.5);
     --id-column: calc(var(--gutter-space) * 5);
-    --footer-height: calc(var(--gutter-space) * 1.5);
+    --footer-height: calc(var(--gutter-space) * 3);
     --date-column: calc(11em);
     --datetime-column: calc(2 * var(--date-column));
     --icon-size: 2.5em;
@@ -131,7 +130,8 @@ a.disabled {
 }
 
 /* Mobile-first: Default styles are for mobile */
-html, body {
+html,
+body {
     background-color: var(--bg-color);
     margin: 0;
     padding: 0;
@@ -279,7 +279,6 @@ textarea {
     background-size: var(--icon-width) var(--icon-width);
 }
 
-
 .notifications {
     grid-area: notifications;
     padding-top: var(--gutter-space);
@@ -307,7 +306,7 @@ textarea {
     'search'
     'tabbar'
     'content';
-    grid-template-rows: auto  minmax(var(--global-toolbar-height), auto ) auto auto 1fr;
+    grid-template-rows: auto minmax(var(--global-toolbar-height), auto) auto auto 1fr;
     grid-template-columns: 1fr;
     grid-row-gap: 0;
 }
@@ -371,7 +370,6 @@ textarea {
     display: none !important;
 }
 
-
 /* Adjust panel content to be visible by default on mobile when active */
 .sidebar .panel-content {
     display: block;
@@ -397,22 +395,38 @@ textarea {
     position: relative;
 
     width: calc(100% + var(--gutter-space));
-
-
 }
 
 .footer {
-    width: 100%;
+    padding: 0;
     background-color: black;
-    text-align: center;
-    padding: calc(var(--gutter-space) / 2) var(--gutter-space);
-    flex-shrink: 0;
-}
 
-.footer a {
-    color: white;
-    font-weight: normal;
-    font-size: small;
+    text-align: center;
+
+
+
+    a {
+        color: white;
+        font-weight: normal;
+        font-size: small;
+    }
+
+    /* todo need to build the bumper */
+
+
+    .footer-content {
+       padding-top: var(--gutter-space-half);
+       padding-bottom : var(--gutter-space-half);
+        display: grid;
+        place-items: center;
+    }
+
+    .footer-bumper {
+        border-bottom-left-radius: var(--radius);
+        border-bottom-right-radius: var(--radius);
+        background-color: var(--bg-color);
+        height: var(--gutter-space);
+    }
 }
 
 .pure-form label {
@@ -455,13 +469,12 @@ button {
 }
 
 /* Desktop Styles - 670px and above */
-@container app (min-width: 670px) {
+@container app (min-width: 900px) {
     .mobile-hidden {
         display: block !important;
     }
 
     .page {
-
         display: grid;
         grid-template-areas:
       ' hello hello hello '
@@ -471,12 +484,10 @@ button {
       ' main . sidebar ';
         grid-template-rows: auto minmax(var(--global-toolbar-height), auto) auto var(--gutter-space) auto;
         grid-template-columns: auto var(--main-toolbar-gutter) minmax(min-content, var(--sidebar-width));
-
     }
 
     .hello {
     }
-
 
     .tab-bar-container {
         display: none;
@@ -486,7 +497,6 @@ button {
         grid-area: main;
         width: auto;
         padding-left: var(--gutter-space);
-
     }
 
     .sidebar {
@@ -524,6 +534,4 @@ button {
         position: relative;
         width: calc(100%);
     }
-
-
 }

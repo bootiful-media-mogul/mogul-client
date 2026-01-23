@@ -1,19 +1,18 @@
 <style>
 .search-outer-box {
-
-    input {
-      border: 1px solid red;
-      border-radius: var(--radius);
-      text-align: center;
-      font-size: 1rem ;
-    }
-    input::placeholder {
-      text-align: center;
-    }
-    input:hover,
-    input:focus,
-    input:active {
-      opacity: 1;
+  input {
+    border: 1px solid red;
+    border-radius: var(--radius);
+    text-align: center;
+    font-size: 1rem;
+  }
+  input::placeholder {
+    text-align: center;
+  }
+  input:hover,
+  input:focus,
+  input:active {
+    opacity: 1;
   }
 }
 </style>

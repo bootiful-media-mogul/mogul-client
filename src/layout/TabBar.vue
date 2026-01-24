@@ -44,7 +44,7 @@
   padding-left: var(--gutter-space);
   gap: var(--gutter-space-half);
   padding-top: var(--gutter-space-third);
-  padding-bottom: var(--gutter-space-third);
+  padding-bottom: 0;
 }
 
 .tab {
@@ -56,8 +56,12 @@
   color: white;
   font-family: 'arial Black', sans-serif;
   padding: var(--gutter-space-third);
+  padding-bottom: var(--gutter-space);
   text-decoration: none;
-  border-radius: var(--radius);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .tab-active {
@@ -83,11 +87,14 @@
 </style>
 
 <script lang="ts" setup>
-import { provide, ref } from 'vue'
+import { provide, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import type { TabRegistration } from '@/layout/tabbar'
 
+const route = useRoute()
 const registeredTabs = ref<TabRegistration[]>([])
 const activeTab = ref<string>('')
+const lastManualActivation = ref<number>(0)
 
 const registerTab = (tab: TabRegistration) => {
   // Prevent duplicate registration
@@ -112,8 +119,23 @@ const selectTab = (tabId: string) => {
 }
 
 const setActiveTab = (tabId: string) => {
+  // Track manual tab activation (from sidebar-panel-opened events)
+  lastManualActivation.value = Date.now()
   activeTab.value = tabId
 }
+
+// Watch for route changes and activate the first (main) tab
+// but only if a tab wasn't just manually activated
+watch(
+  () => route.path,
+  () => {
+    const timeSinceManualActivation = Date.now() - lastManualActivation.value
+    // Only auto-activate main tab if no manual activation in last 100ms
+    if (registeredTabs.value.length > 0 && timeSinceManualActivation > 100) {
+      activeTab.value = registeredTabs.value[0].id
+    }
+  }
+)
 
 provide('registerTab', registerTab)
 provide('getActiveTab', getActiveTab)

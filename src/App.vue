@@ -62,14 +62,113 @@ onMounted(async () => {
   margin-top: var(--gutter-space);
   display: flex;
   grid-area: global-toolbar;
-
   place-self: center;
-  flex: 1;
-  gap: var(--gutter-space);
 
+  gap: var(--gutter-space);
   img {
     max-height: calc(3 * var(--gutter-space));
     width: auto;
+  }
+}
+/* Mobile-first: Default styles for mobile */
+.toolbar-container {
+  color: white;
+  border-radius: calc(2 * var(--radius));
+  padding: var(--gutter-space);
+  background-color: black;
+  position: fixed;
+  bottom: var(--gutter-space);
+  left: var(--gutter-space);
+  right: var(--gutter-space);
+  z-index: 1000;
+  display: grid;
+  grid-template-areas:
+    'hello'
+    'search'
+    'global-toolbar';
+  grid-gap: var(--gutter-space-half);
+  box-shadow: var(--box-shadow);
+}
+
+.toolbar-container .hello {
+  grid-area: hello;
+  text-align: center;
+}
+
+.toolbar-container .search {
+  grid-area: search;
+  width: 100%;
+  padding-bottom: 0;
+}
+
+.toolbar-container .global-toolbar {
+  grid-area: global-toolbar;
+  margin: 0;
+  justify-content: center;
+}
+
+.toolbar-container img {
+  filter: invert(0.5);
+}
+
+.toolbar-container img:hover {
+  filter: invert(1);
+}
+
+.page-content-buffer {
+  grid-area: buffer;
+  height: calc(var(--global-toolbar-height) + var(--gutter-space) * 4);
+}
+
+/* Desktop overrides */
+@media (min-width: 900px) {
+  .toolbar-container {
+    color: black;
+    background-color: transparent;
+    position: static;
+    padding: var(--gutter-space);
+    border: none;
+    border-radius: 0;
+    z-index: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    display: grid;
+    grid-template-areas:
+      'hello hello hello'
+      'global-toolbar global-toolbar global-toolbar'
+      'search search search';
+    grid-template-rows: auto auto auto;
+    gap: 0;
+    box-shadow: none;
+  }
+
+  .toolbar-container .hello {
+    text-align: center;
+    padding: var(--gutter-space-half) 0;
+  }
+
+  .toolbar-container .search {
+    width: 50%;
+    justify-self: center;
+    padding-bottom: var(--gutter-space);
+  }
+
+  .toolbar-container .global-toolbar {
+    margin: var(--gutter-space) 0;
+    place-self: center;
+  }
+
+  .toolbar-container img {
+    filter: none;
+  }
+
+  .toolbar-container img:hover {
+    filter: none;
+  }
+
+  .page-content-buffer {
+    display: none;
   }
 }
 </style>
@@ -78,37 +177,38 @@ onMounted(async () => {
     <NotificationBoxComponent ref="notifications" />
     <div class="frame">
       <div class="page">
-        <div class="hello">{{ t('hello', { mogul: mogulUsername }) }}</div>
-        <div class="search">
-          <Search />
-        </div>
-
-        <div class="global-toolbar">
-          <Icon
-            @click.prevent="go('home')"
-            :icon-hover="homeIconAssetHighlight"
-            :icon="homeIconAsset"
-          />
-          <Icon
-            @click.prevent="goPodcasts"
-            :icon-hover="podcastIconAssetHighlight"
-            :icon="podcastIconAsset"
-          />
-          <Icon
-            @click.prevent="go('blogs')"
-            :icon-hover="blogIconAssetHighlight"
-            :icon="blogIconAsset"
-          />
-          <Icon
-            @click.prevent="go('settings')"
-            :icon-hover="settingsIconAssetHighlight"
-            :icon="settingsIconAsset"
-          />
-          <Icon
-            @click.prevent="go('jobs')"
-            :icon-hover="jobsIconAssetHighlight"
-            :icon="jobsIconAsset"
-          />
+        <div class="toolbar-container">
+          <div class="hello">{{ t('hello', { mogul: mogulUsername }) }}</div>
+          <div class="search">
+            <Search />
+          </div>
+          <div class="global-toolbar">
+            <Icon
+              @click.prevent="go('home')"
+              :icon-hover="homeIconAssetHighlight"
+              :icon="homeIconAsset"
+            />
+            <Icon
+              @click.prevent="goPodcasts"
+              :icon-hover="podcastIconAssetHighlight"
+              :icon="podcastIconAsset"
+            />
+            <Icon
+              @click.prevent="go('blogs')"
+              :icon-hover="blogIconAssetHighlight"
+              :icon="blogIconAsset"
+            />
+            <Icon
+              @click.prevent="go('settings')"
+              :icon-hover="settingsIconAssetHighlight"
+              :icon="settingsIconAsset"
+            />
+            <Icon
+              @click.prevent="go('jobs')"
+              :icon-hover="jobsIconAssetHighlight"
+              :icon="jobsIconAsset"
+            />
+          </div>
         </div>
 
         <!-- Mobile Tab Bar -->
@@ -144,13 +244,9 @@ onMounted(async () => {
             </PanelComponent>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div class="footer">
-      <div class="footer-bumper"></div>
-      <div class="footer-content">
-        <router-link to="/about">{{ t('app.menu.about') }}</router-link>
+        <!-- Buffer to prevent content from being hidden by floating toolbar on mobile -->
+        <div class="page-content-buffer"></div>
       </div>
     </div>
   </div>

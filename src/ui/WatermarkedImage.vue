@@ -24,7 +24,6 @@ const props = withDefaults(
 .watermark-badge {
   --badge-width: calc(0.4 * var(--sidebar-width));
   opacity: 0.3;
-  z-index: -1000;
   pointer-events: none;
 }
 </style>

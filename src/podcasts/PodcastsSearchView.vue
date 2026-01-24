@@ -94,21 +94,19 @@
 
 .podcast-title {
   grid-area: podcast-title;
-  padding-left: var(--gutter-space);
 }
 
 .podcasts-row {
-  padding-top: calc(var(--gutter-space) / 2);
-  grid-template-rows: minmax(var(--row-height), auto);
+  padding-bottom: var(--gutter-space)  ;
+  grid-template-rows: minmax(var(--row-height), auto) auto ;
 
-  border-top: 1px solid black;
+  border-top : 1px solid black;
   display: grid;
-  grid-template-areas: 'id  edit delete rss episodes   created  podcast-title';
-  grid-template-columns:
-    var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) fit-content(100%) fit-content(
-      100%
-    )
-    auto;
+  grid-template-areas:
+    'podcast-title podcast-title podcast-title podcast-title podcast-title podcast-title '
+    'id edit delete rss episodes created' ;
+  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) min-content auto ;
+
 }
 </style>
 <script lang="ts" setup>

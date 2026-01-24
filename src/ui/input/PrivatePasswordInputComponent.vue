@@ -1,6 +1,7 @@
 <style scoped>
 .icon {
-  position: absolute;
+  position: fixed;
+  z-index: 1002;
 }
 </style>
 <template>
@@ -50,6 +51,7 @@ function positionIcon(parent: HTMLElement, icon: HTMLElement) {
     icon.style.top = y + 'px'
   }
   new ResizeObserver(resizeFunction).observe(formElement)
+  window.addEventListener('scroll', resizeFunction)
 }
 
 const togglePreview = function (e: Event) {

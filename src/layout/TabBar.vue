@@ -39,11 +39,10 @@
   padding-left: var(--gutter-space);
   gap: var(--gutter-space-half);
   padding-top: var(--gutter-space-third);
-  padding-bottom : var(--gutter-space-third);
+  padding-bottom: var(--gutter-space-third);
 }
 
 .tab {
-
   background-color: transparent;
   cursor: pointer;
   text-align: center;

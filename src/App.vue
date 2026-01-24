@@ -167,9 +167,7 @@ onMounted(async () => {
     filter: none;
   }
 
-  .page-content-buffer {
-    display: none;
-  }
+
 }
 </style>
 <template>

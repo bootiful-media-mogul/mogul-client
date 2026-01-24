@@ -21,7 +21,7 @@
     --icon-column-width: calc(var(--gutter-space) + var(--icon-width) + var(--icon-width));
     --row-height: 3em;
     --global-toolbar-height: calc(var(--gutter-space) * 10);
-    --box-shadow: 0 calc(var(--gutter-space)*2) 40px rgba(0, 0, 0, 0.5);
+    --box-shadow: 0 calc(var(--gutter-space)*1) 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Container query setup on .frame wrapper */

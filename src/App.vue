@@ -87,7 +87,7 @@ onMounted(async () => {
     'search'
     'global-toolbar';
   grid-gap: var(--gutter-space-half);
-  box-shadow: var(--box-shadow);
+
 }
 
 .toolbar-container .hello {

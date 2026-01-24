@@ -10,6 +10,7 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import NotesComponent from '@/notes/NotesComponent.vue'
 import TabBar from '@/layout/TabBar.vue'
+import Tab from '@/layout/Tab.vue'
 import Icon from '@/ui/Icon.vue'
 
 import homeIconAsset from '@/assets/images/navbar/home-icon.png'
@@ -32,7 +33,6 @@ import router from '@/index'
 const { t } = useI18n()
 const route = useRoute()
 const mogulUsername = ref<string | null>(null)
-const activeTab = ref<string>('main')
 
 function goPodcasts() {
   router.push({
@@ -209,39 +209,36 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- Mobile Tab Bar -->
-        <TabBar v-model="activeTab" />
+        <!-- Tab Bar with Provider/Inject Pattern -->
+        <TabBar>
+          <!-- Main content tab -->
+          <Tab :label="t('app.tabs.main')">
+            <div class="view">
+              <router-view :key="route.fullPath"></router-view>
+            </div>
+          </Tab>
 
-        <!-- Main content area - shown on desktop always, on mobile only when activeTab is 'main' -->
-        <div
-          class="view"
-          :class="{ 'mobile-tab-content': true, 'mobile-hidden': activeTab !== 'main' }"
-        >
-          <router-view :key="route.fullPath"></router-view>
-        </div>
+          <!-- Sidebar panels grouped together -->
+          <div class="sidebar">
+            <Tab :label="t('app.panels.notes')">
+              <PanelComponent :title="t('app.panels.notes')">
+                <NotesComponent />
+              </PanelComponent>
+            </Tab>
 
-        <!-- Sidebar - shown on desktop always, on mobile as individual tabs -->
-        <div class="sidebar">
-          <div :class="{ 'mobile-tab-content': true, 'mobile-hidden': activeTab !== 'notes' }">
-            <PanelComponent :title="t('app.panels.notes')">
-              <NotesComponent />
-            </PanelComponent>
+            <Tab :label="t('app.panels.media-preview')">
+              <PanelComponent :title="t('app.panels.media-preview')">
+                <PreviewComponent />
+              </PanelComponent>
+            </Tab>
+
+            <Tab :label="t('app.panels.transcripts')">
+              <PanelComponent :title="t('app.panels.transcripts')">
+                <TranscriptComponent />
+              </PanelComponent>
+            </Tab>
           </div>
-
-          <div :class="{ 'mobile-tab-content': true, 'mobile-hidden': activeTab !== 'media' }">
-            <PanelComponent :title="t('app.panels.media-preview')">
-              <PreviewComponent />
-            </PanelComponent>
-          </div>
-
-          <div
-            :class="{ 'mobile-tab-content': true, 'mobile-hidden': activeTab !== 'transcripts' }"
-          >
-            <PanelComponent :title="t('app.panels.transcripts')">
-              <TranscriptComponent />
-            </PanelComponent>
-          </div>
-        </div>
+        </TabBar>
 
         <!-- Buffer to prevent content from being hidden by floating toolbar on mobile -->
         <div class="page-content-buffer"></div>

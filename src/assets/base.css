@@ -353,15 +353,6 @@ textarea {
     grid-area: tabbar;
 }
 
-/* Mobile tab content visibility - only hide on mobile */
-.mobile-tab-content {
-    display: block;
-}
-
-/* Mobile-only: hide tabs that aren't active */
-.mobile-hidden {
-    display: none !important;
-}
 
 /* Adjust panel content to be visible by default on mobile when active */
 .sidebar .panel-content {
@@ -458,10 +449,6 @@ button {
 
 /* Desktop Styles - 670px and above */
 @container app (min-width: 900px) {
-    .mobile-hidden {
-        display: block !important;
-    }
-
     .page {
         display: grid;
         grid-template-areas:

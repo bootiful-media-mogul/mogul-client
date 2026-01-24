@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { inject, onMounted, useSlots, computed } from 'vue'
-import type { RegisterTabFunction, GetActiveTabFunction } from '@/layout/tabbar'
+import { inject, onMounted, useSlots, computed, ref } from 'vue'
+import type { RegisterTabFunction, GetActiveTabFunction, SetActiveTabFunction } from '@/layout/tabbar'
+import { events } from '@/services'
 
 interface Props {
   label: string
@@ -8,8 +9,10 @@ interface Props {
 
 const props = defineProps<Props>()
 const slots = useSlots()
+const element = ref<HTMLElement>()
 const registerTab = inject<RegisterTabFunction>('registerTab')
 const getActiveTab = inject<GetActiveTabFunction>('getActiveTab')
+const setActiveTab = inject<SetActiveTabFunction>('setActiveTab')
 
 // Generate a unique ID based on the label
 const tabId = computed(() => {
@@ -30,10 +33,17 @@ onMounted(() => {
     })
   }
 })
+
+// Listen for sidebar panel events and activate this tab if the panel is within it
+events.on('sidebar-panel-opened', (event: any) => {
+  if (element.value && element.value.contains(event)) {
+    setActiveTab?.(tabId.value)
+  }
+})
 </script>
 
 <template>
-  <div class="tab-wrapper" :class="{ 'tab-hidden': !isActive }">
+  <div ref="element" class="tab-wrapper" :class="{ 'tab-hidden': !isActive }">
     <slot></slot>
   </div>
 </template>

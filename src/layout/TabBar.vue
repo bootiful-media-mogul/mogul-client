@@ -111,6 +111,11 @@ const selectTab = (tabId: string) => {
   activeTab.value = tabId
 }
 
+const setActiveTab = (tabId: string) => {
+  activeTab.value = tabId
+}
+
 provide('registerTab', registerTab)
 provide('getActiveTab', getActiveTab)
+provide('setActiveTab', setActiveTab)
 </script>

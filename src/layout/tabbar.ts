@@ -7,3 +7,4 @@ export interface TabRegistration {
 
 export type RegisterTabFunction = (tab: TabRegistration) => void
 export type GetActiveTabFunction = () => string
+export type SetActiveTabFunction = (tabId: string) => void

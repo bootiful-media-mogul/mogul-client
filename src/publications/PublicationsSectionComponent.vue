@@ -134,7 +134,7 @@
   display: grid;
   grid-template-areas: ' uri success key server-error-message ';
   grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-template-columns: var(--icon-column) var(--icon-column) 15em auto;
+  grid-template-columns: var(--icon-column) var(--icon-column) 8vw auto;
   margin-left: var(--icon-column);
 }
 

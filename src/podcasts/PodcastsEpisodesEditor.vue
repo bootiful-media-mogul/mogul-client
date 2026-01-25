@@ -28,6 +28,9 @@ import PodcastEpisodeAudioFile from '@/podcasts/publications/PodcastEpisodeAudio
 import Podbean from '@/podcasts/publications/Podbean.vue'
 import Ayrshare from '@/podcasts/publications/Ayrshare.vue'
 import Mock from '@/podcasts/publications/Mock.vue'
+import plusIconHighlight from '@/assets/images/plus-icon-highlight.png'
+import plusIcon from '@/assets/images/plus-icon.png'
+import Icon from '@/ui/Icon.vue'
 
 const { t } = useI18n()
 
@@ -180,14 +183,14 @@ const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
 const downArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
   if (!segments.value || segments.value.length === 0) return true
   // Check if this is the last segment by order (largest order number)
-  const maxOrder = Math.max(...segments.value.map(s => s.order))
+  const maxOrder = Math.max(...segments.value.map((s) => s.order))
   return segment.order === maxOrder
 }
 
 const upArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
   if (!segments.value || segments.value.length === 0) return true
   // Check if this is the first segment by order (smallest order number)
-  const minOrder = Math.min(...segments.value.map(s => s.order))
+  const minOrder = Math.min(...segments.value.map((s) => s.order))
   return segment.order === minOrder
 }
 
@@ -216,7 +219,7 @@ onMounted(async () => {
 <template>
   <EntityViewDecorator :watermark-image="segmentAsset">
     <h1>
-      {{ t('podcasts.episodes.episode')}}
+      {{ t('podcasts.episodes.episode') }}
     </h1>
     <form class="pure-form pure-form-stacked">
       <fieldset>
@@ -275,6 +278,15 @@ onMounted(async () => {
 
         <div class="form-section">
           <div class="form-section-title">{{ t('podcasts.episodes.segments') }}</div>
+
+          <div class="toolbar">
+            <Icon
+              :icon-hover="plusIconHighlight"
+              :icon="plusIcon"
+              @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
+            />
+          </div>
+
           <div v-if="draftEpisode">
             <!-- Graphic -->
             <PodcastEpisodeSegmentEditor
@@ -305,7 +317,9 @@ onMounted(async () => {
               @delete="deletePodcastEpisodeSegment(draftEpisode, segment)"
               @edit-transcript="editPodcastEpisodeSegmentTranscript(segment)"
             />
+          </div>
 
+          <!--
             <div class="podcast-episode-controls-row">
               <span class="save">
                 <button
@@ -319,6 +333,7 @@ onMounted(async () => {
               </span>
             </div>
           </div>
+-->
 
           <div class="form-section-title">{{ t('podcasts.episodes.publications') }}</div>
           <div class="publish-menu">

@@ -1,20 +1,11 @@
 <style scoped>
-
 .managed-file-row {
- display: grid;
-  grid-template-areas: 'controls choose visible written preview contentType filename';
-  grid-template-columns: min-content var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column) 5em auto;
-  grid-gap: var(--gutter-space-half);
-  /*
   display: grid;
-
-  grid-template-areas:
-    'filename filename filename'
-    'contentType contentType contentType'
-    'choose visible written'
-    'preview . .';
-  grid-template-columns: var(--icon-column) var(--icon-column) 1fr;
-  grid-gap: var(--gutter-space-half);*/
+  grid-template-areas: 'controls choose visible written preview contentType filename';
+  grid-template-columns:
+    min-content var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column)
+    5em auto;
+  grid-gap: var(--gutter-space-half);
 }
 
 .managed-file-row .visible {
@@ -55,33 +46,6 @@
   text-decoration: none;
 }
 
-/*
-!* Desktop: Horizontal layout *!
-@container app (min-width: 900px) {
-  .managed-file-row {
-    grid-column-gap: var(--gutter-space-half);
-    grid-template-areas: 'controls choose visible written preview contentType filename';
-    grid-template-columns:
-      min-content
-      var(--icon-column)
-      var(--icon-column)
-      var(--icon-column)
-      var(--icon-column)
-      5em
-      auto;
-    grid-gap: var(--gutter-space-half);
-  }
-
-  .managed-file-row .filename {
-    padding: 0;
-  }
-
-  .managed-file-row .contentType {
-    text-align: center;
-  }
-}
-
-*/
 /*
   hide the file upload off screen so it doesn't ruin the ui.
   (display: none doesn't work)

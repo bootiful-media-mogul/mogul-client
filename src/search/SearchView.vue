@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { results, ResultType, search, SearchableResult } from '@/services'
+import { ResultType, search, SearchableResult } from '@/services'
 
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'

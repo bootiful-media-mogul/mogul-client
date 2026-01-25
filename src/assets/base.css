@@ -445,7 +445,6 @@ button {
 }
 
 .toolbar {
-    padding-top: var(--gutter-space);
     padding-bottom: var(--gutter-space-half);
 }
 

@@ -22,7 +22,6 @@ function fileTypeIconFor(type: string): string {
       audio: mediaTypeIcon
     })
   )
-  console.log('type', type, 'order', props.order, 'type', props.type)
   return mapping.get(type)!!
 }
 
@@ -56,7 +55,6 @@ const emit = defineEmits<{
   editTranscript: []
 }>()
 </script>
-
 <template>
   <div class="row segment-row">
     <div class="type">

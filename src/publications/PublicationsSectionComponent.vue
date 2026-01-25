@@ -38,9 +38,6 @@
   <div class="publications">
     <div v-for="publication in existingPublications" v-bind:key="publication.id">
       <div class="publications-row row">
-        <!--        <div class="id-column">
-          #<b>{{ publication.id }}</b>
-        </div>-->
         <div class="plugin-column">
           <div class="plugin-icon-container">
             <Icon
@@ -100,6 +97,7 @@
           </div>
           <div class="key">
             {{ t('publications.outcomes.keys.' + outcome.key) }}
+
           </div>
         </div>
       </div>
@@ -134,7 +132,7 @@
   display: grid;
   grid-template-areas: ' uri success key server-error-message ';
   grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-template-columns: var(--icon-column) var(--icon-column) 8vw auto;
+  grid-template-columns: var(--icon-column) var(--icon-column) auto auto;
   margin-left: var(--icon-column);
 }
 

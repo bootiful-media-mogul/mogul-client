@@ -11,10 +11,10 @@
     <fieldset>
       <legend>
         <span
-          v-if="results"
+          v-if="searchResults"
           v-html="
             t('search.results.prompt', {
-              count: results.length,
+              count: searchResults.length,
               term: searchTerm
             })
           "
@@ -24,7 +24,7 @@
         </span>
       </legend>
       <div class="toolbar"></div>
-      <div v-for="result in results" v-bind:key="result.searchableId">
+      <div v-for="result in searchResults" v-bind:key="result.searchableId">
         <Result
           :context="result.contextMap"
           :type="result.type as ResultType"
@@ -62,10 +62,10 @@ onMounted(async () => {
 })
 
 const searchTerm = ref<string>('')
-const results = ref([] as Array<SearchableResult>)
+const searchResults = ref([] as Array<SearchableResult>)
 
 async function doSearch(q: string) {
   searchTerm.value = q
-  results.value = await search.search(q)
+  searchResults.value = await search.search(q)
 }
 </script>

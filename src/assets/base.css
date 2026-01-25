@@ -10,8 +10,10 @@
     --button-radius: var(--radius);
     --small-gutter-space: calc(0.5 * var(--gutter-space));
     --form-buttons-gutter-space: calc(0.3 * var(--gutter-space));
-    --icon-width: 20px;
+    --icon-width: 1.5em;
     --bg-color: cadetblue;
+    --bg-color-light : oklch(from var(--bg-color) calc(l + 0.5) c h);
+
     --icon-column: calc(var(--gutter-space) * 1.5);
     --id-column: calc(var(--gutter-space) * 5);
     --footer-height: calc(var(--gutter-space) * 3);

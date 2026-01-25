@@ -226,6 +226,7 @@ This is NOT reversible! `,
       'Drag one of the attachments onto the text editor to include it inline.',
     // episodes
 
+    'podcasts.episodes.episode': 'Episode',
     'podcasts.episodes': 'Episodes',
     'podcasts.episodes.title': 'Episodes in "{title}"',
     'podcasts.episodes.publications': 'Publications',

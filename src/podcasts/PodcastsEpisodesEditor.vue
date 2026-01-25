@@ -13,7 +13,6 @@ import {
   utils
 } from '@/services'
 import { useI18n } from 'vue-i18n'
-import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 
 import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
@@ -21,19 +20,7 @@ import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 import { dateTimeToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
-import Icon from '@/ui/Icon.vue'
-
-import downHighlightAsset from '@/assets/images/down-highlight.png'
-import downAsset from '@/assets/images/down.png'
-
-import upHighlightAsset from '@/assets/images/up-highlight.png'
-import upAsset from '@/assets/images/up.png'
-
-import transcriptHighlightAsset from '@/assets/images/transcript-highlight.png'
-import transcriptAsset from '@/assets/images/transcript.png'
-
-import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
-import deleteAsset from '@/assets/images/delete.png'
+import PodcastEpisodeSegmentEditor from '@/podcasts/PodcastEpisodeSegmentEditor.vue'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
 import PublicationsSectionComponent from '@/publications/PublicationsSectionComponent.vue'
 import PodcastEpisodeBlogPost from '@/podcasts/publications/PodcastEpisodeBlogPost.vue'
@@ -191,11 +178,17 @@ const addNewPodcastEpisodeSegment = async (episode: PodcastEpisode) => {
 
 // Arrow Classes
 const downArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
-  return segments.value[segments.value.length - 1].id === segment.id
+  if (!segments.value || segments.value.length === 0) return true
+  // Check if this is the last segment by order (largest order number)
+  const maxOrder = Math.max(...segments.value.map(s => s.order))
+  return segment.order === maxOrder
 }
 
 const upArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
-  return segments.value?.[0]?.id === segment.id
+  if (!segments.value || segments.value.length === 0) return true
+  // Check if this is the first segment by order (smallest order number)
+  const minOrder = Math.min(...segments.value.map(s => s.order))
+  return segment.order === minOrder
 }
 
 // Lifecycle Hooks
@@ -222,7 +215,9 @@ onMounted(async () => {
 </script>
 <template>
   <EntityViewDecorator :watermark-image="segmentAsset">
-    <h1>Episode</h1>
+    <h1>
+      {{ t('podcasts.episodes.episode')}}
+    </h1>
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>
@@ -281,62 +276,35 @@ onMounted(async () => {
         <div class="form-section">
           <div class="form-section-title">{{ t('podcasts.episodes.segments') }}</div>
           <div v-if="draftEpisode">
-            <div v-if="draftEpisode.graphic" class="row episode-managed-file-row">
-              <div class="segment-controls-type">
-                <b>{{ t('podcasts.episodes.episode.graphic') }}</b>
-              </div>
-              <div class="segment-controls-row">
-                <ManagedFileComponent
-                  :managed-file-id="draftEpisode.graphic.id"
-                  accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
-                >
-                  <div class="segment-controls"></div>
-                </ManagedFileComponent>
-              </div>
-            </div>
+            <!-- Graphic -->
+            <PodcastEpisodeSegmentEditor
+              v-if="draftEpisode.graphic"
+              type="graphic"
+              :order="0"
+              :label="t('podcasts.episodes.episode.graphic')"
+              :managed-file-id="draftEpisode.graphic.id"
+              accept=".jpg,.jpeg,.png,image/jpeg,image/jpg,image/png"
+            />
 
-            <div v-for="segment in segments" v-bind:key="segment.id">
-              <div class="row episode-managed-file-row">
-                <div class="segment-controls-type">
-                  <b>{{
-                    t('podcasts.episodes.episode.segments.number', { order: segment.order })
-                  }}</b>
-                </div>
-                <div class="segment-controls-row">
-                  <ManagedFileComponent
-                    :managed-file-id="segment.audio.id"
-                    accept=".mp3,audio/mpeg"
-                  >
-                    <div class="segment-controls">
-                      <Icon
-                        :disabled="upArrowDisabled(draftEpisode, segment)"
-                        :icon="upHighlightAsset"
-                        :icon-hover="upAsset"
-                        @click.prevent="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
-                      />
-                      <Icon
-                        :disabled="downArrowDisabled(draftEpisode, segment)"
-                        :icon="downHighlightAsset"
-                        :icon-hover="downAsset"
-                        @click.prevent="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
-                      />
-                      <Icon
-                        :icon="deleteHighlightAsset"
-                        :icon-hover="deleteAsset"
-                        class="delete-icon"
-                        @click.prevent="deletePodcastEpisodeSegment(draftEpisode, segment)"
-                      />
-                      <Icon
-                        :icon="transcriptHighlightAsset"
-                        :icon-hover="transcriptAsset"
-                        class="transcript-icon"
-                        @click.prevent="editPodcastEpisodeSegmentTranscript(segment)"
-                      />
-                    </div>
-                  </ManagedFileComponent>
-                </div>
-              </div>
-            </div>
+            <!-- Segments -->
+            <PodcastEpisodeSegmentEditor
+              v-for="segment in segments"
+              :key="segment.id"
+              :order="segment.order"
+              type="audio"
+              :label="t('podcasts.episodes.episode.segments.number', { order: segment.order })"
+              :managed-file-id="segment.audio.id"
+              accept=".mp3,audio/mpeg"
+              show-reorder
+              :can-move-up="!upArrowDisabled(draftEpisode, segment)"
+              :can-move-down="!downArrowDisabled(draftEpisode, segment)"
+              show-delete
+              show-transcript
+              @move-up="movePodcastEpisodeSegmentUp(draftEpisode, segment)"
+              @move-down="movePodcastEpisodeSegmentDown(draftEpisode, segment)"
+              @delete="deletePodcastEpisodeSegment(draftEpisode, segment)"
+              @edit-transcript="editPodcastEpisodeSegmentTranscript(segment)"
+            />
 
             <div class="podcast-episode-controls-row">
               <span class="save">
@@ -395,29 +363,5 @@ onMounted(async () => {
 
 fieldset.episodes-table {
   padding-bottom: calc(var(--footer-height) * 1);
-}
-
-.episode-managed-file-row {
-  display: grid;
-  grid-template-areas: 'type controls';
-  grid-template-columns: 100px auto;
-}
-
-.episode-managed-file-row .segment-controls-type {
-  grid-area: type;
-  font-size: smaller;
-  margin-right: var(--gutter-space);
-  text-align: right;
-}
-
-.episode-managed-file-row .segment-controls-row {
-  grid-area: controls;
-}
-
-div.segment-controls {
-  display: grid;
-  grid-template-areas: 'up down delete transcript ';
-  grid-column-gap: var(--gutter-space-half);
-  grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column);
 }
 </style>

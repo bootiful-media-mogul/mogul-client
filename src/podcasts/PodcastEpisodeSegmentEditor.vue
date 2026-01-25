@@ -1,0 +1,194 @@
+<script lang="ts" setup>
+import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
+import Icon from '@/ui/Icon.vue'
+
+// files
+import imageTypeIcon from '@/assets/images/files/image-file.png'
+import mediaTypeIcon from '@/assets/images/files/music-file.png'
+import upHighlightAsset from '@/assets/images/up-highlight.png'
+import upAsset from '@/assets/images/up.png'
+import downHighlightAsset from '@/assets/images/down-highlight.png'
+import downAsset from '@/assets/images/down.png'
+import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
+import deleteAsset from '@/assets/images/delete.png'
+import transcriptHighlightAsset from '@/assets/images/transcript-highlight.png'
+import transcriptAsset from '@/assets/images/transcript.png'
+
+//
+function fileTypeIconFor(type: string): string {
+  const mapping = new Map(
+    Object.entries({
+      graphic: imageTypeIcon,
+      audio: mediaTypeIcon
+    })
+  )
+  console.log('type', type, 'order', props.order, 'type', props.type)
+  return mapping.get(type)!!
+}
+
+interface Props {
+  label: string
+  managedFileId: number
+  accept: string
+  showReorder?: boolean
+  canMoveUp?: boolean
+  canMoveDown?: boolean
+  showDelete?: boolean
+  showTranscript?: boolean
+  order?: number
+  type: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  showReorder: false,
+  canMoveUp: false,
+  canMoveDown: false,
+  showDelete: false,
+  showTranscript: false,
+  order: 0,
+  type: 'segment'
+})
+
+const emit = defineEmits<{
+  moveUp: []
+  moveDown: []
+  delete: []
+  editTranscript: []
+}>()
+</script>
+
+<template>
+  <div class="row segment-row">
+    <div class="type">
+      <div class="segment-controls-icon">
+        <Icon :icon-hover="fileTypeIconFor(props.type)" :icon="fileTypeIconFor(props.type)" />
+      </div>
+      <div class="segment-controls-label">{{ label }}</div>
+    </div>
+    <!-- Reorder arrows (if enabled) -->
+    <div class="arrows">
+      <Icon
+        v-if="showReorder"
+        class="up"
+        :disabled="!canMoveUp"
+        :icon="upHighlightAsset"
+        :icon-hover="upAsset"
+        @click.prevent="emit('moveUp')"
+      />
+      <Icon
+        v-if="showReorder"
+        class="down"
+        :disabled="!canMoveDown"
+        :icon="downHighlightAsset"
+        :icon-hover="downAsset"
+        @click.prevent="emit('moveDown')"
+      />
+    </div>
+    <ManagedFileComponent
+      class="managed-file-row"
+      :managed-file-id="managedFileId"
+      :accept="accept"
+    >
+    </ManagedFileComponent>
+    <div class="buttons">
+      <!-- File upload component -->
+
+      <!-- Transcript action (if enabled) -->
+      <div class="transcript-button">
+        <Icon
+          v-if="showTranscript"
+          :icon="transcriptHighlightAsset"
+          :icon-hover="transcriptAsset"
+          class="transcript-icon"
+          @click.prevent="emit('editTranscript')"
+        />
+      </div>
+
+      <!-- Delete action (if enabled) -->
+      <div class="delete-button">
+        <Icon
+          :disabled="!showDelete"
+          :icon="deleteHighlightAsset"
+          :icon-hover="deleteAsset"
+          class="delete-icon"
+          @click.prevent="emit('delete')"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.segment-row {
+  padding: 0;
+  background-color: lightgray;
+  border-radius: var(--radius);
+  margin-bottom: var(--gutter-space);
+  display: grid;
+  grid-template-columns: minmax(12vw, 130px) auto;
+  overflow: hidden;
+  grid-template-areas:
+    ' type arrows                       '
+    '  managed-file-row managed-file-row '
+    '  buttons buttons ';
+  .type {
+    position: relative;
+    font-size: smaller;
+    grid-area: type;
+    top: calc(var(--radius) * -1);
+    background-color: black;
+    color: white;
+    border-bottom-right-radius: var(--radius);
+    display: grid;
+    grid-template-areas: 'icon label';
+    grid-template-columns: min-content auto;
+    grid-gap: var(--gutter-space-half);
+    padding: var(--gutter-space-half);
+    .segment-controls-label {
+      grid-area: label;
+      place-content: center;
+    }
+    .segment-controls-icon {
+      grid-area: icon;
+      img {
+        filter: invert(1);
+      }
+    }
+  }
+  .buttons {
+    border-top: 1px solid black;
+    padding: var(--gutter-space-half);
+    grid-area: buttons;
+    display: grid;
+    grid-template-areas: 'transcript-button . delete-button ';
+    grid-template-columns: min-content auto min-content;
+    .transcript-button {
+      grid-area: transcript-button;
+    }
+    .delete-button {
+      grid-area: delete-button;
+    }
+  }
+  .managed-file-row {
+    border-top: 1px solid black;
+    padding: var(--gutter-space-half);
+    grid-area: managed-file-row;
+  }
+  .arrows {
+    grid-area: arrows;
+    place-content: center;
+    place-self: end;
+    padding: var(--gutter-space-half);
+    grid-gap: var(--gutter-space-half);
+    .up {
+      grid-area: up;
+    }
+    .down {
+      grid-area: down;
+    }
+    display: grid;
+    grid-template-areas: ' up down   ';
+    grid-template-rows: min-content;
+  }
+}
+</style>

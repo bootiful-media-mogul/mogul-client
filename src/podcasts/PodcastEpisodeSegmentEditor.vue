@@ -84,12 +84,9 @@ const emit = defineEmits<{
         @click.prevent="emit('moveDown')"
       />
     </div>
-    <ManagedFileComponent
-      class="managed-file-row"
-      :managed-file-id="managedFileId"
-      :accept="accept"
-    >
-    </ManagedFileComponent>
+    <div class="managed-file-row">
+      <ManagedFileComponent :managed-file-id="managedFileId" :accept="accept" />
+    </div>
     <div class="buttons">
       <!-- File upload component -->
 
@@ -128,9 +125,9 @@ const emit = defineEmits<{
   grid-template-columns: minmax(12vw, 130px) auto;
   overflow: hidden;
   grid-template-areas:
-    ' type arrows                       '
-    '  managed-file-row managed-file-row '
-    '  buttons buttons ';
+    '  type               arrows                       '
+    '  managed-file-row   managed-file-row '
+    '  buttons            buttons ';
   .type {
     position: relative;
     font-size: smaller;
@@ -171,7 +168,7 @@ const emit = defineEmits<{
   }
   .managed-file-row {
     border-top: 1px solid black;
-    padding: var(--gutter-space-half);
+
     grid-area: managed-file-row;
   }
   .arrows {

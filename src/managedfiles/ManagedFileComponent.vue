@@ -1,16 +1,20 @@
-<style>
+<style scoped>
+
 .managed-file-row {
-  grid-column-gap: var(--gutter-space-half);
-  grid-template-areas: 'controls choose visible written  preview   contentType   filename';
-  grid-template-columns:
-    min-content
-    var(--icon-column)
-    var(--icon-column)
-    var(--icon-column)
-    var(--icon-column)
-    5em
-    auto;
+ display: grid;
+  grid-template-areas: 'controls choose visible written preview contentType filename';
+  grid-template-columns: min-content var(--icon-column) var(--icon-column) var(--icon-column) var(--icon-column) 5em auto;
+  grid-gap: var(--gutter-space-half);
+  /*
   display: grid;
+
+  grid-template-areas:
+    'filename filename filename'
+    'contentType contentType contentType'
+    'choose visible written'
+    'preview . .';
+  grid-template-columns: var(--icon-column) var(--icon-column) 1fr;
+  grid-gap: var(--gutter-space-half);*/
 }
 
 .managed-file-row .visible {
@@ -19,17 +23,19 @@
 
 .managed-file-row .controls {
   grid-area: controls;
+  display: contents;
 }
 
 .managed-file-row .filename {
   grid-area: filename;
+  font-size: 1em;
+  padding: var(--gutter-space-half) 0;
 }
 
 .managed-file-row .contentType {
   grid-area: contentType;
   font-size: small;
-
-  text-align: center;
+  text-align: left;
 }
 
 .managed-file-row .written {
@@ -38,6 +44,7 @@
 
 .managed-file-row .preview {
   grid-area: preview;
+  justify-self: start;
 }
 
 .managed-file-row .choose {
@@ -48,6 +55,33 @@
   text-decoration: none;
 }
 
+/*
+!* Desktop: Horizontal layout *!
+@container app (min-width: 900px) {
+  .managed-file-row {
+    grid-column-gap: var(--gutter-space-half);
+    grid-template-areas: 'controls choose visible written preview contentType filename';
+    grid-template-columns:
+      min-content
+      var(--icon-column)
+      var(--icon-column)
+      var(--icon-column)
+      var(--icon-column)
+      5em
+      auto;
+    grid-gap: var(--gutter-space-half);
+  }
+
+  .managed-file-row .filename {
+    padding: 0;
+  }
+
+  .managed-file-row .contentType {
+    text-align: center;
+  }
+}
+
+*/
 /*
   hide the file upload off screen so it doesn't ruin the ui.
   (display: none doesn't work)
@@ -83,13 +117,13 @@
       <input v-model="visible" :title="t('managedfiles.visible')" type="checkbox" />
     </a>
 
-    <span class="written">
+    <div class="written">
       <span v-if="uploading"> 🕒 </span>
       <span v-else>
         <Icon v-if="written" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
       </span>
-    </span>
-    <span class="preview">
+    </div>
+    <div class="preview">
       <a
         :class="'mogul-icon preview-icon ' + (written ? '' : ' disabled')"
         :title="t('managedfiles.preview')"
@@ -97,20 +131,20 @@
         @click="preview"
       >
       </a>
-    </span>
+    </div>
 
-    <span class="contentType">
+    <div class="contentType">
       <span v-if="contentType">
         <code :title="t('managedfiles.content-type')">{{ contentType }}</code>
       </span>
-    </span>
+    </div>
 
-    <span class="filename">
+    <div class="filename">
       <span v-if="filename" :title="t('managedfiles.file-name')" class="form-prompt"
         >{{ filename }}
       </span>
       <span v-else class="form-prompt">{{ t('managedfiles.please-upload-a-file') }}</span>
-    </span>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -120,6 +154,7 @@ import { onMounted, ref, watch } from 'vue'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import Icon from '@/ui/Icon.vue'
 import { useI18n } from 'vue-i18n'
+
 const { t } = useI18n()
 
 const props = defineProps<{

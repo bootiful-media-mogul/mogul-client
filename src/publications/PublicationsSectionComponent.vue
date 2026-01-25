@@ -38,7 +38,7 @@
   <div class="publications">
     <div v-for="publication in existingPublications" v-bind:key="publication.id">
       <div class="publications-row row">
-<!--        <div class="id-column">
+        <!--        <div class="id-column">
           #<b>{{ publication.id }}</b>
         </div>-->
         <div class="plugin-column">
@@ -223,12 +223,8 @@
 /* PUBLICATIONS */
 .publications .publications-row {
   display: grid;
-
   grid-template-areas: ' plugin . delete   url  created published   ';
-
-  grid-template-columns:
-    min-content var(--gutter-space) var(--icon-column)  var(--icon-column)
-    var(--date-column) var(--date-column);
+  grid-template-columns: min-content var(--gutter-space) var(--icon-column) var(--icon-column) var(--date-column) auto;
 }
 
 .publications .publications-row {

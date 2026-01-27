@@ -5,7 +5,7 @@
   --gutter-space-half: calc(var(--gutter-space) / 2);
   --gutter-space-third: calc(var(--gutter-space) / 3);
   --main-toolbar-gutter: var(--gutter-space);
-  --sidebar-width: 35vw;
+  --sidebar-width: 40vw;
   --radius: 0.5em;
   --button-radius: var(--radius);
   --small-gutter-space: calc(0.5 * var(--gutter-space));

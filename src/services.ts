@@ -1365,6 +1365,31 @@ export class Blog {
   }
 }
 
+export class Post {
+  readonly id: number
+  readonly title: string
+  readonly content: string
+  readonly summary: string
+  readonly complete: boolean
+  readonly created: string | null
+
+  constructor(
+    id: number,
+    title: string,
+    content: string,
+    summary: string,
+    complete: boolean,
+    created: string | null
+  ) {
+    this.id = id
+    this.title = title
+    this.content = content
+    this.summary = summary
+    this.complete = complete
+    this.created = created
+  }
+}
+
 export class Blogs {
   readonly graphqlClient: Client
 
@@ -1433,11 +1458,11 @@ export class Blogs {
       query {
         blogs  {
           created
-          id 
-          title 
-          description 
+          id
+          title
+          description
         }
-      }  
+      }
     `,
       {}
     )
@@ -1451,6 +1476,78 @@ export class Blogs {
       )
     }
     return newResults
+  }
+
+  async updatePost(
+    postId: number,
+    title: string,
+    description: string,
+    summary: string
+  ): Promise<boolean> {
+    const q = `
+     mutation ($postId:Int, $title:String, $description:String, $summary:String){
+      updatePost(postId:$postId, title:$title, description:$description, summary:$summary)
+     }
+    `
+    const result = await this.graphqlClient.mutation(q, {
+      postId: postId,
+      title: title,
+      description: description,
+      summary: summary
+    })
+
+    return (await result.data['updatePost']) as boolean
+  }
+
+  async summarize(content: string): Promise<string> {
+    const q = `
+     mutation ($content:String){
+      summarize(content:$content)
+     }
+    `
+    const result = await this.graphqlClient.mutation(q, {
+      content: content
+    })
+
+    return (await result.data['summarize']) as string
+  }
+
+  async blogPostsByBlog(blogId: number): Promise<Array<Post>> {
+    const q = `
+      query blogPostsByBlog($blogId: Int) {
+        blogPostsByBlog(blogId: $blogId) {
+          id
+          title
+          content
+          summary
+          complete
+          created
+        }
+      }
+    `
+    const result = await this.graphqlClient.query(q, { blogId: blogId })
+    const posts = (await result.data['blogPostsByBlog']) as Array<Post>
+    return posts.map(
+      (p) => new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+    )
+  }
+
+  async postById(postId: number): Promise<Post> {
+    const q = `
+      query postById($postId: Int) {
+        postById(postId: $postId) {
+          id
+          title
+          content
+          summary
+          complete
+          created
+        }
+      }
+    `
+    const result = await this.graphqlClient.query(q, { postId: postId })
+    const p = (await result.data['postById']) as Post
+    return new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
   }
 }
 

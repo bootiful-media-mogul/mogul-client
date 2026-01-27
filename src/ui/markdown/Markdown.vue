@@ -45,7 +45,7 @@
   /*max-height: calc(var(--icon-width) * 0.5);*/
   padding: 0 calc(var(--icon-width) / 2);
   padding-top: var(--gutter-space-half);
-  padding-bottom : var(--gutter-space-half);
+  padding-bottom: var(--gutter-space-half);
 }
 </style>
 <template>

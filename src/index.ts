@@ -15,6 +15,7 @@ import {
   resetNotesForNotable,
   results
 } from '@/services'
+import BlogsPostEditor from '@/blogs/BlogsPostEditor.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -84,7 +85,21 @@ const router = createRouter({
       component: { template: '<div>Redirecting...</div>' }
     },
 
-    /* new entities route */
+    /* blogs route */
+    {
+      props(to) {
+        return {
+          blogId: Number(to.params.blogId ),
+          postId: Number(to.params.postId)
+        }
+      },
+      path: '/blogs/:blogId/posts/:postId',
+      name: 'blogs/posts/post',
+      component: BlogsPostEditor
+    },
+
+    /* podcasts route */
+
     {
       props(to) {
         return {

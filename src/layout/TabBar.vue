@@ -58,10 +58,7 @@
   padding: var(--gutter-space-third);
   padding-bottom: var(--gutter-space);
   text-decoration: none;
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  border-radius: var(--radius) var(--radius) 0 0;
 }
 
 .tab-active {

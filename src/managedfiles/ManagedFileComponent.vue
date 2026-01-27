@@ -61,7 +61,6 @@
 </style>
 
 <template>
-
   <input
     ref="realFileUploadInputField"
     :accept="accept ? accept : '*/*'"

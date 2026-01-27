@@ -73,7 +73,7 @@ onMounted(async () => {
 /* Mobile-first: Default styles for mobile */
 .toolbar-container {
   color: white;
-  border-radius: calc(2 * var(--radius));
+  border-radius: calc(1 * var(--radius));
   padding: var(--gutter-space);
   background-color: black;
   position: fixed;

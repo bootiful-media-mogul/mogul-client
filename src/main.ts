@@ -144,7 +144,8 @@ const translations = {
 
     // notifications
     notifications: {
-      'blog-updated-event': `The blog "{context}" with ID #{key} has been created`.trim(),
+      'blog-updated-event': `The blog "{context}" with ID #{key} has been updated`.trim(),
+      'blog-created-event': `The blog "{context}" with ID #{key} has been created`.trim(),
       'ayrshare-publication-completion-event':
         'Publication to the Ayrshare social media platform has completed.',
       'setting-written-event': 'Plugin configuration has been updated.',

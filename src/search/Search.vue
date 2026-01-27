@@ -1,17 +1,17 @@
 <style>
 .search-outer-box {
-  input {
+  & input {
     border: 1px solid red;
     border-radius: var(--radius);
     text-align: center;
     font-size: 1rem;
   }
-  input::placeholder {
+  & input::placeholder {
     text-align: center;
   }
-  input:hover,
-  input:focus,
-  input:active {
+  & input:hover,
+  & input:focus,
+  & input:active {
     opacity: 1;
   }
 }

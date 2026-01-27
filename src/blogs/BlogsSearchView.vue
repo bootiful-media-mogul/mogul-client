@@ -188,7 +188,6 @@ const editorVisible = ref<boolean>(false)
 const draftBlog = ref<Blog>()
 
 async function editBlog(blog: Blog) {
-  console.log('editing blog ', blog)
   draftBlog.value = blog
   editorVisible.value = true
 }
@@ -211,14 +210,12 @@ async function createBlog() {
 }
 
 function openRssFeed(blogId: number, url: string) {
-  console.log(blogId + ':' + url)
   window.open(url, 'rssWindowForBlogNo' + blogId)
 }
 
 function podcastRssFeedUrl(blog: Blog) {
   const api = import.meta.env.VITE_API_URL
   const url = api + '/public/feeds/moguls/' + mogulId.value + '/blogs/' + blog.id + '/posts.atom'
-  console.log('the url is ' + url)
   return url
 }
 
@@ -227,7 +224,6 @@ async function reset() {
   mogulId.value = user.id
   mogulName.value = user.givenName + ' ' + user.familyName
   blogResults.value = await blogs.blogs()
-  console.log('fetched blogs', blogResults.value)
 }
 
 async function onEditorDone() {

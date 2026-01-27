@@ -65,7 +65,7 @@ onMounted(async () => {
   place-self: center;
 
   gap: var(--gutter-space);
-  img {
+  & img {
     max-height: calc(3 * var(--gutter-space));
     width: auto;
   }

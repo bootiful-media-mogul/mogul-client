@@ -221,9 +221,9 @@
 .publications .publications-row {
   display: grid;
   grid-template-areas: ' plugin . delete   url  created published   ';
-  grid-template-columns: min-content var(--gutter-space) var(--icon-column) var(--icon-column) var(
-      --date-column
-    ) auto;
+  grid-template-columns:
+    min-content var(--gutter-space) var(--icon-column) var(--icon-column) var(--date-column)
+    auto;
 }
 
 .publications .publications-row {

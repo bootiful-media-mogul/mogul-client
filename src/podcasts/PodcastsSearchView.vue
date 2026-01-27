@@ -59,7 +59,11 @@
       </form>
     </div>
     <div v-else>
-      <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" @done="onEditorDone" />
+      <PodcastsEditor
+        :podcast="draftPodcast!"
+        :podcast-id="draftPodcast!.id"
+        @done="onEditorDone"
+      />
     </div>
   </EntityViewDecorator>
 </template>

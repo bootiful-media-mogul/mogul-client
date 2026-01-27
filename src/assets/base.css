@@ -387,7 +387,7 @@ textarea {
 
   text-align: center;
 
-  a {
+  & a {
     color: white;
     font-weight: normal;
     font-size: small;

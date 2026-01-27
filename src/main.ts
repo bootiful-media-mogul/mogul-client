@@ -28,6 +28,16 @@ const translations = {
       entity: { title: 'Notes for {entityName}' },
       new: { prompt: "{entityName}'s Notes" }
     },
+    blogs: {
+      done: 'Done',
+      editing : 'Editing {title}' ,
+
+      'save': 'Save',
+      'new-blog': {
+        title: 'Title',
+        description: 'Description'
+      }
+    },
     publications: {
       outcomes: {
         'error-message': 'see error message',
@@ -134,6 +144,7 @@ const translations = {
 
     // notifications
     notifications: {
+      'blog-updated-event' : `The blog "{context}" with ID #{key} has been created`.trim(),
       'ayrshare-publication-completion-event':
         'Publication to the Ayrshare social media platform has completed.',
       'setting-written-event': 'Plugin configuration has been updated.',
@@ -222,10 +233,15 @@ This is NOT reversible! `,
     // compositions
 
     'compositions.buttons.add-attachment': 'Add Attachment',
-    'compositions.attachments.drag-and-drop-attachments':
-      'Drag one of the attachments onto the text editor to include it inline.',
+    // blogs
+    'blogs.title': 'Blogs',
+    'blogs.all': "{user}'s blogs",
     // episodes
 
+    'compositions.attachments.drag-and-drop-attachments':
+      'Drag one of the attachments onto the text editor to include it inline.',
+
+    'podcasts.done' : 'Done',
     'podcasts.episodes.episode': 'Episode',
     'podcasts.episodes': 'Episodes',
     'podcasts.episodes.title': 'Episodes in "{title}"',

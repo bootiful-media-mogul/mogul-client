@@ -134,7 +134,7 @@ events.on('sidebar-panel-closed', (event: any) => {
 })
 
 events.on('sidebar-panel-opened', (event: any) => {
-  console.log ( 'sidebar-panel-opened')
+  console.log('sidebar-panel-opened')
   const contains = element.value!!.contains(event)
   if (contains) {
     visible.value = true

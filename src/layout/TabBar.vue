@@ -98,7 +98,7 @@ const lastManualActivation = ref<number>(0)
 
 const registerTab = (tab: TabRegistration) => {
   // Prevent duplicate registration
-  const exists = registeredTabs.value.find(t => t.id === tab.id)
+  const exists = registeredTabs.value.find((t) => t.id === tab.id)
   if (exists) {
     return
   }

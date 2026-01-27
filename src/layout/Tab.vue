@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { inject, onMounted, useSlots, computed, ref } from 'vue'
-import type { RegisterTabFunction, GetActiveTabFunction, SetActiveTabFunction } from '@/layout/tabbar'
+import type {
+  RegisterTabFunction,
+  GetActiveTabFunction,
+  SetActiveTabFunction
+} from '@/layout/tabbar'
 import { events } from '@/services'
 
 interface Props {

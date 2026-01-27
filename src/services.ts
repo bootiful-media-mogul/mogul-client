@@ -5,6 +5,7 @@ import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
+import { dateTimeToString } from '@/dates'
 
 export const graphqlClient = new Client({
   url: '/api/graphql',
@@ -1354,9 +1355,11 @@ export class Blog {
   readonly id: number
   readonly title: string
   readonly description: string
+  readonly created: string | null
 
-  constructor(id: number, title: string, description: string) {
+  constructor(id: number, title: string, description: string, created: string | null) {
     this.id = id
+    this.created = created
     this.title = title
     this.description = description
   }
@@ -1369,12 +1372,85 @@ export class Blogs {
     this.graphqlClient = graphqlClient
   }
 
+  async deleteBlog(blogId: number): Promise<boolean> {
+    const q = ` 
+    mutation deleteBlog($blogId:Int) {
+      deleteBlog(blogId:$blogId) 
+    }
+   `
+    const r = await blogs.graphqlClient.mutation(q, { blogId: blogId })
+    const b = (await r.data['deleteBlog']) as boolean
+    return Promise.resolve(b)
+  }
+
+  async blogById(blogId: number): Promise<Blog> {
+    const q = `
+          query blogById($blogId: Int) {
+            blogById( blogId: $blogId ) {
+                id
+                title
+                description
+                created
+            }
+          } 
+    `
+    const result = await this.graphqlClient.query(q, { blogId: blogId })
+    const b = (await result.data['blogById']) as Blog
+    return new Blog(b.id, b.title, b.description, dateTimeToString(b.created))
+  }
+
+  async createBlog(title: string, description: string): Promise<Blog> {
+    const q = `
+     mutation ($title:String, $description:String){
+      createBlog(title:$title, description:$description) {
+       id , title , description , created
+      }
+     }
+    `
+    const result = await this.graphqlClient.mutation(q, { title: title, description: description })
+    const resultBlog = (await result.data['createBlog']) as Blog
+    return await this.blogById(resultBlog.id)
+  }
+
+  async update(blogId: number, title: string, description: string): Promise<boolean> {
+    const q = `
+     mutation ($blogId:Int, $title:String, $description:String){
+      updateBlog(blogId:$blogId, title:$title, description:$description)
+     }
+    `
+    const result = await this.graphqlClient.mutation(q, {
+      blogId: blogId,
+      title: title,
+      description: description
+    })
+
+    return (await result.data['updateBlog']) as boolean
+  }
+
   async blogs(): Promise<Array<Blog>> {
-    return Promise.resolve([
-      new Blog(1, 'a blog', 'a description'),
-      new Blog(2, 'another blog', 'another description'),
-      new Blog(3, 'this is hardcoded', 'data in the javascript client')
-    ])
+    const results = await this.graphqlClient.query(
+      `
+      query {
+        blogs  {
+          created
+          id 
+          title 
+          description 
+        }
+      }  
+    `,
+      {}
+    )
+
+    const data = (await results.data['blogs']) as Array<Blog>
+
+    const newResults = []
+    for (let i = 0; i < data.length; i++) {
+      newResults.push(
+        new Blog(data[i]['id'], data[i]['title'], data[i]['description'], data[i]['created']!!)
+      )
+    }
+    return newResults
   }
 }
 
@@ -1425,7 +1501,6 @@ export class Notes {
   }
 
   async createNote(type: string, id: number, note: string): Promise<boolean> {
-    // console.log('creating note', type, id, note)
     const mutation = ` 
       mutation CreateNote( $type : String, $id : Int , $note : String){  
         createNote( type : $type, id : $id, note : $note)
@@ -1436,7 +1511,6 @@ export class Notes {
       id: id,
       type: type
     })
-    // console.log('result', result)
     return await result.data['createNote']
   }
 

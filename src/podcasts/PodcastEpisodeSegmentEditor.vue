@@ -145,6 +145,7 @@ const emit = defineEmits<{
     }
     .segment-controls-icon {
       grid-area: icon;
+      padding-top: var(--radius);
       img {
         filter: invert(1);
       }

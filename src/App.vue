@@ -87,7 +87,6 @@ onMounted(async () => {
     'search'
     'global-toolbar';
   grid-gap: var(--gutter-space-half);
-
 }
 
 .toolbar-container .hello {
@@ -121,7 +120,7 @@ onMounted(async () => {
 }
 
 /* Desktop overrides */
-@media (min-width: 900px) {
+@container app (min-width: 900px) {
   .toolbar-container {
     color: black;
     background-color: transparent;
@@ -166,8 +165,6 @@ onMounted(async () => {
   .toolbar-container img:hover {
     filter: none;
   }
-
-
 }
 </style>
 <template>

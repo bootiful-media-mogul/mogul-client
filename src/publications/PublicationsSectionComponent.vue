@@ -97,7 +97,6 @@
           </div>
           <div class="key">
             {{ t('publications.outcomes.keys.' + outcome.key) }}
-
           </div>
         </div>
       </div>
@@ -222,7 +221,9 @@
 .publications .publications-row {
   display: grid;
   grid-template-areas: ' plugin . delete   url  created published   ';
-  grid-template-columns: min-content var(--gutter-space) var(--icon-column) var(--icon-column) var(--date-column) auto;
+  grid-template-columns: min-content var(--gutter-space) var(--icon-column) var(--icon-column) var(
+      --date-column
+    ) auto;
 }
 
 .publications .publications-row {
@@ -255,6 +256,7 @@
   background-color: black;
   border-radius: var(--radius);
   overflow: hidden;
+
   width: 40px;
   height: 40px;
 }

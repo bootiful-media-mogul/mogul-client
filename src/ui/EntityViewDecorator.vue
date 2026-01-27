@@ -8,7 +8,7 @@ defineProps<{
 
 <template>
   <div class="watermarked-view">
-<!--    <WatermarkedImage class="image" :watermark-image="watermarkImage" />-->
+    <!--    <WatermarkedImage class="image" :watermark-image="watermarkImage" />-->
     <div class="content">
       <slot />
     </div>
@@ -17,8 +17,6 @@ defineProps<{
 
 <style scoped>
 .watermarked-view {
-
-
   .image {
     position: fixed;
     top: var(--gutter-space);

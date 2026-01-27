@@ -59,7 +59,7 @@
       </form>
     </div>
     <div v-else>
-      <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" />
+      <PodcastsEditor :podcast="draftPodcast!" :podcast-id="draftPodcast!.id" @done="onEditorDone" />
     </div>
   </EntityViewDecorator>
 </template>
@@ -97,16 +97,15 @@
 }
 
 .podcasts-row {
-  padding-bottom: var(--gutter-space)  ;
-  grid-template-rows: minmax(var(--row-height), auto) auto ;
-
-  border-top : 1px solid black;
+  padding-bottom: var(--gutter-space);
+  grid-template-rows: minmax(var(--row-height), auto) auto;
+  border-top: 1px solid black;
   display: grid;
+  grid-column-gap: var(--gutter-space);
   grid-template-areas:
     'podcast-title podcast-title podcast-title podcast-title podcast-title podcast-title '
-    'id edit delete rss episodes created' ;
-  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) min-content auto ;
-
+    'id edit delete rss episodes created';
+  grid-template-columns: var(--id-column) var(--icon-column) var(--icon-column) var(--icon-column) 8em auto;
 }
 </style>
 <script lang="ts" setup>
@@ -143,6 +142,7 @@ const editorVisible = ref(false)
 const mogulId = ref<number>(0)
 const mogulName = ref<string>('')
 const { t } = useI18n()
+
 async function refresh() {
   all.value = await podcasts.podcasts()
 }
@@ -190,6 +190,11 @@ async function editPodcast(podcast: Podcast) {
   title.value = podcast.title
   editorVisible.value = true
   await loadNotesForNotable('podcast', podcast.id, podcast.title)
+}
+
+async function onEditorDone() {
+  editorVisible.value = false
+  await refresh()
 }
 
 onMounted(async () => {

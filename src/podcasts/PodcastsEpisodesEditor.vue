@@ -318,23 +318,6 @@ onMounted(async () => {
               @edit-transcript="editPodcastEpisodeSegmentTranscript(segment)"
             />
           </div>
-
-          <!--
-            <div class="podcast-episode-controls-row">
-              <span class="save">
-                <button
-                  :disabled="draftEpisode.id === undefined"
-                  class="pure-button pure-button-primary"
-                  type="submit"
-                  @click.prevent="addNewPodcastEpisodeSegment(draftEpisode)"
-                >
-                  {{ t('podcasts.episodes.buttons.add-segment') }}
-                </button>
-              </span>
-            </div>
-          </div>
--->
-
           <div class="form-section-title">{{ t('podcasts.episodes.publications') }}</div>
           <div class="publish-menu">
             <PublicationsSectionComponent

@@ -61,6 +61,7 @@
 </style>
 
 <template>
+
   <input
     ref="realFileUploadInputField"
     :accept="accept ? accept : '*/*'"
@@ -78,7 +79,26 @@
       <span :title="t('managedfiles.upload')" class="folder-icon"></span>
     </a>
     <a class="visible" href="#">
-      <input v-model="visible" :title="t('managedfiles.visible')" type="checkbox" />
+      <div v-if="visible">
+        <Icon
+          ref="icon"
+          :icon-hover="privacy"
+          :icon="privacy"
+          class="icon"
+          sticky
+          @click.prevent="visible = false"
+        />
+      </div>
+      <div v-else>
+        <Icon
+          ref="icon"
+          :icon-hover="privacyHighlight"
+          :icon="privacyHighlight"
+          class="icon"
+          sticky
+          @click.prevent="visible = true"
+        />
+      </div>
     </a>
 
     <div class="written">
@@ -118,6 +138,8 @@ import { onMounted, ref, watch } from 'vue'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import Icon from '@/ui/Icon.vue'
 import { useI18n } from 'vue-i18n'
+import privacy from '@/assets/images/privacy-preview-highlight.png'
+import privacyHighlight from '@/assets/images/privacy-preview.png'
 
 const { t } = useI18n()
 

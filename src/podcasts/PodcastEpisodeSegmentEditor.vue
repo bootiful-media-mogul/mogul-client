@@ -116,7 +116,7 @@ const emit = defineEmits<{
 <style scoped>
 .segment-row {
   padding: 0;
-  background-color: lightgray;
+  background-color: var(--panel-bg-color);
   border-radius: var(--radius);
   margin-bottom: var(--gutter-space);
   display: grid;

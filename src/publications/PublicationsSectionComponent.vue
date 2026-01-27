@@ -176,14 +176,14 @@
 }
 
 .toolbar-icon-selected {
-  background-color: white;
+  background-color: var(--panel-bg-color);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
 
 .publication-panel {
   border-radius: var(--radius);
-  background-color: white;
+  background-color: var(--panel-bg-color);
   padding: calc(var(--gutter-space) / 2);
   margin: 0;
   overflow: hidden;

@@ -190,12 +190,15 @@ provide('getInputElement', getInputElement)
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2.5 * var(--icon-width));
   background-color: rgba(255, 255, 255, 0.5);
+  /*background-color: var(--panel-bg-color);*/
+
   border-radius: 8px;
 }
 
 .toolbar {
   z-index: 8;
   background-color: rgba(255, 255, 255, 0.5);
+
   grid-area: toolbar;
   margin-bottom: calc(-1 * var(--icon-width));
   border-radius: 8px;

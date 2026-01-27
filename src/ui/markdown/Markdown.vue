@@ -36,9 +36,7 @@
   grid-area: toolbar;
   justify-self: center;
   max-width: fit-content;
-  /*max-height: fit-content;*/
   align-items: center;
-  /*padding-top: var(--gutter-space);*/
   padding-bottom: var(--gutter-space);
 }
 
@@ -46,6 +44,8 @@
   max-width: calc(var(--icon-width) * 0.7);
   /*max-height: calc(var(--icon-width) * 0.5);*/
   padding: 0 calc(var(--icon-width) / 2);
+  padding-top: var(--gutter-space-half);
+  padding-bottom : var(--gutter-space-half);
 }
 </style>
 <template>

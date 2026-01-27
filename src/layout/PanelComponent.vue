@@ -13,7 +13,7 @@
   color: #777777;
 }
 .panel {
-  background-color: lightgray;
+  background-color: var(--panel-bg-color);
   top: calc(-1 * var(--gutter-space));
   position: relative;
   overflow: hidden;

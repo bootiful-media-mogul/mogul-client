@@ -3,7 +3,7 @@
 -->
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { Blog, Post, blogs, ResultType, mogul } from '@/services'
+import { Blog, blogs, Post, ResultType } from '@/services'
 import router from '@/index'
 import { useI18n } from 'vue-i18n'
 import Result from '@/search/Result.vue'
@@ -57,8 +57,7 @@ function context(post: Post) {
 }
 
 async function newPost() {
-  const post = await blogs.createPost(selectedBlogId.value, (await mogul.user()).displayName +"'s blog", '', '')
-  console.log('created post', post)
+  const post = await blogs.createPost(selectedBlogId.value, '', '', '')
   await loadPost(post)
 }
 </script>

@@ -311,7 +311,7 @@ textarea {
 .navigation-links {
   grid-area: navigation;
   text-align: center;
-  font-size: 1em ;
+  font-size: 1em;
   overflow-x: auto;
   white-space: nowrap;
 }

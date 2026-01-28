@@ -90,7 +90,7 @@ const router = createRouter({
     {
       props(to) {
         return {
-          blogId: Number(to.params.blogId ),
+          blogId: Number(to.params.blogId),
           postId: Number(to.params.postId)
         }
       },

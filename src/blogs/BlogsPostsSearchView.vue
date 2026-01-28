@@ -3,7 +3,7 @@
 -->
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import { Blog, Post, blogs, ResultType } from '@/services'
+import { Blog, Post, blogs, ResultType, mogul } from '@/services'
 import router from '@/index'
 import { useI18n } from 'vue-i18n'
 import Result from '@/search/Result.vue'
@@ -45,7 +45,6 @@ async function navigateToPostEditor(blogId: number, postId: number) {
 
 const loadPost = async (p: Post) => {
   await navigateToPostEditor(props.blogId, p.id)
-  title.value = 'Blog Posts'
 }
 
 function context(post: Post) {
@@ -58,22 +57,17 @@ function context(post: Post) {
 }
 
 async function newPost() {
-  console.log('creating new post - TODO: implement createPostDraft in backend')
-  // TODO: Need to add createPostDraft method to blogs service
-  // post.value = await blogs.createPostDraft(selectedBlogId.value, '', '', '')
-  // await loadPost(post.value)
+  const post = await blogs.createPost(selectedBlogId.value, (await mogul.user()).displayName +"'s blog", '', '')
+  console.log('created post', post)
+  await loadPost(post)
 }
 </script>
 <template>
   <EntityViewDecorator :watermark-image="blogIcon">
-    <h1>
-      Blog Posts
-    </h1>
+    <h1>Blog Posts</h1>
     <form class="pure-form">
       <fieldset>
-        <legend>
-          Posts for "{{ currentBlog?.title }}"
-        </legend>
+        <legend>Posts for "{{ currentBlog?.title }}"</legend>
         <div class="toolbar">
           <Icon :icon-hover="plusIconHighlight" :icon="plusIcon" @click="newPost()" />
         </div>

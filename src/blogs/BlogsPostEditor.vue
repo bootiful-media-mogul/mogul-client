@@ -37,7 +37,9 @@ const dts = (date: string | number): string | null => {
 }
 
 const computeDirtyKey = (): string => {
-  return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${summary.value}`
+  return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${
+    summary.value
+  }`
 }
 
 const buttonsDisabled = computed(() => {
@@ -77,38 +79,28 @@ const cancel = async () => {
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>
-          <span v-if="title">
-            Editing Post #{{ draftPost.id }}: {{ title }}
-          </span>
-          <span v-else>
-            New Post
-          </span>
+          <span v-if="title"> Editing Post #{{ draftPost.id }}: {{ title }} </span>
+          <span v-else> New Post </span>
           <span v-if="draftPost.id"> ({{ dts(created) }}) </span>
         </legend>
         <div class="form-section">
           <div class="form-section-title">Basics</div>
           <div class="form-row">
-            <label for="postTitle">
-              Title
-            </label>
+            <label for="postTitle"> Title </label>
             <InputWrapper v-model="title">
               <input id="postTitle" v-model="title" required type="text" />
               <InputTools v-model="title" />
             </InputWrapper>
           </div>
           <div class="form-row">
-            <label for="postDescription">
-              Description
-            </label>
+            <label for="postDescription"> Description </label>
             <InputWrapper v-model="description">
               <textarea id="postDescription" v-model="description" required rows="10" />
               <InputTools v-model="description" />
             </InputWrapper>
           </div>
           <div class="form-row">
-            <label for="postSummary">
-              Summary
-            </label>
+            <label for="postSummary"> Summary </label>
             <InputWrapper v-model="summary">
               <textarea id="postSummary" v-model="summary" required rows="5" />
               <InputTools v-model="summary" />
@@ -138,5 +130,4 @@ const cancel = async () => {
   </EntityViewDecorator>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

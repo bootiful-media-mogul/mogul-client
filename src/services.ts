@@ -42,7 +42,8 @@ export enum ResultType {
   Segment = 'segment',
   Note = 'note',
   Mogul = 'mogul',
-  Episode = 'episode', Post = 'post'
+  Episode = 'episode',
+  Post = 'post'
 }
 
 export class NavigationContext {
@@ -68,6 +69,14 @@ export class Results {
 
   constructor(gc: Client) {
     this.graphqlClient = gc
+
+    this.entry(
+      ResultType.Post,
+      function (ctx: Map<string, number>): NavigationContext {
+        return new NavigationContext('blogs/posts/post', ctx)
+      },
+      function (ctx: Map<string, number>) {}
+    )
 
     this.entry(
       ResultType.Episode,
@@ -1548,6 +1557,24 @@ export class Blogs {
     const result = await this.graphqlClient.query(q, { postId: postId })
     const p = (await result.data['postById']) as Post
     return new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+  }
+
+  async createPost(blogId: number, title: string, content: string, summary: string): Promise<Post> {
+    const q = `
+     mutation ($blogId:Int, $title:String, $content:String, $summary:String){
+      createPost(blogId:$blogId, title:$title, content:$content, summary:$summary) {
+       id, title, content, summary, complete, created
+      }
+     }
+    `
+    const result = await this.graphqlClient.mutation(q, {
+      blogId: blogId,
+      title: title,
+      content: content,
+      summary: summary
+    })
+    const resultPost = (await result.data['createPost']) as Post
+    return await this.postById(resultPost.id)
   }
 }
 

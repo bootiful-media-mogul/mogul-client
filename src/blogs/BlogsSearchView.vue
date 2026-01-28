@@ -18,7 +18,7 @@
               {{ dateTimeToString(blog.created) }}
             </div>
             <div class="posts-column">
-              <a href="#">Posts</a>
+              <a href="#" @click.prevent="navigateToPostsPageForBlog(blog.id, $event)">Posts</a>
             </div>
             <div class="title-column">
               {{ blog.title }}
@@ -178,6 +178,7 @@ import rssHighlightAsset from '@/assets/images/rss-highlight.png'
 import rssAsset from '@/assets/images/rss.png'
 import BlogsEditor from '@/blogs/BlogsEditor.vue'
 import { utils } from '@/services'
+import router from '@/index'
 
 const mogulId = ref<number>(0)
 const blogResults = ref<Array<Blog>>([])
@@ -207,6 +208,14 @@ async function createBlog() {
   console.log('creating blog')
   const blog = await blogs.createBlog('', '')
   await editBlog(blog)
+}
+
+async function navigateToPostsPageForBlog(blogId: number, event: Event) {
+  event.preventDefault()
+  await router.push({
+    name: 'blogs/posts',
+    params: { blogId: blogId }
+  })
 }
 
 function openRssFeed(blogId: number, url: string) {

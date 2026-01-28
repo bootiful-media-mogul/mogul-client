@@ -1,0 +1,95 @@
+<!--
+ this is meant to be the overall search view of the blog posts
+-->
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue'
+import { Blog, Post, blogs, ResultType } from '@/services'
+import router from '@/index'
+import { useI18n } from 'vue-i18n'
+import Result from '@/search/Result.vue'
+import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
+
+import blogIcon from '@/assets/images/navbar/blogs-icon.png'
+import Icon from '@/ui/Icon.vue'
+
+import plusIcon from '@/assets/images/plus-icon.png'
+import plusIconHighlight from '@/assets/images/plus-icon-highlight.png'
+
+// Props
+const props = defineProps<{ blogId: number }>()
+const posts = ref<Post[]>([])
+const currentBlog = ref<Blog>()
+const selectedBlogId = ref(props.blogId)
+const post = ref<Post | null>()
+const { t } = useI18n()
+
+onMounted(async () => {
+  await loadBlog()
+})
+
+const title = ref<string>('')
+
+async function loadBlog() {
+  const newBlogId = selectedBlogId.value
+  currentBlog.value = await blogs.blogById(newBlogId)
+  posts.value = await blogs.blogPostsByBlog(newBlogId)
+  title.value = `Posts for ${currentBlog.value.title}`
+}
+
+async function navigateToPostEditor(blogId: number, postId: number) {
+  await router.push({
+    name: 'blogs/posts/post',
+    params: { blogId: blogId, postId: postId }
+  })
+}
+
+const loadPost = async (p: Post) => {
+  await navigateToPostEditor(props.blogId, p.id)
+  title.value = 'Blog Posts'
+}
+
+function context(post: Post) {
+  const m = new Map<string, any>()
+  m.set('blogId', selectedBlogId.value)
+  m.set('postId', post.id)
+  m.set('id', post.id)
+  m.set('type', 'post')
+  return m
+}
+
+async function newPost() {
+  console.log('creating new post - TODO: implement createPostDraft in backend')
+  // TODO: Need to add createPostDraft method to blogs service
+  // post.value = await blogs.createPostDraft(selectedBlogId.value, '', '', '')
+  // await loadPost(post.value)
+}
+</script>
+<template>
+  <EntityViewDecorator :watermark-image="blogIcon">
+    <h1>
+      Blog Posts
+    </h1>
+    <form class="pure-form">
+      <fieldset>
+        <legend>
+          Posts for "{{ currentBlog?.title }}"
+        </legend>
+        <div class="toolbar">
+          <Icon :icon-hover="plusIconHighlight" :icon="plusIcon" @click="newPost()" />
+        </div>
+        <div v-for="post in posts" v-bind:key="post.id">
+          <Result
+            :context="context(post)"
+            :type="ResultType.Post"
+            :aggregate-id="currentBlog?.id"
+            :created="post.created"
+            :title="post.title"
+            :id="post.id"
+            :allow-deletion="true"
+            @delete="loadBlog"
+          />
+        </div>
+      </fieldset>
+    </form>
+  </EntityViewDecorator>
+</template>

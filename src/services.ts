@@ -42,7 +42,7 @@ export enum ResultType {
   Segment = 'segment',
   Note = 'note',
   Mogul = 'mogul',
-  Episode = 'episode'
+  Episode = 'episode', Post = 'post'
 }
 
 export class NavigationContext {

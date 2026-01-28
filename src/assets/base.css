@@ -311,7 +311,7 @@ textarea {
 .navigation-links {
   grid-area: navigation;
   text-align: center;
-  font-size: 12px;
+  font-size: 1em ;
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -461,7 +461,7 @@ button {
       ' buffer buffer buffer ';
     grid-template-rows: auto var(--main-toolbar-gutter) auto auto;
 
-    grid-template-columns: auto var(--main-toolbar-gutter) minmax(min-content, var(--sidebar-width));
+    grid-template-columns: auto var(--main-toolbar-gutter) 400px;
   }
 
   .toolbar-container {

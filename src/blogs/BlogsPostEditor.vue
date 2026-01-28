@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { blogs, Post, Blog } from '@/services'
+import { blogs, Post, Blog, loadNotesForNotable } from '@/services'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
@@ -57,6 +57,7 @@ const loadPostIntoEditor = async (postId: number) => {
   summary.value = post.summary
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
+  await loadNotesForNotable('episode', postId, title.value)
 }
 
 const save = async () => {

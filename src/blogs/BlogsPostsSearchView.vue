@@ -63,7 +63,8 @@ async function newPost() {
 </script>
 <template>
   <EntityViewDecorator :watermark-image="blogIcon">
-    <h1>Blog Posts</h1>
+    <h1> {{ t('blogs.posts.title')}}
+    </h1>
     <form class="pure-form">
       <fieldset>
         <legend>Posts for "{{ currentBlog?.title }}"</legend>

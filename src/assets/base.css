@@ -448,6 +448,7 @@ button {
 
 .toolbar {
   padding-bottom: var(--gutter-space-half);
+  padding-top : var(--gutter-space-half);
 }
 
 /* Desktop Styles - 670px and above */

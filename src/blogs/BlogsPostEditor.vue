@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { blogs, Post, Blog, loadNotesForNotable, Composition } from '@/services'
+import { Blog, blogs, Composition, loadNotesForNotable, Post } from '@/services'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { dateTimeToString } from '@/dates'
 import blogIcon from '@/assets/images/navbar/blogs-icon.png'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
+import Mock from '@/podcasts/publications/Mock.vue'
+import PublicationsSectionComponent from '@/publications/PublicationsSectionComponent.vue'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 // Props
 const props = defineProps<{
@@ -133,6 +137,25 @@ const cancel = async () => {
             >
               Cancel
             </button>
+          </div>
+
+          <!-- publications -->
+
+          <div class="form-section-title">{{ t('blogs.posts.publications') }}</div>
+          <div class="publish-menu">
+            <PublicationsSectionComponent
+              :disabled="false"
+              :publishable="postId + ''"
+              :type="'post'"
+            >
+              <!--
+              <Ayrshare />
+              <Podbean />
+              <PodcastEpisodeBlogPost />
+              <PodcastEpisodeAudioFile />
+              -->
+              <Mock />
+            </PublicationsSectionComponent>
           </div>
         </div>
       </fieldset>

@@ -44,7 +44,7 @@ const translations = {
         'no-error-message': '(no error message given)',
         keys: {
           ayrshare: 'Ayrshare',
-          mock: 'Mock',
+          mockPodcastEpisode: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',
           audioFile: 'Audio File Download',
@@ -101,9 +101,9 @@ const translations = {
           clientId: 'Client ID',
           clientSecret: 'Client Secret'
         },
-        mock: {
+        mockPodcastEpisode: {
           description: 'Kicks off the production process, and generates dummy data',
-          title: 'Mock'
+          title: 'Mock Podcast Episode'
         },
         podcastEpisodeToBlogPost: {
           blogId: 'Blog ID',
@@ -238,6 +238,7 @@ This is NOT reversible! `,
     'blogs.title': 'Blogs',
     'blogs.all': "{user}'s blogs",
     'blogs.posts.title': 'Posts',
+    'blogs.posts.publications': 'Publications',
     // episodes
 
     'compositions.attachments.drag-and-drop-attachments':

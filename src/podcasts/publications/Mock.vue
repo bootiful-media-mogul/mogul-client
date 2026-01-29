@@ -20,7 +20,7 @@ const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const disabled = ref<boolean>(false)
 const publishFunction = inject<PublishFunction>('publish')!
 
-const pluginName = 'mock'
+const pluginName = 'mockPodcastEpisode'
 
 const getPublicationContextFunction =
   inject<GetPublicationContextFunction>('getPublicationContext')!
@@ -57,7 +57,7 @@ async function publish(): Promise<boolean> {
 </script>
 
 <template>
-  <PublicationPanelComponent :icon="mockIcon" :icon-hover="mockIcon" plugin="mock">
+  <PublicationPanelComponent :icon="mockIcon" :icon-hover="mockIcon" :plugin="pluginName">
     <template v-slot:panel>
       <button
         :disabled="disabled"

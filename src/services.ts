@@ -75,7 +75,12 @@ export class Results {
       function (ctx: Map<string, number>): NavigationContext {
         return new NavigationContext('blogs/posts/post', ctx)
       },
-      function (ctx: Map<string, number>) {}
+      async function (ctx: Map<string, number>) {
+        const postId = ctx.get('postId') as number
+        if (postId) {
+          await blogs.deletePost(postId)
+        }
+      }
     )
 
     this.entry(
@@ -1410,13 +1415,24 @@ export class Blogs {
   }
 
   async deleteBlog(blogId: number): Promise<boolean> {
-    const q = ` 
+    const q = `
     mutation deleteBlog($blogId:Int) {
-      deleteBlog(blogId:$blogId) 
+      deleteBlog(blogId:$blogId)
     }
    `
     const r = await blogs.graphqlClient.mutation(q, { blogId: blogId })
     const b = (await r.data['deleteBlog']) as boolean
+    return Promise.resolve(b)
+  }
+
+  async deletePost(postId: number): Promise<boolean> {
+    const q = `
+    mutation deletePost($postId:Int) {
+      deletePost(postId:$postId)
+    }
+   `
+    const r = await blogs.graphqlClient.mutation(q, { postId: postId })
+    const b = (await r.data['deletePost']) as boolean
     return Promise.resolve(b)
   }
 

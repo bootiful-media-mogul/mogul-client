@@ -20,7 +20,6 @@ const props = defineProps<{ blogId: number }>()
 const posts = ref<Post[]>([])
 const currentBlog = ref<Blog>()
 const selectedBlogId = ref(props.blogId)
-const post = ref<Post | null>()
 const { t } = useI18n()
 
 onMounted(async () => {
@@ -63,7 +62,8 @@ async function newPost() {
 </script>
 <template>
   <EntityViewDecorator :watermark-image="blogIcon">
-    <h1> {{ t('blogs.posts.title')}}
+    <h1>
+      {{ t('blogs.posts.title')}}
     </h1>
     <form class="pure-form">
       <fieldset>

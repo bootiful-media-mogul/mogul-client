@@ -3,6 +3,7 @@ import Icon from '@/ui/Icon.vue'
 
 import noteIconAsset from '@/assets/images/entity-badges/note-icon.png'
 import segmentIconAsset from '@/assets/images/entity-badges/segment-icon.png'
+import postIconAsset from '@/assets/images/entity-badges/post-icon.png'
 
 import editAsset from '@/assets/images/edit-highlight.png'
 import editHighlightAsset from '@/assets/images/edit.png'
@@ -57,6 +58,7 @@ async function navigateToEntity() {
 function sourceFor(type: string): string {
   const map = new Map<string, string>()
   map.set('segment', segmentIconAsset)
+  map.set('post', postIconAsset)
   map.set('note', noteIconAsset)
   return map.get(type)!!
 }

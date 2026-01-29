@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { blogs, Post, Blog } from '@/services'
+import { blogs, Post, Blog, loadNotesForNotable, Composition } from '@/services'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { dateTimeToString } from '@/dates'
 import blogIcon from '@/assets/images/navbar/blogs-icon.png'
+import CompositionComponent from '@/compositions/CompositionComponent.vue'
 
 // Props
 const props = defineProps<{
@@ -23,6 +24,7 @@ const title = ref('')
 const description = ref('')
 const summary = ref('')
 const dirtyKey = ref('')
+const descriptionComposition = ref<Composition>()
 
 onMounted(async () => {
   blog.value = await blogs.blogById(props.blogId)
@@ -37,7 +39,9 @@ const dts = (date: string | number): string | null => {
 }
 
 const computeDirtyKey = (): string => {
-  return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${summary.value}`
+  return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${
+    summary.value
+  }`
 }
 
 const buttonsDisabled = computed(() => {
@@ -55,6 +59,8 @@ const loadPostIntoEditor = async (postId: number) => {
   summary.value = post.summary
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
+  descriptionComposition.value = post.descriptionComposition
+  await loadNotesForNotable('episode', postId, title.value)
 }
 
 const save = async () => {
@@ -77,38 +83,35 @@ const cancel = async () => {
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>
-          <span v-if="title">
-            Editing Post #{{ draftPost.id }}: {{ title }}
-          </span>
-          <span v-else>
-            New Post
-          </span>
+          <span v-if="title"> Editing Post #{{ draftPost.id }}: {{ title }} </span>
+          <span v-else> New Post </span>
           <span v-if="draftPost.id"> ({{ dts(created) }}) </span>
         </legend>
         <div class="form-section">
           <div class="form-section-title">Basics</div>
           <div class="form-row">
-            <label for="postTitle">
-              Title
-            </label>
+            <label for="postTitle"> Title </label>
             <InputWrapper v-model="title">
               <input id="postTitle" v-model="title" required type="text" />
               <InputTools v-model="title" />
             </InputWrapper>
           </div>
           <div class="form-row">
-            <label for="postDescription">
-              Description
-            </label>
+            <label for="postDescription"> Description </label>
+
             <InputWrapper v-model="description">
               <textarea id="postDescription" v-model="description" required rows="10" />
+
+              <CompositionComponent
+                v-if="descriptionComposition"
+                :composition-id="parseInt(descriptionComposition.id + '')"
+              />
               <InputTools v-model="description" />
             </InputWrapper>
           </div>
           <div class="form-row">
-            <label for="postSummary">
-              Summary
-            </label>
+
+            <label for="postSummary"> Summary </label>
             <InputWrapper v-model="summary">
               <textarea id="postSummary" v-model="summary" required rows="5" />
               <InputTools v-model="summary" />
@@ -138,5 +141,4 @@ const cancel = async () => {
   </EntityViewDecorator>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

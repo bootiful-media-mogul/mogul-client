@@ -42,7 +42,8 @@ export enum ResultType {
   Segment = 'segment',
   Note = 'note',
   Mogul = 'mogul',
-  Episode = 'episode'
+  Episode = 'episode',
+  Post = 'post'
 }
 
 export class NavigationContext {
@@ -68,6 +69,14 @@ export class Results {
 
   constructor(gc: Client) {
     this.graphqlClient = gc
+
+    this.entry(
+      ResultType.Post,
+      function (ctx: Map<string, number>): NavigationContext {
+        return new NavigationContext('blogs/posts/post', ctx)
+      },
+      function (ctx: Map<string, number>) {}
+    )
 
     this.entry(
       ResultType.Episode,
@@ -1372,6 +1381,7 @@ export class Post {
   readonly summary: string
   readonly complete: boolean
   readonly created: string | null
+  readonly descriptionComposition?: Composition
 
   constructor(
     id: number,
@@ -1379,8 +1389,10 @@ export class Post {
     content: string,
     summary: string,
     complete: boolean,
-    created: string | null
+    created: string | null,
+    descriptionComposition?: Composition
   ) {
+    this.descriptionComposition = descriptionComposition
     this.id = id
     this.title = title
     this.content = content
@@ -1486,7 +1498,7 @@ export class Blogs {
   ): Promise<boolean> {
     const q = `
      mutation ($postId:Int, $title:String, $description:String, $summary:String){
-      updatePost(postId:$postId, title:$title, description:$description, summary:$summary)
+      updatePost(postId:$postId, title:$title, description:$description, summary:$summary)  
      }
     `
     const result = await this.graphqlClient.mutation(q, {
@@ -1522,6 +1534,17 @@ export class Blogs {
           summary
           complete
           created
+         descriptionComposition { 
+          id,
+          field ,
+          attachments {
+            id,
+            caption,
+            managedFile { id }
+          }
+        }
+          
+          
         }
       }
     `
@@ -1542,12 +1565,59 @@ export class Blogs {
           summary
           complete
           created
+          descriptionComposition { 
+            id,
+            field ,
+            attachments {
+              id,
+              caption,
+              managedFile { id }
+            }
+          }
         }
       }
     `
     const result = await this.graphqlClient.query(q, { postId: postId })
     const p = (await result.data['postById']) as Post
-    return new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+
+    return new Post(
+      p.id,
+      p.title,
+      p.content,
+      p.summary,
+      p.complete,
+      dateTimeToString(p.created),
+      p.descriptionComposition
+    )
+  }
+
+  async createPost(blogId: number, title: string, content: string, summary: string): Promise<Post> {
+    const q = `
+     mutation ($blogId:Int, $title:String, $content:String, $summary:String){
+      createPost(blogId:$blogId, title:$title, content:$content, summary:$summary) {
+       id, title, content, summary, complete, created ,
+          
+          descriptionComposition { 
+            id,
+            field ,
+            attachments {
+              id,
+              caption,
+              managedFile { id }
+            }
+          } 
+          
+      }
+     }
+    `
+    const result = await this.graphqlClient.mutation(q, {
+      blogId: blogId,
+      title: title,
+      content: content,
+      summary: summary
+    })
+    const resultPost = (await result.data['createPost']) as Post
+    return await this.postById(resultPost.id)
   }
 }
 

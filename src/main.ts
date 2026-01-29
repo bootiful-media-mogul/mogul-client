@@ -237,6 +237,7 @@ This is NOT reversible! `,
     // blogs
     'blogs.title': 'Blogs',
     'blogs.all': "{user}'s blogs",
+    'blogs.posts.title' : 'Posts',
     // episodes
 
     'compositions.attachments.drag-and-drop-attachments':

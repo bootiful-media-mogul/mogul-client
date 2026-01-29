@@ -16,6 +16,7 @@ import {
   results
 } from '@/services'
 import BlogsPostEditor from '@/blogs/BlogsPostEditor.vue'
+import BlogsPostsSearchView from '@/blogs/BlogsPostsSearchView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,13 +90,23 @@ const router = createRouter({
     {
       props(to) {
         return {
-          blogId: Number(to.params.blogId ),
+          blogId: Number(to.params.blogId),
           postId: Number(to.params.postId)
         }
       },
       path: '/blogs/:blogId/posts/:postId',
       name: 'blogs/posts/post',
       component: BlogsPostEditor
+    },
+    {
+      path: '/blogs/:blogId/posts',
+      name: 'blogs/posts',
+      component: BlogsPostsSearchView,
+      props(route) {
+        return {
+          blogId: Number(route.params.blogId)
+        }
+      }
     },
 
     /* podcasts route */

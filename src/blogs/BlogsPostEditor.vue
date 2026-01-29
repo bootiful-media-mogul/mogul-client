@@ -110,7 +110,6 @@ const cancel = async () => {
             </InputWrapper>
           </div>
           <div class="form-row">
-
             <label for="postSummary"> Summary </label>
             <InputWrapper v-model="summary">
               <textarea id="postSummary" v-model="summary" required rows="5" />

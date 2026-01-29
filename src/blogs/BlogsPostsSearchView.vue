@@ -63,7 +63,7 @@ async function newPost() {
 <template>
   <EntityViewDecorator :watermark-image="blogIcon">
     <h1>
-      {{ t('blogs.posts.title')}}
+      {{ t('blogs.posts.title') }}
     </h1>
     <form class="pure-form">
       <fieldset>

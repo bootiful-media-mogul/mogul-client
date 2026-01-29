@@ -12,13 +12,13 @@
   font-family: 'arial Black', sans-serif;
   color: #777777;
 }
+
 .panel {
   background-color: var(--panel-bg-color);
   top: calc(-1 * var(--gutter-space));
   position: relative;
   overflow: hidden;
   margin-bottom: var(--gutter-space);
-  /* shadow */
   box-shadow: var(--box-shadow);
   border-radius: var(--radius);
 }
@@ -70,32 +70,28 @@
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
   }
+
+  /* Override base.css .sidebar .panel-content rule when hidden - desktop only */
+  .sidebar .panel-content:not(.panel-content-visible) {
+    display: none !important;
+  }
 }
 </style>
 
 <template>
-  <div ref="element" :class="{ 'panel-maximized': maximized }" class="panel">
+  <div ref="element"  class="panel">
     <div class="panel-menu">
       <div class="panel-menu-title navigable-section">
         {{ props.title }}
       </div>
       <div class="panel-menu-buttons">
-        <div v-if="!maximized">
-          <div v-if="!visible" class="open" @click.prevent="toggleVisible">
-            <img :src="open" alt="open" class="panel-menu-buttons-img" />
-          </div>
-          <div v-else class="close" @click.prevent="toggleVisible">
-            <img :src="minimize" alt="minimize" class="panel-menu-buttons-img" />
-          </div>
+        <div v-if="!visible" class="open" @click.prevent="toggleVisible">
+          <img :src="open" alt="open" class="panel-menu-buttons-img" />
         </div>
-        <div>
-          <img
-            :src="max"
-            alt="maximize"
-            class="panel-menu-buttons-img"
-            @click.prevent="toggleMaximize"
-          />
+        <div v-else class="close" @click.prevent="toggleVisible">
+          <img :src="minimize" alt="minimize" class="panel-menu-buttons-img" />
         </div>
+
       </div>
     </div>
     <div :class="{ 'panel-content': true, 'panel-content-visible': visible }">
@@ -105,23 +101,15 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
-
-import max from '@/assets/images/panel/simple-panel-open.png'
 import minimize from '@/assets/images/panel/simple-panel-collapse.png'
 import open from '@/assets/images/panel/simple-panel-maximize.png'
 import { events } from '@/services'
 
 const element = ref<HTMLElement>()
 
-const visible = ref<boolean>(false)
-const maximized = ref<boolean>(false)
+const visible = ref<boolean>(true)
 
 const props = defineProps<{ title: string }>()
-
-function toggleMaximize() {
-  maximized.value = !maximized.value
-  visible.value = maximized.value
-}
 
 function toggleVisible() {
   visible.value = !visible.value

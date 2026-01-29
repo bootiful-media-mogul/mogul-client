@@ -1381,6 +1381,7 @@ export class Post {
   readonly summary: string
   readonly complete: boolean
   readonly created: string | null
+  readonly descriptionComposition?: Composition
 
   constructor(
     id: number,
@@ -1388,8 +1389,10 @@ export class Post {
     content: string,
     summary: string,
     complete: boolean,
-    created: string | null
+    created: string | null,
+    descriptionComposition?: Composition
   ) {
+    this.descriptionComposition = descriptionComposition
     this.id = id
     this.title = title
     this.content = content
@@ -1495,7 +1498,7 @@ export class Blogs {
   ): Promise<boolean> {
     const q = `
      mutation ($postId:Int, $title:String, $description:String, $summary:String){
-      updatePost(postId:$postId, title:$title, description:$description, summary:$summary)
+      updatePost(postId:$postId, title:$title, description:$description, summary:$summary)  
      }
     `
     const result = await this.graphqlClient.mutation(q, {
@@ -1531,6 +1534,17 @@ export class Blogs {
           summary
           complete
           created
+         descriptionComposition { 
+          id,
+          field ,
+          attachments {
+            id,
+            caption,
+            managedFile { id }
+          }
+        }
+          
+          
         }
       }
     `
@@ -1551,19 +1565,48 @@ export class Blogs {
           summary
           complete
           created
+          descriptionComposition { 
+            id,
+            field ,
+            attachments {
+              id,
+              caption,
+              managedFile { id }
+            }
+          }
         }
       }
     `
     const result = await this.graphqlClient.query(q, { postId: postId })
     const p = (await result.data['postById']) as Post
-    return new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+
+    return new Post(
+      p.id,
+      p.title,
+      p.content,
+      p.summary,
+      p.complete,
+      dateTimeToString(p.created),
+      p.descriptionComposition
+    )
   }
 
   async createPost(blogId: number, title: string, content: string, summary: string): Promise<Post> {
     const q = `
      mutation ($blogId:Int, $title:String, $content:String, $summary:String){
       createPost(blogId:$blogId, title:$title, content:$content, summary:$summary) {
-       id, title, content, summary, complete, created
+       id, title, content, summary, complete, created ,
+          
+          descriptionComposition { 
+            id,
+            field ,
+            attachments {
+              id,
+              caption,
+              managedFile { id }
+            }
+          } 
+          
       }
      }
     `

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { blogs, Post, Blog, loadNotesForNotable } from '@/services'
+import { blogs, Post, Blog, loadNotesForNotable, Composition } from '@/services'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import { dateTimeToString } from '@/dates'
 import blogIcon from '@/assets/images/navbar/blogs-icon.png'
+import CompositionComponent from '@/compositions/CompositionComponent.vue'
 
 // Props
 const props = defineProps<{
@@ -23,6 +24,7 @@ const title = ref('')
 const description = ref('')
 const summary = ref('')
 const dirtyKey = ref('')
+const descriptionComposition = ref<Composition>()
 
 onMounted(async () => {
   blog.value = await blogs.blogById(props.blogId)
@@ -57,6 +59,7 @@ const loadPostIntoEditor = async (postId: number) => {
   summary.value = post.summary
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
+  descriptionComposition.value = post.descriptionComposition
   await loadNotesForNotable('episode', postId, title.value)
 }
 
@@ -95,12 +98,19 @@ const cancel = async () => {
           </div>
           <div class="form-row">
             <label for="postDescription"> Description </label>
+
             <InputWrapper v-model="description">
               <textarea id="postDescription" v-model="description" required rows="10" />
+
+              <CompositionComponent
+                v-if="descriptionComposition"
+                :composition-id="parseInt(descriptionComposition.id + '')"
+              />
               <InputTools v-model="description" />
             </InputWrapper>
           </div>
           <div class="form-row">
+
             <label for="postSummary"> Summary </label>
             <InputWrapper v-model="summary">
               <textarea id="postSummary" v-model="summary" required rows="5" />

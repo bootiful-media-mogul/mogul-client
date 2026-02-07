@@ -2,7 +2,7 @@
   <PublicationPanelComponent
     :icon="downloadAudioIcon"
     :icon-hover="downloadAudioIcon"
-    plugin="markdownFile"
+    :plugin="pluginName"
   >
     <template v-slot:panel>
       <div>
@@ -19,12 +19,10 @@
   </PublicationPanelComponent>
 </template>
 <script lang="ts" setup>
-import downloadAudioIcon from '@/assets/images/publications/podcasts/publish-download-produced-audio.png'
-import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
-import { managedFiles, notifications, podcasts } from '@/services'
-import { useI18n } from 'vue-i18n'
-const { t } = useI18n()
+import downloadAudioIcon from '@/assets/images/publications/blogs/download-blog-post-as-markdown.png'
 
+import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
+import { useI18n } from 'vue-i18n'
 import { inject, onMounted, ref } from 'vue'
 import type {
   GetPublicationContextFunction,
@@ -32,7 +30,9 @@ import type {
   PublishFunction
 } from '@/publications/input'
 
-const pluginName = 'audioFile'
+const { t } = useI18n()
+
+const pluginName = 'blogPostMarkdownFile'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
@@ -40,10 +40,6 @@ const getPublicationContextFunction =
   inject<GetPublicationContextFunction>('getPublicationContext')!
 
 const disabled = ref<boolean>(false)
-
-notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
-  disabled.value = await isPluginDisabled()
-})
 
 async function isPluginDisabled() {
   const clientContext = {}
@@ -67,11 +63,12 @@ async function downloadMarkdown() {
     clientContext,
     pluginName
   )
-  console.log('going to download audio file, after publishFunction')
-  const episode = await podcasts.podcastEpisodeById(publicationContext.publishableId)
-  const mf = await managedFiles.managedFileById(episode.producedAudio.id)
-  const url = mf.downloadableUrl
-  console.log('there should now be a publication outcome for the following url ' + url)
+  console.log(clientContext)
+  // console.log('going to download audio file, after publishFunction')
+  // const episode = await podcasts.podcastEpisodeById(publicationContext.publishableId)
+  // const mf = await managedFiles.managedFileById(episode.producedAudio.id)
+  // const url = mf.downloadableUrl
+  // console.log('there should now be a publication outcome for the following url ' + url)
   // window.open(url, '_blank')
 }
 

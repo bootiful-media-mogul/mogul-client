@@ -43,6 +43,7 @@ const translations = {
         'error-message': 'see error message',
         'no-error-message': '(no error message given)',
         keys: {
+          blogPostMarkdownFile: 'Blog Post Markdown File',
           ayrshare: 'Ayrshare',
           mockPodcastEpisode: 'Mock',
           podbean: 'Podbean',
@@ -63,6 +64,7 @@ const translations = {
         }
       },
       plugins: {
+        blogPostMarkdownFile: { description: 'download a Markdown file for your post' },
         ayrshare: {
           platforms: {
             gmb: 'Google Business Profile',

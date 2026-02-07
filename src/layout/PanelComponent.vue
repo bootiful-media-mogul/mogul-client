@@ -79,7 +79,7 @@
 </style>
 
 <template>
-  <div ref="element"  class="panel">
+  <div ref="element" class="panel">
     <div class="panel-menu">
       <div class="panel-menu-title navigable-section">
         {{ props.title }}
@@ -91,7 +91,6 @@
         <div v-else class="close" @click.prevent="toggleVisible">
           <img :src="minimize" alt="minimize" class="panel-menu-buttons-img" />
         </div>
-
       </div>
     </div>
     <div :class="{ 'panel-content': true, 'panel-content-visible': visible }">
@@ -123,7 +122,7 @@ events.on('sidebar-panel-closed', (event: any) => {
 
 events.on('sidebar-panel-opened', (event: any) => {
   console.log('sidebar-panel-opened')
-  console.log(element.value ? 'got an element' :'no element')
+  console.log(element.value ? 'got an element' : 'no element')
   const contains = element.value!!.contains(event)
   if (contains) {
     visible.value = true

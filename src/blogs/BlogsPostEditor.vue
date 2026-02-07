@@ -7,9 +7,11 @@ import InputTools from '@/ui/InputTools.vue'
 import { dateTimeToString } from '@/dates'
 import blogIcon from '@/assets/images/navbar/blogs-icon.png'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
-import Mock from '@/podcasts/publications/Mock.vue'
 import PublicationsSectionComponent from '@/publications/PublicationsSectionComponent.vue'
 import { useI18n } from 'vue-i18n'
+import BlogPostMarkdownFile from '@/blogs/publications/BlogPostMarkdownFile.vue'
+import BlogPostPdfFile from '@/blogs/publications/BlogPostPdfFile.vue'
+
 const { t } = useI18n()
 
 // Props
@@ -154,7 +156,7 @@ const cancel = async () => {
               <PodcastEpisodeBlogPost />
               <PodcastEpisodeAudioFile />
               -->
-              <Mock />
+              <BlogPostMarkdownFile />
             </PublicationsSectionComponent>
           </div>
         </div>

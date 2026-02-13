@@ -6,11 +6,10 @@ cp $ROOT_DIR/.github/workflows/nginx-buildpack-config/* ${ROOT_DIR}/build
 cp -r $ROOT_DIR/dist/* ${ROOT_DIR}/build/public
 cd "$ROOT_DIR/build"
 
-pack build  $IMAGE_NAME \
+pack build $IMAGE_NAME \
   --builder paketobuildpacks/builder-jammy-base \
- --buildpack docker.io/paketobuildpacks/nginx:latest \
- --env PORT=8080
+  --buildpack paketo-buildpacks/nginx \
+  --pull-policy always \
+  --env PORT=8080
 
-#pack build $IMAGE_NAME --builder paketobuildpacks/builder:full \
-#  --buildpack gcr.io/paketo-buildpacks/nginx:latest  --env PORT=8080
 docker push $IMAGE_NAME

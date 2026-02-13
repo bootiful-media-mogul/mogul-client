@@ -10,7 +10,6 @@ import CompositionComponent from '@/compositions/CompositionComponent.vue'
 import PublicationsSectionComponent from '@/publications/PublicationsSectionComponent.vue'
 import { useI18n } from 'vue-i18n'
 import BlogPostMarkdownFile from '@/blogs/publications/BlogPostMarkdownFile.vue'
-import BlogPostPdfFile from '@/blogs/publications/BlogPostPdfFile.vue'
 
 const { t } = useI18n()
 

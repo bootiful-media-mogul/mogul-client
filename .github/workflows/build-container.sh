@@ -9,7 +9,8 @@ cd "$ROOT_DIR/build"
 pack build $IMAGE_NAME \
   --builder paketobuildpacks/builder-jammy-base \
   --buildpack paketo-buildpacks/nginx \
-  --pull-policy always \
-  --env PORT=8080
+  --env PORT=8080 \
+  --publish
 
-docker push $IMAGE_NAME
+# --pull-policy always \
+# docker push $IMAGE_NAME

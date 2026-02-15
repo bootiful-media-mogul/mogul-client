@@ -11,6 +11,3 @@ pack build $IMAGE_NAME \
   --buildpack paketo-buildpacks/nginx \
   --env PORT=8080 \
   --publish
-
-# --pull-policy always \
-# docker push $IMAGE_NAME

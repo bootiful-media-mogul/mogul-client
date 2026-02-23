@@ -1774,7 +1774,9 @@ export class WordPress {
          `,
       {}
     )
-    return (await results.data['wordPressStatus']) as WordPressStatus
+    const stat = (await results.data['wordPressStatus']) as WordPressStatus
+    console.log(stat)
+    return stat
   }
 }
 

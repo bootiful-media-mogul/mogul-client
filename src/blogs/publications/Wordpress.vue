@@ -1,9 +1,15 @@
 <template>
-  <PublicationPanelComponent :icon="wordpressIcon" :icon-hover="wordpressIcon" :plugin="pluginName">
+  <PublicationPanelComponent
+    :icon="wordpressIcon"
+    :icon-hover="wordpressIcon"
+    :plugin="pluginName"
+  >
     <template v-slot:panel>
       <div>
         <div v-if="status?.connected">
-          <Icon :icon="connected" :icon-hover="connected" />
+          <Icon :icon="connected" :icon-hover="connected"
+           :disabled="true"
+          />
         </div>
         <div v-else>
           <Icon :icon="disconnected" :icon-hover="disconnected" @click.prevent="connect()" />
@@ -29,11 +35,7 @@ import disconnected from '@/assets/images/publications/blogs/unlinked-icon.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { useI18n } from 'vue-i18n'
 import { inject, onMounted, ref } from 'vue'
-import type {
-  GetPublicationContextFunction,
-  IsPluginReadyFunction,
-  PublishFunction
-} from '@/publications/input'
+import type { GetPublicationContextFunction, IsPluginReadyFunction, PublishFunction } from '@/publications/input'
 import { wordpress, WordPressStatus } from '@/services'
 import Icon from '@/ui/Icon.vue'
 
@@ -61,10 +63,16 @@ async function isPluginDisabled() {
   )
   return !ready!
 }
+
 function connect() {
   console.log('going to connect to wordpress. i should store ' +
     'some state somewhere to reconstruct this view')
+  attemptConnection()
+}
 
+function attemptConnection(){
+  // todo sessionStorage.setItem('pending_action', JSON.stringify({ ... }));
+  window.location.href = '/oauth2/authorization/wordpress';
 
 }
 
@@ -83,5 +91,7 @@ async function downloadMarkdown() {
 onMounted(async () => {
   disabled.value = await isPluginDisabled()
   status.value = await wordpress.wordPressStatus()
+  console.log('onMounted ' + status?.value?.connected )
+
 })
 </script>

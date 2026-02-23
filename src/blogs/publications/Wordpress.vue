@@ -76,15 +76,24 @@ async function attemptConnection() {
     publicationContext.type,
     publicationContext.publishableId
   )
-  const json = JSON.stringify(context)
+  // console.log(Object.entries(context.context))
+  // for (let [key, value] of context.context) {
+  //   console.log(key + ' ' + value)
+  // }
+  //
+  const serialized  = {
+    resolvedType: context.resolvedType,
+    context: Object.fromEntries(context.context)
+  }
+  const json = JSON.stringify(serialized)
   sessionStorage.setItem('pending_action', json)
+  console.log('json before:', json)
   window.location.href = '/oauth2/authorization/wordpress'
 }
 
 async function publishToWordpress() {
   const publicationContext = getPublicationContextFunction()
   const clientContext = {}
-  console.log('going to download audio file, before publishFunction')
   await publishFunction(
     publicationContext.type,
     publicationContext.publishableId,

@@ -1,15 +1,9 @@
 <template>
-  <PublicationPanelComponent
-    :icon="wordpressIcon"
-    :icon-hover="wordpressIcon"
-    :plugin="pluginName"
-  >
+  <PublicationPanelComponent :icon="wordpressIcon" :icon-hover="wordpressIcon" :plugin="pluginName">
     <template v-slot:panel>
       <div>
         <div v-if="status?.connected">
-          <Icon :icon="connected" :icon-hover="connected"
-           :disabled="true"
-          />
+          <Icon :icon="connected" :icon-hover="connected" :disabled="true" />
         </div>
         <div v-else>
           <Icon :icon="disconnected" :icon-hover="disconnected" @click.prevent="connect()" />
@@ -19,7 +13,7 @@
           :disabled="disabled"
           class="pure-button pure-button-primary publish-button"
           type="button"
-          @click.prevent="downloadMarkdown()"
+          @click.prevent="publishToWordpress()"
         >
           {{ t('publications.plugins.audioFile.download') }}
         </button>
@@ -35,8 +29,12 @@ import disconnected from '@/assets/images/publications/blogs/unlinked-icon.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { useI18n } from 'vue-i18n'
 import { inject, onMounted, ref } from 'vue'
-import type { GetPublicationContextFunction, IsPluginReadyFunction, PublishFunction } from '@/publications/input'
-import { wordpress, WordPressStatus } from '@/services'
+import type {
+  GetPublicationContextFunction,
+  IsPluginReadyFunction,
+  PublishFunction
+} from '@/publications/input'
+import { entityNavigationContexts, wordpress, WordPressStatus } from '@/services'
 import Icon from '@/ui/Icon.vue'
 
 const { t } = useI18n()
@@ -64,19 +62,26 @@ async function isPluginDisabled() {
   return !ready!
 }
 
-function connect() {
-  console.log('going to connect to wordpress. i should store ' +
-    'some state somewhere to reconstruct this view')
-  attemptConnection()
+async function connect() {
+  console.log(
+    'going to connect to wordpress. i should store ' +
+      'some state somewhere to reconstruct this view'
+  )
+  await attemptConnection()
 }
 
-function attemptConnection(){
-  // todo sessionStorage.setItem('pending_action', JSON.stringify({ ... }));
-  window.location.href = '/oauth2/authorization/wordpress';
-
+async function attemptConnection() {
+  const publicationContext = getPublicationContextFunction()
+  const context = await entityNavigationContexts.buildEntityContextFor(
+    publicationContext.type,
+    publicationContext.publishableId
+  )
+  const json = JSON.stringify(context)
+  sessionStorage.setItem('pending_action', json)
+  window.location.href = '/oauth2/authorization/wordpress'
 }
 
-async function downloadMarkdown() {
+async function publishToWordpress() {
   const publicationContext = getPublicationContextFunction()
   const clientContext = {}
   console.log('going to download audio file, before publishFunction')
@@ -91,7 +96,7 @@ async function downloadMarkdown() {
 onMounted(async () => {
   disabled.value = await isPluginDisabled()
   status.value = await wordpress.wordPressStatus()
-  console.log('onMounted ' + status?.value?.connected )
 
+  console.log('onMounted ' + status?.value?.connected)
 })
 </script>

@@ -64,6 +64,10 @@ const translations = {
         }
       },
       plugins: {
+        wordpress: {
+          description: 'Publish this post to your WordPress blog. ' +
+            '(You may need to connect to Wordpress first.)',
+        } ,
         blogPostMarkdownFile: { description: 'download a Markdown file for your post' },
         ayrshare: {
           platforms: {

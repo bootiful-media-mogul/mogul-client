@@ -1754,7 +1754,6 @@ export class EntityContexts {
 }
 
 export class WordPress {
-
   readonly client: Client
 
   constructor(client: Client) {

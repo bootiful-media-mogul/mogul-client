@@ -43,6 +43,7 @@ const translations = {
         'error-message': 'see error message',
         'no-error-message': '(no error message given)',
         keys: {
+          wordpress: 'Wordpress',
           blogPostMarkdownFile: 'Blog Post Markdown File',
           ayrshare: 'Ayrshare',
           mockPodcastEpisode: 'Mock',
@@ -65,6 +66,7 @@ const translations = {
       },
       plugins: {
         wordpress: {
+
           publish: 'Publish',
           description: `Publish this post to your WordPress blog. 
           (You may need to connect to Wordpress first.`

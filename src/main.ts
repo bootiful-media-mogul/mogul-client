@@ -65,6 +65,7 @@ const translations = {
       },
       plugins: {
         wordpress: {
+          publish: 'Publish',
           description: `Publish this post to your WordPress blog. 
           (You may need to connect to Wordpress first.`
         },

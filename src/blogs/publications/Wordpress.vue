@@ -15,7 +15,7 @@
           type="button"
           @click.prevent="publishToWordpress()"
         >
-          {{ t('publications.plugins.audioFile.download') }}
+          {{ t('publications.plugins.wordpress.publish') }}
         </button>
       </div>
     </template>
@@ -76,12 +76,7 @@ async function attemptConnection() {
     publicationContext.type,
     publicationContext.publishableId
   )
-  // console.log(Object.entries(context.context))
-  // for (let [key, value] of context.context) {
-  //   console.log(key + ' ' + value)
-  // }
-  //
-  const serialized  = {
+  const serialized = {
     resolvedType: context.resolvedType,
     context: Object.fromEntries(context.context)
   }

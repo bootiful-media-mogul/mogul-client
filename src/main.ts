@@ -66,12 +66,19 @@ const translations = {
       },
       plugins: {
         wordpress: {
-
+          title: 'Wordpress',
+          tokenUri: 'WordPress API Token URI',
+          authorizationUri: 'WordPress API Autorization URI',
+          clientId: 'OAuth Client ID',
+          clientSecret: 'OAuth Client Secret',
           publish: 'Publish',
           description: `Publish this post to your WordPress blog. 
           (You may need to connect to Wordpress first.`
         },
-        blogPostMarkdownFile: { description: 'download a Markdown file for your post' },
+        blogPostMarkdownFile: {
+          title: 'Publish a blog as a Markdown file',
+          description: 'download a Markdown file for your post'
+        },
         ayrshare: {
           platforms: {
             gmb: 'Google Business Profile',

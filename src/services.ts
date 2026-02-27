@@ -1765,32 +1765,29 @@ export class WordPress {
       `
             query {
               wordPressStatus {
-                  avatarUrl 
-                  connected 
-                  email 
-                  displayName 
+                  connected, id, displayName
               }
             }  
          `,
       {}
     )
-    const stat = (await results.data['wordPressStatus']) as WordPressStatus
-    console.log(stat)
-    return stat
+    const data = await results.data['wordPressStatus']
+    return new WordPressStatus(
+      data['displayName'] as string,
+      data['connected'] as boolean,
+      data['id'] as number
+    )
   }
 }
 
 export class WordPressStatus {
-  readonly avatarUrl: string
-  readonly connected: boolean
-  readonly email: string
   readonly displayName: string
-
-  constructor(avatarUrl: string, connected: boolean, email: string, displayName: string) {
-    this.avatarUrl = avatarUrl
-    this.connected = connected
-    this.email = email
+  readonly connected: boolean
+  readonly id: number
+  constructor(displayName: string, connected: boolean, id: number) {
     this.displayName = displayName
+    this.connected = connected
+    this.id = id
   }
 }
 export const wordpress = new WordPress(graphqlClient)

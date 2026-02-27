@@ -66,14 +66,16 @@ const translations = {
       },
       plugins: {
         wordpress: {
+          disabled :'You must first configure your WordPress instance in the Settings page.',
           title: 'Wordpress',
           tokenUri: 'WordPress API Token URI',
           authorizationUri: 'WordPress API Autorization URI',
           clientId: 'OAuth Client ID',
+          siteId: 'WordPress Site ID',
+          baseUrl: 'WordPress Site Base URL',
           clientSecret: 'OAuth Client Secret',
           publish: 'Publish',
-          description: `Publish this post to your WordPress blog. 
-          (You may need to connect to Wordpress first.`
+          description: `Publish this post to your WordPress blog.`
         },
         blogPostMarkdownFile: {
           title: 'Publish a blog as a Markdown file',

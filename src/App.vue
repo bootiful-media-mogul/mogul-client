@@ -29,6 +29,7 @@ import jobsIconAsset from '@/assets/images/navbar/jobs-icon.png'
 import jobsIconAssetHighlight from '@/assets/images/navbar/jobs-icon-highlight.png'
 
 import router from '@/index'
+import { usePendingAction } from '@/composables/usePendingAction'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -45,6 +46,9 @@ function goPodcasts() {
 function go(view: string) {
   router.push({ name: view })
 }
+
+const { resume } = usePendingAction()
+onMounted(async () => await resume())
 
 onMounted(async () => {
   const res = await mogul.user()

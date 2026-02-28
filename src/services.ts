@@ -1753,6 +1753,44 @@ export class EntityContexts {
   }
 }
 
+export class WordPress {
+  readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async wordPressStatus(): Promise<WordPressStatus> {
+    const results = await this.client.query(
+      `
+            query {
+              wordPressStatus {
+                  connected, id, displayName
+              }
+            }  
+         `,
+      {}
+    )
+    const data = await results.data['wordPressStatus']
+    return new WordPressStatus(
+      data['displayName'] as string,
+      data['connected'] as boolean,
+      data['id'] as number
+    )
+  }
+}
+
+export class WordPressStatus {
+  readonly displayName: string
+  readonly connected: boolean
+  readonly id: number
+  constructor(displayName: string, connected: boolean, id: number) {
+    this.displayName = displayName
+    this.connected = connected
+    this.id = id
+  }
+}
+export const wordpress = new WordPress(graphqlClient)
 export const events = mitt()
 export const blogs = new Blogs(graphqlClient)
 export const search = new Search(graphqlClient)

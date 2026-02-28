@@ -43,6 +43,7 @@ const translations = {
         'error-message': 'see error message',
         'no-error-message': '(no error message given)',
         keys: {
+          wordpress: 'Wordpress',
           blogPostMarkdownFile: 'Blog Post Markdown File',
           ayrshare: 'Ayrshare',
           mockPodcastEpisode: 'Mock',
@@ -64,7 +65,24 @@ const translations = {
         }
       },
       plugins: {
-        blogPostMarkdownFile: { description: 'download a Markdown file for your post' },
+        wordpress: {
+          connected : 'Connected',
+          connect : 'Connect to WordPress',
+          disabled: 'You must first configure your WordPress instance in the Settings page.',
+          title: 'Wordpress',
+          tokenUri: 'WordPress API Token URI',
+          authorizationUri: 'WordPress API Autorization URI',
+          clientId: 'OAuth Client ID',
+          siteId: 'WordPress Site ID',
+          baseUrl: 'WordPress Site Base URL',
+          clientSecret: 'OAuth Client Secret',
+          publish: 'Publish',
+          description: `Publish this post to your WordPress blog.`
+        },
+        blogPostMarkdownFile: {
+          title: 'Publish a blog as a Markdown file',
+          description: 'download a Markdown file for your post'
+        },
         ayrshare: {
           platforms: {
             gmb: 'Google Business Profile',

@@ -66,7 +66,9 @@ const translations = {
       },
       plugins: {
         wordpress: {
-          disabled :'You must first configure your WordPress instance in the Settings page.',
+          connected : 'Connected',
+          connect : 'Connect to WordPress',
+          disabled: 'You must first configure your WordPress instance in the Settings page.',
           title: 'Wordpress',
           tokenUri: 'WordPress API Token URI',
           authorizationUri: 'WordPress API Autorization URI',

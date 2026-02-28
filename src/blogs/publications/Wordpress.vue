@@ -2,15 +2,20 @@
   <PublicationPanelComponent :icon="wordpressIcon" :icon-hover="wordpressIcon" :plugin="pluginName">
     <template v-slot:panel>
       <div>
-        <div v-if="status?.connected">
-          <Icon :icon="connected" :icon-hover="connected" :disabled="true" />
-        </div>
-        <div v-else>
-          <Icon :icon="disconnected" :icon-hover="disconnected" @click.prevent="connect()" />
-        </div>
-
         <button
-          :disabled="disabled"
+          :disabled="connected"
+          class="pure-button publish-button"
+          type="button"
+          @click.prevent="attemptConnection()"
+        >
+          {{
+            connected
+              ? t('publications.plugins.wordpress.connected')
+              : t('publications.plugins.wordpress.connect')
+          }}
+        </button>
+        <button
+          :disabled="publishDisabled"
           class="pure-button pure-button-primary publish-button"
           type="button"
           @click.prevent="publishToWordpress()"
@@ -23,9 +28,8 @@
 </template>
 <script lang="ts" setup>
 import wordpressIcon from '@/assets/images/publications/blogs/wordpress-og.png'
-import connected from '@/assets/images/publications/blogs/linked-icon.png'
-import disconnected from '@/assets/images/publications/blogs/unlinked-icon.png'
-
+import connectedIcon from '@/assets/images/publications/blogs/linked-icon.png'
+import disconnectedIcon from '@/assets/images/publications/blogs/unlinked-icon.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { useI18n } from 'vue-i18n'
 import { inject, onMounted, ref } from 'vue'
@@ -34,41 +38,19 @@ import type {
   IsPluginReadyFunction,
   PublishFunction
 } from '@/publications/input'
-import { entityNavigationContexts, wordpress, WordPressStatus } from '@/services'
-import Icon from '@/ui/Icon.vue'
+import { entityNavigationContexts, wordpress } from '@/services'
 
 const { t } = useI18n()
 
-const status = ref<WordPressStatus>()
+function connectionIcon(): string {
+  return connected.value ? connectedIcon : disconnectedIcon
+}
 
 const pluginName = 'wordpress'
-
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!
 const getPublicationContextFunction =
   inject<GetPublicationContextFunction>('getPublicationContext')!
-
-const disabled = ref<boolean>(false)
-
-async function isPluginDisabled() {
-  const clientContext = {}
-  const publicationContext = getPublicationContextFunction()
-  const ready = await isPluginReadyFunction(
-    publicationContext.type,
-    publicationContext.publishableId,
-    clientContext,
-    pluginName
-  )
-  return !ready!
-}
-
-async function connect() {
-  console.log(
-    'going to connect to wordpress. i should store ' +
-      'some state somewhere to reconstruct this view'
-  )
-  await attemptConnection()
-}
 
 async function attemptConnection() {
   const publicationContext = getPublicationContextFunction()
@@ -82,8 +64,32 @@ async function attemptConnection() {
   }
   const json = JSON.stringify(serialized)
   sessionStorage.setItem('pending_action', json)
-  console.log('json before:', json)
+  // todo when the user is redirected back we and we detect it on the router config, we need to
+  //      publish an event and the plugins on this page can detect the event and expand themselves
   window.location.href = '/oauth2/authorization/wordpress'
+}
+
+async function connectedToWordpress(): Promise<boolean> {
+  return (await wordpress.wordPressStatus()).connected
+}
+
+async function fullyConfigured(): Promise<boolean> {
+  const clientContext = {}
+  const publicationContext = getPublicationContextFunction()
+  const ready = await isPluginReadyFunction(
+    publicationContext.type,
+    publicationContext.publishableId,
+    clientContext,
+    pluginName
+  )
+  return ready!
+}
+
+async function readyToPublish(): Promise<boolean> {
+  configured.value = await fullyConfigured()
+  connected.value = await connectedToWordpress()
+  console.log('configured ' + configured.value + ', connected ' + connected.value)
+  return configured.value && connected.value
 }
 
 async function publishToWordpress() {
@@ -97,10 +103,16 @@ async function publishToWordpress() {
   )
 }
 
-onMounted(async () => {
-  disabled.value = await isPluginDisabled()
-  status.value = await wordpress.wordPressStatus()
+// rules: the publish button should _never_ be active UNLESS the user is both (configured && connected)
+// the connection button should show connected if the user is connected, not connected otherwise.
 
-  console.log('onMounted ' + status?.value?.connected)
+const connected = ref<boolean>(false)
+const configured = ref<boolean>(false)
+const publishDisabled = ref<boolean>(false)
+
+onMounted(async () => {
+  publishDisabled.value = !(await readyToPublish())
+
+  console.log('onMounted evaluating: ' + publishDisabled.value)
 })
 </script>

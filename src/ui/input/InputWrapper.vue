@@ -150,11 +150,7 @@ function evaluateWordCount(element: TextInputElement) {
 }
 
 function registerWordCountListener(element: TextInputElement) {
-  const charChangeListener = () => {
-    if (element.value.length) {
-      evaluateWordCount(element)
-    }
-  }
+  const charChangeListener = () => evaluateWordCount(element)
   element.addEventListener('input', charChangeListener)
 }
 

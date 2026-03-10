@@ -7,9 +7,11 @@
         </div>
       </div>
     </div>
-
     <div ref="root" class="input-wrapper">
       <slot></slot>
+    </div>
+    <div class="word-count">
+      <div class="status" ref="wordCount"></div>
     </div>
     <div class="icon-column">
       <InputWrapperMenu
@@ -46,20 +48,26 @@
 </template>
 
 <script lang="ts" setup>
+type TextInputElement = HTMLInputElement | HTMLTextAreaElement
+
 import { onBeforeUnmount, onMounted, provide, ref } from 'vue'
 import InputWrapperMenu from '@/ui/input/InputWrapperMenu.vue'
 import type { PanelSlot } from './input'
 
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+const wordCount = ref<HTMLElement>()
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 const root = ref<HTMLElement>()
-const inputElement = ref<HTMLInputElement>()
+const inputElement = ref<TextInputElement>()
 const childSlots = ref<Array<PanelSlot>>([])
-const events = 'input,change'.split(',')
+const inputEvents = 'input,change'.split(',')
 const panelVisible = ref<boolean>(false)
 
 const updateInputValue = (txt: string) => {
   emit('update:modelValue', txt)
-  //text.value = txt
 }
 
 const updateValue = (event: Event) => {
@@ -134,17 +142,35 @@ const togglePanel = (slot: PanelSlot) => {
   panelVisible.value = !panelVisible.value
 }
 
+function evaluateWordCount(element: TextInputElement) {
+  wordCount.value!!.innerText =
+    element.value.length == 0
+      ? t('components.inputWrapper.empty')
+      : t('components.inputWrapper.character-count', element.value.length)
+}
+
+function registerWordCountListener(element: TextInputElement) {
+  const charChangeListener = () => {
+    if (element.value.length) {
+      evaluateWordCount(element)
+    }
+  }
+  element.addEventListener('input', charChangeListener)
+}
+
 onMounted(() => {
   inputElement.value = root.value?.querySelector('input, textarea')!!
   if (inputElement.value) {
-    events.forEach((evt) => inputElement.value!!.addEventListener(evt, updateValue))
+    const element = inputElement.value!!
+    registerWordCountListener(element)
+    inputEvents.forEach((evt) => element.addEventListener(evt, updateValue))
   }
   childSlots.value[0].iconVisible = true
 })
 
 onBeforeUnmount(() => {
   if (inputElement.value) {
-    events.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
+    inputEvents.forEach((evt) => inputElement.value!!.removeEventListener(evt, updateValue))
   }
 })
 
@@ -164,13 +190,22 @@ provide('getInputElement', getInputElement)
   grid-template-areas:
     ' toolbar toolbar toolbar '
     ' input input  input '
-    ' . icons .  '
+    ' word-count icons .  '
     ' panel panel panel  ';
-  grid-template-columns: auto min-content auto;
-  grid-template-rows: auto auto calc(var(--icon-width) * 1.2) auto;
+  grid-template-columns: 1fr min-content 1fr;
+  grid-template-rows: auto auto auto auto;
   margin-bottom: var(--gutter-space);
 }
 
+.word-count {
+  .status {
+    font-size: small;
+  }
+  align-self: center;
+  /*text-align: right ;*/
+  padding-right: var(--gutter-space);
+  grid-area: word-count;
+}
 .input-wrapper {
   grid-area: input;
 }
@@ -178,6 +213,7 @@ provide('getInputElement', getInputElement)
 .icon-column {
   display: grid;
   grid-area: icons;
+  align-self: center;
 }
 
 .input-panel {
@@ -190,8 +226,6 @@ provide('getInputElement', getInputElement)
   padding-right: var(--writing-tools-panel-padding);
   padding-top: calc(2.5 * var(--icon-width));
   background-color: rgba(255, 255, 255, 0.5);
-  /*background-color: var(--panel-bg-color);*/
-
   border-radius: 8px;
 }
 

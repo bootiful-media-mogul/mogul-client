@@ -250,9 +250,10 @@ This is NOT reversible! `,
       cancel: 'Cancel'
     },
     'about.title': 'About',
-
+    // input wrappers
+    'components.inputWrapper.character-count': '{count} character(s)',
+    'components.inputWrapper.empty': '(empty)',
     // compositions
-
     'compositions.buttons.add-attachment': 'Add Attachment',
     // blogs
     'blogs.title': 'Blogs',

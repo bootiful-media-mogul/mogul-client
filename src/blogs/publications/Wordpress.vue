@@ -28,8 +28,8 @@
 </template>
 <script lang="ts" setup>
 import wordpressIcon from '@/assets/images/publications/blogs/wordpress-og.png'
-import connectedIcon from '@/assets/images/publications/blogs/linked-icon.png'
-import disconnectedIcon from '@/assets/images/publications/blogs/unlinked-icon.png'
+// import connectedIcon from '@/assets/images/publications/blogs/linked-icon.png'
+// import disconnectedIcon from '@/assets/images/publications/blogs/unlinked-icon.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { useI18n } from 'vue-i18n'
 import { inject, onMounted, ref } from 'vue'
@@ -41,11 +41,6 @@ import type {
 import { entityNavigationContexts, wordpress } from '@/services'
 
 const { t } = useI18n()
-
-function connectionIcon(): string {
-  return connected.value ? connectedIcon : disconnectedIcon
-}
-
 const pluginName = 'wordpress'
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
 const publishFunction = inject<PublishFunction>('publish')!

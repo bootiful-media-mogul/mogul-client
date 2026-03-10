@@ -22,6 +22,11 @@
 
 .platform-panel .platform-name {
   grid-area: platform-name;
+  font-weight: bolder;
+  .notes {
+    display: inline;
+    font-weight: normal;
+  }
 }
 
 .platform-panels {
@@ -42,12 +47,10 @@
             <input v-model="p.enabled" :disabled="publishing" type="checkbox" @change="reset(p)" />
           </div>
           <div class="platform-name">
-            {{
-              t(
-                'publications.plugins.ayrshare.platforms.' +
-                  p.ayrsharePublicationComposition.platform
-              )
-            }}
+            {{ getPlatformLabel(p.ayrsharePublicationComposition.platform) }}
+            <div class="notes">
+              {{ getMaxCharactersAllowed(p.ayrsharePublicationComposition.platform) }}
+            </div>
           </div>
           <div class="platform-post">
             <div v-if="p.enabled">
@@ -87,11 +90,28 @@ import {
   PublicationContext,
   type PublishFunction
 } from '@/publications/input'
-const { t } = useI18n()
 import { ayrshare, AyrsharePublicationComposition, notifications } from '@/services'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
+
+const { t } = useI18n()
+
+function getMaxCharactersAllowed(platform: string): string {
+  let msg = t('publications.plugins.ayrshare.platforms.' + platform + '.maxCharactersAllowed')
+  if (msg == '' || msg == '0') {
+    msg = ''
+  }
+  if (msg != '') {
+    const charsOrLess = t('publications.plugins.ayrshare.charactersOrLess', { num: msg })
+    if (charsOrLess && charsOrLess != '') return '(' + charsOrLess + ')'
+  }
+  return ''
+}
+
+function getPlatformLabel(platform: string): string {
+  return t('publications.plugins.ayrshare.platforms.' + platform + '.label')
+}
 
 class EnableAyrsharePublicationComposition {
   public enabled: boolean = false

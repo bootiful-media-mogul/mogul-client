@@ -7,6 +7,10 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './index'
 
+function formatNumberEnglish(value: number): string {
+  return new Intl.NumberFormat('en-US').format(value)
+}
+
 // i18n
 const translations = {
   en: {
@@ -84,20 +88,27 @@ const translations = {
           description: 'download a Markdown file for your post'
         },
         ayrshare: {
+          charactersOrLess : '{num} characters or less',
           platforms: {
-            gmb: 'Google Business Profile',
-            facebook: 'Facebook',
-            linkedin: 'LinkedIn',
-            instagram: 'Instagram',
-            telegram: 'Telegram',
-            snapchat: 'Snapchat',
-            pinterest: 'Pinterest',
-            threads: 'Threads',
-            youtube: 'YouTube',
-            reddit: 'Reddit',
-            bluesky: 'Bluesky',
-            tiktok: 'TikTok',
-            twitter: 'X (formerly known as Twitter)'
+            gmb: {
+              label: 'Google Business Profile',
+              maxCharactersAllowed: formatNumberEnglish(1500)
+            },
+            facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
+            linkedin: { label: 'LinkedIn', maxCharactersAllowed:  formatNumberEnglish(3000) },
+            instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
+            telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
+            snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
+            pinterest: { label: 'Pinterest', maxCharactersAllowed: formatNumberEnglish(500) },
+            threads: { label: 'Threads', maxCharactersAllowed: formatNumberEnglish(25000) },
+            youtube: { label: 'YouTube', maxCharactersAllowed: formatNumberEnglish(5000) },
+            reddit: { label: 'Reddit', maxCharactersAllowed: formatNumberEnglish(40000) },
+            bluesky: { label: 'Bluesky', maxCharactersAllowed: formatNumberEnglish(300) },
+            tiktok: { label: 'TikTok', maxCharactersAllowed: formatNumberEnglish(2200) },
+            twitter: {
+              label: 'X (formerly known as Twitter)',
+              maxCharactersAllowed: formatNumberEnglish(280)
+            }
           },
           'combo-post': 'use the same copy for all enabled platforms',
           ayrshareKey: 'Ayrshare API Key',

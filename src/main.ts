@@ -88,14 +88,14 @@ const translations = {
           description: 'download a Markdown file for your post'
         },
         ayrshare: {
-          charactersOrLess : '{num} characters or less',
+          charactersOrLess: '{num} characters or less',
           platforms: {
             gmb: {
               label: 'Google Business Profile',
               maxCharactersAllowed: formatNumberEnglish(1500)
             },
             facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
-            linkedin: { label: 'LinkedIn', maxCharactersAllowed:  formatNumberEnglish(3000) },
+            linkedin: { label: 'LinkedIn', maxCharactersAllowed: formatNumberEnglish(3000) },
             instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
             telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
             snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
@@ -213,12 +213,15 @@ const translations = {
     'selections.podcasts': 'Select a Podcast',
     'selections.params.podcastIndexerJob.podcastId': 'Podcast ID',
     'selections.params.helloWorldJob.name': 'Name',
+    'selections.params.importMarkdownPostsJob.blogId': 'Blog ID',
+    'selections.params.importMarkdownPostsJob.managedFileId': 'Archive File',
 
     // jobs
     'jobs.name.helloWorldJob': '"Hello World!"',
     'jobs.name.failingJob': 'Fail',
     'jobs.name.notesIndexerJob': 'Notes Indexer',
     'jobs.name.podcastIndexerJob': 'Podcast Indexer',
+    'jobs.name.importMarkdownPostsJob': 'Import Markdown Posts',
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',
     'jobs.title': 'Jobs',

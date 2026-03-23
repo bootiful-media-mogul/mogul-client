@@ -55,19 +55,22 @@
 </template>
 
 <script lang="ts" setup>
-import { Job, jobs, notifications } from '@/services'
+import { Job, JobParam, jobs, notifications } from '@/services'
 import { onMounted, reactive, ref } from 'vue'
 import PodcastsSelect from '@/podcasts/PodcastsSelect.vue'
 import Input from '@/ui/Input.vue'
 import { type SelectOption } from '@/ui/Select.vue'
 import { useI18n } from 'vue-i18n'
 import BlogsSelect from '@/blogs/BlogsSelect.vue'
+import ManagedFileSelect from '@/managedfiles/ManagedFileSelect.vue'
+import { at } from 'vitest/dist/reporters-5f784f42'
 
 const { t } = useI18n()
 
 const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
 paramComponents.set('blogId', BlogsSelect)
+paramComponents.set('managedFileId', ManagedFileSelect)
 
 function validate() {
   allJobs.value.forEach((job: JobRequest) => {
@@ -109,7 +112,13 @@ async function launch(req: JobRequest) {
 
   return await jobs.launch(req.job.name, payload)
 }
-
+function arrayOfJobParamsToMap(arr: JobParam[]): Map<string, object> {
+  const m = new Map<string, object>()
+  arr.forEach((job) => {
+    m.set(job.name, JSON.parse(job.value))
+  })
+  return m
+}
 class JobRequest {
   readonly job: Job
   ready: boolean = false
@@ -121,14 +130,22 @@ class JobRequest {
   constructor(job: Job) {
     this.job = job
     this.selections = reactive({})
+    const existingValues = arrayOfJobParamsToMap(job.contextAttributes)
     for (const attr of job.requiredContextAttributes) {
-      this.selections[attr] = null
+      if (existingValues.has(attr)) {
+        this.selections[attr] = existingValues.get(attr) as SelectOption | string | number | null
+      } //
+      else {
+        this.selections[attr] = null
+      }
     }
   }
 }
 
 onMounted(async () => {
-  notifications.listenForCategory('job-completed-event', async (evt) => {
+
+  // todo this needs to be fixed it doesnt work anymore.
+  notifications.listenForCategory('job-stopped-event', async (evt) => {
     const jobName = evt.key
     const job = jobByName(jobName)
     if (job) {
@@ -139,7 +156,10 @@ onMounted(async () => {
     validate()
   })
   const jobsResults = await jobs.jobs()
-  allJobs.value = jobsResults.map((job) => new JobRequest(job))
+  allJobs.value = jobsResults.map((job) => {
+    console.log('jobRequest: ' + JSON.stringify(job))
+    return new JobRequest(job)
+  })
   validate()
 })
 </script>

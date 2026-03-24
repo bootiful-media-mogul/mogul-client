@@ -156,6 +156,7 @@ class JobRequest {
         this.selections[attr] = new ValidatedJobParam(attr, false, null)
       }
     }
+    this.ready = job.requiredContextAttributes.length === 0
   }
 }
 

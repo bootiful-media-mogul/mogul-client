@@ -175,6 +175,8 @@ const translations = {
 
     // notifications
     notifications: {
+      'job-started-event' : 'the job {key} has started',
+      'job-stopped-event' : 'the job {key} has finished',
       'blog-updated-event': `The blog "{context}" with ID #{key} has been updated`.trim(),
       'blog-created-event': `The blog "{context}" with ID #{key} has been created`.trim(),
       'ayrshare-publication-completion-event':

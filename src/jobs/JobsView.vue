@@ -163,6 +163,7 @@ class JobRequest {
 onMounted(async () => {
   // todo this needs to be fixed it doesnt work anymore.
   notifications.listenForCategory('job-stopped-event', async (evt) => {
+    console.log('job-stopped-event', evt)
     const jobName = evt.key
     const job = jobByName(jobName)
     if (job) {
@@ -175,7 +176,6 @@ onMounted(async () => {
   })
   const jobsResults = await jobs.jobs()
   allJobs.value = jobsResults.map((job) => {
-    console.log('jobRequest: ' + JSON.stringify(job))
     return new JobRequest(job)
   })
   // todo call validate when the app starts

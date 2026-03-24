@@ -1,31 +1,28 @@
 <template>
-  <ManagedFileComponent accept="tgz,zip" :managed-file-id="props.modelValue!!" @has-data="change" />
+  <ManagedFileComponent accept="tgz,zip" :managed-file-id="model" @has-data="onManagedFileChange" />
 </template>
 
 <script setup lang="ts">
-function change(id: number) {
-  console.log('changing', id)
+function onManagedFileChange(id: number) {
   emit('update:modelValue', id)
+  emit('validated', true)
 }
 
 import { computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
-const { t } = useI18n()
 const props = defineProps<{ modelValue: number | null }>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', v: number | null): void
-  (e: 'change', v: number | null): void
+  (e: 'validated', valid: boolean): void
 }>()
 
-const model = computed<number | null>({
-  get: () => props.modelValue,
+const model = computed<number>({
+  get: () => props.modelValue!!,
   set: (v) => emit('update:modelValue', v)
 })
 
 onMounted(async () => {
   console.log('mount the managedFileComponent ')
-
 })
 </script>

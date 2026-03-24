@@ -248,6 +248,9 @@ const uploadFile = async (event: Event) => {
   )
   written.value = true
   uploading.value = false
+
+  emit('hasData', props.managedFileId)
+
   await loadManagedFileIntoEditor()
 }
 </script>

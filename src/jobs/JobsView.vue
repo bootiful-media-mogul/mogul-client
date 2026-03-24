@@ -20,8 +20,8 @@
             <div class="attribute-input">
               <component
                 :is="resolveComponent(attribute)"
-                v-model="job.selections[attribute]"
-                @change="validate"
+                v-model="job.selections[attribute].value"
+                @validated="(valid: boolean) => onValidated(job, attribute, valid)"
               />
             </div>
           </div>
@@ -71,11 +71,9 @@ paramComponents.set('podcastId', PodcastsSelect)
 paramComponents.set('blogId', BlogsSelect)
 paramComponents.set('managedFileId', ManagedFileSelect)
 
-function validate() {
-  allJobs.value.forEach((job: JobRequest) => {
-    // todo build some sort of validated state
-    job.ready = Object.values(job.selections).every((v) => v != null)
-  })
+function onValidated(job: JobRequest, attribute: string, valid: boolean) {
+  job.selections[attribute].valid = valid
+  job.ready = Object.values(job.selections).every((v) => v != null && v.valid)
 }
 
 function resolveComponent(paramName: string): any {
@@ -96,12 +94,13 @@ function jobByName(jn: string): JobRequest | null {
 
 class ValidatedJobParam {
 
-  readonly name: string
+  name: string
+  valid: boolean
+  value: SelectOption | string | number | null
 
-  readonly valid: boolean
-
-  constructor(name: string, valid: boolean) {
+  constructor(name: string, valid: boolean, value: SelectOption | string | number | null) {
     this.name = name
+    this.value = value
     this.valid = valid
   }
 }
@@ -124,6 +123,7 @@ async function launch(req: JobRequest) {
 
   return await jobs.launch(req.job.name, payload)
 }
+
 function arrayOfJobParamsToMap(arr: JobParam[]): Map<string, object> {
   const m = new Map<string, object>()
   arr.forEach((job) => {
@@ -131,13 +131,14 @@ function arrayOfJobParamsToMap(arr: JobParam[]): Map<string, object> {
   })
   return m
 }
+
 class JobRequest {
   readonly job: Job
   ready: boolean = false
   busy: boolean = false
   success: boolean = false
   done: boolean = false
-  selections: Record<string, SelectOption | string | number | null>
+  selections: Record<string, ValidatedJobParam>
 
   constructor(job: Job) {
     this.job = job
@@ -145,10 +146,14 @@ class JobRequest {
     const existingValues = arrayOfJobParamsToMap(job.contextAttributes)
     for (const attr of job.requiredContextAttributes) {
       if (existingValues.has(attr)) {
-        this.selections[attr] = existingValues.get(attr) as SelectOption | string | number | null
+        this.selections[attr] = new ValidatedJobParam(
+          attr,
+          false,
+          existingValues.get(attr) as SelectOption | string | number | null
+        )
       } //
       else {
-        this.selections[attr] = null
+        this.selections[attr] = new ValidatedJobParam(attr, false, null)
       }
     }
   }
@@ -164,14 +169,16 @@ onMounted(async () => {
       job.success = JSON.parse(evt.context)['success']
       job.done = true
     }
-    validate()
+    // todo validate
+    // validate()
   })
   const jobsResults = await jobs.jobs()
   allJobs.value = jobsResults.map((job) => {
     console.log('jobRequest: ' + JSON.stringify(job))
     return new JobRequest(job)
   })
-  validate()
+  // todo call validate when the app starts
+  // validate()
 })
 </script>
 

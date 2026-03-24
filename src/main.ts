@@ -266,6 +266,7 @@ This is NOT reversible! `,
     },
     'about.title': 'About',
     // input wrappers
+    'components.input.enter-a-value' :'Enter a value',
     'components.inputWrapper.character-count': '{count} character(s)',
     'components.inputWrapper.empty': '(empty)',
     // compositions

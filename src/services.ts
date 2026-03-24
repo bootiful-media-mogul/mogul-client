@@ -149,15 +149,14 @@ export interface TranscriptEditedEvent {
   readonly transcript: string
 }
 
-export class JobParam  {
+export class JobParam {
   readonly name: string
-  readonly value : string
+  readonly value: string
 
   constructor(name: string, value: string) {
     this.name = name
     this.value = value
   }
-
 }
 
 export class Job {

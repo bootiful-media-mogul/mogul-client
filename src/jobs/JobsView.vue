@@ -63,7 +63,6 @@ import { type SelectOption } from '@/ui/Select.vue'
 import { useI18n } from 'vue-i18n'
 import BlogsSelect from '@/blogs/BlogsSelect.vue'
 import ManagedFileSelect from '@/managedfiles/ManagedFileSelect.vue'
-import { at } from 'vitest/dist/reporters-5f784f42'
 
 const { t } = useI18n()
 
@@ -74,6 +73,7 @@ paramComponents.set('managedFileId', ManagedFileSelect)
 
 function validate() {
   allJobs.value.forEach((job: JobRequest) => {
+    // todo build some sort of validated state
     job.ready = Object.values(job.selections).every((v) => v != null)
   })
 }
@@ -92,6 +92,18 @@ function jobByName(jn: string): JobRequest | null {
     return result
   }
   return null
+}
+
+class ValidatedJobParam {
+
+  readonly name: string
+
+  readonly valid: boolean
+
+  constructor(name: string, valid: boolean) {
+    this.name = name
+    this.valid = valid
+  }
 }
 
 async function launch(req: JobRequest) {
@@ -143,7 +155,6 @@ class JobRequest {
 }
 
 onMounted(async () => {
-
   // todo this needs to be fixed it doesnt work anymore.
   notifications.listenForCategory('job-stopped-event', async (evt) => {
     const jobName = evt.key

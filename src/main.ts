@@ -211,6 +211,7 @@ const translations = {
 
     // selections
     'selections.podcasts': 'Select a Podcast',
+    'selections.blogs': 'Select a Blog',
     'selections.params.podcastIndexerJob.podcastId': 'Podcast ID',
     'selections.params.helloWorldJob.name': 'Name',
     'selections.params.importMarkdownPostsJob.blogId': 'Blog ID',

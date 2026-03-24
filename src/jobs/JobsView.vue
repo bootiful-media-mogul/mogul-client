@@ -7,22 +7,25 @@
           <legend>{{ t('jobs.name.' + job.job.name) }}</legend>
         </fieldset>
 
-        <div class="attributes">
+        <div class="attributes form-section ">
+<!--          <div class="form-section-title">{{ t('jobs.attributes') }}</div>-->
           <div
             class="attribute"
             v-for="attribute in job.job.requiredContextAttributes"
             :key="attribute"
           >
-            <label class="attribute-label">
-              {{ t('selections.params.' + job.job.name + '.' + attribute) }}
-            </label>
+            <div class="form-row">
+              <label class="attribute-label">
+                {{ t('selections.params.' + job.job.name + '.' + attribute) }}
+              </label>
 
-            <div class="attribute-input">
-              <component
-                :is="resolveComponent(attribute)"
-                v-model="job.selections[attribute].value"
-                @validated="(valid: boolean) => onValidated(job, attribute, valid)"
-              />
+              <div class="attribute-input">
+                <component
+                  :is="resolveComponent(attribute)"
+                  v-model="job.selections[attribute].value"
+                  @validated="(valid: boolean) => onValidated(job, attribute, valid)"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -93,7 +96,6 @@ function jobByName(jn: string): JobRequest | null {
 }
 
 class ValidatedJobParam {
-
   name: string
   valid: boolean
   value: SelectOption | string | number | null

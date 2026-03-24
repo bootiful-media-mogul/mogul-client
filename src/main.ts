@@ -228,6 +228,7 @@ const translations = {
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',
     'jobs.title': 'Jobs',
+    'jobs.attributes': 'Attributes',
     'jobs.busy': 'running {name}',
     'jobs.done': '{name} has completed successfully.',
     'jobs.failed': '{name} failed.',

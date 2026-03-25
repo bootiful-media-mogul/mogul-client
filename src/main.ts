@@ -175,8 +175,8 @@ const translations = {
 
     // notifications
     notifications: {
-      'job-started-event' : 'the job {key} has started',
-      'job-stopped-event' : 'the job {key} has finished',
+      'job-started-event': 'the job {key} has started',
+      'job-stopped-event': 'the job {key} has finished',
       'blog-updated-event': `The blog "{context}" with ID #{key} has been updated`.trim(),
       'blog-created-event': `The blog "{context}" with ID #{key} has been created`.trim(),
       'ayrshare-publication-completion-event':
@@ -220,10 +220,12 @@ const translations = {
     'selections.params.importMarkdownPostsJob.managedFileId': 'Archive File',
 
     // jobs
+    'jobs.name.testHelloWorldJob': '"Hello World!"',
     'jobs.name.helloWorldJob': '"Hello World!"',
     'jobs.name.failingJob': 'Fail',
     'jobs.name.notesIndexerJob': 'Notes Indexer',
     'jobs.name.podcastIndexerJob': 'Podcast Indexer',
+    'jobs.required' : '(required)',
     'jobs.name.importMarkdownPostsJob': 'Import Markdown Posts',
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',
@@ -269,7 +271,7 @@ This is NOT reversible! `,
     },
     'about.title': 'About',
     // input wrappers
-    'components.input.enter-a-value' :'Enter a value',
+    'components.input.enter-a-value': 'Enter a value',
     'components.inputWrapper.character-count': '{count} character(s)',
     'components.inputWrapper.empty': '(empty)',
     // compositions

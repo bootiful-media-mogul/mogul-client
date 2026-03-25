@@ -7,15 +7,20 @@
           <legend>{{ t('jobs.name.' + job.job.name) }}</legend>
         </fieldset>
 
-        <div class="attributes form-section ">
-<!--          <div class="form-section-title">{{ t('jobs.attributes') }}</div>-->
+        <div class="attributes form-section">
+          <!--          <div class="form-section-title">{{ t('jobs.attributes') }}</div>-->
           <div
             class="attribute"
             v-for="attribute in job.job.requiredContextAttributes"
             :key="attribute"
           >
             <div class="form-row">
-              <label class="attribute-label">
+              <label
+                :class="{
+                  'attribute-label': true ,
+                  'required-field' : !job.selections[attribute].valid
+                }"
+              >
                 {{ t('selections.params.' + job.job.name + '.' + attribute) }}
               </label>
 

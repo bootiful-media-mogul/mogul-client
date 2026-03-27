@@ -66,7 +66,7 @@ const loadPostIntoEditor = async (postId: number) => {
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
   descriptionComposition.value = post.descriptionComposition
-  await loadNotesForNotable('episode', postId, title.value)
+  await loadNotesForNotable('post', postId, title.value)
 }
 
 const save = async () => {

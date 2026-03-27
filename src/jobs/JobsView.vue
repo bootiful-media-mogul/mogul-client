@@ -17,8 +17,8 @@
             <div class="form-row">
               <label
                 :class="{
-                  'attribute-label': true ,
-                  'required-field' : !job.selections[attribute].valid
+                  'attribute-label': true,
+                  'required-field': !job.selections[attribute].valid
                 }"
               >
                 {{ t('selections.params.' + job.job.name + '.' + attribute) }}

@@ -88,6 +88,8 @@ const translations = {
           description: 'download a Markdown file for your post'
         },
         ayrshare: {
+          twitterOauth1ApiKey: 'Twitter OAuth 1 API Key',
+          twitterOauth1ApiSecret: 'Twitter OAuth 1 API Secret',
           charactersOrLess: '{num} characters or less',
           platforms: {
             gmb: {

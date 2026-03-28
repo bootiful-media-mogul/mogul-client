@@ -149,12 +149,24 @@ export interface TranscriptEditedEvent {
   readonly transcript: string
 }
 
+export class JobParam {
+  readonly name: string
+  readonly value: string
+
+  constructor(name: string, value: string) {
+    this.name = name
+    this.value = value
+  }
+}
+
 export class Job {
   readonly name: string
   readonly requiredContextAttributes: string[]
+  readonly contextAttributes: JobParam[]
 
-  constructor(name: string, requiredContextAttributes: string[]) {
+  constructor(name: string, requiredContextAttributes: string[], contextAttributes: JobParam[]) {
     this.name = name
+    this.contextAttributes = contextAttributes
     this.requiredContextAttributes = requiredContextAttributes
   }
 }
@@ -186,7 +198,11 @@ export class Jobs {
   async jobs(): Promise<Array<Job>> {
     const q = `
       query { 
-        jobs { name, requiredContextAttributes } 
+        jobs { 
+          name, 
+          requiredContextAttributes, 
+          contextAttributes { name, value } 
+        } 
       }
     `
     const result = await this.client.query(q, {})

@@ -7,22 +7,30 @@
           <legend>{{ t('jobs.name.' + job.job.name) }}</legend>
         </fieldset>
 
-        <div class="attributes">
+        <div class="attributes form-section">
+          <!--          <div class="form-section-title">{{ t('jobs.attributes') }}</div>-->
           <div
             class="attribute"
             v-for="attribute in job.job.requiredContextAttributes"
             :key="attribute"
           >
-            <label class="attribute-label">
-              {{ t('selections.params.' + job.job.name + '.' + attribute) }}
-            </label>
+            <div class="form-row">
+              <label
+                :class="{
+                  'attribute-label': true,
+                  'required-field': !job.selections[attribute].valid
+                }"
+              >
+                {{ t('selections.params.' + job.job.name + '.' + attribute) }}
+              </label>
 
-            <div class="attribute-input">
-              <component
-                :is="resolveComponent(attribute)"
-                v-model="job.selections[attribute]"
-                @change="validate"
-              />
+              <div class="attribute-input">
+                <component
+                  :is="resolveComponent(attribute)"
+                  v-model="job.selections[attribute].value"
+                  @validated="(valid: boolean) => onValidated(job, attribute, valid)"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -55,24 +63,25 @@
 </template>
 
 <script lang="ts" setup>
-import { Job, jobs, notifications } from '@/services'
+import { Job, JobParam, jobs, notifications } from '@/services'
 import { onMounted, reactive, ref } from 'vue'
 import PodcastsSelect from '@/podcasts/PodcastsSelect.vue'
 import Input from '@/ui/Input.vue'
 import { type SelectOption } from '@/ui/Select.vue'
 import { useI18n } from 'vue-i18n'
 import BlogsSelect from '@/blogs/BlogsSelect.vue'
+import ManagedFileSelect from '@/managedfiles/ManagedFileSelect.vue'
 
 const { t } = useI18n()
 
 const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
 paramComponents.set('blogId', BlogsSelect)
+paramComponents.set('managedFileId', ManagedFileSelect)
 
-function validate() {
-  allJobs.value.forEach((job: JobRequest) => {
-    job.ready = Object.values(job.selections).every((v) => v != null)
-  })
+function onValidated(job: JobRequest, attribute: string, valid: boolean) {
+  job.selections[attribute].valid = valid
+  job.ready = Object.values(job.selections).every((v) => v != null && v.valid)
 }
 
 function resolveComponent(paramName: string): any {
@@ -89,6 +98,18 @@ function jobByName(jn: string): JobRequest | null {
     return result
   }
   return null
+}
+
+class ValidatedJobParam {
+  name: string
+  valid: boolean
+  value: SelectOption | string | number | null
+
+  constructor(name: string, valid: boolean, value: SelectOption | string | number | null) {
+    this.name = name
+    this.value = value
+    this.valid = valid
+  }
 }
 
 async function launch(req: JobRequest) {
@@ -110,25 +131,46 @@ async function launch(req: JobRequest) {
   return await jobs.launch(req.job.name, payload)
 }
 
+function arrayOfJobParamsToMap(arr: JobParam[]): Map<string, object> {
+  const m = new Map<string, object>()
+  arr.forEach((job) => {
+    m.set(job.name, JSON.parse(job.value))
+  })
+  return m
+}
+
 class JobRequest {
   readonly job: Job
   ready: boolean = false
   busy: boolean = false
   success: boolean = false
   done: boolean = false
-  selections: Record<string, SelectOption | string | number | null>
+  selections: Record<string, ValidatedJobParam>
 
   constructor(job: Job) {
     this.job = job
     this.selections = reactive({})
+    const existingValues = arrayOfJobParamsToMap(job.contextAttributes)
     for (const attr of job.requiredContextAttributes) {
-      this.selections[attr] = null
+      if (existingValues.has(attr)) {
+        this.selections[attr] = new ValidatedJobParam(
+          attr,
+          false,
+          existingValues.get(attr) as SelectOption | string | number | null
+        )
+      } //
+      else {
+        this.selections[attr] = new ValidatedJobParam(attr, false, null)
+      }
     }
+    this.ready = job.requiredContextAttributes.length === 0
   }
 }
 
 onMounted(async () => {
-  notifications.listenForCategory('job-completed-event', async (evt) => {
+  // todo this needs to be fixed it doesnt work anymore.
+  notifications.listenForCategory('job-stopped-event', async (evt) => {
+    console.log('job-stopped-event', evt)
     const jobName = evt.key
     const job = jobByName(jobName)
     if (job) {
@@ -136,11 +178,15 @@ onMounted(async () => {
       job.success = JSON.parse(evt.context)['success']
       job.done = true
     }
-    validate()
+    // todo validate
+    // validate()
   })
   const jobsResults = await jobs.jobs()
-  allJobs.value = jobsResults.map((job) => new JobRequest(job))
-  validate()
+  allJobs.value = jobsResults.map((job) => {
+    return new JobRequest(job)
+  })
+  // todo call validate when the app starts
+  // validate()
 })
 </script>
 

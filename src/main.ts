@@ -88,14 +88,14 @@ const translations = {
           description: 'download a Markdown file for your post'
         },
         ayrshare: {
-          charactersOrLess : '{num} characters or less',
+          charactersOrLess: '{num} characters or less',
           platforms: {
             gmb: {
               label: 'Google Business Profile',
               maxCharactersAllowed: formatNumberEnglish(1500)
             },
             facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
-            linkedin: { label: 'LinkedIn', maxCharactersAllowed:  formatNumberEnglish(3000) },
+            linkedin: { label: 'LinkedIn', maxCharactersAllowed: formatNumberEnglish(3000) },
             instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
             telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
             snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
@@ -175,6 +175,8 @@ const translations = {
 
     // notifications
     notifications: {
+      'job-started-event': 'the job {key} has started',
+      'job-stopped-event': 'the job {key} has finished',
       'blog-updated-event': `The blog "{context}" with ID #{key} has been updated`.trim(),
       'blog-created-event': `The blog "{context}" with ID #{key} has been created`.trim(),
       'ayrshare-publication-completion-event':
@@ -211,17 +213,24 @@ const translations = {
 
     // selections
     'selections.podcasts': 'Select a Podcast',
+    'selections.blogs': 'Select a Blog',
     'selections.params.podcastIndexerJob.podcastId': 'Podcast ID',
     'selections.params.helloWorldJob.name': 'Name',
+    'selections.params.importMarkdownPostsJob.blogId': 'Blog ID',
+    'selections.params.importMarkdownPostsJob.managedFileId': 'Archive File',
 
     // jobs
+    'jobs.name.testHelloWorldJob': '"Hello World!"',
     'jobs.name.helloWorldJob': '"Hello World!"',
     'jobs.name.failingJob': 'Fail',
     'jobs.name.notesIndexerJob': 'Notes Indexer',
     'jobs.name.podcastIndexerJob': 'Podcast Indexer',
+    'jobs.required': '(required)',
+    'jobs.name.importMarkdownPostsJob': 'Import Markdown Posts',
     'jobs.required-context-attributes': 'Required Context Attributes: {attributes}',
     'jobs.launch': 'Launch {name}',
     'jobs.title': 'Jobs',
+    'jobs.attributes': 'Attributes',
     'jobs.busy': 'running {name}',
     'jobs.done': '{name} has completed successfully.',
     'jobs.failed': '{name} failed.',
@@ -262,6 +271,7 @@ This is NOT reversible! `,
     },
     'about.title': 'About',
     // input wrappers
+    'components.input.enter-a-value': 'Enter a value',
     'components.inputWrapper.character-count': '{count} character(s)',
     'components.inputWrapper.empty': '(empty)',
     // compositions
@@ -270,6 +280,15 @@ This is NOT reversible! `,
     'blogs.title': 'Blogs',
     'blogs.all': "{user}'s blogs",
     'blogs.posts.title': 'Posts',
+    'blogs.posts.post': 'Blog Post',
+    'blogs.posts.editing': 'Editing Post #{id}: {title}',
+    'blogs.posts.new-post': 'New Post',
+    'blogs.posts.basics': 'Basics',
+    'blogs.posts.post.title': 'Title',
+    'blogs.posts.post.description': 'Description',
+    'blogs.posts.post.summary': 'Summary',
+    'blogs.posts.buttons.save': 'Save',
+    'blogs.posts.buttons.cancel': 'Cancel',
     'blogs.posts.publications': 'Publications',
     // episodes
 

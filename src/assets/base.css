@@ -30,6 +30,11 @@
   --box-shadow: 0 calc(var(--gutter-space) * 1) 40px rgba(0, 0, 0, 0.5);
 }
 
+label.required-field::after {
+  content: ' *';
+  color: #e24b4a;
+}
+
 /* Container query setup on .frame wrapper */
 .frame {
   container-type: inline-size;

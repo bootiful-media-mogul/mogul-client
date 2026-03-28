@@ -8,13 +8,18 @@ import Select, { type SelectOption } from '@/ui/Select.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
-const props = defineProps<{ modelValue: SelectOption | null }>()
-const emit = defineEmits<{ (e: 'update:modelValue', v: SelectOption | null): void }>()
+const props = defineProps<{ modelValue: number | null }>()
+const emit = defineEmits<{
+  (e: 'update:modelValue', v: number | null): void
+  (e: 'validated', valid: boolean): void
+}>()
 
-// Proxy so <Select v-model> is directly your component v-model
 const model = computed<SelectOption | null>({
-  get: () => props.modelValue,
-  set: (v) => emit('update:modelValue', v)
+  get: () => podcastSelections.value.find((o) => o.value === props.modelValue) ?? null,
+  set: (v) => {
+    emit('update:modelValue', v?.value ?? null)
+    emit('validated', v != null)
+  }
 })
 
 const podcastSelections = ref<SelectOption[]>([])

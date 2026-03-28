@@ -147,6 +147,11 @@ const props = defineProps<{
   readonly accept: string
   readonly managedFileId: number
 }>()
+
+const emit = defineEmits<{
+  (e: 'hasData', managedFileId: number): void
+}>()
+
 const filename = ref<string>('')
 const contentType = ref<string>('')
 const size = ref<number>(0)
@@ -173,6 +178,15 @@ watch(
       n
     )
     await managedFiles.setManagedFileVisibility(props.managedFileId, n)
+  }
+)
+
+watch(
+  () => size.value,
+  (newSize: number, oldSize: number) => {
+    if (oldSize === 0 && newSize > 0) {
+      emit('hasData', props.managedFileId)
+    }
   }
 )
 
@@ -234,6 +248,9 @@ const uploadFile = async (event: Event) => {
   )
   written.value = true
   uploading.value = false
+
+  emit('hasData', props.managedFileId)
+
   await loadManagedFileIntoEditor()
 }
 </script>

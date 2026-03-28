@@ -66,7 +66,7 @@ const loadPostIntoEditor = async (postId: number) => {
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
   descriptionComposition.value = post.descriptionComposition
-  await loadNotesForNotable('episode', postId, title.value)
+  await loadNotesForNotable('post', postId, title.value)
 }
 
 const save = async () => {
@@ -85,29 +85,29 @@ const cancel = async () => {
 
 <template>
   <EntityViewDecorator :watermark-image="blogIcon">
-    <h1>Blog Post</h1>
+    <h1>{{ t('blogs.posts.post') }}</h1>
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>
-          <span v-if="title"> Editing Post #{{ draftPost.id }}: {{ title }} </span>
-          <span v-else> New Post </span>
+          <span v-if="title">
+            {{ t('blogs.posts.editing', { id: draftPost.id, title: title }) }}
+          </span>
+          <span v-else> {{ t('blogs.posts.new-post') }} </span>
           <span v-if="draftPost.id"> ({{ dts(created) }}) </span>
         </legend>
         <div class="form-section">
-          <div class="form-section-title">Basics</div>
+          <div class="form-section-title">{{ t('blogs.posts.basics') }}</div>
           <div class="form-row">
-            <label for="postTitle"> Title </label>
+            <label for="postTitle"> {{ t('blogs.posts.post.title') }} </label>
             <InputWrapper v-model="title">
               <input id="postTitle" v-model="title" required type="text" />
               <InputTools v-model="title" />
             </InputWrapper>
           </div>
           <div class="form-row">
-            <label for="postDescription"> Description </label>
-
+            <label for="postDescription"> {{ t('blogs.posts.post.description') }} </label>
             <InputWrapper v-model="description">
               <textarea id="postDescription" v-model="description" required rows="10" />
-
               <CompositionComponent
                 v-if="descriptionComposition"
                 :composition-id="parseInt(descriptionComposition.id + '')"
@@ -116,7 +116,7 @@ const cancel = async () => {
             </InputWrapper>
           </div>
           <div class="form-row">
-            <label for="postSummary"> Summary </label>
+            <label for="postSummary"> {{ t('blogs.posts.post.summary') }} </label>
             <InputWrapper v-model="summary">
               <textarea id="postSummary" v-model="summary" required rows="5" />
               <InputTools v-model="summary" />
@@ -129,7 +129,7 @@ const cancel = async () => {
               type="submit"
               @click.prevent="save"
             >
-              Save
+              {{ t('blogs.posts.buttons.save') }}
             </button>
             <button
               :disabled="buttonsDisabled"
@@ -137,7 +137,7 @@ const cancel = async () => {
               type="submit"
               @click.prevent="cancel"
             >
-              Cancel
+              {{ t('blogs.posts.buttons.cancel') }}
             </button>
           </div>
 
@@ -150,12 +150,6 @@ const cancel = async () => {
               :publishable="postId + ''"
               :type="'post'"
             >
-              <!--
-              <Ayrshare />
-              <Podbean />
-              <PodcastEpisodeBlogPost />
-              <PodcastEpisodeAudioFile />
-              -->
               <BlogPostMarkdownFile />
               <Wordpress />
             </PublicationsSectionComponent>

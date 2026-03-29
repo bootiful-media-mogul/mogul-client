@@ -20,7 +20,8 @@ const translations = {
       close: 'Close',
       cancel: 'Cancel',
       save: 'Save',
-      create: 'Create'
+      create: 'Create',
+      'optional-value': '(this is optional)'
     },
 
     hello: 'Hi, {mogul}',

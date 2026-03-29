@@ -514,11 +514,13 @@ export class Setting {
   name: string
   valid: boolean
   value: string
+  required: boolean
 
-  constructor(name: string, valid: boolean, value: string) {
+  constructor(name: string, valid: boolean, value: string, required: boolean) {
     this.name = name
     this.valid = valid
     this.value = value
+    this.required = required
   }
 }
 
@@ -856,9 +858,10 @@ export class Settings {
                  valid 
                  category 
                  settings  {
-                  name 
-                  valid 
+                  name
+                  valid
                   value
+                  required
                  }
                 }
             }

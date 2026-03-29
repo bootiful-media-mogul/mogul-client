@@ -1,7 +1,7 @@
 <template>
   <h1 v-if="mogul">{{ t('settings.title') }}</h1>
   <div v-for="settingsPage in settingsRef" v-bind:key="settingsPage.category">
-    <form class="pure-form pure-form-stacked">
+    <form class="pure-form pure-form-stacked" @submit.prevent="save(settingsPage.category)">
       <fieldset>
         <legend>
           {{ t('publications.plugins.' + settingsPage.category + '.title') }}
@@ -17,12 +17,14 @@
             <input
               :id="textAreaElementId(settingsPage.category, setting.name)"
               v-model="setting.value"
-              :required="!setting.valid"
+              autocomplete="off"
+              :required="setting.required && !setting.valid"
               class="secret"
               type="password"
             />
             <span class="pure-form-message-inline">
-              <span v-if="!setting.valid">{{ t('labels.required-value') }}</span>
+              <span v-if="setting.required && !setting.valid">{{ t('labels.required-value') }}</span>
+              <span v-if="!setting.required">{{ t('labels.optional-value', 'optional') }}</span>
             </span>
           </div>
         </div>
@@ -31,7 +33,6 @@
             v-if="settingsPage.settings.length > 0"
             class="pure-button pure-button-primary"
             type="submit"
-            @click.prevent="save(settingsPage.category)"
           >
             {{
               t('settings.save-button', {
@@ -73,7 +74,7 @@ const reloadSettings = async () => {
   const newSettings: Array<SettingsPage> = []
   settingsRef.value.forEach((sp: SettingsPage) => {
     const sub = sp.settings.map(
-      (setting) => new Setting(setting.name, setting.valid, setting.value)
+      (setting) => new Setting(setting.name, setting.valid, setting.value, setting.required)
     )
     const nsp = new SettingsPage(sp.valid, sp.category, sub)
     newSettings.push(nsp)

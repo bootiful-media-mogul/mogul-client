@@ -1575,6 +1575,7 @@ export class Blogs {
     `
     const result = await this.graphqlClient.query(q, { blogId: blogId })
     const posts = (await result.data['blogPostsByBlog']) as Array<Post>
+    console.log('loading blog post previews # ' + blogId)
     return posts.map(
       (p) => new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
     )

@@ -31,7 +31,7 @@ const title = ref<string>('')
 async function loadBlog() {
   const newBlogId = selectedBlogId.value
   currentBlog.value = await blogs.blogById(newBlogId)
-  posts.value = await blogs.blogPostsByBlog(newBlogId)
+  posts.value = await blogs.blogPostPreviewsByBlog(newBlogId)
   title.value = `Posts for ${currentBlog.value.title}`
 }
 

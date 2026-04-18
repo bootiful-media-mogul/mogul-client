@@ -1559,6 +1559,27 @@ export class Blogs {
     return (await result.data['summarize']) as string
   }
 
+
+  async  blogPostPreviewsByBlog (blogId: number) : Promise <Array <Post>> {
+    const q = `
+      query blogPostsByBlog($blogId: Int) {
+        blogPostsByBlog(blogId: $blogId) {
+          id
+          title
+          content
+          summary
+          complete
+          created
+        }
+      }
+    `
+    const result = await this.graphqlClient.query(q, { blogId: blogId })
+    const posts = (await result.data['blogPostsByBlog']) as Array<Post>
+    return posts.map(
+      (p) => new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+    )
+  }
+
   async blogPostsByBlog(blogId: number): Promise<Array<Post>> {
     const q = `
       query blogPostsByBlog($blogId: Int) {

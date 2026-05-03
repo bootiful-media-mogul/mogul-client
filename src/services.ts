@@ -1559,8 +1559,7 @@ export class Blogs {
     return (await result.data['summarize']) as string
   }
 
-
-  async  blogPostPreviewsByBlog (blogId: number) : Promise <Array <Post>> {
+  async blogPostPreviewsByBlog(blogId: number): Promise<Array<Post>> {
     const q = `
       query blogPostsByBlog($blogId: Int) {
         blogPostsByBlog(blogId: $blogId) {

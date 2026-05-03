@@ -23,7 +23,9 @@
               type="password"
             />
             <span class="pure-form-message-inline">
-              <span v-if="setting.required && !setting.valid">{{ t('labels.required-value') }}</span>
+              <span v-if="setting.required && !setting.valid">{{
+                t('labels.required-value')
+              }}</span>
               <span v-if="!setting.required">{{ t('labels.optional-value', 'optional') }}</span>
             </span>
           </div>

@@ -8,7 +8,7 @@ import Select, { type SelectOption } from '@/ui/Select.vue'
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
-const props = defineProps<{ modelValue:  number | null }>()
+const props = defineProps<{ modelValue: number | null }>()
 const emit = defineEmits<{
   (e: 'update:modelValue', v: string | number | null): void
   (e: 'validated', valid: boolean): void

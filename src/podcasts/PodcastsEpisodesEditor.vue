@@ -278,7 +278,6 @@ onMounted(async () => {
 
         <div class="form-section">
           <div class="form-section-title">{{ t('podcasts.episodes.segments') }}</div>
-
           <div class="toolbar">
             <Icon
               :icon-hover="plusIconHighlight"
@@ -326,8 +325,8 @@ onMounted(async () => {
               :publishable="draftEpisode.id + ''"
               :type="'episode'"
             >
-              <Ayrshare />
               <Podbean />
+              <Ayrshare />
               <PodcastEpisodeBlogPost />
               <PodcastEpisodeAudioFile />
               <Mock />

@@ -292,6 +292,8 @@ This is NOT reversible! `,
     'blogs.posts.post.summary': 'Summary',
     'blogs.posts.buttons.save': 'Save',
     'blogs.posts.buttons.cancel': 'Cancel',
+    'blogs.posts.buttons.summarize': 'Summarize',
+    'blogs.posts.buttons.summarizing': 'Summarizing',
     'blogs.posts.publications': 'Publications',
     // episodes
 

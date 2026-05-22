@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
-import { Blog, blogs, Composition, loadNotesForNotable, Post } from '@/services'
+import { ai, Blog, blogs, Composition, loadNotesForNotable, Post } from '@/services'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
@@ -11,6 +11,10 @@ import PublicationsSectionComponent from '@/publications/PublicationsSectionComp
 import { useI18n } from 'vue-i18n'
 import BlogPostMarkdownFile from '@/blogs/publications/BlogPostMarkdownFile.vue'
 import Wordpress from '@/blogs/publications/Wordpress.vue'
+import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
+import asset from '@/assets/images/transcript.png'
+import assetHighlight from '@/assets/images/transcript-highlight.png'
+import Icon from '@/ui/Icon.vue'
 
 const { t } = useI18n()
 
@@ -24,13 +28,29 @@ const props = defineProps<{
 const draftPost = ref<Post>({} as Post)
 const blog = ref<Blog>()
 const created = ref<string | number>(-1)
-
+const summarizing = ref<boolean>(false)
+const summarizingButtonText = ref<string>(t('blogs.posts.buttons.summarize'))
 // Form fields
 const title = ref('')
 const description = ref('')
 const summary = ref('')
 const dirtyKey = ref('')
 const descriptionComposition = ref<Composition>()
+
+async function summarize() {
+  summarizing.value = true
+  summarizingButtonText.value = t('blogs.posts.buttons.summarizing')
+  summary.value = await ai.chat(
+    `
+    derive a summary of the following blog post.
+    do not any embedded HTML markup like <IFRAME> elements when generating the summary.
+
+    ===================================
+    ${draftPost.value.content}`
+  )
+  summarizing.value = false
+  summarizingButtonText.value = t('blogs.posts.buttons.summarize')
+}
 
 onMounted(async () => {
   blog.value = await blogs.blogById(props.blogId)
@@ -119,7 +139,29 @@ const cancel = async () => {
             <label for="postSummary"> {{ t('blogs.posts.post.summary') }} </label>
             <InputWrapper v-model="summary">
               <textarea id="postSummary" v-model="summary" required rows="5" />
-              <InputTools v-model="summary" />
+
+              <InputTools v-model="summary">
+                <!--
+                 i need to build a component or some logic here in this slot that updates the v-model
+                 with the AI-derived summary from the blog post. could i do that here?
+                 how do i get a panel and such so that it slots in?
+                -->
+                <InputWrapperChild>
+                  <template v-slot:icon>
+                    <Icon :icon="asset" :icon-hover="assetHighlight" />
+                  </template>
+                  <template v-slot:panel>
+                    <button
+                      :disabled="summarizing"
+                      class="pure-button"
+                      type="button"
+                      @click.prevent="summarize"
+                    >
+                      {{ summarizingButtonText }}
+                    </button>
+                  </template>
+                </InputWrapperChild>
+              </InputTools>
             </InputWrapper>
           </div>
           <div>

@@ -9,6 +9,7 @@ import { notes } from '@/services'
 
 const emit = defineEmits<{
   deleted: [id: number, type: string]
+  doneChanged: [id: number, type: string]
   update: [id: number, type: string]
 }>()
 
@@ -17,21 +18,35 @@ async function deleteNote() {
   emit('deleted', props.id, props.type)
 }
 
+async function setDone(event: Event) {
+  const done = (event.target as HTMLInputElement).checked
+  await notes.setNoteDone(props.id, done)
+  emit('doneChanged', props.id, props.type)
+}
+
 const props = defineProps<{
   id: number
   note: string
   created: string | number
+  done: string | null
   type: string
 }>()
 </script>
 
 <template>
-  <div class="note">
+  <div class="note" :class="{ done: done !== null }">
     <div class="created-column">{{ dateTimeToString(created) }}</div>
     <div class="note-text">
       {{ note }}
     </div>
     <div class="note-controls">
+      <input
+        class="done-checkbox"
+        type="checkbox"
+        :checked="done !== null"
+        title="Done"
+        @change="setDone"
+      />
       <Icon
         :icon="editAsset"
         :icon-hover="editHighlightAsset"
@@ -67,14 +82,23 @@ const props = defineProps<{
 
     grid-area: note-text;
   }
+  &.done .note-text {
+    opacity: 0.65;
+    text-decoration: line-through;
+  }
   .note-controls {
     padding-top: var(--gutter-space-half);
     padding-bottom: var(--gutter-space-half);
     grid-area: buttons;
     display: grid;
-    grid-template-areas: 'edit delete';
+    grid-template-areas: 'done edit delete';
     grid-column-gap: var(--gutter-space-half);
-    grid-template-columns: var(--icon-column) var(--icon-column);
+    grid-template-columns: var(--icon-column) var(--icon-column) var(--icon-column);
+    align-items: center;
+  }
+  .done-checkbox {
+    grid-area: done;
+    margin: 0;
   }
 }
 </style>

@@ -1681,13 +1681,15 @@ export class Note {
   readonly id: number
   readonly note: string
   readonly type: string
-  readonly created: number
+  readonly created: string
+  readonly done?: string | null
 
-  constructor(id: number, note: string, type: string, created: number) {
+  constructor(id: number, note: string, type: string, created: string, done?: string | null) {
     this.id = id
     this.note = note
     this.type = type
     this.created = created
+    this.done = done
   }
 }
 
@@ -1723,6 +1725,19 @@ export class Notes {
     return await result.data['updateNote']
   }
 
+  async setNoteDone(id: number, done: boolean): Promise<boolean> {
+    const mutation = `
+      mutation SetNoteDone( $id:Int,$done:Boolean  ){
+        setNoteDone(id:$id, done:$done)
+      }
+    `
+    const result = await this.client.mutation(mutation, {
+      done: done,
+      id: id
+    })
+    return await result.data['setNoteDone']
+  }
+
   async createNote(type: string, id: number, note: string): Promise<boolean> {
     const mutation = ` 
       mutation CreateNote( $type : String, $id : Int , $note : String){  
@@ -1737,19 +1752,24 @@ export class Notes {
     return await result.data['createNote']
   }
 
-  async notesForNotable(id: number, type: string): Promise<Array<Note>> {
+  async notesForNotable(
+    id: number,
+    type: string,
+    includeDone: boolean = true
+  ): Promise<Array<Note>> {
     const results = await this.client.query(
       `
-      query($type: String, $id : Int ) {
-        notesForNotable(type: $type, id: $id ) {
+      query($type: String, $id : Int, $includeDone: Boolean ) {
+        notesForNotable(type: $type, id: $id, includeDone: $includeDone ) {
           created
+          done
           id 
           note 
           type
         }
       }  
     `,
-      { type: type, id: id }
+      { type: type, id: id, includeDone: includeDone }
     )
     return (await results.data['notesForNotable']) as Array<Note>
   }

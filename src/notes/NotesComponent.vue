@@ -16,12 +16,14 @@ class UiNote {
   readonly id: number
   readonly note: string
   readonly type: string
-  readonly created: number
-  constructor(id: number, note: string, type: string, created: number) {
+  readonly created: string
+  readonly done: string | null
+  constructor(id: number, note: string, type: string, created: string, done?: string | null) {
     this.id = id
     this.note = note
     this.type = type
     this.created = created
+    this.done = done ?? null
   }
 }
 const mogulName = ref<string>('')
@@ -37,12 +39,13 @@ const entityLoaded = ref<boolean>(false)
 const entityName = ref<string>('')
 const noteTarget = ref<'mogul' | 'entity'>('mogul')
 const showComposer = ref<boolean>(false)
+const showDoneNotes = ref<boolean>(false)
 
 function resultsToUiNotes(items: Array<Note>): Array<UiNote> {
   if (items && items.length > 0) {
     const arr: Array<UiNote> = []
     for (const item of items) {
-      arr.push(new UiNote(item.id, item.note, item.type, item.created))
+      arr.push(new UiNote(item.id, item.note, item.type, item.created, item.done))
     }
     return arr
   }
@@ -88,9 +91,13 @@ function showComposerFor(target: 'mogul' | 'entity') {
 }
 
 async function reload() {
-  mogulNotes.value = resultsToUiNotes(await notes.notesForNotable(mogulId.value, 'mogul'))
+  mogulNotes.value = resultsToUiNotes(
+    await notes.notesForNotable(mogulId.value, 'mogul', showDoneNotes.value)
+  )
   if (notableId.value > 0 && (type.value + '').trim() !== '') {
-    entityNotes.value = resultsToUiNotes(await notes.notesForNotable(notableId.value, type.value))
+    entityNotes.value = resultsToUiNotes(
+      await notes.notesForNotable(notableId.value, type.value, showDoneNotes.value)
+    )
   }
   await expandIfNotesAvailable()
 }
@@ -115,7 +122,9 @@ onMounted(async () => {
     entityLoaded.value = false
     showComposer.value = false
     // Reload mogul notes to keep them fresh
-    mogulNotes.value = resultsToUiNotes(await notes.notesForNotable(mogulId.value, 'mogul'))
+    mogulNotes.value = resultsToUiNotes(
+      await notes.notesForNotable(mogulId.value, 'mogul', showDoneNotes.value)
+    )
   })
 
   events.on('notes-for-notable-event', notesForNotableEventHandler)
@@ -172,6 +181,10 @@ onMounted(async () => {
       </div>
       <!-- Always show mogul notes section -->
       <div class="existing-notes">
+        <label class="notes-filter">
+          <input v-model="showDoneNotes" type="checkbox" @change="reload" />
+          <span>{{ t('notes.filters.show-done') }}</span>
+        </label>
         <div class="panel-menu-subtitle notes-section section-header">
           <span>{{ t('notes.system-wide.title') }}</span>
           <Icon
@@ -183,10 +196,12 @@ onMounted(async () => {
         <div class="note" v-for="note in mogulNotes" :key="note.id">
           <NoteEditor
             :created="note.created"
+            :done="note.done"
             :id="note.id"
             :note="note.note"
             :type="note.type"
             @deleted="reload"
+            @done-changed="reload"
             @update="loadIntoEditor(note)"
           />
         </div>
@@ -208,10 +223,12 @@ onMounted(async () => {
         <div class="note" v-for="note in entityNotes" :key="note.id">
           <NoteEditor
             :created="note.created"
+            :done="note.done"
             :id="note.id"
             :note="note.note"
             :type="note.type"
             @deleted="reload"
+            @done-changed="reload"
             @update="loadIntoEditor(note)"
           />
         </div>
@@ -230,6 +247,14 @@ onMounted(async () => {
 .notes-section {
   padding-top: var(--gutter-space-half);
   padding-bottom: var(--gutter-space-half);
+}
+
+.notes-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gutter-space-half);
+  padding-bottom: var(--gutter-space-half);
+  font-size: smaller;
 }
 
 .note-composition {

@@ -23,6 +23,12 @@
             <InputTools v-model="description" />
           </InputWrapper>
         </div>
+        <div class="pure-control-group">
+          <label for="rss-url">
+            {{ t('blogs.new-blog.rss-url') }}
+          </label>
+          <input id="rss-url" v-model="rssUrl" type="url" />
+        </div>
         <div class="pure-controls">
           <button
             :disabled="updateDisabled()"
@@ -62,13 +68,14 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
 function computeDirtyKey() {
-  return title.value + '|' + description.value
+  return title.value + '|' + description.value + '|' + rssUrl.value
 }
 
 const dirtyKey = ref<string>('')
 
 const title = ref<string>('')
 const description = ref<string>('')
+const rssUrl = ref<string>('')
 
 const mogulId = ref<number>(0)
 
@@ -81,8 +88,13 @@ const emit = defineEmits<{
 }>()
 
 const updateBlog = async function (e: Event) {
-  await blogs.update(props.blog.id, title.value, description.value)
+  await blogs.update(props.blog.id, title.value, description.value, optionalValue(rssUrl.value))
   updateKey()
+}
+
+function optionalValue(value: string): string | null {
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
 }
 
 function updateKey() {
@@ -101,6 +113,7 @@ onMounted(async () => {
   const blog = await blogs.blogById(props.blog.id)
   title.value = blog.title
   description.value = blog.description
+  rssUrl.value = blog.rssUrl ?? ''
   updateKey()
 })
 </script>

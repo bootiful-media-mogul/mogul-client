@@ -41,7 +41,8 @@ const translations = {
       save: 'Save',
       'new-blog': {
         title: 'Title',
-        description: 'Description'
+        description: 'Description',
+        'rss-url': 'RSS URL'
       }
     },
     publications: {

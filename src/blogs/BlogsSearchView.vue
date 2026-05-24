@@ -223,6 +223,9 @@ function openRssFeed(blogId: number, url: string) {
 }
 
 function podcastRssFeedUrl(blog: Blog) {
+  if (blog.rssUrl && blog.rssUrl.trim().length > 0) {
+    return blog.rssUrl
+  }
   const api = import.meta.env.VITE_API_URL
   const url = api + '/public/feeds/moguls/' + mogulId.value + '/blogs/' + blog.id + '/posts.atom'
   return url

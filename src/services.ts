@@ -1388,13 +1388,21 @@ export class Blog {
   readonly id: number
   readonly title: string
   readonly description: string
+  readonly rssUrl: string | null
   readonly created: string | null
 
-  constructor(id: number, title: string, description: string, created: string | null) {
+  constructor(
+    id: number,
+    title: string,
+    description: string,
+    rssUrl: string | null,
+    created: string | null
+  ) {
     this.id = id
     this.created = created
     this.title = title
     this.description = description
+    this.rssUrl = rssUrl
   }
 }
 
@@ -1462,20 +1470,21 @@ export class Blogs {
                 id
                 title
                 description
+                rssUrl
                 created
             }
           } 
     `
     const result = await this.graphqlClient.query(q, { blogId: blogId })
     const b = (await result.data['blogById']) as Blog
-    return new Blog(b.id, b.title, b.description, dateTimeToString(b.created))
+    return new Blog(b.id, b.title, b.description, b.rssUrl, dateTimeToString(b.created))
   }
 
   async createBlog(title: string, description: string): Promise<Blog> {
     const q = `
      mutation ($title:String, $description:String){
       createBlog(title:$title, description:$description) {
-       id , title , description , created
+       id , title , description , rssUrl , created
       }
      }
     `
@@ -1484,16 +1493,22 @@ export class Blogs {
     return await this.blogById(resultBlog.id)
   }
 
-  async update(blogId: number, title: string, description: string): Promise<boolean> {
+  async update(
+    blogId: number,
+    title: string,
+    description: string,
+    rssUrl: string | null
+  ): Promise<boolean> {
     const q = `
-     mutation ($blogId:Int, $title:String, $description:String){
-      updateBlog(blogId:$blogId, title:$title, description:$description)
+     mutation ($blogId:Int, $title:String, $description:String, $rssUrl:String){
+      updateBlog(blogId:$blogId, title:$title, description:$description, rssUrl:$rssUrl)
      }
     `
     const result = await this.graphqlClient.mutation(q, {
       blogId: blogId,
       title: title,
-      description: description
+      description: description,
+      rssUrl: rssUrl
     })
 
     return (await result.data['updateBlog']) as boolean
@@ -1508,6 +1523,7 @@ export class Blogs {
           id
           title
           description
+          rssUrl
         }
       }
     `,
@@ -1519,7 +1535,13 @@ export class Blogs {
     const newResults = []
     for (let i = 0; i < data.length; i++) {
       newResults.push(
-        new Blog(data[i]['id'], data[i]['title'], data[i]['description'], data[i]['created']!!)
+        new Blog(
+          data[i]['id'],
+          data[i]['title'],
+          data[i]['description'],
+          data[i]['rssUrl'],
+          data[i]['created']!!
+        )
       )
     }
     return newResults

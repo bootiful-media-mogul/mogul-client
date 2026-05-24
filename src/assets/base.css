@@ -71,7 +71,8 @@ a:hover {
   border-radius: 0 0 var(--radius) var(--radius);
 }
 
-input[type='text'] {
+input[type='text'],
+input[type='url'] {
   width: 100%;
 }
 

@@ -31,6 +31,7 @@ const translations = {
       },
       'system-wide': { title: 'System Notes' },
       entity: { title: 'Notes for {entityName}' },
+      filters: { 'show-done': 'Show Finished notes' },
       new: { prompt: "{entityName}'s Notes" }
     },
     blogs: {

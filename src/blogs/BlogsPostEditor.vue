@@ -43,7 +43,7 @@ async function summarize() {
   summary.value = await ai.chat(
     `
     derive a summary of the following blog post.
-    do not any embedded HTML markup like <IFRAME> elements when generating the summary.
+    do not include or refer to any embedded HTML markup like <IFRAME> elements when generating the summary.
 
     ===================================
     ${draftPost.value.content}`

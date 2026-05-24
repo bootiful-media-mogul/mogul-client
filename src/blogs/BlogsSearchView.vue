@@ -164,7 +164,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { onMounted, ref } from 'vue'
-import { Blog, blogs, mogul } from '@/services'
+import { Blog, blogs, mogul, utils } from '@/services'
 import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 import plusIconHighlight from '@/assets/images/plus-icon-highlight.png'
 import plusIcon from '@/assets/images/plus-icon.png'
@@ -177,7 +177,6 @@ import deleteAsset from '@/assets/images/delete.png'
 import rssHighlightAsset from '@/assets/images/rss-highlight.png'
 import rssAsset from '@/assets/images/rss.png'
 import BlogsEditor from '@/blogs/BlogsEditor.vue'
-import { utils } from '@/services'
 import router from '@/index'
 
 const mogulId = ref<number>(0)
@@ -223,12 +222,8 @@ function openRssFeed(blogId: number, url: string) {
 }
 
 function podcastRssFeedUrl(blog: Blog) {
-  if (blog.rssUrl && blog.rssUrl.trim().length > 0) {
-    return blog.rssUrl
-  }
   const api = import.meta.env.VITE_API_URL
-  const url = api + '/public/feeds/moguls/' + mogulId.value + '/blogs/' + blog.id + '/posts.atom'
-  return url
+  return api + '/public/feeds/moguls/' + mogulId.value + '/blogs/' + blog.id + '/posts.atom'
 }
 
 async function reset() {

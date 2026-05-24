@@ -34,6 +34,7 @@ const summarizingButtonText = ref<string>(t('blogs.posts.buttons.summarize'))
 const title = ref('')
 const description = ref('')
 const summary = ref('')
+const rssSlug = ref('')
 const dirtyKey = ref('')
 const descriptionComposition = ref<Composition>()
 
@@ -67,7 +68,7 @@ const dts = (date: string | number): string | null => {
 const computeDirtyKey = (): string => {
   return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${
     summary.value
-  }`
+  }:${rssSlug.value}`
 }
 
 const buttonsDisabled = computed(() => {
@@ -83,6 +84,7 @@ const loadPostIntoEditor = async (postId: number) => {
   title.value = post.title
   description.value = post.content
   summary.value = post.summary
+  rssSlug.value = post.rssSlug ?? ''
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
   descriptionComposition.value = post.descriptionComposition
@@ -91,9 +93,20 @@ const loadPostIntoEditor = async (postId: number) => {
 
 const save = async () => {
   if (draftPost.value.id) {
-    await blogs.updatePost(draftPost.value.id, title.value, description.value, summary.value)
+    await blogs.updatePost(
+      draftPost.value.id,
+      title.value,
+      description.value,
+      summary.value,
+      optionalValue(rssSlug.value)
+    )
     await loadPostIntoEditor(draftPost.value.id)
   }
+}
+
+function optionalValue(value: string): string | null {
+  const trimmed = value.trim()
+  return trimmed.length > 0 ? trimmed : null
 }
 
 const cancel = async () => {
@@ -163,6 +176,10 @@ const cancel = async () => {
                 </InputWrapperChild>
               </InputTools>
             </InputWrapper>
+          </div>
+          <div class="form-row">
+            <label for="postRssSlug"> {{ t('blogs.posts.post.rss-slug') }} </label>
+            <input id="postRssSlug" v-model="rssSlug" type="text" />
           </div>
           <div>
             <button

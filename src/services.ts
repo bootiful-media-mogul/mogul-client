@@ -1411,6 +1411,7 @@ export class Post {
   readonly title: string
   readonly content: string
   readonly summary: string
+  readonly rssSlug: string | null
   readonly complete: boolean
   readonly created: string | null
   readonly descriptionComposition?: Composition
@@ -1420,6 +1421,7 @@ export class Post {
     title: string,
     content: string,
     summary: string,
+    rssSlug: string | null,
     complete: boolean,
     created: string | null,
     descriptionComposition?: Composition
@@ -1429,6 +1431,7 @@ export class Post {
     this.title = title
     this.content = content
     this.summary = summary
+    this.rssSlug = rssSlug
     this.complete = complete
     this.created = created
   }
@@ -1551,18 +1554,20 @@ export class Blogs {
     postId: number,
     title: string,
     description: string,
-    summary: string
+    summary: string,
+    rssSlug: string | null
   ): Promise<boolean> {
     const q = `
-     mutation ($postId:Int, $title:String, $description:String, $summary:String){
-      updatePost(postId:$postId, title:$title, description:$description, summary:$summary)  
+     mutation ($postId:Int, $title:String, $description:String, $summary:String, $rssSlug:String){
+      updatePost(postId:$postId, title:$title, description:$description, summary:$summary, rssSlug:$rssSlug)
      }
     `
     const result = await this.graphqlClient.mutation(q, {
       postId: postId,
       title: title,
       description: description,
-      summary: summary
+      summary: summary,
+      rssSlug: rssSlug
     })
 
     return (await result.data['updatePost']) as boolean
@@ -1589,6 +1594,7 @@ export class Blogs {
           title
           content
           summary
+          rssSlug
           complete
           created
         }
@@ -1598,7 +1604,16 @@ export class Blogs {
     const posts = (await result.data['blogPostsByBlog']) as Array<Post>
     console.log('loading blog post previews # ' + blogId)
     return posts.map(
-      (p) => new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+      (p) =>
+        new Post(
+          p.id,
+          p.title,
+          p.content,
+          p.summary,
+          p.rssSlug,
+          p.complete,
+          dateTimeToString(p.created)
+        )
     )
   }
 
@@ -1610,6 +1625,7 @@ export class Blogs {
           title
           content
           summary
+          rssSlug
           complete
           created
          descriptionComposition { 
@@ -1629,7 +1645,16 @@ export class Blogs {
     const result = await this.graphqlClient.query(q, { blogId: blogId })
     const posts = (await result.data['blogPostsByBlog']) as Array<Post>
     return posts.map(
-      (p) => new Post(p.id, p.title, p.content, p.summary, p.complete, dateTimeToString(p.created))
+      (p) =>
+        new Post(
+          p.id,
+          p.title,
+          p.content,
+          p.summary,
+          p.rssSlug,
+          p.complete,
+          dateTimeToString(p.created)
+        )
     )
   }
 
@@ -1641,6 +1666,7 @@ export class Blogs {
           title
           content
           summary
+          rssSlug
           complete
           created
           descriptionComposition { 
@@ -1663,17 +1689,24 @@ export class Blogs {
       p.title,
       p.content,
       p.summary,
+      p.rssSlug,
       p.complete,
       dateTimeToString(p.created),
       p.descriptionComposition
     )
   }
 
-  async createPost(blogId: number, title: string, content: string, summary: string): Promise<Post> {
+  async createPost(
+    blogId: number,
+    title: string,
+    content: string,
+    summary: string,
+    rssSlug: string | null = null
+  ): Promise<Post> {
     const q = `
-     mutation ($blogId:Int, $title:String, $content:String, $summary:String){
-      createPost(blogId:$blogId, title:$title, content:$content, summary:$summary) {
-       id, title, content, summary, complete, created ,
+     mutation ($blogId:Int, $title:String, $content:String, $summary:String, $rssSlug:String){
+      createPost(blogId:$blogId, title:$title, content:$content, summary:$summary, rssSlug:$rssSlug) {
+       id, title, content, summary, rssSlug, complete, created ,
           
           descriptionComposition { 
             id,
@@ -1692,7 +1725,8 @@ export class Blogs {
       blogId: blogId,
       title: title,
       content: content,
-      summary: summary
+      summary: summary,
+      rssSlug: rssSlug
     })
     const resultPost = (await result.data['createPost']) as Post
     return await this.postById(resultPost.id)

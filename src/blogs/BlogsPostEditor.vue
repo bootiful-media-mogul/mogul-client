@@ -35,6 +35,7 @@ const title = ref('')
 const description = ref('')
 const summary = ref('')
 const rssSlug = ref('')
+const visible = ref(false)
 const dirtyKey = ref('')
 const descriptionComposition = ref<Composition>()
 
@@ -68,7 +69,7 @@ const dts = (date: string | number): string | null => {
 const computeDirtyKey = (): string => {
   return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${
     summary.value
-  }:${rssSlug.value}`
+  }:${rssSlug.value}:${visible.value}`
 }
 
 const buttonsDisabled = computed(() => {
@@ -85,6 +86,7 @@ const loadPostIntoEditor = async (postId: number) => {
   description.value = post.content
   summary.value = post.summary
   rssSlug.value = post.rssSlug ?? ''
+  visible.value = post.visible
   created.value = post.created ?? -1
   dirtyKey.value = computeDirtyKey()
   descriptionComposition.value = post.descriptionComposition
@@ -100,6 +102,7 @@ const save = async () => {
       summary.value,
       optionalValue(rssSlug.value)
     )
+    await blogs.setBlogPostVisibility(draftPost.value.id, visible.value)
     await loadPostIntoEditor(draftPost.value.id)
   }
 }
@@ -180,6 +183,12 @@ const cancel = async () => {
           <div class="form-row">
             <label for="postRssSlug"> {{ t('blogs.posts.post.rss-slug') }} </label>
             <input id="postRssSlug" v-model="rssSlug" type="text" />
+          </div>
+          <div class="form-row">
+            <label for="postVisible">
+              <input id="postVisible" v-model="visible" type="checkbox" />
+              {{ t('blogs.posts.post.visible') }}
+            </label>
           </div>
           <div>
             <button

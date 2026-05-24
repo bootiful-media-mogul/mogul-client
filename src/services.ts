@@ -1413,6 +1413,7 @@ export class Post {
   readonly summary: string
   readonly rssSlug: string | null
   readonly complete: boolean
+  readonly visible: boolean
   readonly created: string | null
   readonly descriptionComposition?: Composition
 
@@ -1423,6 +1424,7 @@ export class Post {
     summary: string,
     rssSlug: string | null,
     complete: boolean,
+    visible: boolean,
     created: string | null,
     descriptionComposition?: Composition
   ) {
@@ -1433,6 +1435,7 @@ export class Post {
     this.summary = summary
     this.rssSlug = rssSlug
     this.complete = complete
+    this.visible = visible
     this.created = created
   }
 }
@@ -1573,6 +1576,19 @@ export class Blogs {
     return (await result.data['updatePost']) as boolean
   }
 
+  async setBlogPostVisibility(postId: number, visible: boolean): Promise<boolean> {
+    const q = `
+      mutation SetBlogPostVisibility($postId:Int, $visible:Boolean) {
+        setBlogPostVisibility(postId:$postId, visible:$visible)
+      }
+    `
+    const result = await this.graphqlClient.mutation(q, {
+      postId: postId,
+      visible: visible
+    })
+    return (await result.data['setBlogPostVisibility']) as boolean
+  }
+
   async summarize(content: string): Promise<string> {
     const q = `
      mutation ($content:String){
@@ -1596,6 +1612,7 @@ export class Blogs {
           summary
           rssSlug
           complete
+          visible
           created
         }
       }
@@ -1612,6 +1629,7 @@ export class Blogs {
           p.summary,
           p.rssSlug,
           p.complete,
+          p.visible,
           dateTimeToString(p.created)
         )
     )
@@ -1627,6 +1645,7 @@ export class Blogs {
           summary
           rssSlug
           complete
+          visible
           created
          descriptionComposition { 
           id,
@@ -1653,6 +1672,7 @@ export class Blogs {
           p.summary,
           p.rssSlug,
           p.complete,
+          p.visible,
           dateTimeToString(p.created)
         )
     )
@@ -1668,6 +1688,7 @@ export class Blogs {
           summary
           rssSlug
           complete
+          visible
           created
           descriptionComposition { 
             id,
@@ -1691,6 +1712,7 @@ export class Blogs {
       p.summary,
       p.rssSlug,
       p.complete,
+      p.visible,
       dateTimeToString(p.created),
       p.descriptionComposition
     )
@@ -1706,7 +1728,7 @@ export class Blogs {
     const q = `
      mutation ($blogId:Int, $title:String, $content:String, $summary:String, $rssSlug:String){
       createPost(blogId:$blogId, title:$title, content:$content, summary:$summary, rssSlug:$rssSlug) {
-       id, title, content, summary, rssSlug, complete, created ,
+       id, title, content, summary, rssSlug, complete, visible, created ,
           
           descriptionComposition { 
             id,

@@ -15,6 +15,8 @@ import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import asset from '@/assets/images/transcript.png'
 import assetHighlight from '@/assets/images/transcript-highlight.png'
 import Icon from '@/ui/Icon.vue'
+import privacy from '@/assets/images/privacy-preview-highlight.png'
+import privacyHighlight from '@/assets/images/privacy-preview.png'
 
 const { t } = useI18n()
 
@@ -69,7 +71,7 @@ const dts = (date: string | number): string | null => {
 const computeDirtyKey = (): string => {
   return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${
     summary.value
-  }:${rssSlug.value}:${visible.value}`
+  }:${rssSlug.value}`
 }
 
 const buttonsDisabled = computed(() => {
@@ -102,8 +104,22 @@ const save = async () => {
       summary.value,
       optionalValue(rssSlug.value)
     )
-    await blogs.setBlogPostVisibility(draftPost.value.id, visible.value)
     await loadPostIntoEditor(draftPost.value.id)
+  }
+}
+
+const toggleVisibility = async () => {
+  const previous = visible.value
+  const next = !previous
+  visible.value = next
+  if (!draftPost.value.id) {
+    return
+  }
+  try {
+    await blogs.setBlogPostVisibility(draftPost.value.id, next)
+  } catch (e) {
+    visible.value = previous
+    throw e
   }
 }
 
@@ -185,10 +201,25 @@ const cancel = async () => {
             <input id="postRssSlug" v-model="rssSlug" type="text" />
           </div>
           <div class="form-row">
-            <label for="postVisible">
-              <input id="postVisible" v-model="visible" type="checkbox" />
-              {{ t('blogs.posts.post.visible') }}
-            </label>
+            <label>{{ t('blogs.posts.post.visible') }}</label>
+            <a class="visibility-toggle" href="#" @click.prevent="toggleVisibility">
+              <Icon
+                v-if="visible"
+                :alt="t('blogs.posts.post.visible')"
+                :icon-hover="privacy"
+                :icon="privacy"
+                class="icon"
+                sticky
+              />
+              <Icon
+                v-else
+                :alt="t('blogs.posts.post.not-visible')"
+                :icon-hover="privacyHighlight"
+                :icon="privacyHighlight"
+                class="icon"
+                sticky
+              />
+            </a>
           </div>
           <div>
             <button
@@ -228,4 +259,8 @@ const cancel = async () => {
   </EntityViewDecorator>
 </template>
 
-<style scoped></style>
+<style scoped>
+.visibility-toggle:hover {
+  text-decoration: none;
+}
+</style>

@@ -35,7 +35,7 @@
 }
 </style>
 <template>
-  <PublicationPanelComponent :icon="ayrshareIcon" :icon-hover="ayrshareIcon" plugin="ayrshare">
+  <PublicationPanelComponent :icon="ayrshareIcon" :icon-hover="ayrshareIcon" plugin="podcastEpisodeAyrshare">
     <template v-slot:panel>
       <div class="platform-panels">
         <div
@@ -98,7 +98,9 @@ import InputWrapper from '@/ui/input/InputWrapper.vue'
 const { t } = useI18n()
 
 function getMaxCharactersAllowed(platform: string): string {
-  let msg = t('publications.plugins.' + pluginName + '.platforms.' + platform + '.maxCharactersAllowed')
+  let msg = t(
+    'publications.plugins.' + pluginName + '.platforms.' + platform + '.maxCharactersAllowed'
+  )
   if (msg == '' || msg == '0') {
     msg = ''
   }

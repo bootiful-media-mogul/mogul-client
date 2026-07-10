@@ -85,7 +85,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 
-import ayrshareIcon from '@/assets/images/publications/podcasts/publish-to-ayrshare.png'
+import ayrshareIcon from '@/assets/images/publications/blogs/publish-to-ayrshare.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
 import { inject, onMounted, ref } from 'vue'
 import {
@@ -102,7 +102,9 @@ import InputWrapper from '@/ui/input/InputWrapper.vue'
 const { t } = useI18n()
 
 function getMaxCharactersAllowed(platform: string): string {
-  let msg = t('publications.plugins.' + pluginName + '.platforms.' + platform + '.maxCharactersAllowed')
+  let msg = t(
+    'publications.plugins.' + pluginName + '.platforms.' + platform + '.maxCharactersAllowed'
+  )
   if (msg == '' || msg == '0') {
     msg = ''
   }
@@ -114,7 +116,7 @@ function getMaxCharactersAllowed(platform: string): string {
 }
 
 function getPlatformLabel(platform: string): string {
-  return t('publications.plugins.'+pluginName+'.platforms.' + platform + '.label')
+  return t('publications.plugins.' + pluginName + '.platforms.' + platform + '.label')
 }
 
 class EnableAyrsharePublicationComposition {

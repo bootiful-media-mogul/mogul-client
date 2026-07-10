@@ -52,7 +52,8 @@ const translations = {
         keys: {
           wordpress: 'Wordpress',
           blogPostMarkdownFile: 'Blog Post Markdown File',
-          ayrshare: 'Ayrshare',
+          blogPostAyrshare: 'Ayrshare (Blog Posts)',
+          podcastEpisodeAyrshare: 'Ayrshare (Podcast Episodes)',
           mockPodcastEpisode: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',

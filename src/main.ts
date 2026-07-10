@@ -51,6 +51,7 @@ const translations = {
         'no-error-message': '(no error message given)',
         keys: {
           wordpress: 'Wordpress',
+          podcastEpisodeToBlogPost: 'Blog Post',
           blogPostMarkdownFile: 'Blog Post Markdown File',
           blogPostAyrshare: 'Ayrshare (Blog Posts)',
           podcastEpisodeAyrshare: 'Ayrshare (Podcast Episodes)',
@@ -168,6 +169,7 @@ const translations = {
         },
         podcastEpisodeToBlogPost: {
           blogId: 'Blog ID',
+          create: 'Create Post',
           description: 'Publish as a Blog Post',
           title: 'Publish as a Blog Post'
         },

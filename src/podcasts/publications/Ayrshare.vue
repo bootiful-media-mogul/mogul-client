@@ -35,7 +35,11 @@
 }
 </style>
 <template>
-  <PublicationPanelComponent :icon="ayrshareIcon" :icon-hover="ayrshareIcon" plugin="podcastEpisodeAyrshare">
+  <PublicationPanelComponent
+    :icon="ayrshareIcon"
+    :icon-hover="ayrshareIcon"
+    plugin="podcastEpisodeAyrshare"
+  >
     <template v-slot:panel>
       <div class="platform-panels">
         <div

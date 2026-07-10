@@ -11,6 +11,7 @@ import PublicationsSectionComponent from '@/publications/PublicationsSectionComp
 import { useI18n } from 'vue-i18n'
 import BlogPostMarkdownFile from '@/blogs/publications/BlogPostMarkdownFile.vue'
 import Wordpress from '@/blogs/publications/Wordpress.vue'
+import Ayrshare from '@/blogs/publications/Ayrshare.vue'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import asset from '@/assets/images/transcript.png'
 import assetHighlight from '@/assets/images/transcript-highlight.png'
@@ -251,6 +252,7 @@ const cancel = async () => {
             >
               <BlogPostMarkdownFile />
               <Wordpress />
+              <Ayrshare />
             </PublicationsSectionComponent>
           </div>
         </div>

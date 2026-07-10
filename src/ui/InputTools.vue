@@ -2,8 +2,7 @@
   <div>
     <WritingAssistant :model-value="modelValue" @update:modelValue="updateValue" />
     <MarkdownPreview :model-value="modelValue" @update:modelValue="updateValue" />
-    <slot>
-    </slot>
+    <slot> </slot>
   </div>
 </template>
 <script lang="ts" setup>

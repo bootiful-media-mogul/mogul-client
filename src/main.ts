@@ -90,9 +90,13 @@ const translations = {
           title: 'Publish a blog as a Markdown file',
           description: 'download a Markdown file for your post'
         },
-        ayrshare: {
+        blogPostAyrshare: {
+          title: 'Ayrshare (Blog Posts)',
+          description:
+            'Publish this post to your Ayrshare account for distribution to social media.',
           twitterOauth1ApiKey: 'Twitter OAuth 1 API Key',
           twitterOauth1ApiSecret: 'Twitter OAuth 1 API Secret',
+          ayrshareKey: 'Ayrshare API Key',
           charactersOrLess: '{num} characters or less',
           platforms: {
             gmb: {
@@ -115,18 +119,38 @@ const translations = {
               maxCharactersAllowed: formatNumberEnglish(280)
             }
           },
-          'combo-post': 'use the same copy for all enabled platforms',
+          'combo-post': 'use the same copy for all enabled platforms'
+        },
+        podcastEpisodeAyrshare: {
+          description:
+            'Publish this post to your Ayrshare account for distribution to social media.',
+          title: 'Ayrshare (Podcast Episodes)',
+          twitterOauth1ApiKey: 'Twitter OAuth 1 API Key',
+          twitterOauth1ApiSecret: 'Twitter OAuth 1 API Secret',
           ayrshareKey: 'Ayrshare API Key',
-          title: 'Ayrshare',
-          description: `
-            Publish this episode to your Ayrshare.com account for social media syndication. 
-            
-            Please note that before continuing, you must link and enable 
-            the selected target platforms in your Ayrshare account.
-            
-            Please select to which social media platforms you want to publish, and then compose a post targeted to that
-            platform.
-            `
+          charactersOrLess: '{num} characters or less',
+          platforms: {
+            gmb: {
+              label: 'Google Business Profile',
+              maxCharactersAllowed: formatNumberEnglish(1500)
+            },
+            facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
+            linkedin: { label: 'LinkedIn', maxCharactersAllowed: formatNumberEnglish(3000) },
+            instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
+            telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
+            snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
+            pinterest: { label: 'Pinterest', maxCharactersAllowed: formatNumberEnglish(500) },
+            threads: { label: 'Threads', maxCharactersAllowed: formatNumberEnglish(25000) },
+            youtube: { label: 'YouTube', maxCharactersAllowed: formatNumberEnglish(5000) },
+            reddit: { label: 'Reddit', maxCharactersAllowed: formatNumberEnglish(40000) },
+            bluesky: { label: 'Bluesky', maxCharactersAllowed: formatNumberEnglish(300) },
+            tiktok: { label: 'TikTok', maxCharactersAllowed: formatNumberEnglish(2200) },
+            twitter: {
+              label: 'X (formerly known as Twitter)',
+              maxCharactersAllowed: formatNumberEnglish(280)
+            }
+          },
+          'combo-post': 'use the same copy for all enabled platforms'
         },
         blogPost: {
           description: 'Publish the episode as a blog post'

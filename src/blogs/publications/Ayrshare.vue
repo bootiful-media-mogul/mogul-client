@@ -35,7 +35,11 @@
 }
 </style>
 <template>
-  <PublicationPanelComponent :icon="ayrshareIcon" :icon-hover="ayrshareIcon" plugin="ayrshare">
+  <PublicationPanelComponent
+    :icon="ayrshareIcon"
+    :icon-hover="ayrshareIcon"
+    plugin="blogPostAyrshare"
+  >
     <template v-slot:panel>
       <div class="platform-panels">
         <div
@@ -110,7 +114,7 @@ function getMaxCharactersAllowed(platform: string): string {
 }
 
 function getPlatformLabel(platform: string): string {
-  return t('publications.plugins.' + pluginName + '.platforms.' + platform + '.label')
+  return t('publications.plugins.'+pluginName+'.platforms.' + platform + '.label')
 }
 
 class EnableAyrsharePublicationComposition {
@@ -123,7 +127,7 @@ class EnableAyrsharePublicationComposition {
   }
 }
 
-const pluginName = 'podcastEpisodeAyrshare'
+const pluginName = 'blogPostAyrshare'
 
 const publishing = ref<boolean>(false)
 
@@ -162,10 +166,6 @@ async function reset(post: EnableAyrsharePublicationComposition) {
   }
   disabled.value = await isPluginDisabled()
 }
-
-notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
-  disabled.value = await isPluginDisabled()
-})
 
 notifications.listenForCategory('ayrshare-publication-completion-event', async (evt) => {
   publishing.value = false

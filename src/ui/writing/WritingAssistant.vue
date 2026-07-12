@@ -138,7 +138,6 @@
             <WritingAssistantButton class="proofread-button" label="Proofread" @click="proofread">
               <Icon :icon-hover="proofreadAssetHighlight" :icon="proofreadAsset" />
             </WritingAssistantButton>
-
             <WritingAssistantButton
               :class="rewriteToolsClasses"
               label="Rewrite"
@@ -146,7 +145,6 @@
             >
               <Icon :icon-hover="rewriteAssetHighlight" :icon="rewriteAsset" />
             </WritingAssistantButton>
-
             <WritingAssistantButton
               :class="aiToolsClasses"
               label="Generate with AI"
@@ -154,7 +152,6 @@
             >
               <Icon :icon-hover="aiAssetHighlight" :icon="aiAsset" />
             </WritingAssistantButton>
-
             <div v-if="aiToolsVisible" class="ai">
               <textarea
                 v-model="prompt"
@@ -170,17 +167,6 @@
                 >
                   {{ generating ? 'Generating' : 'Generate' }}
                 </button>
-                <!--
- generate todo
--->
-                <!--                <WritingAssistantButton
-                  :class="generateClasses"
-                  :label="generating ? 'Generating…' : 'Generate'"
-                  class="generate-button"
-                  @click="generate"
-                >
-                  <img alt="generate" src="../../assets/images/ai-icon.png" />
-                </WritingAssistantButton>-->
               </div>
             </div>
           </div>
@@ -226,7 +212,6 @@ import rewriteAssetHighlight from '@/assets/images/writing-tools/rewrite-highlig
 
 import aiAsset from '@/assets/images/writing-tools/ai.png'
 import aiAssetHighlight from '@/assets/images/writing-tools/ai-highlight.png'
-
 
 import { ai } from '@/services'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'

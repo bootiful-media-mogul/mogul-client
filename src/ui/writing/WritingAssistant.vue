@@ -136,7 +136,7 @@
         <div v-if="!proposalApprovalRequired">
           <div :class="toolsClasses">
             <WritingAssistantButton class="proofread-button" label="Proofread" @click="proofread">
-              <img alt="proofread" src="../../assets/images/writing-tools/proofread.png" />
+              <Icon :icon-hover="proofreadAssetHighlight" :icon="proofreadAsset" />
             </WritingAssistantButton>
 
             <WritingAssistantButton
@@ -144,11 +144,15 @@
               label="Rewrite"
               @click="toggleRewriteTools"
             >
-              <img alt="rewrite" src="../../assets/images/writing-tools/rewrite.png" />
+              <Icon :icon-hover="rewriteAssetHighlight" :icon="rewriteAsset" />
             </WritingAssistantButton>
 
-            <WritingAssistantButton :class="aiToolsClasses" label="AI" @click="toggleAiTools">
-              <img alt="ai" src="../../assets/images/ai-icon.png" />
+            <WritingAssistantButton
+              :class="aiToolsClasses"
+              label="Generate with AI"
+              @click="toggleAiTools"
+            >
+              <Icon :icon-hover="aiAssetHighlight" :icon="aiAsset" />
             </WritingAssistantButton>
 
             <div v-if="aiToolsVisible" class="ai">
@@ -209,13 +213,21 @@
       </div>
     </template>
     <template v-slot:icon>
-      <Icon :icon="assetHighlight" :icon-hover="asset" />
+      <Icon :icon="rewriteAssetHighlight" :icon-hover="rewriteAsset" />
     </template>
   </InputWrapperChild>
 </template>
 <script lang="ts" setup>
-import asset from '@/assets/images/writing-tools/rewrite.png'
-import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
+import proofreadAsset from '@/assets/images/writing-tools/proofread.png'
+import proofreadAssetHighlight from '@/assets/images/writing-tools/proofread-highlight.png'
+
+import rewriteAsset from '@/assets/images/writing-tools/rewrite.png'
+import rewriteAssetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
+
+import aiAsset from '@/assets/images/writing-tools/ai.png'
+import aiAssetHighlight from '@/assets/images/writing-tools/ai-highlight.png'
+
+
 import { ai } from '@/services'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'

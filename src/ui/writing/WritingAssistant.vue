@@ -4,19 +4,24 @@
   --writing-tools-panel-icon-size: 20px;
 }
 
-.tools.active .writing-tools-button:last-of-type {
+/* every button in an open tools row gets bottom spacing so the row baseline aligns... */
+.tools.active .writing-tools-button {
+  margin-bottom: calc(1 * var(--writing-tools-panel-padding));
+}
+
+/* ...except the one that's currently expanded, which merges into the row below it */
+.tools .writing-tools-button.active {
   background-color: white;
   opacity: 100%;
+  margin-bottom: 0;
+  padding-bottom: calc(2 * var(--writing-tools-panel-padding));
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .styles.active .writing-tools-button {
   background-color: white;
   opacity: 100%;
-}
-
-.tools.active .rewrite-button {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 .styles .writing-tools-button {
@@ -65,8 +70,10 @@
 
 .writing-tools-panel .tools {
   display: grid;
-  grid-template-areas: ' proofread-button rewrite-button ';
-  grid-template-columns: auto auto;
+  grid-template-areas:
+    ' proofread-button rewrite-button ai-button '
+    ' ai-panel         ai-panel       ai-panel   ';
+  grid-template-columns: auto auto auto;
   grid-column-gap: calc(1 * var(--writing-tools-panel-padding));
 }
 
@@ -74,17 +81,48 @@
   grid-area: rewrite-button;
 }
 
-.active .proofread-button {
-  margin-bottom: calc(1 * var(--writing-tools-panel-padding));
-}
-
-.active .rewrite-button {
-  margin-bottom: 0;
-  padding-bottom: calc(2 * var(--writing-tools-panel-padding));
+.ai-button {
+  grid-area: ai-button;
 }
 
 .proofread-button {
   grid-area: proofread-button;
+}
+
+.writing-tools-panel .ai {
+  /* spans the Proofread/Rewrite/AI columns of the tools grid, so its width is
+     derived from the tabs rather than a forced size */
+  grid-area: ai-panel;
+  min-width: 0;
+  display: grid;
+  grid-row-gap: calc(1 * var(--writing-tools-panel-padding));
+  /* white panel that connects up to the (white, active) AI tab above it;
+     flat top edge so the tab reads as sitting on a shelf, rounded bottom */
+  background-color: white;
+  padding: calc(1.5 * var(--writing-tools-panel-padding));
+  border-radius: var(--button-radius);
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.writing-tools-panel .ai textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+.ai .generate-row {
+  display: grid;
+  grid-template-areas: ' generate . ';
+  grid-template-columns: auto 1fr;
+}
+
+.generate-button {
+  grid-area: generate;
+}
+
+.generate-button.disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .proposal-approval a {
@@ -108,6 +146,29 @@
             >
               <img alt="rewrite" src="../../assets/images/writing-tools/rewrite.png" />
             </WritingAssistantButton>
+
+            <WritingAssistantButton :class="aiToolsClasses" label="AI" @click="toggleAiTools">
+              <img alt="ai" src="../../assets/images/ai-icon.png" />
+            </WritingAssistantButton>
+
+            <div v-if="aiToolsVisible" class="ai">
+              <textarea
+                v-model="prompt"
+                :disabled="generating"
+                :placeholder="placeholder"
+                rows="3"
+              />
+              <div class="generate-row">
+                <WritingAssistantButton
+                  :class="generateClasses"
+                  :label="generating ? 'Generating…' : 'Generate'"
+                  class="generate-button"
+                  @click="generate"
+                >
+                  <img alt="generate" src="../../assets/images/ai-icon.png" />
+                </WritingAssistantButton>
+              </div>
+            </div>
           </div>
           <div v-if="rewriteStylesVisible" :class="rewriteStylesClasses">
             <WritingAssistantButton
@@ -148,29 +209,46 @@ import assetHighlight from '@/assets/images/writing-tools/rewrite-highlight.png'
 import { ai } from '@/services'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
-import { inject, ref } from 'vue'
+import { computed, inject, ref } from 'vue'
 import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
 import Icon from '@/ui/Icon.vue'
 import { useI18n } from 'vue-i18n'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
+
 const previousModelValue = ref<string>('')
 const proposalApprovalRequired = ref<boolean>(false)
-const toolsClasses = ref<string>('tools')
-const rewriteStylesVisible = ref<boolean>(false)
-const rewriteStylesClasses = ref<string>('styles')
-const rewriteToolsClasses = ref<string>('rewrite-button')
-const toggleButtonClasses = ref<string>('toggle-icon edit-icon')
+
+// which expandable sub-row (if any) is open in the tools row
+const activeTool = ref<'none' | 'rewrite' | 'ai'>('none')
+
+// AI prompt sub-row state
+const prompt = ref<string>('')
+const generating = ref<boolean>(false)
+const placeholder = 'Ask the AI to write or rewrite this text…'
+
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 const { t } = useI18n()
+
+const rewriteStylesVisible = computed<boolean>(() => activeTool.value === 'rewrite')
+const aiToolsVisible = computed<boolean>(() => activeTool.value === 'ai')
+
+const toolsClasses = computed<string>(() => (activeTool.value === 'none' ? 'tools' : 'tools active'))
+const rewriteStylesClasses = computed<string>(() => 'styles active')
+const rewriteToolsClasses = computed<string>(() =>
+  activeTool.value === 'rewrite' ? 'rewrite-button active' : 'rewrite-button'
+)
+const aiToolsClasses = computed<string>(() =>
+  activeTool.value === 'ai' ? 'ai-button active' : 'ai-button'
+)
+const generateClasses = computed<string>(() => (generating.value ? 'disabled' : ''))
+
 function reset() {
   proposalApprovalRequired.value = false
-  rewriteStylesVisible.value = false
-  rewriteStylesClasses.value = 'styles'
-  toolsClasses.value = 'tools'
-  toggleButtonClasses.value = 'toggle-icon edit-icon'
-  rewriteToolsClasses.value = 'rewrite-button'
+  activeTool.value = 'none'
+  prompt.value = ''
+  generating.value = false
 }
 
 function revert() {
@@ -179,7 +257,6 @@ function revert() {
 }
 
 function accept() {
-  proposalApprovalRequired.value = false
   reset()
 }
 
@@ -190,12 +267,20 @@ function proposeUpdatedText(updatedText: string) {
   updateValue(updatedText)
 }
 
+function toggleRewriteTools() {
+  activeTool.value = activeTool.value === 'rewrite' ? 'none' : 'rewrite'
+}
+
+function toggleAiTools() {
+  activeTool.value = activeTool.value === 'ai' ? 'none' : 'ai'
+}
+
 async function proofread() {
   const contents = readValue().trim()
 
   if (contents === '') return
 
-  if (rewriteStylesVisible.value) await toggleRewriteTools()
+  activeTool.value = 'none'
 
   const proofread = await ai.chat(
     `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
@@ -228,19 +313,6 @@ async function rewriteConcise() {
   proposeUpdatedText(updated)
 }
 
-async function toggleRewriteTools() {
-  rewriteStylesVisible.value = !rewriteStylesVisible.value
-  if (rewriteStylesVisible.value) {
-    rewriteStylesClasses.value += ' active'
-    toolsClasses.value += ' active'
-    rewriteToolsClasses.value += ' active'
-  } else {
-    rewriteStylesClasses.value = 'styles'
-    toolsClasses.value = 'tools'
-    rewriteToolsClasses.value = 'rewrite-button'
-  }
-}
-
 async function rewriteFriendly() {
   if (readValue().trim() === '') return
   const updated = await ai.chat(
@@ -250,5 +322,36 @@ async function rewriteFriendly() {
       `
   )
   proposeUpdatedText(updated)
+}
+
+/**
+ * Build a single prompt for the Ai service. When the text box already has
+ * content we ask the model to transform it using the user's instruction;
+ * when it's empty we ask the model to write something from scratch.
+ */
+function buildPrompt(instruction: string, existing: string): string {
+  if (existing === '') {
+    return `${instruction}
+
+Return only the requested text, and nothing else.`
+  }
+  return `Follow the instruction below to rewrite or transform the text that appears after the line made of "="'s. Return only the resulting text, and nothing else.
+
+Instruction: ${instruction}
+==========================================
+${existing}`
+}
+
+async function generate() {
+  const instruction = prompt.value.trim()
+  if (instruction === '' || generating.value) return
+
+  generating.value = true
+  try {
+    const result = await ai.chat(buildPrompt(instruction, readValue().trim()))
+    proposeUpdatedText(result)
+  } finally {
+    generating.value = false
+  }
 }
 </script>

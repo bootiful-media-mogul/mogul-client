@@ -6,6 +6,10 @@ import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './index'
+import VCalendar, { Calendar, DatePicker, setupCalendar } from 'v-calendar'
+// import { setupCalendar } from 'v-calendar'
+
+import 'v-calendar/style.css'
 
 function formatNumberEnglish(value: number): string {
   return new Intl.NumberFormat('en-US').format(value)
@@ -426,12 +430,19 @@ const i18n = createI18n({
   locale: 'en',
   fallbackLocale: 'en',
   messages: translations,
-  // warnHtmlInMessage : false
   legacy: false, // why is this defaulted to true?
   warnHtmlInMessage: 'off'
 })
 
 const app = createApp(App)
+
+// Use plugin with optional defaults
+// app.use(setupCalendar, {})
+app.use(setupCalendar, {})
+
+// Use the components
+app.component('VCalendar', Calendar)
+app.component('VDatePicker', DatePicker)
 
 app.use(i18n)
 app.use(router)

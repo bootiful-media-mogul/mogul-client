@@ -17,7 +17,7 @@
   border-radius: var(--button-radius);
   background-color: lightgrey;
   padding: calc(var(--gutter-space) / 3);
-  font-size: small;
+  font-size: var(--font-size-sm);
 }
 
 .writing-tools-button-content {

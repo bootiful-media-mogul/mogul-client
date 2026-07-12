@@ -12,6 +12,18 @@
   --form-buttons-gutter-space: calc(0.3 * var(--gutter-space));
   --icon-width: 1.5em;
 
+  /* Form controls (inputs + buttons): Pure/normalize leaves them at the UA default,
+     which is below the ~1rem web baseline. Nudge a touch above it for legibility.
+     Expressed in rem so it scales with the root font size. */
+  --control-font-size: 1.0625rem;
+
+  /* App-wide text scale. All in rem so text stays relative and scales with the
+     root font size; replaces the old absolute `small`/`medium`/`large` keywords.
+     The `sm` floor is deliberately above the keyword `small` (~13px) for legibility. */
+  --font-size-sm: 0.9375rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+
   /*--bg-color: tan */
   --bg-color: cadetblue;
   --panel-bg-color: lightgray;
@@ -54,7 +66,7 @@ label.required-field::after {
 }
 
 .subject-actions {
-  font-size: smaller;
+  font-size: var(--font-size-sm);
 }
 
 .disabled {
@@ -78,6 +90,17 @@ input[type='url'] {
 
 textarea {
   width: 100%;
+}
+
+/* Larger, consistent font for all form controls across the app.
+   font-family: inherit makes them match the page font (Pure comments this out). */
+input,
+textarea,
+select,
+button,
+.pure-button {
+  font-family: inherit;
+  font-size: var(--control-font-size);
 }
 
 .pure-form input[type='text'],
@@ -400,7 +423,7 @@ textarea {
   & a {
     color: white;
     font-weight: normal;
-    font-size: small;
+    font-size: var(--font-size-sm);
   }
 
   .footer-content {
@@ -434,7 +457,7 @@ textarea {
 }
 
 .form-section .form-section-title {
-  font-size: large;
+  font-size: var(--font-size-lg);
   border-top: 1px solid black;
   margin-bottom: var(--gutter-space);
   margin-top: var(--gutter-space);

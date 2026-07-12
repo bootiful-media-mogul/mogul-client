@@ -197,7 +197,7 @@
   margin-left: calc(var(--gutter-space-half) * -1);
   margin-bottom: var(--gutter-space-half);
   font-weight: bold;
-  font-size: smaller;
+  font-size: var(--font-size-sm);
 }
 
 .publication-panel-selected {

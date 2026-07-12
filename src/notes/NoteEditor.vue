@@ -74,7 +74,7 @@ const props = defineProps<{
   .created-column {
     padding-top: var(--gutter-space-half);
     padding-bottom: calc(var(--gutter-space) / 2);
-    font-size: smaller;
+    font-size: var(--font-size-sm);
     text-align: right;
   }
   .note-text {

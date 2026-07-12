@@ -254,7 +254,7 @@ onMounted(async () => {
   align-items: center;
   gap: var(--gutter-space-half);
   padding-bottom: var(--gutter-space-half);
-  font-size: smaller;
+  font-size: var(--font-size-sm);
 }
 
 .note-composition {

@@ -51,7 +51,7 @@
   background-color: transparent;
   cursor: pointer;
   text-align: center;
-  font-size: smaller;
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   color: white;
   font-family: 'arial Black', sans-serif;

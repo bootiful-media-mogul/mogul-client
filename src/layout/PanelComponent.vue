@@ -7,7 +7,7 @@
 }
 
 .panel-menu-subtitle {
-  font-size: smaller;
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   font-family: 'arial Black', sans-serif;
   color: #777777;
@@ -48,7 +48,7 @@
 }
 
 .panel-menu-title {
-  font-size: smaller;
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   color: white;
   font-family: 'arial Black', sans-serif;

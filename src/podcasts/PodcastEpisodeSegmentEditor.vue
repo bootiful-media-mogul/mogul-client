@@ -128,7 +128,7 @@ const emit = defineEmits<{
     '  buttons            buttons ';
   .type {
     position: relative;
-    font-size: smaller;
+    font-size: var(--font-size-sm);
     grid-area: type;
     top: calc(var(--radius) * -1);
     background-color: black;

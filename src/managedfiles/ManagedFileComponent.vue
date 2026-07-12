@@ -25,7 +25,7 @@
 
 .managed-file-row .contentType {
   grid-area: contentType;
-  font-size: small;
+  font-size: var(--font-size-sm);
   text-align: left;
 }
 

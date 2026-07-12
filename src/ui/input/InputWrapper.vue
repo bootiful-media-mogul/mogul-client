@@ -195,7 +195,7 @@ provide('getInputElement', getInputElement)
 
 .word-count {
   .status {
-    font-size: small;
+    font-size: var(--font-size-sm);
   }
   align-self: center;
   /*text-align: right ;*/

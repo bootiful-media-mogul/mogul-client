@@ -89,7 +89,7 @@
 
 .id-column b {
   font-weight: bold;
-  font-size: medium;
+  font-size: var(--font-size-base);
 }
 
 .delete {

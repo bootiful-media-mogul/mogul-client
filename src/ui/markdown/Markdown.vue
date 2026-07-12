@@ -1,6 +1,6 @@
 <style>
 .rendered-preview {
-  font-size: small;
+  font-size: var(--font-size-sm);
   padding: calc(var(--gutter-space) / 3);
 }
 

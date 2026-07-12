@@ -126,7 +126,7 @@
 }
 
 .proposal-approval a {
-  font-size: small;
+  font-size: var(--font-size-sm);
 }
 </style>
 <template>
@@ -159,14 +159,24 @@
                 rows="3"
               />
               <div class="generate-row">
-                <WritingAssistantButton
+                <button
+                  class="pure-button pure-button-primary"
+                  type="submit"
+                  @click.prevent="generate"
+                >
+                  {{ generating ? 'Generating' : 'Generate' }}
+                </button>
+                <!--
+ generate todo
+-->
+                <!--                <WritingAssistantButton
                   :class="generateClasses"
                   :label="generating ? 'Generating…' : 'Generate'"
                   class="generate-button"
                   @click="generate"
                 >
                   <img alt="generate" src="../../assets/images/ai-icon.png" />
-                </WritingAssistantButton>
+                </WritingAssistantButton>-->
               </div>
             </div>
           </div>
@@ -234,7 +244,9 @@ const { t } = useI18n()
 const rewriteStylesVisible = computed<boolean>(() => activeTool.value === 'rewrite')
 const aiToolsVisible = computed<boolean>(() => activeTool.value === 'ai')
 
-const toolsClasses = computed<string>(() => (activeTool.value === 'none' ? 'tools' : 'tools active'))
+const toolsClasses = computed<string>(() =>
+  activeTool.value === 'none' ? 'tools' : 'tools active'
+)
 const rewriteStylesClasses = computed<string>(() => 'styles active')
 const rewriteToolsClasses = computed<string>(() =>
   activeTool.value === 'rewrite' ? 'rewrite-button active' : 'rewrite-button'

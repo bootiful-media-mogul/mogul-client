@@ -2,7 +2,7 @@
   <div class="menu">
     <div ref="up" :class="'unselectable arrow up ' + upArrowCss()" @click="emit('up')">◀</div>
     <div class="unselectable icons">
-      <slot> the buttons should go here otherwise this will look like crap!</slot>
+      <slot>{{ t('inputWrapperMenu.default-content') }}</slot>
     </div>
     <div ref="down" :class="'unselectable arrow down ' + downArrowCss()" @click="emit('down')">
       ▶
@@ -44,6 +44,9 @@
 </style>
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Props {
   readonly disabled: boolean

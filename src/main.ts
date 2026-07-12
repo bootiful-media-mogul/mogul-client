@@ -342,6 +342,15 @@ This is NOT reversible! `,
 
     'managedfiles.alt.preview': 'A preview for managed file {id}',
 
+    'home.title': 'Home',
+    'home.activity-feed': 'Here is your activity feed...',
+
+    'icon.alt.default': 'an image, #{image}',
+
+    'inputWrapperMenu.default-content': 'the buttons should go here otherwise this will look like crap!',
+
+    'markdown.nothing-to-preview': '(nothing to preview)',
+
     'blogs.posts': 'Posts',
     'blogs.posts.title': 'Posts',
     'blogs.posts.post': 'Blog Post',

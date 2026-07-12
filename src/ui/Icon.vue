@@ -1,5 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 interface Props {
   readonly alt?: string
@@ -40,7 +43,7 @@ onMounted(() => {
   if (props.alt) {
     altText.value = props.alt
   } else {
-    altText.value = 'an image - ' + src.value
+    altText.value = t('icon.alt.default', { image: src.value })
   }
 })
 </script>

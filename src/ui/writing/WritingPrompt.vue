@@ -44,9 +44,7 @@
               class="generate-button"
               @click="generate"
             >
-<!--              <img alt="generate" src="../../assets/images/ai-icon.png" />-->
-
-              <img alt="professional" src="../../assets/images/writing-tools/professional.png" />
+              <img alt="generate" src="../../assets/images/ai-icon.png" />
             </WritingAssistantButton>
           </div>
         </div>

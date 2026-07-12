@@ -135,19 +135,19 @@
       <div class="writing-tools-panel">
         <div v-if="!proposalApprovalRequired">
           <div :class="toolsClasses">
-            <WritingAssistantButton class="proofread-button" label="Proofread" @click="proofread">
+            <WritingAssistantButton class="proofread-button" :label="t('writingassistant.buttons.proofread')" @click="proofread">
               <Icon :icon-hover="proofreadAssetHighlight" :icon="proofreadAsset" />
             </WritingAssistantButton>
             <WritingAssistantButton
               :class="rewriteToolsClasses"
-              label="Rewrite"
+              :label="t('writingassistant.buttons.rewrite')"
               @click="toggleRewriteTools"
             >
               <Icon :icon-hover="rewriteAssetHighlight" :icon="rewriteAsset" />
             </WritingAssistantButton>
             <WritingAssistantButton
               :class="aiToolsClasses"
-              label="Generate with AI"
+              :label="t('writingassistant.buttons.generate-with-ai')"
               @click="toggleAiTools"
             >
               <Icon :icon-hover="aiAssetHighlight" :icon="aiAsset" />
@@ -165,7 +165,7 @@
                   type="submit"
                   @click.prevent="generate"
                 >
-                  {{ generating ? 'Generating' : 'Generate' }}
+                  {{ generating ? t('writingassistant.buttons.generating') : t('writingassistant.buttons.generate') }}
                 </button>
               </div>
             </div>
@@ -173,19 +173,19 @@
           <div v-if="rewriteStylesVisible" :class="rewriteStylesClasses">
             <WritingAssistantButton
               class="friendly-button"
-              label="Friendly"
+              :label="t('writingassistant.buttons.friendly')"
               @click="rewriteFriendly"
             >
               <img alt="friendly" src="../../assets/images/writing-tools/friendly.png" />
             </WritingAssistantButton>
 
-            <WritingAssistantButton class="concise-button" label="Concise" @click="rewriteConcise">
+            <WritingAssistantButton class="concise-button" :label="t('writingassistant.buttons.concise')" @click="rewriteConcise">
               <img alt="concise" src="../../assets/images/writing-tools/concise.png" />
             </WritingAssistantButton>
 
             <WritingAssistantButton
               class="professional-button"
-              label="Professional"
+              :label="t('writingassistant.buttons.professional')"
               @click="rewriteProfessional"
             >
               <img alt="professional" src="../../assets/images/writing-tools/professional.png" />
@@ -233,7 +233,7 @@ const activeTool = ref<'none' | 'rewrite' | 'ai'>('none')
 // AI prompt sub-row state
 const prompt = ref<string>('')
 const generating = ref<boolean>(false)
-const placeholder = 'Ask the AI to write or rewrite this text…'
+const placeholder = computed(() => t('writingassistant.placeholder'))
 
 const emit = defineEmits<{ (e: 'update:modelValue', value: string): void }>()
 const { t } = useI18n()

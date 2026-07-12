@@ -188,6 +188,19 @@ const translations = {
       }
     },
 
+    writingassistant: {
+      buttons: {
+        proofread: 'Proofread',
+        rewrite: 'Rewrite',
+        'generate-with-ai': 'Generate with AI',
+        generate: 'Generate',
+        generating: 'Generating',
+        friendly: 'Friendly',
+        concise: 'Concise',
+        professional: 'Professional'
+      },
+      placeholder: 'Ask the AI to write or rewrite this text…'
+    },
     search: {
       navigation: {
         episode: 'visit podcast episode'

@@ -14,8 +14,6 @@
       </div>
       <div class="tab-bar-bumper"><div class="tab-bar-bumper-corners"></div></div>
     </div>
-
-    <!-- Tab Content (all tabs rendered, visibility controlled by Tab component) -->
     <slot></slot>
   </div>
 </template>

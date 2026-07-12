@@ -127,7 +127,7 @@ const handleDragStart = (event: DragEvent, attachment: Attachment) => {
   // Create a clean clone of just this element
   let dragEl = event.target as HTMLElement
 
-  // we want to have ghost image of the attachment row, no matter which node gets picked up for dragging. so if were on an inner element, lets keep looking up
+  // we want to have ghost-image of the attachment row, no matter which node gets picked up for dragging. so if were on an inner element, lets keep looking up
 
   const attachmentRowClassName = 'attachment-row'
   if (dragEl.className.indexOf(attachmentRowClassName) < 0) {

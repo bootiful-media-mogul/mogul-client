@@ -4,7 +4,7 @@
       <div>
         <img
           v-if="isImage"
-          :alt="'a preview for managed file ' + managedFileId"
+          :alt="t('managedfiles.alt.preview', { id: managedFileId })"
           :src="url"
           class="managed-file-preview-image"
         />
@@ -47,6 +47,9 @@
 </style>
 <script lang="ts" setup>
 import { events, managedFiles } from '@/services'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import { prettyPrintInBytes } from '@/managedfiles/files'
 import { onMounted, ref, watch } from 'vue'
 

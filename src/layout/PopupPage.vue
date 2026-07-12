@@ -65,12 +65,12 @@
 </style>
 <template>
   <div ref="openPanelElement">
-    <slot :open="openPanelFunction"> default panel content </slot>
+    <slot :open="openPanelFunction"> {{ t('popup.default-content') }} </slot>
   </div>
 
   <div class="expanding-panel" ref="expandingPanel" aria-hidden="true">
     <div class="expanding-panel__bg">
-      <button class="panel-close" ref="closePanel">Close</button>
+      <button class="panel-close" ref="closePanel">{{ t('popup.close') }}</button>
       <div>
         <!-- the search forms -->
 
@@ -86,6 +86,9 @@
  */
 
 import { onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const openPanelElement = ref<HTMLElement>()
 const expandingPanel = ref<HTMLElement>()

@@ -135,7 +135,11 @@
       <div class="writing-tools-panel">
         <div v-if="!proposalApprovalRequired">
           <div :class="toolsClasses">
-            <WritingAssistantButton class="proofread-button" :label="t('writingassistant.buttons.proofread')" @click="proofread">
+            <WritingAssistantButton
+              class="proofread-button"
+              :label="t('writingassistant.buttons.proofread')"
+              @click="proofread"
+            >
               <Icon :icon-hover="proofreadAssetHighlight" :icon="proofreadAsset" />
             </WritingAssistantButton>
             <WritingAssistantButton
@@ -165,7 +169,11 @@
                   type="submit"
                   @click.prevent="generate"
                 >
-                  {{ generating ? t('writingassistant.buttons.generating') : t('writingassistant.buttons.generate') }}
+                  {{
+                    generating
+                      ? t('writingassistant.buttons.generating')
+                      : t('writingassistant.buttons.generate')
+                  }}
                 </button>
               </div>
             </div>
@@ -176,11 +184,21 @@
               :label="t('writingassistant.buttons.friendly')"
               @click="rewriteFriendly"
             >
-              <img alt="friendly" src="../../assets/images/writing-tools/friendly.png" />
+              <img
+                :alt="t('writingassistant.alt.friendly')"
+                src="../../assets/images/writing-tools/friendly.png"
+              />
             </WritingAssistantButton>
 
-            <WritingAssistantButton class="concise-button" :label="t('writingassistant.buttons.concise')" @click="rewriteConcise">
-              <img alt="concise" src="../../assets/images/writing-tools/concise.png" />
+            <WritingAssistantButton
+              class="concise-button"
+              :label="t('writingassistant.buttons.concise')"
+              @click="rewriteConcise"
+            >
+              <img
+                :alt="t('writingassistant.alt.concise')"
+                src="../../assets/images/writing-tools/concise.png"
+              />
             </WritingAssistantButton>
 
             <WritingAssistantButton
@@ -188,7 +206,10 @@
               :label="t('writingassistant.buttons.professional')"
               @click="rewriteProfessional"
             >
-              <img alt="professional" src="../../assets/images/writing-tools/professional.png" />
+              <img
+                :alt="t('writingassistant.alt.professional')"
+                src="../../assets/images/writing-tools/professional.png"
+              />
             </WritingAssistantButton>
           </div>
         </div>

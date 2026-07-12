@@ -31,6 +31,7 @@ const translations = {
       },
       'system-wide': { title: 'System Notes' },
       entity: { title: 'Notes for {entityName}' },
+      done: 'Done',
       filters: { 'show-done': 'Show Finished notes' },
       new: { prompt: "{entityName}'s Notes" }
     },
@@ -178,6 +179,10 @@ const translations = {
           description: 'Download the finalized (produced) .mp3 file for the episode',
           download: 'Download'
         },
+        transcript: {
+          title: 'Transcript',
+          download: 'Download transcript'
+        },
         podbean: {
           title: 'Podbean',
           clientId: 'Client ID',
@@ -199,7 +204,12 @@ const translations = {
         concise: 'Concise',
         professional: 'Professional'
       },
-      placeholder: 'Ask the AI to write or rewrite this text…'
+      placeholder: 'Ask the AI to write or rewrite this text…',
+      alt: {
+        friendly: 'Friendly',
+        concise: 'Concise',
+        professional: 'Professional'
+      }
     },
     search: {
       navigation: {
@@ -324,6 +334,15 @@ This is NOT reversible! `,
     // blogs
     'blogs.title': 'Blogs',
     'blogs.all': "{user}'s blogs",
+    'panel.alt.open': 'Open',
+    'panel.alt.minimize': 'Minimize',
+
+    'popup.default-content': 'default panel content',
+    'popup.close': 'Close',
+
+    'managedfiles.alt.preview': 'A preview for managed file {id}',
+
+    'blogs.posts': 'Posts',
     'blogs.posts.title': 'Posts',
     'blogs.posts.post': 'Blog Post',
     'blogs.posts.editing': 'Editing Post #{id}: {title}',
@@ -340,6 +359,7 @@ This is NOT reversible! `,
     'blogs.posts.buttons.summarize': 'Summarize',
     'blogs.posts.buttons.summarizing': 'Summarizing',
     'blogs.posts.publications': 'Publications',
+    'blogs.posts.posts-for': 'Posts for "{title}"',
     // episodes
 
     'compositions.attachments.drag-and-drop-attachments':

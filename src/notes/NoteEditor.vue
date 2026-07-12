@@ -6,6 +6,9 @@ import editHighlightAsset from '@/assets/images/edit-highlight.png'
 import editAsset from '@/assets/images/edit.png'
 import { dateTimeToString } from '@/dates'
 import { notes } from '@/services'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const emit = defineEmits<{
   deleted: [id: number, type: string]
@@ -44,7 +47,7 @@ const props = defineProps<{
         class="done-checkbox"
         type="checkbox"
         :checked="done !== null"
-        title="Done"
+        :title="t('notes.done')"
         @change="setDone"
       />
       <Icon

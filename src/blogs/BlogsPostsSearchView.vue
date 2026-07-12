@@ -32,7 +32,7 @@ async function loadBlog() {
   const newBlogId = selectedBlogId.value
   currentBlog.value = await blogs.blogById(newBlogId)
   posts.value = await blogs.blogPostPreviewsByBlog(newBlogId)
-  title.value = `Posts for ${currentBlog.value.title}`
+  title.value = t('blogs.posts.posts-for', { title: currentBlog.value.title })
 }
 
 async function navigateToPostEditor(blogId: number, postId: number) {
@@ -67,7 +67,7 @@ async function newPost() {
     </h1>
     <form class="pure-form">
       <fieldset>
-        <legend>Posts for "{{ currentBlog?.title }}"</legend>
+        <legend>{{ t('blogs.posts.posts-for', { title: currentBlog?.title }) }}</legend>
         <div class="toolbar">
           <Icon :icon-hover="plusIconHighlight" :icon="plusIcon" @click="newPost()" />
         </div>

@@ -86,10 +86,10 @@
       </div>
       <div class="panel-menu-buttons">
         <div v-if="!visible" class="open" @click.prevent="toggleVisible">
-          <img :src="open" alt="open" class="panel-menu-buttons-img" />
+          <img :src="open" :alt="t('panel.alt.open')" class="panel-menu-buttons-img" />
         </div>
         <div v-else class="close" @click.prevent="toggleVisible">
-          <img :src="minimize" alt="minimize" class="panel-menu-buttons-img" />
+          <img :src="minimize" :alt="t('panel.alt.minimize')" class="panel-menu-buttons-img" />
         </div>
       </div>
     </div>
@@ -100,6 +100,9 @@
 </template>
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 import minimize from '@/assets/images/panel/simple-panel-collapse.png'
 import open from '@/assets/images/panel/simple-panel-maximize.png'
 import { events } from '@/services'

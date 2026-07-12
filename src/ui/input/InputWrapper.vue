@@ -174,10 +174,17 @@ const getInputElement = () => {
   return inputElement.value!!
 }
 
+const setInputDisabled = (disabled: boolean) => {
+  if (inputElement.value) {
+    inputElement.value.disabled = disabled
+  }
+}
+
 provide('updateInputValue', updateInputValue)
 provide('registerChild', registerChild)
 provide('readInputValue', readInputValue)
 provide('getInputElement', getInputElement)
+provide('setInputDisabled', setInputDisabled)
 </script>
 
 <style scoped>

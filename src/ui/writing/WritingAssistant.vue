@@ -238,12 +238,22 @@ import { ai } from '@/services'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 import { computed, inject, ref } from 'vue'
-import type { ReadValueFunction, UpdateValueFunction } from '@/ui/input/input'
+import type { ReadValueFunction, SetInputDisabledFunction, UpdateValueFunction } from '@/ui/input/input'
 import Icon from '@/ui/Icon.vue'
 import { useI18n } from 'vue-i18n'
 
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
 const readValue = inject<ReadValueFunction>('readInputValue')!
+const setInputDisabled = inject<SetInputDisabledFunction>('setInputDisabled')!
+
+async function withInputDisabled<T>(fn: () => Promise<T>): Promise<T> {
+  setInputDisabled(true)
+  try {
+    return await fn()
+  } finally {
+    setInputDisabled(false)
+  }
+}
 
 const previousModelValue = ref<string>('')
 const proposalApprovalRequired = ref<boolean>(false)
@@ -312,46 +322,54 @@ async function proofread() {
 
   activeTool.value = 'none'
 
-  const proofread = await ai.chat(
-    `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
+  await withInputDisabled(async () => {
+    const proofread = await ai.chat(
+      `Please proof read the text following the line made of "="'s. Return only the proofread text, and nothing else.
         ==========================================
         ${contents}
       `
-  )
-  proposeUpdatedText(proofread)
+    )
+    proposeUpdatedText(proofread)
+  })
 }
 
 async function rewriteProfessional() {
   if (readValue().trim() === '') return
-  const updated = await ai.chat(
-    `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
+  await withInputDisabled(async () => {
+    const updated = await ai.chat(
+      `Please rewrite the text following the line made of "="'s to sound more professional. Return only the new text, and nothing else.
         ==========================================
         ${readValue()}
       `
-  )
-  proposeUpdatedText(updated)
+    )
+    proposeUpdatedText(updated)
+  })
 }
 
 async function rewriteConcise() {
   if (readValue().trim() === '') return
-  const updated = await ai.chat(
-    `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
+  await withInputDisabled(async () => {
+    const updated = await ai.chat(
+      `Please rewrite the text following the line made of "="'s to be more concise. Return only the new text, and nothing else.
         ==========================================
         ${readValue()}
       `
-  )
-  proposeUpdatedText(updated)
+    )
+    proposeUpdatedText(updated)
+  })
 }
 
 async function rewriteFriendly() {
   if (readValue().trim() === '') return
-  const updated = await ai.chat(
-    `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
+  await withInputDisabled(async () => {
+    const updated = await ai.chat(
+      `Please rewrite the text following the line made of "="'s to be more friendly in tone. Return only the new text, and nothing else.
         ==========================================
         ${readValue()}
       `
-  )
-  proposeUpdatedText(updated)
+    )
+    proposeUpdatedText(updated)
+  })
 }
 
 /**
@@ -377,11 +395,13 @@ async function generate() {
   if (instruction === '' || generating.value) return
 
   generating.value = true
-  try {
-    const result = await ai.chat(buildPrompt(instruction, readValue().trim()))
-    proposeUpdatedText(result)
-  } finally {
-    generating.value = false
-  }
+  await withInputDisabled(async () => {
+    try {
+      const result = await ai.chat(buildPrompt(instruction, readValue().trim()))
+      proposeUpdatedText(result)
+    } finally {
+      generating.value = false
+    }
+  })
 }
 </script>

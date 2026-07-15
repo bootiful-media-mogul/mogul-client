@@ -351,7 +351,8 @@ This is NOT reversible! `,
 
     'icon.alt.default': 'an image, #{image}',
 
-    'inputWrapperMenu.default-content': 'the buttons should go here otherwise this will look like crap!',
+    'inputWrapperMenu.default-content':
+      'the buttons should go here otherwise this will look like crap!',
 
     'markdown.nothing-to-preview': '(nothing to preview)',
 

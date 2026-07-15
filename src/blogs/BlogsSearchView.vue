@@ -18,7 +18,9 @@
               {{ dateTimeToString(blog.created) }}
             </div>
             <div class="posts-column">
-              <a href="#" @click.prevent="navigateToPostsPageForBlog(blog.id, $event)">{{ t('blogs.posts') }}</a>
+              <a href="#" @click.prevent="navigateToPostsPageForBlog(blog.id, $event)">{{
+                t('blogs.posts')
+              }}</a>
             </div>
             <div class="title-column">
               {{ blog.title }}

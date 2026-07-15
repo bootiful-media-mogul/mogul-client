@@ -1,12 +1,6 @@
 <template>
   <h1>{{ t('home.title') }}</h1>
   <p>{{ t('home.activity-feed') }}</p>
-
-<!--  <VCalendar />
-  <VDatePicker mode="dateTime" is-range v-model="date" is24hr />
-  <br />
-  {{ date.start }} ||
-  {{ date.end }}-->
 </template>
 <script lang="ts" setup>
 import 'v-calendar/style.css'

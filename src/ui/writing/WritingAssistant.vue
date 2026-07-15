@@ -238,7 +238,11 @@ import { ai } from '@/services'
 import InputWrapperChild from '@/ui/input/InputWrapperChild.vue'
 import WritingAssistantButton from '@/ui/writing/WritingAssistantButton.vue'
 import { computed, inject, ref } from 'vue'
-import type { ReadValueFunction, SetInputDisabledFunction, UpdateValueFunction } from '@/ui/input/input'
+import type {
+  ReadValueFunction,
+  SetInputDisabledFunction,
+  UpdateValueFunction
+} from '@/ui/input/input'
 import Icon from '@/ui/Icon.vue'
 import { useI18n } from 'vue-i18n'
 

@@ -1,6 +1,8 @@
 <script lang="ts" setup>
+import { computed } from 'vue'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import Icon from '@/ui/Icon.vue'
+import { durationToString } from '@/dates'
 
 // files
 import imageTypeIcon from '@/assets/images/files/image-file.png'
@@ -36,6 +38,7 @@ interface Props {
   showTranscript?: boolean
   order?: number
   type: string
+  duration?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,8 +48,11 @@ const props = withDefaults(defineProps<Props>(), {
   showDelete: false,
   showTranscript: false,
   order: 0,
-  type: 'segment'
+  type: 'segment',
+  duration: undefined
 })
+
+const formattedDuration = computed(() => durationToString(props.duration))
 
 const emit = defineEmits<{
   moveUp: []
@@ -97,6 +103,10 @@ const emit = defineEmits<{
           class="transcript-icon"
           @click.prevent="emit('editTranscript')"
         />
+      </div>
+
+      <div v-if="formattedDuration" class="duration" :title="formattedDuration">
+        {{ formattedDuration }}
       </div>
 
       <!-- Delete action (if enabled) -->
@@ -156,10 +166,18 @@ const emit = defineEmits<{
     padding: var(--gutter-space-half);
     grid-area: buttons;
     display: grid;
-    grid-template-areas: 'transcript-button . delete-button ';
+    grid-template-areas: 'transcript-button duration delete-button ';
     grid-template-columns: min-content auto min-content;
+    align-items: center;
     .transcript-button {
       grid-area: transcript-button;
+    }
+    .duration {
+      grid-area: duration;
+      place-self: center;
+      font-size: var(--font-size-sm);
+      font-variant-numeric: tabular-nums;
+      color: var(--muted-color, inherit);
     }
     .delete-button {
       grid-area: delete-button;

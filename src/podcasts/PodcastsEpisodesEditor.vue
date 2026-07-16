@@ -17,7 +17,7 @@ import EntityViewDecorator from '@/ui/EntityViewDecorator.vue'
 
 import segmentAsset from '@/assets/images/entity-badges/segment-icon.png'
 
-import { dateTimeToString } from '@/dates'
+import { dateTimeToString, durationToString } from '@/dates'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import InputTools from '@/ui/InputTools.vue'
 import PodcastEpisodeSegmentEditor from '@/podcasts/PodcastEpisodeSegmentEditor.vue'
@@ -88,6 +88,8 @@ const loadEpisodeFromDbIntoEditor = async (episodeId: number): Promise<PodcastEp
 const dts = (date: string | number): string | null => {
   return dateTimeToString(date)
 }
+
+const formattedEpisodeDuration = computed(() => durationToString(draftEpisode.value.duration))
 
 const computeDirtyKey = (): string => {
   return `${draftEpisode.value.id ? draftEpisode.value.id : ''}${description.value}:${title.value}`
@@ -231,6 +233,9 @@ onMounted(async () => {
             {{ t('podcasts.episodes.new-episode') }}
           </span>
           <span v-if="draftEpisode.id"> ({{ dts(draftEpisode.created) }}) </span>
+          <span v-if="draftEpisode.id && formattedEpisodeDuration" class="episode-duration">
+            {{ formattedEpisodeDuration }}
+          </span>
         </legend>
         <div class="form-section">
           <div class="form-section-title">{{ t('podcasts.episodes.basics') }}</div>
@@ -305,6 +310,7 @@ onMounted(async () => {
               type="audio"
               :label="t('podcasts.episodes.episode.segments.number', { order: segment.order })"
               :managed-file-id="segment.audio.id"
+              :duration="segment.duration"
               accept=".mp3,audio/mpeg"
               show-reorder
               :can-move-up="!upArrowDisabled(draftEpisode, segment)"
@@ -360,5 +366,10 @@ onMounted(async () => {
 
 fieldset.episodes-table {
   padding-bottom: calc(var(--footer-height) * 1);
+}
+
+.episode-duration {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
 }
 </style>

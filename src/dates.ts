@@ -25,3 +25,16 @@ export function dateToString(date: string | number) {
   }
   return null
 }
+
+// Formats a duration given in (possibly fractional) seconds as hh:mm:ss.
+export function durationToString(seconds: null | undefined | number): string | null {
+  if (seconds === null || seconds === undefined || isNaN(seconds) || seconds < 0) {
+    return null
+  }
+  const totalSeconds = Math.floor(seconds / 1000) // the value comes as milliseconds
+  const hh = Math.floor(totalSeconds / 3600)
+  const mm = Math.floor((totalSeconds % 3600) / 60)
+  const ss = totalSeconds % 60
+  const pad = (n: number) => n.toString().padStart(2, '0')
+  return `${pad(hh)}:${pad(mm)}:${pad(ss)}`
+}

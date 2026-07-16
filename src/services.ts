@@ -269,14 +269,15 @@ export class Podcasts {
               title, 
               podcastId, 
               description, 
-              complete,  
+              complete,
+              duration,
               producedAudio { id  },
               graphic { id  },
-              segments { 
-                id, name, audio { id } , order , crossFadeDuration , 
-                transcript { 
-                 id, transcript 
-                } 
+              segments {
+                id, name, audio { id } , order , crossFadeDuration , duration ,
+                transcript {
+                 id, transcript
+                }
               }
               descriptionComposition { 
                 id,
@@ -353,21 +354,23 @@ export class Podcasts {
     const q = `
         query GetPodcastEpisodesByPodcast( $podcastId:  Int ){
             podcastEpisodesByPodcast ( podcastId : $podcastId) {
-                created, 
-                id , 
-                title, 
-                description, 
-                complete, 
+                created,
+                id ,
+                title,
+                description,
+                complete,
+                duration,
                 graphic { id  } ,
-               
-                segments { 
-                  id, 
-                  name, 
-                  audio { id } , 
-                  order , 
+
+                segments {
+                  id,
+                  name,
+                  audio { id } ,
+                  order ,
                   crossFadeDuration,
-                  transcript 
-                } 
+                  duration,
+                  transcript
+                }
             }
         }
         `
@@ -592,13 +595,22 @@ export class PodcastEpisodeSegment {
   audio: ManagedFile
   order: number
   transcript: Transcript
+  duration: number
 
-  constructor(id: number, name: string, audio: ManagedFile, order: number, transcript: Transcript) {
+  constructor(
+    id: number,
+    name: string,
+    audio: ManagedFile,
+    order: number,
+    transcript: Transcript,
+    duration: number
+  ) {
     this.id = id
     this.name = name
     this.audio = audio
     this.order = order
     this.transcript = transcript
+    this.duration = duration
   }
 }
 
@@ -641,6 +653,7 @@ export class PodcastEpisode {
   producedAudio: ManagedFile
   complete: boolean = false
   created: string = ''
+  duration: number = 0
   segments: Array<PodcastEpisodeSegment>
   publications: Array<Publication> //todo remove this i dont think its necessary any more.
   descriptionComposition?: Composition
@@ -658,9 +671,11 @@ export class PodcastEpisode {
     publications: Array<Publication>,
     producedAudio: ManagedFile,
     podcastId: number,
+    duration: number = 0,
     descriptionComposition?: Composition,
     titleComposition?: Composition
   ) {
+    this.duration = duration
     this.podcastId = podcastId
     this.descriptionComposition = descriptionComposition
     this.titleComposition = titleComposition

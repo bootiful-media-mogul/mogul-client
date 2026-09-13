@@ -23,8 +23,11 @@ import type {
   IsPluginReadyFunction,
   PublishFunction
 } from '@/publications/input'
-import { notifications } from '@/services'
 import { useI18n } from 'vue-i18n'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 const { t } = useI18n()
 
 const pluginName = 'podbean'
@@ -47,7 +50,7 @@ async function publish(): Promise<boolean> {
 
 const disabled = ref<boolean>(false)
 
-notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+listenForCategory('podcast-episode-completed-event', async (evt) => {
   disabled.value = await isPluginDisabled()
 })
 

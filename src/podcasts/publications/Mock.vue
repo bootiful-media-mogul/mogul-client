@@ -11,8 +11,11 @@ import {
   type PublishFunction
 } from '@/publications/input'
 
-import { notifications } from '@/services'
 import { useI18n } from 'vue-i18n'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 const { t } = useI18n()
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
@@ -40,7 +43,7 @@ onMounted(async () => {
   disabled.value = await isPluginDisabled()
 })
 
-notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+listenForCategory('podcast-episode-completed-event', async (evt) => {
   disabled.value = await isPluginDisabled()
 })
 

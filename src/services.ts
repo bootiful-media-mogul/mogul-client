@@ -755,12 +755,18 @@ export class Notification {
   }
 }
 
+/**
+ * every listener in practice does IO, so returning a promise is normal. dispatch
+ * doesn't wait on them, it just makes sure a rejection gets reported.
+ */
+export type NotificationListener = (notification: Notification) => void | Promise<void>
+
 export class Notifications {
   private readonly client: Client
 
-  private callbacks: Array<(notification: Notification) => void> = []
+  private callbacks: Array<NotificationListener> = []
 
-  private callbacksByCategory: Map<string, Array<(notification: Notification) => void>> = new Map()
+  private callbacksByCategory: Map<string, Array<NotificationListener>> = new Map()
 
   constructor(client: Client) {
     this.client = client
@@ -783,35 +789,62 @@ export class Notifications {
           }
          }
         `
-    const result = await this.client.query(q, {})
-    const nc = (await result.data['notificationContext']) as NotificationContext
-    const ably = new Ably.Realtime({
-      async authCallback(
-        data: TokenParams,
-        callback: (
-          error: ErrorInfo | string | null,
-          tokenRequestOrDetails: TokenDetails | TokenRequest | string | null
-        ) => void
-      ) {
-        callback(null, nc.ablyTokenRequest as Ably.TokenRequest)
+    // nobody awaits this, so report failures here or they become an unhandled
+    // rejection and every notification goes quiet with nothing to explain why.
+    try {
+      const result = await this.client.query(q, {})
+      const nc = (await result.data?.['notificationContext']) as NotificationContext
+      if (!nc) {
+        console.error('no notification context was returned; notifications are disabled')
+        return
       }
-    })
-    const channel = ably.channels.get(nc.ablyChannel)
-    await channel.subscribe(async (message) => await this.dispatch(message))
+      const ably = new Ably.Realtime({
+        async authCallback(
+          data: TokenParams,
+          callback: (
+            error: ErrorInfo | string | null,
+            tokenRequestOrDetails: TokenDetails | TokenRequest | string | null
+          ) => void
+        ) {
+          callback(null, nc.ablyTokenRequest as Ably.TokenRequest)
+        }
+      })
+      const channel = ably.channels.get(nc.ablyChannel)
+      await channel.subscribe(async (message) => await this.dispatch(message))
+    } catch (e) {
+      console.error('could not subscribe to notifications', e)
+    }
   }
 
   async dispatch(message: Ably.InboundMessage) {
-    if (this.callbacks.length == 0) {
+    let notification: Notification
+    try {
+      notification = JSON.parse(message.data) as Notification
+    } catch (e) {
+      console.error('could not parse the notification ' + message.data, e)
       return
     }
 
-    const notification = JSON.parse(message.data) as Notification
-    this.callbacks.forEach((callback) => callback(notification))
-    this.callbacksByCategory.forEach((array, key) => {
-      if (key === notification.category) {
-        array.forEach((cb) => cb(notification))
+    // snapshot the listeners before invoking any of them: a listener is allowed to
+    // unregister itself (or a sibling) while we're dispatching, and mutating the
+    // live array mid-iteration would skip whoever slid into the vacated slot.
+    const listeners = [
+      ...this.callbacks,
+      ...(this.callbacksByCategory.get(notification.category) ?? [])
+    ]
+
+    for (const listener of listeners) {
+      // one broken listener shouldn't cost all the others their notification
+      try {
+        Promise.resolve(listener(notification)).catch((e) => this.listenerFailed(notification, e))
+      } catch (e) {
+        this.listenerFailed(notification, e)
       }
-    })
+    }
+  }
+
+  private listenerFailed(notification: Notification, e: unknown) {
+    console.error('a listener for the ' + notification.category + ' notification failed', e)
   }
 
   async notify(visible: boolean, modal: boolean) {
@@ -827,16 +860,35 @@ export class Notifications {
     return (await result.data['notify']) as boolean
   }
 
-  listenForCategory(category: string, callback: (notification: Notification) => void) {
+  /**
+   * returns a function that unregisters the callback again. components that get
+   * mounted more than once per session (anything inside an editor you can navigate
+   * back into) should call it on unmount, or every remount leaves another live
+   * copy of the callback behind and one notification ends up invoking all of them.
+   */
+  listenForCategory(category: string, callback: NotificationListener): () => void {
     if (!this.callbacksByCategory.has(category)) {
       this.callbacksByCategory.set(category, [])
     }
-    this.callbacksByCategory.get(category)!.push(callback)
+    const callbacks = this.callbacksByCategory.get(category)!
+    callbacks.push(callback)
+    return () => {
+      const at = callbacks.indexOf(callback)
+      if (at !== -1) {
+        callbacks.splice(at, 1)
+      }
+    }
   }
 
-  listen(callback: (notification: Notification) => void) {
+  listen(callback: NotificationListener): () => void {
     if (this.callbacks.indexOf(callback) === -1) {
       this.callbacks.push(callback)
+    }
+    return () => {
+      const at = this.callbacks.indexOf(callback)
+      if (at !== -1) {
+        this.callbacks.splice(at, 1)
+      }
     }
   }
 }

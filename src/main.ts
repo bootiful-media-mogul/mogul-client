@@ -15,6 +15,29 @@ function formatNumberEnglish(value: number): string {
   return new Intl.NumberFormat('en-US').format(value)
 }
 
+// every Ayrshare plugin publishes to the same platforms, so they all share these labels
+const ayrsharePlatforms = {
+  gmb: {
+    label: 'Google Business Profile',
+    maxCharactersAllowed: formatNumberEnglish(1500)
+  },
+  facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
+  linkedin: { label: 'LinkedIn', maxCharactersAllowed: formatNumberEnglish(3000) },
+  instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
+  telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
+  snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
+  pinterest: { label: 'Pinterest', maxCharactersAllowed: formatNumberEnglish(500) },
+  threads: { label: 'Threads', maxCharactersAllowed: formatNumberEnglish(25000) },
+  youtube: { label: 'YouTube', maxCharactersAllowed: formatNumberEnglish(5000) },
+  reddit: { label: 'Reddit', maxCharactersAllowed: formatNumberEnglish(40000) },
+  bluesky: { label: 'Bluesky', maxCharactersAllowed: formatNumberEnglish(300) },
+  tiktok: { label: 'TikTok', maxCharactersAllowed: formatNumberEnglish(2200) },
+  twitter: {
+    label: 'X (formerly known as Twitter)',
+    maxCharactersAllowed: formatNumberEnglish(280)
+  }
+}
+
 // i18n
 const translations = {
   en: {
@@ -60,6 +83,7 @@ const translations = {
           blogPostMarkdownFile: 'Blog Post Markdown File',
           blogPostAyrshare: 'Ayrshare (Blog Posts)',
           podcastEpisodeAyrshare: 'Ayrshare (Podcast Episodes)',
+          mogulAyrshare: 'Ayrshare',
           mockPodcastEpisode: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',
@@ -105,27 +129,7 @@ const translations = {
           twitterOauth1ApiSecret: 'Twitter OAuth 1 API Secret',
           ayrshareKey: 'Ayrshare API Key',
           charactersOrLess: '{num} characters or less',
-          platforms: {
-            gmb: {
-              label: 'Google Business Profile',
-              maxCharactersAllowed: formatNumberEnglish(1500)
-            },
-            facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
-            linkedin: { label: 'LinkedIn', maxCharactersAllowed: formatNumberEnglish(3000) },
-            instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
-            telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
-            snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
-            pinterest: { label: 'Pinterest', maxCharactersAllowed: formatNumberEnglish(500) },
-            threads: { label: 'Threads', maxCharactersAllowed: formatNumberEnglish(25000) },
-            youtube: { label: 'YouTube', maxCharactersAllowed: formatNumberEnglish(5000) },
-            reddit: { label: 'Reddit', maxCharactersAllowed: formatNumberEnglish(40000) },
-            bluesky: { label: 'Bluesky', maxCharactersAllowed: formatNumberEnglish(300) },
-            tiktok: { label: 'TikTok', maxCharactersAllowed: formatNumberEnglish(2200) },
-            twitter: {
-              label: 'X (formerly known as Twitter)',
-              maxCharactersAllowed: formatNumberEnglish(280)
-            }
-          },
+          platforms: ayrsharePlatforms,
           'combo-post': 'use the same copy for all enabled platforms'
         },
         podcastEpisodeAyrshare: {
@@ -136,27 +140,18 @@ const translations = {
           twitterOauth1ApiSecret: 'Twitter OAuth 1 API Secret',
           ayrshareKey: 'Ayrshare API Key',
           charactersOrLess: '{num} characters or less',
-          platforms: {
-            gmb: {
-              label: 'Google Business Profile',
-              maxCharactersAllowed: formatNumberEnglish(1500)
-            },
-            facebook: { label: 'Facebook', maxCharactersAllowed: formatNumberEnglish(63206) },
-            linkedin: { label: 'LinkedIn', maxCharactersAllowed: formatNumberEnglish(3000) },
-            instagram: { label: 'Instagram', maxCharactersAllowed: formatNumberEnglish(2200) },
-            telegram: { label: 'Telegram', maxCharactersAllowed: formatNumberEnglish(4096) },
-            snapchat: { label: 'Snapchat', maxCharactersAllowed: formatNumberEnglish(80) },
-            pinterest: { label: 'Pinterest', maxCharactersAllowed: formatNumberEnglish(500) },
-            threads: { label: 'Threads', maxCharactersAllowed: formatNumberEnglish(25000) },
-            youtube: { label: 'YouTube', maxCharactersAllowed: formatNumberEnglish(5000) },
-            reddit: { label: 'Reddit', maxCharactersAllowed: formatNumberEnglish(40000) },
-            bluesky: { label: 'Bluesky', maxCharactersAllowed: formatNumberEnglish(300) },
-            tiktok: { label: 'TikTok', maxCharactersAllowed: formatNumberEnglish(2200) },
-            twitter: {
-              label: 'X (formerly known as Twitter)',
-              maxCharactersAllowed: formatNumberEnglish(280)
-            }
-          },
+          platforms: ayrsharePlatforms,
+          'combo-post': 'use the same copy for all enabled platforms'
+        },
+        mogulAyrshare: {
+          description:
+            'Publish straight to your Ayrshare account for distribution to social media.',
+          title: 'Ayrshare',
+          twitterOauth1ApiKey: 'Twitter OAuth 1 API Key',
+          twitterOauth1ApiSecret: 'Twitter OAuth 1 API Secret',
+          ayrshareKey: 'Ayrshare API Key',
+          charactersOrLess: '{num} characters or less',
+          platforms: ayrsharePlatforms,
           'combo-post': 'use the same copy for all enabled platforms'
         },
         blogPost: {
@@ -348,6 +343,7 @@ This is NOT reversible! `,
 
     'home.title': 'Home',
     'home.activity-feed': 'Here is your activity feed...',
+    'home.publications': 'Publications',
 
     'icon.alt.default': 'an image, #{image}',
 

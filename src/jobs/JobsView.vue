@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Job, JobParam, jobs, notifications } from '@/services'
+import { Job, JobParam, jobs } from '@/services'
 import { onMounted, reactive, ref } from 'vue'
 import PodcastsSelect from '@/podcasts/PodcastsSelect.vue'
 import Input from '@/ui/Input.vue'
@@ -71,6 +71,10 @@ import { type SelectOption } from '@/ui/Select.vue'
 import { useI18n } from 'vue-i18n'
 import BlogsSelect from '@/blogs/BlogsSelect.vue'
 import ManagedFileSelect from '@/managedfiles/ManagedFileSelect.vue'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 
 const { t } = useI18n()
 
@@ -169,7 +173,7 @@ class JobRequest {
 
 onMounted(async () => {
   // todo this needs to be fixed it doesnt work anymore.
-  notifications.listenForCategory('job-stopped-event', async (evt) => {
+  listenForCategory('job-stopped-event', async (evt) => {
     console.log('job-stopped-event', evt)
     const jobName = evt.key
     const job = jobByName(jobName)

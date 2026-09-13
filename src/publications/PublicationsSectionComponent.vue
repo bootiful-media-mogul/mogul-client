@@ -290,7 +290,7 @@
 import Icon from '@/ui/Icon.vue'
 import { onMounted, provide, ref } from 'vue'
 import { type PanelSlot, PanelSlotIcon, PublicationContext } from '@/publications/input'
-import { Notification, notifications, Publication, publications } from '@/services'
+import { Notification, Publication, publications } from '@/services'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
 import errorAsset from '@/assets/images/error.png'
@@ -298,6 +298,10 @@ import errorHighlightAsset from '@/assets/images/error-highlight.png'
 import checkmarkAsset from '@/assets/images/checkbox.png'
 import { dateTimeToString } from '@/dates'
 import { useI18n } from 'vue-i18n'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 
 const { t } = useI18n()
 
@@ -340,7 +344,7 @@ onMounted(async () => {
   iconsAvailable.value = childSlots.value.length == icons.value.size
 })
 
-notifications.listenForCategory('publication-started-event', async (notification: Notification) => {
+listenForCategory('publication-started-event', async (notification: Notification) => {
   await refresh()
   existingPublications.value
     .filter((pub) => pub.id === parseInt(notification.key))
@@ -349,7 +353,7 @@ notifications.listenForCategory('publication-started-event', async (notification
     })
 })
 
-notifications.listenForCategory('publication-completed-event', async () => {
+listenForCategory('publication-completed-event', async () => {
   await refresh()
 })
 

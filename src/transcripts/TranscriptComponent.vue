@@ -1,15 +1,13 @@
 <script lang="ts" setup>
 import { onMounted, ref, watch } from 'vue'
-import {
-  events,
-  Notification,
-  notifications,
-  type TranscriptEditEvent,
-  transcripts
-} from '@/services'
+import { events, Notification, type TranscriptEditEvent, transcripts } from '@/services'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
 import { useI18n } from 'vue-i18n'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 const { t } = useI18n()
 const transcript = ref<string>('')
 const el = ref<HTMLElement>()
@@ -21,20 +19,17 @@ const busy = ref<boolean>(false)
 
 onMounted(async () => {
   // Event Listeners
-  notifications.listenForCategory(
-    'transcript-processed-event',
-    async (notification: Notification) => {
-      const idOfThingWithTranscript = parseInt(notification.key)
-      const incoming = parseInt(idOfThingWithTranscript + '')
-      const existing = parseInt(transcriptId.value + '')
-      if (incoming === existing) {
-        transcript.value = '' + notification.context
-      }
-      busy.value = false
-      dirty.value = false
-      fresh.value = true
+  listenForCategory('transcript-processed-event', async (notification: Notification) => {
+    const idOfThingWithTranscript = parseInt(notification.key)
+    const incoming = parseInt(idOfThingWithTranscript + '')
+    const existing = parseInt(transcriptId.value + '')
+    if (incoming === existing) {
+      transcript.value = '' + notification.context
     }
-  )
+    busy.value = false
+    dirty.value = false
+    fresh.value = true
+  })
 })
 
 events.on('transcript-edit-event', async (event) => {
@@ -76,18 +71,15 @@ watch(
   }
 )
 
-notifications.listenForCategory(
-  'transcript-completed-event',
-  async (notification: Notification) => {
-    const context = JSON.parse(notification.context)
-    const ctxTranscriptId = context['transcriptId']
-    if (ctxTranscriptId != transcriptId.value) {
-      return
-    }
-    transcript.value = context.transcript
-    busy.value = false
+listenForCategory('transcript-completed-event', async (notification: Notification) => {
+  const context = JSON.parse(notification.context)
+  const ctxTranscriptId = context['transcriptId']
+  if (ctxTranscriptId != transcriptId.value) {
+    return
   }
-)
+  transcript.value = context.transcript
+  busy.value = false
+})
 
 const saveTranscript = async () => {
   await transcripts.writeTranscript(transcriptId.value, transcript.value)

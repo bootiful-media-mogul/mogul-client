@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { inject, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Attachment, compositions, Notification, notifications } from '@/services'
+import { Attachment, compositions, Notification } from '@/services'
 import ManagedFileComponent from '@/managedfiles/ManagedFileComponent.vue'
 import type {
   GetInputElementFunction,
@@ -14,6 +14,10 @@ import assetHighlight from '@/assets/images/compositions/attachments.png'
 import Icon from '@/ui/Icon.vue'
 import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
 import deleteAsset from '@/assets/images/delete.png'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 
 const { t } = useI18n()
 const updateValue = inject<UpdateValueFunction>('updateInputValue')!
@@ -39,25 +43,22 @@ const props = defineProps<{
   compositionId: number
 }>()
 
-notifications.listenForCategory(
-  'attachment-managed-file-updated-event',
-  async (notification: Notification) => {
-    const managedFileId = parseInt(notification.key)
-    const composition = await compositions.getCompositionById(props.compositionId)
-    composition.attachments.forEach((attachment) => {
-      if (attachment.managedFile.id == managedFileId) {
-        const newMarkdown = attachment.markdown
-        const newContentType = attachment.managedFile.contentType
-        attachments.value?.forEach((existingAttachment) => {
-          if (existingAttachment.managedFile.id == managedFileId) {
-            existingAttachment.managedFile.contentType = newContentType
-            existingAttachment.markdown = newMarkdown
-          }
-        })
-      }
-    })
-  }
-)
+listenForCategory('attachment-managed-file-updated-event', async (notification: Notification) => {
+  const managedFileId = parseInt(notification.key)
+  const composition = await compositions.getCompositionById(props.compositionId)
+  composition.attachments.forEach((attachment) => {
+    if (attachment.managedFile.id == managedFileId) {
+      const newMarkdown = attachment.markdown
+      const newContentType = attachment.managedFile.contentType
+      attachments.value?.forEach((existingAttachment) => {
+        if (existingAttachment.managedFile.id == managedFileId) {
+          existingAttachment.managedFile.contentType = newContentType
+          existingAttachment.markdown = newMarkdown
+        }
+      })
+    }
+  })
+})
 
 const text = ref<string>()
 const textareaRef = ref<HTMLInputElement>()

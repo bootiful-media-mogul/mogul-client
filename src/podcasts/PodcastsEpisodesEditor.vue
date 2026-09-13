@@ -4,7 +4,6 @@ import {
   Composition,
   loadNotesForNotable,
   Notification,
-  notifications,
   Podcast,
   PodcastEpisode,
   PodcastEpisodeSegment,
@@ -31,6 +30,10 @@ import Mock from '@/podcasts/publications/Mock.vue'
 import plusIconHighlight from '@/assets/images/plus-icon-highlight.png'
 import plusIcon from '@/assets/images/plus-icon.png'
 import Icon from '@/ui/Icon.vue'
+
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 
 const { t } = useI18n()
 
@@ -200,7 +203,7 @@ const upArrowDisabled = (_: PodcastEpisode, segment: PodcastEpisodeSegment) => {
 onMounted(async () => {
   dirtyKey.value = computeDirtyKey()
 
-  notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+  listenForCategory('podcast-episode-completed-event', async (evt) => {
     const ctx = JSON.parse(evt.context)
     const matches = '' + ctx['key'] === draftEpisode.value.id + ''
     if (!matches) {
@@ -209,11 +212,11 @@ onMounted(async () => {
     publicationsDisabled.value = ctx['complete'] === false
   })
 
-  notifications.listenForCategory('publication-completed-event', async () => {
+  listenForCategory('publication-completed-event', async () => {
     await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
   })
 
-  notifications.listenForCategory('publication-started-event', async (_: Notification) => {
+  listenForCategory('publication-started-event', async (_: Notification) => {
     await loadEpisodeFromDbIntoEditor(draftEpisode.value.id)
   })
 })

@@ -89,10 +89,13 @@ import {
   PublicationContext,
   type PublishFunction
 } from '@/publications/input'
-import { ayrshare, AyrsharePublicationComposition, notifications } from '@/services'
+import { ayrshare, AyrsharePublicationComposition } from '@/services'
 import CompositionComponent from '@/compositions/CompositionComponent.vue'
 import InputTools from '@/ui/InputTools.vue'
 import InputWrapper from '@/ui/input/InputWrapper.vue'
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
 
 const props = defineProps<{
   pluginName: string
@@ -171,20 +174,35 @@ async function reset(post: EnableAyrsharePublicationComposition) {
 }
 
 if (props.readyEventCategory) {
-  notifications.listenForCategory(props.readyEventCategory, async (evt) => {
+  listenForCategory(props.readyEventCategory, async (evt) => {
     disabled.value = await isPluginDisabled()
   })
 }
 
-notifications.listenForCategory('ayrshare-publication-completion-event', async (evt) => {
+listenForCategory('ayrshare-publication-completion-event', async (evt) => {
   publishing.value = false
   await refresh()
 })
 
-async function refresh() {
-  posts.value = (await ayrshare.publicationCompositions()).map(
-    (x) => new EnableAyrsharePublicationComposition(x)
-  )
+// publishing to N platforms sends N completion notifications, and every one of
+// them asks us to reload. they'd all be asking for the exact same thing, so ride
+// along on the request that's already in flight instead of firing N of them.
+let refreshing: Promise<void> | null = null
+
+async function refresh(): Promise<void> {
+  if (refreshing) {
+    return refreshing
+  }
+  refreshing = (async () => {
+    try {
+      posts.value = (await ayrshare.publicationCompositions()).map(
+        (x) => new EnableAyrsharePublicationComposition(x)
+      )
+    } finally {
+      refreshing = null
+    }
+  })()
+  return refreshing
 }
 
 onMounted(async () => {

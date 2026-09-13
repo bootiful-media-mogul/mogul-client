@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import downloadAudioIcon from '@/assets/images/publications/podcasts/publish-download-produced-audio.png'
 import PublicationPanelComponent from '@/publications/PublicationPanelComponent.vue'
-import { managedFiles, notifications, podcasts } from '@/services'
+import { managedFiles, podcasts } from '@/services'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -32,6 +32,10 @@ import type {
   PublishFunction
 } from '@/publications/input'
 
+import { useNotificationListeners } from '@/composables/useNotificationListeners'
+
+const { listenForCategory } = useNotificationListeners()
+
 const pluginName = 'audioFile'
 
 const isPluginReadyFunction = inject<IsPluginReadyFunction>('isPluginReady')!
@@ -41,7 +45,7 @@ const getPublicationContextFunction =
 
 const disabled = ref<boolean>(false)
 
-notifications.listenForCategory('podcast-episode-completed-event', async (evt) => {
+listenForCategory('podcast-episode-completed-event', async (evt) => {
   disabled.value = await isPluginDisabled()
 })
 

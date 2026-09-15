@@ -211,6 +211,9 @@ provide('setInputDisabled', setInputDisabled)
 }
 .input-wrapper {
   grid-area: input;
+  /* same reason as .platform-post: without this the full-width textarea sets a
+     min-content floor for the track it sits in. */
+  min-width: 0;
 }
 
 .icon-column {

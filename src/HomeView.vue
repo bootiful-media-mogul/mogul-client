@@ -15,6 +15,11 @@
       </PublicationsSectionComponent>
     </div>
   </div>
+
+  <!-- the last N days, each with what went out on it. gated on today's status
+       existing: child mounted hooks run before the parent's, so without this the
+       first load of a new day would fetch before today's row was created. -->
+  <MogulStatusHistoryComponent v-if="mogulStatusId" />
 </template>
 <script lang="ts" setup>
 import 'v-calendar/style.css'
@@ -24,6 +29,7 @@ import { onMounted, ref } from 'vue'
 import { mogul } from '@/services'
 import PublicationsSectionComponent from '@/publications/PublicationsSectionComponent.vue'
 import Ayrshare from '@/home/publications/Ayrshare.vue'
+import MogulStatusHistoryComponent from '@/home/MogulStatusHistoryComponent.vue'
 
 const { t } = useI18n()
 

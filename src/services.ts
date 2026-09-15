@@ -1,4 +1,4 @@
-import Mogul from '@/mogul'
+import Mogul, { MogulStatus } from '@/mogul'
 import mitt from 'mitt'
 import { Client, errorExchange, fetchExchange } from '@urql/core'
 import router from '@/index'
@@ -1230,6 +1230,99 @@ export class PublicationOutcome {
   }
 }
 
+/**
+ * the publication fields we ask for, in the one place that defines them. asked for
+ * against a single publishable, and again against each of the last N days.
+ */
+const PUBLICATION_FIELDS = `
+  id,
+  plugin,
+  created,
+  published,
+  url,
+  state,
+  outcomes {
+    id,
+    created,
+    success,
+    url,
+    key,
+    serverErrorMessage
+  }
+`
+
+export function toPublication(pub: any): Publication {
+  const outcomes = (pub['outcomes'] as Array<any>).map(
+    (outcome: any) =>
+      new PublicationOutcome(
+        outcome['id'] as number,
+        outcome['success'] as boolean,
+        outcome['url'] as string,
+        outcome['key'] as string,
+        outcome['serverErrorMessage'] as string,
+        outcome['created'] as Date
+      )
+  )
+  return new Publication(
+    pub['id'] as number,
+    pub['plugin'] as string,
+    pub.created,
+    pub.published,
+    pub['url'] as string,
+    pub['state'],
+    outcomes
+  )
+}
+
+/**
+ * one of the mogul's days, together with everything published on it.
+ */
+export class MogulStatusPublications {
+  readonly status: MogulStatus
+  readonly publications: Array<Publication>
+
+  constructor(status: MogulStatus, publications: Array<Publication>) {
+    this.status = status
+    this.publications = publications
+  }
+}
+
+export class MogulStatuses {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  /**
+   * the most recent days the mogul did something, newest first, each with its own
+   * publications. the nesting is free: the server batch-loads every day's publications
+   * in one query and their outcomes in one more, so asking for thirty days costs the
+   * same number of round trips as asking for one.
+   */
+  async recent(limit: number): Promise<Array<MogulStatusPublications>> {
+    const q = `
+        query ( $limit: Int ) {
+           mogulStatuses( limit: $limit ) {
+              id,
+              mogulId,
+              date,
+              publications { ${PUBLICATION_FIELDS} }
+           }
+       }
+     `
+    const result = await this.client.query(q, { limit: limit })
+    const days = (result.data['mogulStatuses'] as Array<any>) || []
+    return days.map(
+      (day: any) =>
+        new MogulStatusPublications(
+          new MogulStatus(day['id'] as number, day['mogulId'] as number, day['date'] as string),
+          ((day['publications'] as Array<any>) || []).map(toPublication)
+        )
+    )
+  }
+}
+
 export class Publications {
   private readonly client: Client
 
@@ -1246,22 +1339,7 @@ export class Publications {
            publicationsForPublishable( 
              id: $id, 
              type : $type  
-           ){
-              id,
-              plugin,
-              created,
-              published,
-              url,
-              state, 
-              outcomes { 
-                id,
-                created,
-                success,
-                url,
-                key,
-                serverErrorMessage
-              }
-           }
+           ){ ${PUBLICATION_FIELDS} }
        }
      `
     const result = await this.client.query(q, {
@@ -1269,35 +1347,7 @@ export class Publications {
       type: type
     })
     const pubs = await result.data['publicationsForPublishable'] //as Array<Map<string,object>>
-    const newPubs = new Array<Publication>()
-    pubs.forEach((pub: any) => {
-      const outcomes = pub['outcomes'] as Array<any>
-      const newOutcomes = new Array<PublicationOutcome>()
-      outcomes.forEach((outcome: any) => {
-        newOutcomes.push(
-          new PublicationOutcome(
-            outcome['id'] as number,
-            outcome['success'] as boolean,
-            outcome['url'] as string,
-            outcome['key'] as string,
-            outcome['serverErrorMessage'] as string,
-            outcome['created'] as Date
-          )
-        )
-      })
-
-      const publication = new Publication(
-        pub['id'] as number,
-        pub['plugin'] as string,
-        pub.created,
-        pub.published,
-        pub['url'] as string,
-        pub['state'],
-        newOutcomes
-      )
-      newPubs.push(publication)
-    })
-    return newPubs
+    return (pubs as Array<any>).map(toPublication)
   }
 
   async unpublish(publicationId: number): Promise<boolean> {
@@ -2006,6 +2056,7 @@ export const markdown = new Markdown(graphqlClient)
 export const ai = new Ai(graphqlClient)
 export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)
+export const mogulStatuses = new MogulStatuses(graphqlClient)
 export const podcasts = new Podcasts(graphqlClient)
 export const managedFiles = new ManagedFiles(graphqlClient)
 export const settings = new Settings(graphqlClient)

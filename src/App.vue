@@ -169,6 +169,14 @@ onMounted(async () => {
   .toolbar-container img:hover {
     filter: none;
   }
+
+  /* the buffer exists to clear the floating toolbar, which is only fixed on mobile.
+     on desktop the toolbar sits in normal flow (position: static, above), so the
+     buffer is ~224px of dead height that pushes the page past the viewport and
+     produces a scrollbar over empty space. */
+  .page-content-buffer {
+    height: 0;
+  }
 }
 </style>
 <template>

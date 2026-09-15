@@ -35,131 +35,15 @@
     </div>
   </div>
 
-  <div class="publications">
-    <div v-for="publication in existingPublications" v-bind:key="publication.id">
-      <div class="publications-row row">
-        <div class="plugin-column">
-          <div class="plugin-icon-container">
-            <Icon
-              v-if="iconsAvailable"
-              :icon="getIconForPlugin(publication.plugin).icon"
-              :icon-hover="getIconForPlugin(publication.plugin).iconHover"
-              :width="40"
-            />
-          </div>
-        </div>
-        <div class="created-column">{{ dateTimeToString(publication.created) }}</div>
-        <div class="published-column">
-          {{ dateTimeToString(publication.published) }}
-        </div>
-        <div class="delete-column">
-          <Icon
-            :disabled="withdrawn(publication)"
-            :icon="deleteHighlightAsset"
-            :icon-hover="deleteAsset"
-            class="delete-icon"
-            @click.prevent="unpublish(publication.id)"
-          />
-        </div>
-        <div class="url-column preview">
-          <span v-if="publication.publishing"> 🕒 </span>
-        </div>
-      </div>
-      <div class="publications-outcomes">
-        <div
-          v-for="outcome in publication.outcomes"
-          v-bind:key="outcome.id"
-          class="publications-outcome row"
-        >
-          <div class="success">
-            <Icon v-if="outcome.success" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
-            <Icon v-else :icon="errorAsset" :icon-hover="errorHighlightAsset" />
-          </div>
-          <div class="server-error-message">
-            <div v-if="!outcome.success">
-              <a
-                v-if="outcome.serverErrorMessage"
-                href="#"
-                @click.prevent="popupErrorMessage(outcome.serverErrorMessage)"
-              >
-                {{ t('publications.outcomes.error-message') }}
-              </a>
-              <span v-else>{{ t('publications.outcomes.no-error-message') }}</span>
-            </div>
-          </div>
-          <div class="uri">
-            <a
-              :class="{ disabled: withdrawn(publication) }"
-              :href="outcome.url"
-              class="mogul-icon preview-icon"
-              target="_blank"
-            ></a>
-          </div>
-          <div class="key">
-            {{ t('publications.outcomes.keys.' + outcome.key) }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <PublicationsListComponent
+    v-if="showExistingPublications"
+    :icons="icons"
+    :publications="existingPublications"
+    unpublishable
+    @unpublish="unpublish"
+  />
 </template>
 <style scoped>
-.publications {
-  --icon-column: 40px;
-}
-
-.publications .publications-outcome .success {
-  grid-area: success;
-}
-
-.publications .publications-row {
-  padding-top: calc(var(--radius) * 1);
-  border-top: 1px solid black;
-}
-
-.publications .publications-outcome {
-  margin-top: calc(var(--radius) * -1);
-  height: var(--row-height);
-  border-radius: var(--radius);
-  border-top-left-radius: 0;
-  padding-left: var(--gutter-space);
-  border: 1px solid black;
-  border-top: 0;
-  border-right: none;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  display: grid;
-  grid-template-areas: ' uri success key server-error-message ';
-  grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-template-columns: var(--icon-column) var(--icon-column) auto auto;
-  margin-left: var(--icon-column);
-}
-
-.publications .publications-outcome:last-child {
-  margin-bottom: calc(var(--radius) * 1);
-}
-
-.publications .publications-outcome:first-child {
-  margin-top: 0;
-  padding-top: 0;
-}
-
-.publications .publications-outcome {
-  padding-top: var(--radius);
-}
-
-.publications .publications-outcome .key {
-  grid-area: key;
-}
-
-.publications .publications-outcome .uri {
-  grid-area: uri;
-}
-
-.publications .publications-outcome .server-error-message {
-  grid-area: server-error-message;
-}
-
 .publications-toolbar {
   display: grid;
   grid-template-columns: repeat(auto-fill, 50px);
@@ -217,86 +101,14 @@
   margin-top: var(--gutter-space);
 }
 
-/* PUBLICATIONS */
-.publications .publications-row {
-  display: grid;
-  grid-template-areas: ' plugin . delete   url  created published   ';
-  grid-template-columns:
-    min-content var(--gutter-space) var(--icon-column) var(--icon-column) var(--date-column)
-    auto;
-}
-
-.publications .publications-row {
-  padding-bottom: var(--gutter-space-half);
-  border-bottom: 1px solid black;
-}
-
-/*id url delete created published plugin */
-.publications .publications-row .created-column {
-  grid-area: created;
-}
-
-.publications .publications-row .published {
-  grid-area: published;
-}
-
-.publications .publications-row .plugin {
-  grid-area: plugin;
-}
-
-.publications .publications-row .id-column {
-  grid-area: id;
-}
-
-.publications .publications-row .url {
-  grid-area: url;
-}
-
-.publications .publications-row .plugin-icon-container {
-  background-color: black;
-  border-radius: var(--radius);
-  overflow: hidden;
-
-  width: 40px;
-  height: 40px;
-}
-
-.publications .publications-row .delete-column {
-  grid-area: delete;
-}
-
-.publications .publications-row .id-column {
-  grid-area: id;
-}
-
-.publications .publications-row .plugin-column {
-  grid-area: plugin;
-}
-
-.publications .publications-row .created-column {
-  grid-area: created;
-}
-
-.publications .publications-row .published-column {
-  grid-area: published;
-}
-
-.publications .publications-row .url-column {
-  grid-area: url;
-}
 </style>
 
 <script lang="ts" setup>
 import Icon from '@/ui/Icon.vue'
+import PublicationsListComponent from '@/publications/PublicationsListComponent.vue'
 import { onMounted, provide, ref } from 'vue'
 import { type PanelSlot, PanelSlotIcon, PublicationContext } from '@/publications/input'
 import { Notification, Publication, publications } from '@/services'
-import deleteHighlightAsset from '@/assets/images/delete-highlight.png'
-import deleteAsset from '@/assets/images/delete.png'
-import errorAsset from '@/assets/images/error.png'
-import errorHighlightAsset from '@/assets/images/error-highlight.png'
-import checkmarkAsset from '@/assets/images/checkbox.png'
-import { dateTimeToString } from '@/dates'
 import { useI18n } from 'vue-i18n'
 
 import { useNotificationListeners } from '@/composables/useNotificationListeners'
@@ -305,31 +117,24 @@ const { listenForCategory } = useNotificationListeners()
 
 const { t } = useI18n()
 
-const props = defineProps<{
-  disabled: boolean
-  publishable: string
-  type: string
-}>()
-
-function withdrawn(publication: Publication) {
-  return (
-    publication.url === '' || publication.state == 'draft' || publication.state == 'unpublished'
-  )
-}
+const props = withDefaults(
+  defineProps<{
+    disabled: boolean
+    publishable: string
+    type: string
+    /**
+     * set false where something else on the page already lists these publications --
+     * the home page renders them per-day -- so they aren't shown twice.
+     */
+    showExistingPublications?: boolean
+  }>(),
+  { showExistingPublications: true }
+)
 
 const existingPublications = ref<Array<Publication>>([])
 const childSlots = ref<Array<PanelSlot>>([])
 const isAnyPanelSelected = ref<boolean>(false)
-const iconsAvailable = ref<boolean>(false)
 const icons = ref<Map<string, PanelSlotIcon>>(new Map<string, PanelSlotIcon>())
-
-function getIconForPlugin(plugin: string): PanelSlotIcon {
-  return icons.value!.get(plugin)!
-}
-
-async function popupErrorMessage(message: string) {
-  if (message !== null) window.alert(message)
-}
 
 async function refresh() {
   const ctx = getPublicationContext()
@@ -341,7 +146,6 @@ onMounted(async () => {
   childSlots.value.forEach((slot) => {
     icons.value.set(slot.plugin, slot.icon)
   })
-  iconsAvailable.value = childSlots.value.length == icons.value.size
 })
 
 listenForCategory('publication-started-event', async (notification: Notification) => {

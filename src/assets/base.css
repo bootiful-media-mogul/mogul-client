@@ -83,13 +83,23 @@ a:hover {
   border-radius: 0 0 var(--radius) var(--radius);
 }
 
+/* forcing width:100% is only safe with border-box, or the control renders at 100%
+   *plus* its own border and padding and overflows whatever contains it. pure only
+   sets border-box under `.pure-form`, and the publication panels aren't wrapped in a
+   form -- so their textareas were spilling past the panel and getting clipped by
+   .publication-panel's overflow:hidden. max-width keeps a manual resize from blowing
+   the layout out the same way. */
 input[type='text'],
 input[type='url'] {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 textarea {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Larger, consistent font for all form controls across the app.
@@ -133,14 +143,18 @@ a {
   border-radius: var(--button-radius);
 }
 
-.pure-form-stacked .pure-button {
+/* the app's buttons are black. two ways in: being inside a stacked form, or being a
+   publish button -- publication panels aren't wrapped in a form, so they used to fall
+   through to pure's blue .pure-button-primary. one rule so the two can't drift. */
+.pure-form-stacked .pure-button,
+.publish-button.pure-button {
   box-sizing: content-box;
   background-color: black;
-
   color: white;
 }
 
-.pure-form-stacked .pure-button:hover {
+.pure-form-stacked .pure-button:hover,
+.publish-button.pure-button:hover {
   background-color: #333;
 }
 

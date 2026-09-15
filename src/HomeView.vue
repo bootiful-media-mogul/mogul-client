@@ -9,6 +9,7 @@
       <PublicationsSectionComponent
         :disabled="false"
         :publishable="mogulStatusId + ''"
+        :show-existing-publications="false"
         :type="'mogulStatus'"
       >
         <Ayrshare />

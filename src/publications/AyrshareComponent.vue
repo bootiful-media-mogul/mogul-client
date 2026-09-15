@@ -14,6 +14,10 @@
 .platform-panel .platform-post {
   grid-area: platform-post;
   width: 100%;
+  /* grid items are min-width:auto by default, so this one refuses to shrink below
+     the intrinsic width of the textarea inside it and pushes the auto track -- and
+     the panel with it -- wider than the container. */
+  min-width: 0;
 }
 
 .platform-panel .platform-post textarea {

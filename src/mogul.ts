@@ -18,6 +18,17 @@ export default class Mogul {
     return new User(me.id as number, me.name, me.email, me.givenName, me.familyName)
   }
 
+  async todayStatus(): Promise<MogulStatus> {
+    const query = `
+            query { 
+             mogulStatusToday { id, mogulId, date } 
+            } 
+    `
+    const result = await this.client.query(query, {})
+    const status = result.data['mogulStatusToday']
+    return new MogulStatus(status.id as number, status.mogulId as number, status.date)
+  }
+
   async me(): Promise<string> {
     const query = `
             query { 
@@ -50,5 +61,22 @@ export class User {
     this.givenName = givenName
     this.familyName = familyName
     this.displayName = this.givenName + ' ' + this.familyName + ' (' + this.email + ')'
+  }
+}
+
+/**
+ * a single day in the life of a mogul. this -- and not the mogul -- is what
+ * publications attach to, so that they stay bounded to a day instead of piling up
+ * against an identity that never ends.
+ */
+export class MogulStatus {
+  readonly id: number
+  readonly mogulId: number
+  readonly date: string
+
+  constructor(id: number, mogulId: number, date: string) {
+    this.id = id
+    this.mogulId = mogulId
+    this.date = date
   }
 }

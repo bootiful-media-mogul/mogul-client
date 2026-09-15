@@ -83,7 +83,7 @@ const translations = {
           blogPostMarkdownFile: 'Blog Post Markdown File',
           blogPostAyrshare: 'Ayrshare (Blog Posts)',
           podcastEpisodeAyrshare: 'Ayrshare (Podcast Episodes)',
-          mogulAyrshare: 'Ayrshare',
+          mogulAyrshare: 'Ayrshare (Mogul)',
           mockPodcastEpisode: 'Mock',
           podbean: 'Podbean',
           gmb: 'Google Business Profile',

@@ -3,10 +3,14 @@
   <p>{{ t('home.activity-feed') }}</p>
 
   <!-- publications -->
-  <div v-if="mogulId" class="form-section">
+  <div v-if="mogulStatusId" class="form-section">
     <div class="form-section-title">{{ t('home.publications') }}</div>
     <div class="publish-menu">
-      <PublicationsSectionComponent :disabled="false" :publishable="mogulId + ''" :type="'mogul'">
+      <PublicationsSectionComponent
+        :disabled="false"
+        :publishable="mogulStatusId + ''"
+        :type="'mogulStatus'"
+      >
         <Ayrshare />
       </PublicationsSectionComponent>
     </div>
@@ -23,9 +27,11 @@ import Ayrshare from '@/home/publications/Ayrshare.vue'
 
 const { t } = useI18n()
 
-const mogulId = ref<number | null>(null)
+// we publish today's status, not the mogul: the mogul is an identity that never
+// ends, and publications hung off one accumulate forever.
+const mogulStatusId = ref<number | null>(null)
 
 onMounted(async () => {
-  mogulId.value = (await mogul.user()).id
+  mogulStatusId.value = (await mogul.todayStatus()).id
 })
 </script>

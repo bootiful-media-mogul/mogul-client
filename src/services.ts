@@ -1326,6 +1326,62 @@ export class MogulStatuses {
   }
 }
 
+export class ServerTime {
+  readonly instant: string
+  readonly javaTimeZone: string
+  readonly javaOffset: string
+  readonly javaLocalTime: string
+  readonly databaseTimeZone: string
+  readonly databaseLocalTime: string
+
+  constructor(
+    instant: string,
+    javaTimeZone: string,
+    javaOffset: string,
+    javaLocalTime: string,
+    databaseTimeZone: string,
+    databaseLocalTime: string
+  ) {
+    this.instant = instant
+    this.javaTimeZone = javaTimeZone
+    this.javaOffset = javaOffset
+    this.javaLocalTime = javaLocalTime
+    this.databaseTimeZone = databaseTimeZone
+    this.databaseLocalTime = databaseLocalTime
+  }
+}
+
+export class Diagnostics {
+  private readonly client: Client
+
+  constructor(client: Client) {
+    this.client = client
+  }
+
+  async serverTime(): Promise<ServerTime> {
+    const q = `
+        query {
+           serverTime {
+              instant, javaTimeZone, javaOffset, javaLocalTime, databaseTimeZone, databaseLocalTime
+           }
+       }
+     `
+    const result = await this.client.query(q, {})
+    if (result.error || !result.data || !result.data['serverTime']) {
+      throw new Error(result.error ? `${result.error}` : 'no serverTime in the response')
+    }
+    const st = result.data['serverTime']
+    return new ServerTime(
+      st.instant,
+      st.javaTimeZone,
+      st.javaOffset,
+      st.javaLocalTime,
+      st.databaseTimeZone,
+      st.databaseLocalTime
+    )
+  }
+}
+
 export class Publications {
   private readonly client: Client
 
@@ -2066,6 +2122,7 @@ export const markdown = new Markdown(graphqlClient)
 export const ai = new Ai(graphqlClient)
 export const notifications = new Notifications(graphqlClient)
 export const mogul = new Mogul(graphqlClient)
+export const diagnostics = new Diagnostics(graphqlClient)
 export const mogulStatuses = new MogulStatuses(graphqlClient)
 export const podcasts = new Podcasts(graphqlClient)
 export const managedFiles = new ManagedFiles(graphqlClient)

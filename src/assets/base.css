@@ -350,8 +350,9 @@ textarea {
   grid-template-areas:
     'tabbar'
     'content'
+    'footer'
     'buffer';
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto;
   grid-template-columns: 1fr;
   grid-row-gap: 0;
 }
@@ -513,8 +514,9 @@ button {
       ' toolbar toolbar toolbar '
       ' .       .       .        '
       ' main . sidebar '
+      ' footer footer footer '
       ' buffer buffer buffer ';
-    grid-template-rows: auto var(--main-toolbar-gutter) auto auto;
+    grid-template-rows: auto var(--main-toolbar-gutter) auto auto auto;
 
     grid-template-columns: auto var(--main-toolbar-gutter) 400px;
   }

@@ -341,6 +341,10 @@ This is NOT reversible! `,
 
     'managedfiles.alt.preview': 'A preview for managed file {id}',
 
+    'diagnostics.server-time.server': 'server',
+    'diagnostics.server-time.database': 'db',
+    'diagnostics.server-time.browser': 'browser',
+
     'home.title': 'Home',
     'home.activity-feed': 'Here is your activity feed...',
     'home.publications': 'Publications',

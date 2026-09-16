@@ -4,6 +4,7 @@ import PreviewComponent from '@/managedfiles/PreviewComponent.vue'
 import NotificationBoxComponent from '@/notifications/NotificationBoxComponent.vue'
 import { onMounted, ref } from 'vue'
 import TranscriptComponent from '@/transcripts/TranscriptComponent.vue'
+import ServerTimeFooter from '@/diagnostics/ServerTimeFooter.vue'
 import PanelComponent from '@/layout/PanelComponent.vue'
 import Search from '@/search/Search.vue'
 import { useRoute } from 'vue-router'
@@ -248,6 +249,10 @@ onMounted(async () => {
             </Tab>
           </div>
         </TabBar>
+
+        <!-- diagnostic: which wall clock each side is using, for working out the
+             zone that existing timestamp columns were written in -->
+        <ServerTimeFooter />
 
         <!-- Buffer to prevent content from being hidden by floating toolbar on mobile -->
         <div class="page-content-buffer"></div>

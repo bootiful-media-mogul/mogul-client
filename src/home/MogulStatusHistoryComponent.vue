@@ -13,13 +13,11 @@
       {{ t('home.history.nothing') }}
     </div>
 
+    <!-- the query only returns days that published something, so there is no empty
+         day to render here -->
     <div v-for="day in days" :key="day.status.id" class="history-day">
       <div class="history-day-date">{{ day.status.date }}</div>
-      <div v-if="day.publications.length === 0" class="history-empty">
-        {{ t('home.history.no-publications') }}
-      </div>
       <PublicationsListComponent
-        v-else
         :icons="icons"
         :publications="day.publications"
         unpublishable

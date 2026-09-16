@@ -347,7 +347,6 @@ This is NOT reversible! `,
     'home.history.title': 'Recent Days',
     'home.history.days': 'Days to show',
     'home.history.nothing': 'Nothing here yet.',
-    'home.history.no-publications': 'Nothing published this day.',
 
     'icon.alt.default': 'an image, #{image}',
 

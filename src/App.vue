@@ -255,9 +255,7 @@ onMounted(async () => {
           </div>
         </TabBar>
 
-        <!-- diagnostic: which wall clock each side is using, for working out the
-             zone that existing timestamp columns were written in -->
-        <ServerTimeFooter />
+<!--        <ServerTimeFooter />-->
 
         <!-- Buffer to prevent content from being hidden by floating toolbar on mobile -->
         <div class="page-content-buffer"></div>

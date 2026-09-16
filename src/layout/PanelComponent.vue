@@ -109,7 +109,11 @@ import { events } from '@/services'
 
 const element = ref<HTMLElement>()
 
-const visible = ref<boolean>(true)
+// collapsed on arrival: three expanded panels stacked in the sidebar push the page
+// long before you've asked for any of them. only desktop is affected -- on mobile
+// base.css keeps .sidebar .panel-content displayed regardless of this flag, so a tab
+// you tapped into still shows its content.
+const visible = ref<boolean>(false)
 
 const props = defineProps<{ title: string }>()
 

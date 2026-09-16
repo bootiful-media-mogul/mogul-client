@@ -1,6 +1,7 @@
 import Mogul, { MogulStatus } from '@/mogul'
 import mitt from 'mitt'
 import { Client, errorExchange, fetchExchange } from '@urql/core'
+import { graphqlJson } from '@/graphql'
 import router from '@/index'
 import { marked } from 'marked'
 import * as Ably from 'ably'
@@ -1366,11 +1367,15 @@ export class Diagnostics {
            }
        }
      `
-    const result = await this.client.query(q, {})
-    if (result.error || !result.data || !result.data['serverTime']) {
-      throw new Error(result.error ? `${result.error}` : 'no serverTime in the response')
+    // deliberately goes around the urql client. this is a diagnostic, so when it fails
+    // the useful thing is exactly what the server said -- a validation error naming an
+    // unknown field reads very differently from a resolver blowing up, and both look
+    // identical once they've been flattened into "no data".
+    const body = await graphqlJson(q, new Map())
+    const st = body?.data?.serverTime
+    if (!st) {
+      throw new Error(JSON.stringify(body?.errors ?? body))
     }
-    const st = result.data['serverTime']
     return new ServerTime(
       st.instant,
       st.javaTimeZone,

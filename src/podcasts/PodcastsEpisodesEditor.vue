@@ -204,12 +204,34 @@ onMounted(async () => {
   dirtyKey.value = computeDirtyKey()
 
   listenForCategory('podcast-episode-completed-event', async (evt) => {
+    // the context carries episodeId and complete; `key` lives on the notification
+    // itself, not inside its context, so reading ctx['key'] was always undefined and
+    // this handler returned early every single time.
     const ctx = JSON.parse(evt.context)
-    const matches = '' + ctx['key'] === draftEpisode.value.id + ''
-    if (!matches) {
+    if ('' + ctx['episodeId'] !== '' + draftEpisode.value.id) {
       return
     }
     publicationsDisabled.value = ctx['complete'] === false
+  })
+
+  // a segment's audio is normalized on the server long after the upload returns, and
+  // that's when its duration becomes known. the notification carries the duration
+  // itself rather than telling us to re-fetch: the server writes the row and sends
+  // this from two independent listeners on the same event, so a re-read could arrive
+  // before the write.
+  listenForCategory('media-normalized-event', async (evt: Notification) => {
+    const ctx = JSON.parse(evt.context)
+    if ('' + ctx['episodeId'] !== '' + draftEpisode.value.id) {
+      return
+    }
+    const segment = segments.value.find((s) => '' + s.id === '' + ctx['segmentId'])
+    if (!segment) {
+      return
+    }
+    segment.duration = ctx['durationInMilliseconds']
+    // the episode's duration is the sum of its segments', server-side too, so keep the
+    // header in step without another round trip.
+    draftEpisode.value.duration = segments.value.reduce((total, s) => total + (s.duration || 0), 0)
   })
 
   listenForCategory('publication-completed-event', async () => {

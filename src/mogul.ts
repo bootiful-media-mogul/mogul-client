@@ -10,12 +10,41 @@ export default class Mogul {
   async user(): Promise<User> {
     const query = `
             query { 
-             me { id,   name, email, givenName, familyName  } 
+             me { id,   name, email, givenName, familyName, timeZone  } 
             } 
     `
     const result = await this.client.query(query, {})
     const me = result.data['me']
-    return new User(me.id as number, me.name, me.email, me.givenName, me.familyName)
+    return new User(me.id as number, me.name, me.email, me.givenName, me.familyName, me.timeZone)
+  }
+
+  async setTimeZone(timeZone: string): Promise<boolean> {
+    const mutation = `
+         mutation ( $timeZone: String ) {
+            setMogulTimeZone( timeZone: $timeZone )
+         }
+        `
+    const result = await this.client.mutation(mutation, { timeZone: timeZone })
+    return (await result.data['setMogulTimeZone']) as boolean
+  }
+
+  /**
+   * a mogul_status is a calendar day, and which day a thing falls on depends on where
+   * you are. the server runs in UTC, so without this everything published after 5pm
+   * Pacific was filed under tomorrow.
+   *
+   * only offered when the server has none stored. picking up the browser's zone on
+   * every load would silently re-file your days the moment you opened the app from
+   * another timezone, which is a decision to make deliberately rather than by travelling.
+   */
+  async adoptBrowserTimeZoneIfUnset(user: User): Promise<void> {
+    if (user.timeZone) {
+      return
+    }
+    const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    if (browserTimeZone) {
+      await this.setTimeZone(browserTimeZone)
+    }
   }
 
   async todayStatus(): Promise<MogulStatus> {
@@ -50,16 +79,26 @@ export class User {
   givenName: string
   familyName: string
   id: number
+  // IANA zone id, or null until the mogul has told us where they are
+  timeZone: string | null
 
   // materialized view
   readonly displayName: string
 
-  constructor(id: number, name: string, email: string, givenName: string, familyName: string) {
+  constructor(
+    id: number,
+    name: string,
+    email: string,
+    givenName: string,
+    familyName: string,
+    timeZone: string | null = null
+  ) {
     this.name = name
     this.id = id
     this.email = email
     this.givenName = givenName
     this.familyName = familyName
+    this.timeZone = timeZone
     this.displayName = this.givenName + ' ' + this.familyName + ' (' + this.email + ')'
   }
 }

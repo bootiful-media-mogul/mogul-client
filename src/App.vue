@@ -55,6 +55,11 @@ onMounted(async () => {
   const res = await mogul.user()
   if (res && res.email) {
     mogulUsername.value = `${res.givenName} ${res.familyName} (${res.email})`
+    // here rather than in a view: this runs once per session whatever page you land
+    // on, and it reuses the user we just fetched. anything that resolves "today"
+    // server-side -- the home page's status, publishing from the ayrshare panel --
+    // needs the zone on record, and none of them go through the home page first.
+    await mogul.adoptBrowserTimeZoneIfUnset(res)
   } //
   else {
     console.log('could not get user info from mogul.user()')

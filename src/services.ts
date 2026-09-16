@@ -1,6 +1,6 @@
 import Mogul, { MogulStatus } from '@/mogul'
 import mitt from 'mitt'
-import { Client, errorExchange, fetchExchange } from '@urql/core'
+import { Client, type CombinedError, errorExchange, fetchExchange } from '@urql/core'
 import { graphqlJson } from '@/graphql'
 import router from '@/index'
 import { marked } from 'marked'
@@ -8,19 +8,43 @@ import * as Ably from 'ably'
 import { ErrorInfo, type TokenDetails, type TokenParams, type TokenRequest } from 'ably'
 import { dateTimeToString } from '@/dates'
 
+/**
+ * only an expired or rejected session should send you back to the login flow. every
+ * other GraphQL error -- a failed validation, a resolver blowing up -- is the caller's
+ * to deal with.
+ */
+function isAuthenticationFailure(error: CombinedError): boolean {
+  const status = (error as unknown as { response?: { status?: number } }).response?.status
+  if (status === 401 || status === 403) {
+    return true
+  }
+  return (error.graphQLErrors ?? []).some((graphQLError) => {
+    const classification = `${graphQLError.extensions?.['classification'] ?? ''}`.toUpperCase()
+    return classification === 'UNAUTHORIZED' || classification === 'FORBIDDEN'
+  })
+}
+
 export const graphqlClient = new Client({
   url: '/api/graphql',
+  // errorExchange first, fetchExchange last. fetchExchange is a *terminating* exchange:
+  // anything listed after it never runs, so with the previous order this handler was
+  // unreachable and every error was swallowed silently.
   exchanges: [
-    fetchExchange,
     errorExchange({
       onError: async (error) => {
-        if (error) {
-          console.error('got an error! ' + JSON.stringify(error))
+        if (!error) {
+          return
+        }
+        console.error('graphql error', error)
+        // now that this actually runs, it has to be selective. redirecting on *any*
+        // error would bounce you to the home page mid-edit whenever a mutation failed.
+        if (isAuthenticationFailure(error)) {
           events.emit('unauthorized', error)
           await router.replace('/')
         }
       }
-    })
+    }),
+    fetchExchange
   ]
 })
 

@@ -31,6 +31,8 @@ const props = defineProps<{
 const draftPost = ref<Post>({} as Post)
 const blog = ref<Blog>()
 const created = ref<string | number>(-1)
+// bound to the date picker; null until a post is loaded
+const createdDate = ref<Date | null>(null)
 const summarizing = ref<boolean>(false)
 const summarizingButtonText = ref<string>(t('blogs.posts.buttons.summarize'))
 // Form fields
@@ -70,9 +72,12 @@ const dts = (date: string | number): string | null => {
 }
 
 const computeDirtyKey = (): string => {
+  // the creation date is part of what Save persists, so editing it has to mark the
+  // form dirty or the buttons stay disabled.
+  const createdAt = createdDate.value ? createdDate.value.getTime() : ''
   return `${draftPost.value.id ? draftPost.value.id : ''}${title.value}:${description.value}:${
     summary.value
-  }:${rssSlug.value}`
+  }:${rssSlug.value}:${createdAt}`
 }
 
 const buttonsDisabled = computed(() => {
@@ -91,6 +96,7 @@ const loadPostIntoEditor = async (postId: number) => {
   rssSlug.value = post.rssSlug ?? ''
   visible.value = post.visible
   created.value = post.created ?? -1
+  createdDate.value = post.created ? new Date(post.created) : null
   dirtyKey.value = computeDirtyKey()
   descriptionComposition.value = post.descriptionComposition
   await loadNotesForNotable('post', postId, title.value)
@@ -103,7 +109,8 @@ const save = async () => {
       title.value,
       description.value,
       summary.value,
-      optionalValue(rssSlug.value)
+      optionalValue(rssSlug.value),
+      createdDate.value
     )
     await loadPostIntoEditor(draftPost.value.id)
   }
@@ -200,6 +207,14 @@ const cancel = async () => {
           <div class="form-row">
             <label for="postRssSlug"> {{ t('blogs.posts.post.rss-slug') }} </label>
             <input id="postRssSlug" v-model="rssSlug" type="text" />
+          </div>
+          <div v-if="draftPost.id" class="form-row">
+            <label for="postCreated">{{ t('blogs.posts.post.created') }}</label>
+            <VDatePicker id="postCreated" v-model="createdDate" mode="dateTime" is24hr>
+              <template #default="{ inputValue, inputEvents }">
+                <input :value="inputValue" type="text" v-on="inputEvents" />
+              </template>
+            </VDatePicker>
           </div>
           <div class="form-row">
             <label>{{ t('blogs.posts.post.visible') }}</label>

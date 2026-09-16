@@ -243,17 +243,20 @@ export class Podcasts {
   async updatePodcastEpisode(
     podcastEpisodeId: number,
     title: string,
-    description: string
+    description: string,
+    // null leaves the existing creation date alone, server-side
+    created: Date | null = null
   ): Promise<PodcastEpisode> {
     const mutation = `
-         mutation ($podcastEpisodeId: Int, $title: String, $description: String ){ 
-          updatePodcastEpisode( podcastEpisodeId: $podcastEpisodeId, title: $title, description: $description) 
+         mutation ($podcastEpisodeId: Int, $title: String, $description: String, $created: DateTime ){ 
+          updatePodcastEpisode( podcastEpisodeId: $podcastEpisodeId, title: $title, description: $description, created: $created) 
          }
         `
     const result = await this.client.mutation(mutation, {
       podcastEpisodeId: podcastEpisodeId,
       title: title,
-      description: description
+      description: description,
+      created: created ? created.toISOString() : null
     })
 
     const res = await result.data['updatePodcastEpisode']
@@ -1675,11 +1678,13 @@ export class Blogs {
     title: string,
     description: string,
     summary: string,
-    rssSlug: string | null
+    rssSlug: string | null,
+    // null leaves the existing creation date alone, server-side
+    created: Date | null = null
   ): Promise<boolean> {
     const q = `
-     mutation ($postId:Int, $title:String, $description:String, $summary:String, $rssSlug:String){
-      updatePost(postId:$postId, title:$title, description:$description, summary:$summary, rssSlug:$rssSlug)
+     mutation ($postId:Int, $title:String, $description:String, $summary:String, $rssSlug:String, $created:DateTime){
+      updatePost(postId:$postId, title:$title, description:$description, summary:$summary, rssSlug:$rssSlug, created:$created)
      }
     `
     const result = await this.graphqlClient.mutation(q, {
@@ -1687,7 +1692,8 @@ export class Blogs {
       title: title,
       description: description,
       summary: summary,
-      rssSlug: rssSlug
+      rssSlug: rssSlug,
+      created: created ? created.toISOString() : null
     })
 
     return (await result.data['updatePost']) as boolean
@@ -1830,7 +1836,11 @@ export class Blogs {
       p.rssSlug,
       p.complete,
       p.visible,
-      dateTimeToString(p.created),
+      // deliberately NOT formatted for display here. the post editor parses this back
+      // into a Date for the creation-date picker, and a formatted string has already
+      // lost its seconds -- every save then wrote the truncated value back. the list
+      // queries above still format, because nothing parses those.
+      p.created,
       p.descriptionComposition
     )
   }

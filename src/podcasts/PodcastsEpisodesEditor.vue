@@ -46,6 +46,8 @@ const props = defineProps<{
 // State
 const segments = ref<PodcastEpisodeSegment[]>([])
 const created = ref<string | number>(-1)
+// bound to the date picker; null until an episode is loaded
+const createdDate = ref<Date | null>(null)
 const draftEpisode = ref<PodcastEpisode>({} as PodcastEpisode)
 const podcast = ref<Podcast>()
 const podcastId = ref<number>(props.podcastId)
@@ -95,7 +97,10 @@ const dts = (date: string | number): string | null => {
 const formattedEpisodeDuration = computed(() => durationToString(draftEpisode.value.duration))
 
 const computeDirtyKey = (): string => {
-  return `${draftEpisode.value.id ? draftEpisode.value.id : ''}${description.value}:${title.value}`
+  // the creation date is part of what Save persists, so editing it has to mark the
+  // form dirty or the button stays disabled.
+  const createdAt = createdDate.value ? createdDate.value.getTime() : ''
+  return `${draftEpisode.value.id ? draftEpisode.value.id : ''}${description.value}:${title.value}:${createdAt}`
 }
 
 const loadEpisodeSegments = async (episode: PodcastEpisode) => {
@@ -111,6 +116,7 @@ const loadEpisodeIntoEditor = async (episode: PodcastEpisode) => {
   description.value = episode.description
   title.value = episode.title
   created.value = episode.created
+  createdDate.value = episode.created ? new Date(episode.created) : null
   segments.value = episode.segments
   descriptionComposition.value = episode.descriptionComposition
   titleComposition.value = episode.titleComposition
@@ -127,7 +133,12 @@ async function editPodcastEpisodeSegmentTranscript(seg: PodcastEpisodeSegment) {
 
 const save = async () => {
   if (draftEpisode.value.id) {
-    await podcasts.updatePodcastEpisode(draftEpisode.value.id, title.value, description.value)
+    await podcasts.updatePodcastEpisode(
+      draftEpisode.value.id,
+      title.value,
+      description.value,
+      createdDate.value
+    )
     await loadEpisodeIntoEditor(await podcasts.podcastEpisodeById(draftEpisode.value.id))
   } //
   else {
@@ -272,6 +283,16 @@ onMounted(async () => {
               <input id="episodeTitle" v-model="title" required type="text" />
               <InputTools v-model="title" />
             </InputWrapper>
+          </div>
+          <div v-if="draftEpisode.id" class="form-row">
+            <label for="episodeCreated">
+              {{ t('podcasts.episodes.episode.created') }}
+            </label>
+            <VDatePicker id="episodeCreated" v-model="createdDate" mode="dateTime" is24hr>
+              <template #default="{ inputValue, inputEvents }">
+                <input :value="inputValue" type="text" v-on="inputEvents" />
+              </template>
+            </VDatePicker>
           </div>
           <div class="form-row">
             <label for="episodeDescription">

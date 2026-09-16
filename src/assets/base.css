@@ -265,6 +265,17 @@ textarea {
   position: relative;
 }
 
+/* v-calendar's popover ships at z-index 10, which loses to the rule above: the date
+   picker opened *behind* whatever field came next, so it was neither visible nor
+   clickable.
+   the class is doubled deliberately. v-calendar's own stylesheet is bundled *after*
+   this file, so a single-class selector here ties on specificity and loses on order.
+   1003 clears the inputs (20) and the sidebar (1001) while staying under PopupPage
+   (9998) and the notification box, which should still cover a calendar. */
+.vc-popover-content-wrapper.vc-popover-content-wrapper {
+  z-index: 1003;
+}
+
 .unselectable {
   user-select: none; /* For modern browsers */
   -webkit-user-select: none; /* For Safari */

@@ -16,10 +16,6 @@
       </PublicationsSectionComponent>
     </div>
   </div>
-
-  <!-- the last N days, each with what went out on it. gated on today's status
-       existing: child mounted hooks run before the parent's, so without this the
-       first load of a new day would fetch before today's row was created. -->
   <MogulStatusHistoryComponent v-if="mogulStatusId" />
 </template>
 <script lang="ts" setup>

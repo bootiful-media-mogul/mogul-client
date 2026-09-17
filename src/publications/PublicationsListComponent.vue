@@ -36,22 +36,6 @@
           v-bind:key="outcome.id"
           class="publications-outcome row"
         >
-          <div class="success">
-            <Icon v-if="outcome.success" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
-            <Icon v-else :icon="errorAsset" :icon-hover="errorHighlightAsset" />
-          </div>
-          <div class="server-error-message">
-            <div v-if="!outcome.success">
-              <a
-                v-if="outcome.serverErrorMessage"
-                href="#"
-                @click.prevent="popupErrorMessage(outcome.serverErrorMessage)"
-              >
-                {{ t('publications.outcomes.error-message') }}
-              </a>
-              <span v-else>{{ t('publications.outcomes.no-error-message') }}</span>
-            </div>
-          </div>
           <div class="uri">
             <a
               :class="{ disabled: withdrawn(publication) }"
@@ -60,8 +44,25 @@
               target="_blank"
             ></a>
           </div>
+          <div class="success">
+            <Icon v-if="outcome.success" :icon="checkmarkAsset" :icon-hover="checkmarkAsset" />
+            <Icon v-else :icon="errorAsset" :icon-hover="errorHighlightAsset" />
+          </div>
           <div class="key">
             {{ t('publications.outcomes.keys.' + outcome.key) }}
+          </div>
+          <div v-if="!outcome.success" class="server-error-message">
+            <a
+              v-if="outcome.serverErrorMessage"
+              href="#"
+              @click.prevent="popupErrorMessage(outcome.serverErrorMessage)"
+            >
+              {{ t('publications.outcomes.error-message') }}
+            </a>
+            <span v-else>{{ t('publications.outcomes.no-error-message') }}</span>
+          </div>
+          <div v-else-if="outcome.preview" :title="outcome.preview" class="preview">
+            {{ outcome.preview }}
           </div>
         </div>
       </div>
@@ -72,6 +73,8 @@
 <style scoped>
 .publications {
   --icon-column: 40px;
+  /* fits the longest outcome label, "X (formerly known as Twitter)", with room to spare. */
+  --key-column: 15em;
   margin-top: var(--gutter-space);
 }
 
@@ -129,9 +132,17 @@
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   display: grid;
-  grid-template-areas: ' uri success key server-error-message ';
+  grid-template-areas: ' uri success key detail ';
   grid-column-gap: calc(var(--gutter-space) / 2);
-  grid-template-columns: var(--icon-column) var(--icon-column) auto auto;
+  /*
+   * every track before the detail column is a fixed width, which is the whole point:
+   * each outcome row is its own grid, so a key column that sized itself to its own text
+   * started "Facebook"'s preview and "X (formerly known as Twitter)"'s preview at
+   * different offsets. fixed tracks are the one thing separate grids can agree on.
+   */
+  grid-template-columns:
+    var(--icon-column) var(--icon-column) var(--key-column)
+    minmax(0, 1fr);
   margin-left: var(--icon-column);
 }
 
@@ -148,16 +159,36 @@
   grid-area: success;
 }
 
+/* a label longer than the column clips rather than crowding the detail beside it. */
 .publications .publications-outcome .key {
   grid-area: key;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .publications .publications-outcome .uri {
   grid-area: uri;
 }
 
+/*
+ * the two alternatives share the one column. the preview is the only thing in the row
+ * allowed to lose space -- hence the 0 minimum and the ellipsis -- while the error
+ * message holds its line, since wrapping would spill out of the row's fixed height.
+ */
+.publications .publications-outcome .preview,
 .publications .publications-outcome .server-error-message {
-  grid-area: server-error-message;
+  grid-area: detail;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.publications .publications-outcome .preview {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-style: italic;
+  opacity: 0.75;
 }
 </style>
 

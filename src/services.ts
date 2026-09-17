@@ -1240,6 +1240,7 @@ export class PublicationOutcome {
   readonly key: string
   readonly serverErrorMessage: string
   readonly created: Date
+  readonly preview: string | null
 
   constructor(
     id: number,
@@ -1247,7 +1248,8 @@ export class PublicationOutcome {
     url: string,
     key: string,
     serverErrorMessage: string,
-    created: Date
+    created: Date,
+    preview: string | null = null
   ) {
     this.id = id
     this.success = success
@@ -1255,6 +1257,7 @@ export class PublicationOutcome {
     this.key = key
     this.created = created
     this.serverErrorMessage = serverErrorMessage
+    this.preview = preview
   }
 }
 
@@ -1275,7 +1278,8 @@ const PUBLICATION_FIELDS = `
     success,
     url,
     key,
-    serverErrorMessage
+    serverErrorMessage,
+    preview
   }
 `
 
@@ -1288,7 +1292,8 @@ export function toPublication(pub: any): Publication {
         outcome['url'] as string,
         outcome['key'] as string,
         outcome['serverErrorMessage'] as string,
-        outcome['created'] as Date
+        outcome['created'] as Date,
+        (outcome['preview'] as string) ?? null
       )
   )
   return new Publication(

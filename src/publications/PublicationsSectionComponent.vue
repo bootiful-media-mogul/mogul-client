@@ -100,7 +100,6 @@
 .publications {
   margin-top: var(--gutter-space);
 }
-
 </style>
 
 <script lang="ts" setup>

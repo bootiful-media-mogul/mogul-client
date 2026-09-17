@@ -100,7 +100,9 @@ const computeDirtyKey = (): string => {
   // the creation date is part of what Save persists, so editing it has to mark the
   // form dirty or the button stays disabled.
   const createdAt = createdDate.value ? createdDate.value.getTime() : ''
-  return `${draftEpisode.value.id ? draftEpisode.value.id : ''}${description.value}:${title.value}:${createdAt}`
+  return `${draftEpisode.value.id ? draftEpisode.value.id : ''}${description.value}:${
+    title.value
+  }:${createdAt}`
 }
 
 const loadEpisodeSegments = async (episode: PodcastEpisode) => {

@@ -187,11 +187,9 @@ export class JobParam {
 export class Job {
   readonly name: string
   readonly requiredContextAttributes: string[]
-  readonly contextAttributes: JobParam[]
 
-  constructor(name: string, requiredContextAttributes: string[], contextAttributes: JobParam[]) {
+  constructor(name: string, requiredContextAttributes: string[]) {
     this.name = name
-    this.contextAttributes = contextAttributes
     this.requiredContextAttributes = requiredContextAttributes
   }
 }
@@ -220,13 +218,25 @@ export class Jobs {
     return await result.data['JobLaunch']
   }
 
+  // jobs that need a file to work on get one explicitly now. it used to arrive as a
+  // side effect of reading the job list, back when the server kept a draft execution
+  // per job; JobRunr has no such thing, so the client asks outright.
+  async createManagedFile(jobName: string): Promise<number> {
+    const mutation = `
+      mutation CreateJobManagedFile($jobName: String) {
+        createJobManagedFile(jobName: $jobName) { id }
+      }
+    `
+    const result = await this.client.mutation(mutation, { jobName: jobName })
+    return (await result.data['createJobManagedFile'])['id'] as number
+  }
+
   async jobs(): Promise<Array<Job>> {
     const q = `
       query { 
         jobs { 
           name, 
-          requiredContextAttributes, 
-          contextAttributes { name, value } 
+          requiredContextAttributes
         } 
       }
     `

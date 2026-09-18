@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts" setup>
-import { Job, JobParam, jobs } from '@/services'
+import { Job, jobs } from '@/services'
 import { onMounted, reactive, ref } from 'vue'
 import PodcastsSelect from '@/podcasts/PodcastsSelect.vue'
 import Input from '@/ui/Input.vue'
@@ -81,7 +81,8 @@ const { t } = useI18n()
 const paramComponents = new Map<string, any>()
 paramComponents.set('podcastId', PodcastsSelect)
 paramComponents.set('blogId', BlogsSelect)
-paramComponents.set('managedFileId', ManagedFileSelect)
+const MANAGED_FILE_ID = 'managedFileId'
+paramComponents.set(MANAGED_FILE_ID, ManagedFileSelect)
 
 function onValidated(job: JobRequest, attribute: string, valid: boolean) {
   job.selections[attribute].valid = valid
@@ -135,14 +136,6 @@ async function launch(req: JobRequest) {
   return await jobs.launch(req.job.name, payload)
 }
 
-function arrayOfJobParamsToMap(arr: JobParam[]): Map<string, object> {
-  const m = new Map<string, object>()
-  arr.forEach((job) => {
-    m.set(job.name, JSON.parse(job.value))
-  })
-  return m
-}
-
 class JobRequest {
   readonly job: Job
   ready: boolean = false
@@ -154,18 +147,11 @@ class JobRequest {
   constructor(job: Job) {
     this.job = job
     this.selections = reactive({})
-    const existingValues = arrayOfJobParamsToMap(job.contextAttributes)
+    // the server no longer keeps a draft execution to remember values from, so every
+    // attribute starts empty. the one that used to arrive pre-filled is managedFileId,
+    // and it is requested explicitly instead - see ensureManagedFile below.
     for (const attr of job.requiredContextAttributes) {
-      if (existingValues.has(attr)) {
-        this.selections[attr] = new ValidatedJobParam(
-          attr,
-          false,
-          existingValues.get(attr) as SelectOption | string | number | null
-        )
-      } //
-      else {
-        this.selections[attr] = new ValidatedJobParam(attr, false, null)
-      }
+      this.selections[attr] = new ValidatedJobParam(attr, false, null)
     }
     this.ready = job.requiredContextAttributes.length === 0
   }
@@ -186,9 +172,24 @@ onMounted(async () => {
     // validate()
   })
   const jobsResults = await jobs.jobs()
-  allJobs.value = jobsResults.map((job) => {
-    return new JobRequest(job)
-  })
+  allJobs.value = await Promise.all(
+    jobsResults.map(async (job) => {
+      const request = new JobRequest(job)
+      // a job that takes a file needs one to upload into *before* it is launched, and
+      // the file selector loads it by id the moment it mounts - a null id is the NPE.
+      // the server used to mint the managed file as a side effect of the jobs query,
+      // back when it kept a draft execution per job; now we ask for it outright.
+      if (job.requiredContextAttributes.includes(MANAGED_FILE_ID)) {
+        const managedFileId = await jobs.createManagedFile(job.name)
+        request.selections[MANAGED_FILE_ID] = new ValidatedJobParam(
+          MANAGED_FILE_ID,
+          true,
+          managedFileId
+        )
+      }
+      return request
+    })
+  )
   // todo call validate when the app starts
   // validate()
 })

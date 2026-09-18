@@ -138,24 +138,52 @@ a {
   font-weight: bold;
 }
 
-.pure-button {
-  border-color: var(--bg-color);
+/* the app's buttons are black -- all of them, everywhere. this was once two selectors,
+   a button inside a stacked form and a button carrying .publish-button, and anything
+   matching neither fell through to pure's blue .pure-button-primary. enumerating the
+   places a button is allowed to appear is a losing game: the next panel that isn't
+   wrapped in a form is blue again. so the rule sits on the button itself, and pure's
+   primary and selected are named here so that their blue cannot come back on a tie. */
+.pure-button,
+.pure-button-primary,
+.pure-button-selected,
+a.pure-button,
+a.pure-button-primary,
+a.pure-button-selected {
+  border-color: black;
   border-radius: var(--button-radius);
-}
-
-/* the app's buttons are black. two ways in: being inside a stacked form, or being a
-   publish button -- publication panels aren't wrapped in a form, so they used to fall
-   through to pure's blue .pure-button-primary. one rule so the two can't drift. */
-.pure-form-stacked .pure-button,
-.publish-button.pure-button {
-  box-sizing: content-box;
   background-color: black;
   color: white;
 }
 
-.pure-form-stacked .pure-button:hover,
-.publish-button.pure-button:hover {
+.pure-button:hover,
+.pure-button-primary:hover,
+.pure-button-selected:hover,
+a.pure-button:hover {
   background-color: #333;
+}
+
+/* content-box only where it always was: these two set their own width, and widening the
+   rule to every button moves layout around for no reason. */
+.pure-form-stacked .pure-button,
+.publish-button.pure-button {
+  box-sizing: content-box;
+}
+
+/* pure dims a disabled button with opacity alone and lets what's behind it show through.
+   what's behind it is the cadetblue page, so a disabled black button -- the ayrshare post
+   button sits disabled until a platform is picked -- came out reading as a blue one. an
+   opaque grey instead: disabled should look disabled, not blue. */
+.pure-button[disabled],
+.pure-button[disabled]:hover,
+.pure-button-disabled,
+.pure-button-disabled:hover,
+.pure-button-disabled:focus,
+.pure-button-disabled:active {
+  opacity: 1;
+  background-color: #767676;
+  border-color: #767676;
+  color: white;
 }
 
 .pure-form-stacked select {
